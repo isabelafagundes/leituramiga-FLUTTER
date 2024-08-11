@@ -1,0 +1,51 @@
+name: projeto_leituramiga
+description: Interfaces gráficas do LeiturAmiga.
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+
+  leituramiga:
+    path: ../leituramiga
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_svg: ^2.0.9
+  flutter_animate: ^4.3.0
+  flutter_lints: ^2.0.0
+  auto_route: ^8.2.0
+  build_runner: ^2.4.11
+  auto_route_generator: ^8.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/svg/
+    - assets/png/
+    - assets/svg/academico/
+    - assets/svg/exclusao/
+    - assets/svg/seta/
+    - assets/svg/tema/
+    - assets/svg/usuario/
+    - assets/svg/menu/
+
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonte/Montserrat/Montserrat-Regular.ttf
+        - asset: assets/fonte/Montserrat/Montserrat-Bold.ttf
+        - asset: assets/fonte/Montserrat/Montserrat-SemiBold.ttf
+        - asset: assets/fonte/Montserrat/Montserrat-ExtraBold.ttf
+        - asset: assets/fonte/Montserrat/Montserrat-Light.ttf
+        - asset: assets/fonte/Montserrat/Montserrat-Medium.ttf
