@@ -3,9 +3,12 @@ import 'package:projeto_leituramiga/domain/menu_lateral.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
+import 'package:projeto_leituramiga/interface/widget/botao/botao_menu.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/botoes_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/menu_lateral.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/rodape_mobile.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class ConteudoMenuLateralWidget extends StatefulWidget {
@@ -123,7 +126,10 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                     SizedBox(height: widget.tema.espacamento * 2),
                     Expanded(
                       flex: 8,
-                      child: widget.child,
+                      child: Padding(
+                        padding: Responsive.larguraM(context) ? const EdgeInsets.only(bottom: 84) : EdgeInsets.zero,
+                        child: widget.child,
+                      ),
                     ),
                   ],
                 ),
@@ -147,42 +153,52 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
           ),
         if (exibindoMenu)
           AnimatedPositioned(
-              left: ativarAnimacao ? 0 : -200,
-              curve: Curves.easeOut,
-              duration: const Duration(milliseconds: 100),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 250,
-                    padding: EdgeInsets.symmetric(vertical: widget.tema.espacamento * 2),
-                    height: Responsive.altura(context),
-                    decoration: BoxDecoration(
-                      color: Color(widget.tema.base200),
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(widget.tema.borderRadiusG),
-                        bottomRight: Radius.circular(widget.tema.borderRadiusG),
-                      ),
-                    ),
-                    child: BotoesMenuLateralWidget(
-                      tema: widget.tema,
-                      aoEntrar: () {},
-                      aoSair: () {},
-                      exibindoMenu: true,
-                      exibirSeta: true,
-                      itemSelecionado: _itemSelecionado,
-                      expandirMenu: () => setState(() {
-                        exibindoMenu = false;
-                        ativarAnimacao = false;
-                      }),
-                      alterarTema: widget.alterarTema,
-                      alterarFonte: widget.alterarFonte,
-                      selecionarItem: (item) => setState(() => _itemSelecionado = item),
+            left: ativarAnimacao ? 0 : -200,
+            curve: Curves.easeOut,
+            duration: const Duration(milliseconds: 100),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 250,
+                  padding: EdgeInsets.symmetric(vertical: widget.tema.espacamento * 2),
+                  height: Responsive.altura(context),
+                  decoration: BoxDecoration(
+                    color: Color(widget.tema.base200),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(widget.tema.borderRadiusG),
+                      bottomRight: Radius.circular(widget.tema.borderRadiusG),
                     ),
                   ),
-                ],
-              ))
+                  child: BotoesMenuLateralWidget(
+                    tema: widget.tema,
+                    aoEntrar: () {},
+                    aoSair: () {},
+                    exibindoMenu: true,
+                    exibirSeta: true,
+                    itemSelecionado: _itemSelecionado,
+                    expandirMenu: () => setState(() {
+                      exibindoMenu = false;
+                      ativarAnimacao = false;
+                    }),
+                    alterarTema: widget.alterarTema,
+                    alterarFonte: widget.alterarFonte,
+                    selecionarItem: (item) => setState(() => _itemSelecionado = item),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        if (Responsive.larguraM(context))
+          Positioned(
+            bottom: 0,
+            child: RodapeMobileWidget(
+              tema: widget.tema,
+              itemSelecionado: _itemSelecionado,
+              selecionarItem: (item) => setState(() => _itemSelecionado = item),
+            ),
+          ),
       ],
     );
   }
