@@ -77,14 +77,15 @@ class FormularioLivroWidget extends StatelessWidget {
               ),
               SizedBox(height: tema.espacamento * 4),
               BotaoWidget(
-                  tema: tema,
-                  texto: 'Criar livro',
-                  icone: Icon(
-                    Icons.check,
-                    color: Color(tema.base200),
-                    size: tema.espacamento+10,
-                  ),
-                  aoClicar: () => Rota.navegar(context, Rota.PERFIL)),
+                tema: tema,
+                texto: 'Criar livro',
+                icone: Icon(
+                  Icons.check,
+                  color: Color(tema.base200),
+                  size: tema.espacamento + 10,
+                ),
+                aoClicar: () => Rota.navegar(context, Rota.PERFIL),
+              ),
             ],
           ),
         ),

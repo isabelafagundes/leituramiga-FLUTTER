@@ -44,7 +44,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
                 Container(
                   height: 170,
                   padding: EdgeInsets.symmetric(
-                    horizontal: Responsive.larguraP(context) ? tema.espacamento * 2 : tema.espacamento * 8,
+                    horizontal: Responsive.larguraP(context) ? tema.espacamento : tema.espacamento * 8,
                   ),
                   child: CardPerfilUsuarioWidget(
                     tema: tema,

@@ -78,7 +78,7 @@ class Tema {
         _selecionado = selecionado,
         _modoFonteGrande = modoFonteGrande,
         _familiaDeFontePrimaria = familiaDeFontePrimaria,
-        _familiaDeFonteSecundaria = familiaDeFontePrimaria,
+        _familiaDeFonteSecundaria = familiaDeFonteSecundaria,
         _espacamento = espacamento,
         _neutralPrimary = Cor.criar(corNeutralPrimary);
 
@@ -92,11 +92,11 @@ class Tema {
 
   bool get selecionado => _selecionado;
 
-  double get tamanhoFonteG => modoFonteGrande ? _tamanhoFonteG + 2 : _tamanhoFonteG;
+  double get tamanhoFonteG => modoFonteGrande ? _tamanhoFonteG + 4 : _tamanhoFonteG;
 
-  double get tamanhoFonteM => modoFonteGrande ? _tamanhoFonteM + 2 : _tamanhoFonteM;
+  double get tamanhoFonteM => modoFonteGrande ? _tamanhoFonteM + 4 : _tamanhoFonteM;
 
-  double get tamanhoFonteP => modoFonteGrande ? _tamanhoFonteP + 2 : _tamanhoFonteP;
+  double get tamanhoFonteP => modoFonteGrande ? _tamanhoFonteP + 4 : _tamanhoFonteP;
 
   double get borderRadiusXG => _borderRadiusXG;
 
@@ -134,7 +134,7 @@ class Tema {
 
   int get success => _success.valor;
 
-  double get tamanhoFonteXG => _modoFonteGrande ? _tamanhoFonteXG + 2 : _tamanhoFonteXG;
+  double get tamanhoFonteXG => _modoFonteGrande ? _tamanhoFonteXG + 4 : _tamanhoFonteXG;
 
   void selecionarTema(bool selecionar) => _selecionado = selecionar;
 

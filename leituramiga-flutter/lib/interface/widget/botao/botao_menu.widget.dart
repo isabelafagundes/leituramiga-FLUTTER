@@ -12,6 +12,9 @@ class BotaoMenuWidget extends StatefulWidget {
   final Color? corFundo;
   final Widget? icone;
   final bool iconeAEsquerda;
+  final String? fontFamily;
+  final FontWeight? weight;
+  final double? tamanhoFonte;
 
   const BotaoMenuWidget({
     super.key,
@@ -23,6 +26,9 @@ class BotaoMenuWidget extends StatefulWidget {
     this.icone,
     this.iconeAEsquerda = true,
     this.corFundo,
+    this.fontFamily,
+    this.weight,
+    this.tamanhoFonte,
   });
 
   @override
@@ -77,9 +83,9 @@ class _BotaoMenuWidgetState extends State<BotaoMenuWidget> {
                     child: TextoWidget(
                       texto: widget.textoLabel!,
                       tema: widget.tema,
-
-                      weight: FontWeight.w400,
-                      tamanho: widget.tema.tamanhoFonteM,
+                      fontFamily: widget.fontFamily ?? widget.tema.familiaDeFontePrimaria,
+                      weight: widget.weight ?? FontWeight.w400,
+                      tamanho: widget.tamanhoFonte ?? widget.tema.tamanhoFonteM,
                       cor: widget.ativado || _hover
                           ? Color(widget.tema.base200)
                           : widget.corFundo ?? Color(widget.tema.baseContent),

@@ -49,3 +49,50 @@ flutter:
         - asset: assets/fonte/Montserrat/Montserrat-ExtraBold.ttf
         - asset: assets/fonte/Montserrat/Montserrat-Light.ttf
         - asset: assets/fonte/Montserrat/Montserrat-Medium.ttf
+
+    - family: MontserratAlternates
+      fonts:
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-Black.ttf
+          weight: 900
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-BlackItalic.ttf
+          weight: 900
+          style: italic
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-Bold.ttf
+          weight: 700
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-ExtraLightItalic.ttf
+          weight: 200
+          style: italic
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-Italic.ttf
+          style: italic
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-Light.ttf
+          weight: 300
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-Medium.ttf
+          weight: 500
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-Regular.ttf
+          weight: 500
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-SemiBoldItalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-Thin.ttf
+          weight: 100
+        - asset: assets/fonte/Montserrat_Alternates/MontserratAlternates-ThinItalic.ttf
+          weight: 100
+          style: italic

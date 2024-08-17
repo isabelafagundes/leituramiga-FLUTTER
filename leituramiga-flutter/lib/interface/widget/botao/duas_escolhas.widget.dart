@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
@@ -111,7 +112,7 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
               child: Center(
                 child: TextoWidget(
                   tema: widget.tema,
-                  cor: Color(widget.tema.base200),
+                  cor: kCorFonte,
                   texto: widget.escolhas[chave],
                 ),
               ),

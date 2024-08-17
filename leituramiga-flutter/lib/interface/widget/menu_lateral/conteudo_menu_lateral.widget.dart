@@ -40,8 +40,8 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
       children: [
         Container(
           padding: EdgeInsets.symmetric(
-            vertical: widget.tema.espacamento * 2,
-            horizontal: widget.tema.espacamento * 2,
+            vertical: widget.tema.espacamento,
+            horizontal: widget.tema.espacamento,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -53,7 +53,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                   alterarTema: widget.alterarTema,
                   alterarFonte: widget.alterarFonte,
                 ),
-                SizedBox(width: widget.tema.espacamento * 2),
+                SizedBox(width: widget.tema.espacamento * 4),
               ],
               Expanded(
                 child: Column(

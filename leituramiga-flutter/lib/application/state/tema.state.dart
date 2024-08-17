@@ -10,7 +10,10 @@ mixin class TemaState {
     return _instancia!;
   }
 
-  Tema? get temaSelecionado => _temas.where((tema) => tema.selecionado).firstOrNull;
+  Tema? get temaSelecionado =>
+      _temas
+          .where((tema) => tema.selecionado)
+          .firstOrNull;
 
   void alterarTema(int idTema, Function() atualizar) {
     bool temaModoGrande = temaSelecionado!.modoFonteGrande;
@@ -34,9 +37,9 @@ mixin class TemaState {
     corNeutral: "ffffff",
     corBase100: "464A52",
     corInfo: "61b3ff",
-    corSuccess: "00bf7a",
+    corSuccess: "2dc04b",
     corWarning: "ffad00",
-    corError: "d63150",
+    corError: "ff899a",
     corBase200: "363940",
     corBaseContent: "ffffff",
     corNeutralPrimary: "ffffff",
@@ -52,7 +55,8 @@ mixin class TemaState {
     selecionado: true,
     modoFonteGrande: false,
     familiaDeFontePrimaria: 'Montserrat',
-    familiaDeFonteSecundaria: null,
+    familiaDeFonteSecundaria: 'MontserratAlternates',
+
   );
 
   final Tema _temaClaro = Tema.criar(
@@ -63,9 +67,9 @@ mixin class TemaState {
     corNeutral: "2a2f2c",
     corBase100: "eaeee5",
     corInfo: "61b3ff",
-    corSuccess: "00bf7a",
+    corSuccess: "2dc04b",
     corWarning: "ffad00",
-    corError: "d63150",
+    corError: "ff899a",
     corBase200: "FFFDFF",
     corBaseContent: "464A52",
     corNeutralPrimary: "004342",
@@ -81,39 +85,8 @@ mixin class TemaState {
     selecionado: false,
     modoFonteGrande: false,
     familiaDeFontePrimaria: 'Montserrat',
-    familiaDeFonteSecundaria: null,
+    familiaDeFonteSecundaria: 'MontserratAlternates',
   );
-
-
-  /*
-  *
-  *   id: 2,
-    corAccent: "2A9777",
-    corPrimary: "A5FFE5",
-    corSecondary: "3FDFAF",
-    corNeutral: "2a2f2c",
-    corBase100: "EFF8F7",
-    corInfo: "61b3ff",
-    corSuccess: "00bf7a",
-    corWarning: "ffad00",
-    corError: "d63150",
-    corBase200: "FFFDFF",
-    corBaseContent: "141207",
-    corNeutralPrimary: "004342",
-    espacamento: 8.0,
-    borderRadiusP: 8.0,
-    borderRadiusM: 16.0,
-    borderRadiusG: 24.0,
-    borderRadiusXG: 32.0,
-    tamanhoFonteP: 10.0,
-    tamanhoFonteM: 14.0,
-    tamanhoFonteG: 16.0,
-    tamanhoFonteXG: 18.0,
-    selecionado: false,
-    modoFonteGrande: false,
-    familiaDeFontePrimaria: 'Montserrat',
-    familiaDeFonteSecundaria: null,
-  * */
 
   List<Tema> get _temas => [_temaEscuro, _temaClaro];
 }

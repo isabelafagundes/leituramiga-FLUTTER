@@ -51,6 +51,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const EditarPefilPage(),
       );
     },
+    EsqueceSenhaRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const EsqueceSenhaPage(),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -73,6 +79,12 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const PerfilPage(),
+      );
+    },
+    SolicitacoesRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SolicitacoesPage(),
       );
     },
     UsuarioRoute.name: (routeData) {
@@ -169,6 +181,20 @@ class EditarPefilRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [EsqueceSenhaPage]
+class EsqueceSenhaRoute extends PageRouteInfo<void> {
+  const EsqueceSenhaRoute({List<PageRouteInfo>? children})
+      : super(
+          EsqueceSenhaRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'EsqueceSenhaRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [HomePage]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
@@ -220,6 +246,20 @@ class PerfilRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'PerfilRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SolicitacoesPage]
+class SolicitacoesRoute extends PageRouteInfo<void> {
+  const SolicitacoesRoute({List<PageRouteInfo>? children})
+      : super(
+          SolicitacoesRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SolicitacoesRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

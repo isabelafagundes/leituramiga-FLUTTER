@@ -48,22 +48,12 @@ class FormularioEnderecoWidget extends StatelessWidget {
             direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
             children: [
               Flexible(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextoWidget(
-                      texto: "Estado",
-                      tema: tema,
-                      cor: Color(tema.baseContent),
-                    ),
-                    SizedBox(height: tema.espacamento),
-                    MenuWidget(
-                      tema: tema,
-                      escolhas: ["Cajamar", "Santana de Parnaíba", "São Paulo"],
-                      aoClicar: () {},
-                    ),
-                  ],
+                child: InputWidget(
+                  tema: tema,
+                  controller: controllerCep,
+                  label: "CEP",
+                  tamanho: tema.tamanhoFonteM,
+                  onChanged: (valor) {},
                 ),
               ),
               SizedBox(
@@ -76,7 +66,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextoWidget(
-                      texto: "Cidade",
+                      texto: "Estado",
                       tema: tema,
                       cor: Color(tema.baseContent),
                     ),
@@ -97,30 +87,27 @@ class FormularioEnderecoWidget extends StatelessWidget {
           height: tema.espacamento * 2,
         ),
         Flexible(
-          child: InputWidget(
-            tema: tema,
-            controller: controllerRua,
-            label: "Rua",
-            tamanho: tema.tamanhoFonteM,
-            onChanged: (valor) {},
-          ),
-        ),
-        SizedBox(
-          width: tema.espacamento * 2,
-          height: tema.espacamento * 2,
-        ),
-        Flexible(
           child: Flex(
             mainAxisSize: MainAxisSize.min,
-            direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
+            direction: Axis.horizontal,
             children: [
               Flexible(
-                child: InputWidget(
-                  tema: tema,
-                  controller: controllerCep,
-                  label: "CEP",
-                  tamanho: tema.tamanhoFonteM,
-                  onChanged: (valor) {},
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextoWidget(
+                      texto: "Cidade",
+                      tema: tema,
+                      cor: Color(tema.baseContent),
+                    ),
+                    SizedBox(height: tema.espacamento),
+                    MenuWidget(
+                      tema: tema,
+                      escolhas: ["Cajamar", "Santana de Parnaíba", "São Paulo"],
+                      aoClicar: () {},
+                    ),
+                  ],
                 ),
               ),
               SizedBox(
@@ -149,10 +136,11 @@ class FormularioEnderecoWidget extends StatelessWidget {
             direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
             children: [
               Flexible(
+                flex: 2,
                 child: InputWidget(
                   tema: tema,
-                  controller: controllerNumero,
-                  label: "Número",
+                  controller: controllerRua,
+                  label: "Rua",
                   tamanho: tema.tamanhoFonteM,
                   onChanged: (valor) {},
                 ),
@@ -164,10 +152,47 @@ class FormularioEnderecoWidget extends StatelessWidget {
               Flexible(
                 child: InputWidget(
                   tema: tema,
+                  controller: controllerNumero,
+                  label: "Número",
+                  tamanho: tema.tamanhoFonteM,
+                  onChanged: (valor) {},
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: tema.espacamento * 2,
+          height: tema.espacamento * 2,
+        ),
+        Flexible(
+          child: Flex(
+            mainAxisSize: MainAxisSize.min,
+            direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
+            children: [
+              Flexible(
+                child: InputWidget(
+                  tema: tema,
                   controller: controllerComplemento,
                   label: "Complemento",
                   tamanho: tema.tamanhoFonteM,
                   onChanged: (valor) {},
+                ),
+              ),
+              SizedBox(
+                width: tema.espacamento * 2,
+                height: tema.espacamento * 2,
+              ),
+              Flexible(
+                child: Opacity(
+                  opacity: 0,
+                  child: InputWidget(
+                    tema: tema,
+                    controller: controllerNumero,
+                    label: "Número",
+                    tamanho: tema.tamanhoFonteM,
+                    onChanged: (valor) {},
+                  ),
                 ),
               ),
             ],

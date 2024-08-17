@@ -6,12 +6,12 @@ import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/duas_escolhas.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_perfil_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/grid/grid_comentarios.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/grid/grid_livros.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:auto_route/annotations.dart';
-import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 @RoutePage()
 class PerfilPage extends StatefulWidget {
@@ -45,7 +45,7 @@ class _PerfilPageState extends State<PerfilPage> {
                 Container(
                   height: 170,
                   padding: EdgeInsets.symmetric(
-                    horizontal: Responsive.larguraP(context) ? tema.espacamento * 2 : tema.espacamento * 8,
+                    horizontal: Responsive.larguraP(context) ? tema.espacamento : tema.espacamento * 8,
                   ),
                   child: Stack(
                     children: [
@@ -93,31 +93,10 @@ class _PerfilPageState extends State<PerfilPage> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         if (_exibindoLivros)
-                          GestureDetector(
-                            onTap: _exibindoLivros ? () => Rota.navegar(context, Rota.CRIAR_LIVRO) : () {},
-                            child: Container(
-                              height: 30,
-                              padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 3),
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color(tema.neutral).withOpacity(.1),
-                                    offset: const Offset(0, 2),
-                                    blurRadius: 2,
-                                  ),
-                                ],
-                                color: Color(tema.accent),
-                                borderRadius: BorderRadius.circular(tema.borderRadiusXG),
-                              ),
-                              child: Center(
-                                child: TextoWidget(
-                                  tema: tema,
-                                  weight: FontWeight.w500,
-                                  cor: Color(tema.base200),
-                                  texto: _exibindoLivros ? "Adicionar livro" : "Criar comentário",
-                                ),
-                              ),
-                            ),
+                          BotaoPequenoWidget(
+                            tema: tema,
+                            aoClicar: _exibindoLivros ? () => Rota.navegar(context, Rota.CRIAR_LIVRO) : () {},
+                            label: _exibindoLivros ? "Adicionar livro" : "Criar comentário",
                           ),
                       ],
                     ),

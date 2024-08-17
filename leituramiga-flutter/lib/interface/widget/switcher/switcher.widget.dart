@@ -70,7 +70,9 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
                         ),
                       )
                     : BoxDecoration(
-                        color: widget.corFundo ?? Color(widget.tema.base100),
+                        color: _ativado
+                            ? widget.corBorda ?? Color(widget.tema.accent)
+                            : widget.corFundo ?? Color(widget.tema.base100),
                         borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
                         border: Border.all(
                           color: widget.corBorda ?? Color(widget.tema.accent),
@@ -84,7 +86,9 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
                     borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
                     boxShadow: [
                       BoxShadow(
-                        color: widget.corFundo ?? Color(widget.tema.base100),
+                        color: _ativado
+                            ? widget.corBorda ?? Color(widget.tema.accent)
+                            : widget.corFundo ?? Color(widget.tema.base100),
                         spreadRadius: 5,
                         blurRadius: 5,
                         // ignore: prefer_const_constructors
@@ -96,7 +100,7 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
               ),
             ),
             AnimatedPositioned(
-              left: _ativado ? 32: 4,
+              left: _ativado ? 32 : 4,
               duration: const Duration(milliseconds: 200),
               curve: Curves.easeOut,
               child: AnimatedContainer(
@@ -104,15 +108,17 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
                 width: 20,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
-                  color: widget.corCirculo ?? Color(widget.tema.accent),
+                  color: !_ativado
+                      ? widget.corBorda ?? Color(widget.tema.accent)
+                      : widget.corCirculo ?? Color(widget.tema.base100),
                   border: Border.all(
                     color: widget.corBorda ?? Color(widget.tema.neutral).withOpacity(.1),
                     width: 1,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color:  Color(widget.tema.neutral).withOpacity(.15),
-                      blurRadius:2,
+                      color: Color(widget.tema.neutral).withOpacity(.15),
+                      blurRadius: 2,
                       // ignore: prefer_const_constructors
                       offset: Offset(0, 2),
                     )

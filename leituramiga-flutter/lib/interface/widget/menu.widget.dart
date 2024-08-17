@@ -43,11 +43,11 @@ class _MenuWidgetState extends State<MenuWidget> {
           height: 40,
           decoration: BoxDecoration(
             color: Color(widget.tema.base200),
-            border: Border.all(color: Color(widget.tema.neutral).withOpacity(.1)),
+            border: Border.all(color: Color(widget.tema.neutral).withOpacity(.2)),
             borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
             boxShadow: [
               BoxShadow(
-                color: Color(widget.tema.neutral).withOpacity(.1),
+                color: Color(widget.tema.neutral).withOpacity(.2),
                 offset: const Offset(0, 2),
                 blurRadius: 5.0,
               ),
@@ -105,10 +105,11 @@ class _MenuWidgetState extends State<MenuWidget> {
                     height: 200,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Color(widget.tema.neutral).withOpacity(.2)),
                       color: Color(widget.tema.base200),
                       boxShadow: [
                         BoxShadow(
-                          color: Color(widget.tema.base200),
+                          color: Color(widget.tema.neutral).withOpacity(.2),
                           offset: const Offset(0, 2),
                           blurRadius: 5.0,
                         ),
@@ -118,34 +119,30 @@ class _MenuWidgetState extends State<MenuWidget> {
                         shrinkWrap: true,
                         itemCount: widget.escolhas.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            onEnter: (e) => setState(() => _indiceHover = index),
-                            onExit: (e) => setState(() => _indiceHover = -1),
-                            child: GestureDetector(
-                              onTap: () {
-                                _removerOverlay();
-                                setState(() {
-                                  _label = widget.escolhas[index];
-                                  _indiceHover = -1;
-                                  widget.aoClicar();
-                                });
-                              },
-                              child: Container(
-                                height: 54,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: _indiceHover == index ? Color(widget.tema.accent) : Color(widget.tema.base200),
-                                ),
-                                padding: const EdgeInsets.symmetric(vertical: 16),
-                                child: Center(
-                                  child: TextoWidget(
-                                    tema: widget.tema,
-                                    texto: widget.escolhas[index],
-                                    tamanho: 14,
-                                  ),
-                                ),
+                          return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(widget.tema.base200),
+                              shadowColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(widget.tema.borderRadiusM), // Border Radius
                               ),
+                              textStyle: TextStyle(
+                                fontSize: widget.tema.tamanhoFonteM,
+                                fontFamily: widget.tema.familiaDeFontePrimaria,
+                              ),
+                              overlayColor: Color(widget.tema.accent),
+                            ),
+                            onPressed: () {
+                              _removerOverlay();
+                              setState(() {
+                                _label = widget.escolhas[index];
+                                _indiceHover = -1;
+                                widget.aoClicar();
+                              });
+                            },
+                            child: TextoWidget(
+                              tema: widget.tema,
+                              texto: widget.escolhas[index],
                             ),
                           );
                         }),

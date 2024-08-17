@@ -3,8 +3,9 @@ import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/menu_lateral.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
-import 'package:projeto_leituramiga/interface/page/autenticacao/login.page.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_menu.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/conteudo_notificacoes.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto_com_switcher.widget.dart';
@@ -40,49 +41,64 @@ class BotoesMenuLateralWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.only(bottom: tema.espacamento * 5),
-          child: MouseRegion(
-            onEnter: (_) => aoEntrar(),
-            onExit: (_) => aoSair(),
-            child: BotaoMenuWidget(
-              tema: tema,
-              iconeAEsquerda: false,
-              corFundo: Color(tema.accent),
-              textoLabel: exibindoMenu ? "LeiturAmiga" : null,
-              icone: !exibirSeta
-                  ? Container(
-                      padding: const EdgeInsets.all(7),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Color(tema.neutral).withOpacity(.1)),
-                        gradient: LinearGradient(
-                          colors: [kCorPessego, kCorVerde, kCorAzul],
-                          begin: Alignment.bottomLeft,
-                          end: Alignment.topRight,
-                        ),
-                        borderRadius: BorderRadius.circular(tema.borderRadiusXG),
-                      ),
-                      child: SvgWidget(
-                        cor: Color(tema.base200),
-                        altura: 24,
-                        nomeSvg: "menu/book-open",
-                      ),
-                    ).animate(onComplete: (controller) => controller.repeat()).shimmer(
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
+          padding: EdgeInsets.symmetric(
+            vertical: tema.espacamento,
+            horizontal: tema.espacamento / 2,
+          ),
+          decoration: const BoxDecoration(),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: tema.espacamento),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if(exibindoMenu)
+                Expanded(
+                  child: TextoWidget(
+                    texto: "LeiturAmiga",
+                    tema: tema,
+                    cor: Color(tema.accent),
+                    fontFamily: tema.familiaDeFonteSecundaria,
+                    weight: FontWeight.w500,
+                    tamanho: tema.tamanhoFonteG,
+                  ).animate(onComplete: (controller) => controller.repeat()).shimmer(
                         duration: const Duration(seconds: 1),
                         delay: const Duration(seconds: 1),
                         curve: Curves.easeOut,
-                      )
-                  : null,
-              nomeSvg: exibirSeta
-                  ? exibindoMenu
-                      ? "seta/chevron-left"
-                      : "seta/chevron-right"
-                  : "",
-              executar: expandirMenu,
-              ativado: false,
+                      ),
+                ),
+                if(exibindoMenu)
+                SizedBox(width: tema.espacamento),
+                FittedBox(
+                  child: Container(
+                    padding: const EdgeInsets.all(7),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color(tema.neutral).withOpacity(.1)),
+                      gradient: LinearGradient(
+                        colors: [kCorPessego, Color(tema.accent)],
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topRight,
+                      ),
+                      borderRadius: BorderRadius.circular(tema.borderRadiusXG),
+                    ),
+                    child: SvgWidget(
+                      cor: Color(tema.base200),
+                      altura: 24,
+                      nomeSvg: "menu/book-open",
+                    ),
+                  ).animate(onComplete: (controller) => controller.repeat()).shimmer(
+                    duration: const Duration(seconds: 1),
+                    delay: const Duration(seconds: 1),
+                    curve: Curves.easeOut,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
+        SizedBox(height: tema.espacamento*2),
         ListView.builder(
           itemCount: MenuLateral.values.length,
           shrinkWrap: true,
@@ -97,7 +113,11 @@ class BotoesMenuLateralWidget extends StatelessWidget {
                 nomeSvg: ativado ? item.iconeAtivado : item.iconeDesativado,
                 executar: () {
                   selecionarItem(item);
-                  Rota.navegar(context, item.rota);
+                  if (item.descricao != "Solicitações") {
+                    Rota.navegar(context, item.rota);
+                  } else {
+                    _exibirPopUp(context);
+                  }
                 },
                 ativado: ativado,
               ),
@@ -113,7 +133,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
             child: TextoWidget(
               texto: "A",
               tema: tema,
-              cor: Color(tema.base100),
+              cor: Color(tema.baseContent),
               tamanho: 12,
               weight: FontWeight.w600,
             ),
@@ -145,7 +165,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
             padding: const EdgeInsets.all(2),
             child: SvgWidget(
               nomeSvg: "tema/sun",
-              cor: Color(tema.base200),
+              cor: Color(tema.baseContent),
             ),
           ),
           aoAlterar: alterarTema,
@@ -161,5 +181,24 @@ class BotoesMenuLateralWidget extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void _exibirPopUp(BuildContext context) async {
+    bool navegarParaSolicitacoes = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return PopUpPadraoWidget(
+          tema: tema,
+          conteudo: ConteudoNotificacoesWidget(
+            tema: tema,
+            aoVisualizarSolicitacao: () {
+              Navigator.pop(context, true);
+            },
+          ),
+        );
+      },
+    );
+    selecionarItem(navegarParaSolicitacoes ? MenuLateral.SOLICITACOES : MenuLateral.PAGINA_PRINCIPAL);
+    Rota.navegar(context, navegarParaSolicitacoes ? Rota.CRIAR_SOLICITACAO : Rota.HOME);
   }
 }

@@ -1,12 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
+import 'package:projeto_leituramiga/interface/page/autenticacao/esqueceu_senha.page.dart';
 
 enum Rota {
   AUTENTICACAO(url: "/", pageInfo: AutenticacaoRoute.page),
   AREA_LOGADA(url: "/leituramiga/", pageInfo: AreaLogadaRoute.page),
   LOGIN(url: "login", pageInfo: LoginRoute.page),
   CADASTRO_USUARIO(url: "cadastro-usuario", pageInfo: CadastroUsuarioRoute.page),
+  SENHA(url:"esqueceu-senha",pageInfo: EsqueceSenhaRoute.page),
   HOME(url: "home", pageInfo: HomeRoute.page),
   LIVRO(url: "livro", pageInfo: LivrosRoute.page),
   USUARIO(url: "usuario", pageInfo: UsuarioRoute.page),
@@ -28,6 +30,7 @@ enum Rota {
           subrotas: [
             adicionar(rota: LOGIN, inicial: true),
             adicionar(rota: CADASTRO_USUARIO),
+            adicionar(rota: SENHA),
           ],
         ),
         adicionar(

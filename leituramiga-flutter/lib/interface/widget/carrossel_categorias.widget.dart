@@ -1,7 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/chip/chip.widget.dart';
-import 'dart:math' as math;
 
 class CarrosselCategoriaWidget extends StatefulWidget {
   final Tema tema;
@@ -37,12 +38,11 @@ class _CarrosselCategoriaWidgetState extends State<CarrosselCategoriaWidget> {
               itemCount: widget.categoriasPorId.length,
               itemBuilder: (context, indice) {
                 String categoria = widget.categoriasPorId.values.toList()[indice];
-                Color color = Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
                 return Row(
                   children: [
                     ChipWidget(
                       tema: widget.tema,
-                      cor: color,
+                      cor: _obterCorAleatoria(),
                       texto: categoria,
                       corTexto: const Color(0xff464A52),
                     ),
@@ -86,4 +86,13 @@ class _CarrosselCategoriaWidgetState extends State<CarrosselCategoriaWidget> {
       ),
     );
   }
+
+  Color _obterCorAleatoria() {
+    final Random random = Random();
+    double hue = random.nextDouble() * 360; // Matiz: qualquer valor entre 0 e 360
+    double saturation = random.nextDouble() * 0.4 + 0.3; // Saturação baixa: entre 0.3 e 0.7
+
+    return HSLColor.fromAHSL(1.0, hue, saturation, .8).toColor();
+  }
+
 }

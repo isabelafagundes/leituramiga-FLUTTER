@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
-class BotaoRedondoWidget extends StatelessWidget {
+class BotaoRedondoWidget extends StatefulWidget {
   final Tema tema;
   final Function() aoClicar;
   final String nomeSvg;
   final Widget? icone;
   final Color? corIcone;
   final Color? corFundo;
+  final EdgeInsets? padding;
 
   const BotaoRedondoWidget({
     super.key,
@@ -18,35 +20,50 @@ class BotaoRedondoWidget extends StatelessWidget {
     this.corIcone,
     this.corFundo,
     this.icone,
+    this.padding,
   });
+
+  @override
+  State<BotaoRedondoWidget> createState() => _BotaoRedondoWidgetState();
+}
+
+class _BotaoRedondoWidgetState extends State<BotaoRedondoWidget> {
+  bool _hover = false;
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
+      onEnter: (_) => setState(() => _hover = true),
+      onExit: (_) => setState(() => _hover = false),
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: aoClicar,
+        onTap: widget.aoClicar,
         child: Container(
-          padding: const EdgeInsets.all(10),
+          padding: widget.padding ?? const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(tema.borderRadiusXG),
-            border: Border.all(color: Color(tema.neutral).withOpacity(.2)),
-            color: corFundo ?? Color(tema.base200),
+            borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
+            border: Border.all(color: Color(widget.tema.neutral).withOpacity(.2)),
+            color: widget.corFundo ?? Color(widget.tema.base200),
             boxShadow: [
               BoxShadow(
-                color: Color(tema.neutral).withOpacity(.15),
+                color: Color(widget.tema.neutral).withOpacity(.15),
                 offset: const Offset(0, 2),
                 blurRadius: 2,
               ),
             ],
           ),
-          child: icone ??
+          child: widget.icone ??
               SvgWidget(
-                nomeSvg: nomeSvg,
+                nomeSvg: widget.nomeSvg,
                 altura: 16,
-                cor: corIcone ?? Color(tema.baseContent),
+                cor: widget.corIcone ?? Color(widget.tema.baseContent),
               ),
         ),
+      ).animate(target: _hover ? 1 : 0, onComplete: (controller) {
+        if(_hover) controller.repeat();
+      }).shimmer(
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeOut,
       ),
     );
   }
