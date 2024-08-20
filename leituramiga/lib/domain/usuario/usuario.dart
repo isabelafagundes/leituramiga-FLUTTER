@@ -1,7 +1,7 @@
-import 'package:leituramiga/dominio/email.dart';
-import 'package:leituramiga/dominio/instituicao_de_ensino.dart';
-import 'package:leituramiga/dominio/super/entidade.dart';
-import 'package:leituramiga/dominio/telefone.dart';
+import 'package:leituramiga/domain/usuario/email.dart';
+import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
+import 'package:leituramiga/domain/super/entidade.dart';
+import 'package:leituramiga/domain/usuario/telefone.dart';
 
 class Usuario extends Entidade {
   final int? _numero;
@@ -12,6 +12,7 @@ class Usuario extends Entidade {
   final int _numeroDeLivros;
   final String? _descricao;
   final InstituicaoDeEnsino _instituicaoDeEnsino;
+  final int _numeroEndereco;
 
   Usuario.criar(
     this._nome,
@@ -21,6 +22,7 @@ class Usuario extends Entidade {
     this._numeroDeLivros,
     this._descricao,
     this._instituicaoDeEnsino,
+    this._numeroEndereco,
   ) : _numero = null;
 
   Usuario.carregar(
@@ -32,6 +34,7 @@ class Usuario extends Entidade {
     this._numeroDeLivros,
     this._descricao,
     this._instituicaoDeEnsino,
+    this._numeroEndereco,
   );
 
   int? get numero => _numero;
@@ -57,4 +60,6 @@ class Usuario extends Entidade {
   String? get descricao => _descricao;
 
   InstituicaoDeEnsino get instituicaoDeEnsino => _instituicaoDeEnsino;
+
+  int get numeroEndereco => _numeroEndereco;
 }

@@ -1,24 +1,25 @@
-import 'package:leituramiga/dominio/super/entidade.dart';
-import 'package:leituramiga/dominio/tipo_solicitacao.dart';
+import 'package:leituramiga/domain/data_hora.dart';
+import 'package:leituramiga/domain/super/entidade.dart';
+import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
+import 'package:leituramiga/domain/livro/tipo_status_livro.dart';
 
 class Livro extends Entidade {
   final int _numero;
   final String _nome;
   final String _nomeAutor;
-  final int _numeroAutor;
   final String _descricao;
   final String _descricaoEstado;
   final int _numeroCategoria;
   final List<TipoSolicitacao> _tiposSolicitacao;
   final int _numeroUsuario;
-  final DateTime _dataCriacao;
-  final DateTime? _dataUltimaSolicitacao;
+  final DataHora _dataCriacao;
+  final DataHora? _dataUltimaSolicitacao;
+  final TipoStatusLivro _status;
 
   Livro.carregar(
     this._numero,
     this._nome,
     this._nomeAutor,
-    this._numeroAutor,
     this._descricao,
     this._descricaoEstado,
     this._numeroCategoria,
@@ -26,11 +27,12 @@ class Livro extends Entidade {
     this._numeroUsuario,
     this._dataCriacao,
     this._dataUltimaSolicitacao,
+    this._status,
   );
 
   int get numero => _numero;
 
-  DateTime get dataCriacao => _dataCriacao;
+  DataHora get dataCriacao => _dataCriacao;
 
   @override
   String get id => _numero.toString();
@@ -43,9 +45,7 @@ class Livro extends Entidade {
   String get nome => _nome;
 
   String get nomeAutor => _nomeAutor;
-
-  int get numeroAutor => _numeroAutor;
-
+  
   String get descricao => _descricao;
 
   String get descricaoEstado => _descricaoEstado;
@@ -56,5 +56,7 @@ class Livro extends Entidade {
 
   int get numeroUsuario => _numeroUsuario;
 
-  DateTime? get dataUltimaSolicitacao => _dataUltimaSolicitacao;
+  DataHora? get dataUltimaSolicitacao => _dataUltimaSolicitacao;
+
+  TipoStatusLivro get status => _status;
 }

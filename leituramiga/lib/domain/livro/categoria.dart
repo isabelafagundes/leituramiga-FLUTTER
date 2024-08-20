@@ -1,4 +1,4 @@
-import 'package:leituramiga/dominio/super/entidade.dart';
+import 'package:leituramiga/domain/super/entidade.dart';
 
 class Categoria extends Entidade {
   final int _numero;

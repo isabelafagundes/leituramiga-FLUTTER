@@ -1,4 +1,4 @@
-import 'package:leituramiga/dominio/super/entidade.dart';
+import 'package:leituramiga/domain/super/entidade.dart';
 
 class InstituicaoDeEnsino extends Entidade {
   final int _numero;
@@ -14,4 +14,10 @@ class InstituicaoDeEnsino extends Entidade {
   Map<String, dynamic> paraMapa() {
     return {};
   }
+
+  String get nome => _nome;
+
+  String get sigla => _sigla;
+
+  int get numero => _numero;
 }

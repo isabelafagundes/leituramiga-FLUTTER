@@ -1,5 +1,5 @@
-import 'package:leituramiga/dominio/super/erro_dominio.dart';
-import 'package:leituramiga/dominio/super/objeto_de_valor.dart';
+import 'package:leituramiga/domain/super/erro_dominio.dart';
+import 'package:leituramiga/domain/super/objeto_de_valor.dart';
 
 class Telefone extends ObjetoDeValor {
   final String _numero;
