@@ -31,8 +31,8 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
     return _visualizarSolicitacao
         ? ConteudoResumoSolicitacaoWidget(tema: widget.tema)
         : Container(
-            width: Responsive.larguraP(context) ? Responsive.largura(context) : 600,
-            height: Responsive.larguraP(context) ? Responsive.altura(context) :  Responsive.altura(context)-40,
+            width: Responsive.largura(context) <= 600 ? Responsive.largura(context) : 600,
+            height: Responsive.largura(context) <= 600 ? Responsive.altura(context) : Responsive.altura(context) - 40,
             padding: EdgeInsets.all(widget.tema.espacamento * 2),
             child: Column(
               children: [
@@ -95,7 +95,6 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
                         ],
                       ),
                     ),
-
                   ],
                 ),
                 SizedBox(height: widget.tema.espacamento * 2),

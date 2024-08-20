@@ -15,8 +15,8 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(tema.espacamento * 2),
-      width: Responsive.larguraM(context) ? Responsive.largura(context) : 600,
-      height: Responsive.larguraM(context) ? Responsive.altura(context) : null,
+      width: Responsive.largura(context) <= 600? Responsive.largura(context) : 600,
+      height: Responsive.largura(context) <= 600? Responsive.altura(context) : null,
       child: Column(
         children: [
           Flex(
@@ -197,6 +197,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
             direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
             mainAxisSize: MainAxisSize.min,
             children: [
+              if(false)
               BotaoWidget(
                 tema: tema,
                 corTexto: kCorFonte,
@@ -208,6 +209,19 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                 ),
                 corFundo: Color(tema.success),
               ),
+              if(true)
+                BotaoWidget(
+                  tema: tema,
+                  corTexto: kCorFonte,
+                  texto: "Escolher livros",
+                  aoClicar: () {},
+                  icone: Icon(
+                    Icons.bookmark_add_outlined,
+                    color: kCorFonte,
+                  ),
+                  corFundo: Color(tema.accent),
+                ),
+
               SizedBox(height: tema.espacamento * 2, width: tema.espacamento * 2),
               BotaoWidget(
                 tema: tema,

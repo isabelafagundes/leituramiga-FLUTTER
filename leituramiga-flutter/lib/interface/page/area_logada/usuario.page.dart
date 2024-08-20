@@ -5,12 +5,12 @@ import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/duas_escolhas.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_perfil_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/grid/grid_comentarios.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/grid/grid_livros.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:auto_route/annotations.dart';
-import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 @RoutePage()
 class UsuarioPage extends StatefulWidget {
@@ -74,29 +74,11 @@ class _UsuarioPageState extends State<UsuarioPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Container(
-                          height: 30,
-                          padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 3),
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(tema.neutral).withOpacity(.1),
-                                offset: const Offset(0, 2),
-                                blurRadius: 2,
-                              ),
-                            ],
-                            color: Color(tema.accent),
-                            borderRadius: BorderRadius.circular(tema.borderRadiusXG),
-                          ),
-                          child: Center(
-                            child: TextoWidget(
-                              tema: tema,
-                              weight: FontWeight.w500,
-                              cor: Color(tema.base200),
-                              texto: _exibindoLivros ? "Criar solicitação" : "Criar comentário",
-                            ),
-                          ),
-                        ),
+                        BotaoPequenoWidget(
+                          tema: tema,
+                          aoClicar: () {},
+                          label: _exibindoLivros ? "Criar solicitação" : "Criar comentário",
+                        )
                       ],
                     ),
                   ),
