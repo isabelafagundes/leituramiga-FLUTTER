@@ -13,12 +13,16 @@ class UsuarioUseCase {
     _state.usuarioSelecionado = usuario;
   }
 
-  Future<void> atualizarUsuario(Usuario usuario) async {
+  Future<void> atualizarUsuario() async {
     if (_state.usuarioEdicao == null) return;
-    _state.usuarioEdicao = usuario;
+    await _repo.atualizarUsuario(_state.usuarioEdicao!);
   }
 
   Future<void> excluirUsuario(int numero) async {
     await _repo.excluirUsuario(numero);
+  }
+
+  void atualizarUsuarioMemoria(Usuario usuario) {
+    _state.usuarioEdicao = usuario;
   }
 }

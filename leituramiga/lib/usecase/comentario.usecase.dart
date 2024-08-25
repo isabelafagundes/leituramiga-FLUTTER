@@ -10,7 +10,10 @@ class ComentarioUseCase {
 
   Future<void> obterComentarios(int usuario) async {
     List<ComentarioPerfil> comentarios = await _repo.obterComentarios(usuario);
-    _state.comentarios = comentarios;
+    _state.comentariosPorNumero.clear();
+   for(ComentarioPerfil comentario in comentarios) {
+     _state.comentariosPorNumero[comentario.numero] = comentario;
+   }
   }
 
   Future<void> cadastrarComentario() async {
@@ -20,5 +23,9 @@ class ComentarioUseCase {
 
   Future<void> excluirComentario(int numeroComentario, int numeroPerfil) async {
     await _repo.excluirComentario(numeroComentario, numeroPerfil);
+  }
+
+  void cadastrarComentarioMemoria(ComentarioPerfil comentario) {
+    _state.comentarioEdicao = comentario;
   }
 }

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/domain/endereco/municipio.dart';
+import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
+import 'package:leituramiga/domain/livro/categoria.dart';
+import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
+import 'package:leituramiga/state/filtros.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/interface/page/area_logada/home.page.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/carrossel_categorias.widget.dart';
@@ -11,148 +15,185 @@ import 'package:projeto_leituramiga/interface/widget/menu.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
-class LayoutFiltroWidget extends StatelessWidget {
+class LayoutFiltroWidget extends StatefulWidget {
   final Tema tema;
   final bool usuario;
   final Function() aplicarFiltros;
+  final Map<int, Categoria> categoriasPorId;
+  final Map<int, Municipio> municipiosPorId;
+  final Map<int, InstituicaoDeEnsino> instituicoesPorId;
+  final Function(Categoria) selecionarCategoria;
+  final Function(InstituicaoDeEnsino) selecionarInstituicao;
+  final Function(TipoSolicitacao) selecionarTipoSolicitacao;
+  final Function(Municipio) selecionarMunicipio;
+  final int? categoriaSelecionada;
+  final bool carrergando;
 
   const LayoutFiltroWidget({
     super.key,
     required this.tema,
     required this.usuario,
     required this.aplicarFiltros,
+    required this.categoriasPorId,
+    required this.selecionarCategoria,
+    required this.selecionarInstituicao,
+    required this.selecionarTipoSolicitacao,
+    required this.selecionarMunicipio,
+    required this.municipiosPorId,
+    required this.instituicoesPorId,
+    this.categoriaSelecionada,
+    required this.carrergando,
   });
+
+  @override
+  State<LayoutFiltroWidget> createState() => _LayoutFiltroWidgetState();
+}
+
+class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
+  FiltroState get _filtroState => FiltroState.instancia;
 
   @override
   Widget build(BuildContext context) {
     return LayoutFlexivelWidget(
-      tema: tema,
+      tema: widget.tema,
       overlayChild: obterConteudo(context),
       drawerChild: obterConteudo(context),
     );
   }
 
   Widget obterConteudo(BuildContext context) => Container(
-        padding: EdgeInsets.symmetric(vertical: tema.espacamento * 2),
+        padding: EdgeInsets.symmetric(vertical: widget.tema.espacamento * 2),
         width: 550,
-        height: Responsive.largura(context) <600 ? 500 : Responsive.altura(context),
+        height: Responsive.largura(context) < 600 ? 500 : Responsive.altura(context),
         child: Column(
-          children: [
-            Row(
-              children: [
-                TextoWidget(
-                  texto: "Filtros",
-                  tema: tema,
-                  tamanho: tema.tamanhoFonteG,
-                  weight: FontWeight.w400,
-                  cor: Color(tema.baseContent),
-                ),
-                SizedBox(width: tema.espacamento),
-                SvgWidget(
-                  nomeSvg: 'filtro',
-                  cor: Color(tema.baseContent),
-                )
-              ],
-            ),
-            if (!usuario) ...[
-              TextoWidget(
-                texto: "Categorias",
-                tema: tema,
-                cor: Color(tema.baseContent),
-              ),
-              SizedBox(height: tema.espacamento),
-              CarrosselCategoriaWidget(
-                tema: tema,
-                categoriasPorId: const {
-                  1: "Drama",
-                  2: "História",
-                  3: "Terror",
-                  4: "Comédia",
-                  5: "Engenharia",
-                  6: "TI",
-                },
-              ),
-              SizedBox(height: tema.espacamento * 2),
-              TextoWidget(
-                texto: "Tipo de solicitação",
-                tema: tema,
-                cor: Color(tema.baseContent),
-              ),
-              SizedBox(height: tema.espacamento),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ChipWidget(
-                    tema: tema,
-                    cor: kCorPessego,
-                    texto: "Troca",
-                    corTexto: const Color(0xff464A52),
+          children: widget.carrergando
+              ? [
+                  Center(
+                    child: CircularProgressIndicator(
+                      color: Color(widget.tema.baseContent),
+                    ),
+                  )
+                ]
+              : [
+                  Row(
+                    children: [
+                      TextoWidget(
+                        texto: "Filtros",
+                        tema: widget.tema,
+                        tamanho: widget.tema.tamanhoFonteG,
+                        weight: FontWeight.w400,
+                        cor: Color(widget.tema.baseContent),
+                      ),
+                      SizedBox(width: widget.tema.espacamento),
+                      SvgWidget(
+                        nomeSvg: 'filtro',
+                        cor: Color(widget.tema.baseContent),
+                      )
+                    ],
                   ),
-                  SizedBox(width: tema.espacamento * 2),
-                  ChipWidget(
-                    tema: tema,
-                    cor: kCorVerde,
-                    texto: "Empréstimo",
-                    corTexto: const Color(0xff464A52),
+                  if (!widget.usuario) ...[
+                    TextoWidget(
+                      texto: "Categorias",
+                      tema: widget.tema,
+                      cor: Color(widget.tema.baseContent),
+                    ),
+                    SizedBox(height: widget.tema.espacamento),
+                    CarrosselCategoriaWidget(
+                      tema: widget.tema,
+                      selecionarCategoria: (categoria) => setState(() => widget.selecionarCategoria(categoria)),
+                      categoriasPorId: widget.categoriasPorId,
+                      categoriaSelecionada: _filtroState.numeroCategoria,
+                    ),
+                    SizedBox(height: widget.tema.espacamento * 2),
+                    TextoWidget(
+                      texto: "Tipo de solicitação",
+                      tema: widget.tema,
+                      cor: Color(widget.tema.baseContent),
+                    ),
+                    SizedBox(height: widget.tema.espacamento),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ChipWidget(
+                          tema: widget.tema,
+                          cor: kCorPessego,
+                          texto: "Troca",
+                          ativado: _filtroState.tipo == TipoSolicitacao.TROCA,
+                          aoClicar: () => setState(() => widget.selecionarTipoSolicitacao(TipoSolicitacao.TROCA)),
+                          corTexto: const Color(0xff464A52),
+                        ),
+                        SizedBox(width: widget.tema.espacamento * 2),
+                        ChipWidget(
+                          tema: widget.tema,
+                          cor: kCorVerde,
+                          aoClicar: () => setState(() => widget.selecionarTipoSolicitacao(TipoSolicitacao.EMPRESTIMO)),
+                          texto: "Empréstimo",
+                          ativado: _filtroState.tipo == TipoSolicitacao.EMPRESTIMO,
+                          corTexto: const Color(0xff464A52),
+                        ),
+                        SizedBox(width: widget.tema.espacamento * 2),
+                        ChipWidget(
+                          aoClicar: () => setState(() => widget.selecionarTipoSolicitacao(TipoSolicitacao.DOACAO)),
+                          tema: widget.tema,
+                          cor: kCorAzul,
+                          ativado: _filtroState.tipo == TipoSolicitacao.DOACAO,
+                          texto: "Doação",
+                          corTexto: const Color(0xff464A52),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: widget.tema.espacamento * 2),
+                  ],
+                  TextoWidget(
+                    texto: "Cidade",
+                    tema: widget.tema,
+                    cor: Color(widget.tema.baseContent),
                   ),
-                  SizedBox(width: tema.espacamento * 2),
-                  ChipWidget(
-                    tema: tema,
-                    cor: kCorAzul,
-                    texto: "Doação",
-                    corTexto: const Color(0xff464A52),
+                  SizedBox(height: widget.tema.espacamento),
+                  Container(
+                    constraints: const BoxConstraints(maxWidth: 300),
+                    child: MenuWidget(
+                      tema: widget.tema,
+                      escolhas: widget.municipiosPorId.values.map((e) => e.nome).toList(),
+                      aoClicar: (nomeCidade) => setState((){
+                        widget.selecionarMunicipio(
+                          widget.municipiosPorId.values.firstWhere((element) => element.nome == nomeCidade),
+                        );
+                      }),
+                    ),
                   ),
+                  SizedBox(height: widget.tema.espacamento * 2),
+                  TextoWidget(
+                    texto: "Intituições de ensino",
+                    tema: widget.tema,
+                    cor: Color(widget.tema.baseContent),
+                  ),
+                  SizedBox(height: widget.tema.espacamento),
+                  Container(
+                    constraints: const BoxConstraints(maxWidth: 300),
+                    child: MenuWidget(
+                      tema: widget.tema,
+                      escolhas: widget.instituicoesPorId.values.map((e) => e.nome).toList(),
+                      aoClicar: (nomeInstituicao) => setState(() {
+                        widget.selecionarInstituicao(
+                          widget.instituicoesPorId.values.firstWhere((element) => element.nome == nomeInstituicao),
+                        );
+                      }),
+                    ),
+                  ),
+                  const Spacer(),
+                  BotaoWidget(
+                    tema: widget.tema,
+                    texto: 'Aplicar filtros',
+                    icone: Icon(
+                      Icons.done,
+                      color: Color(widget.tema.base200),
+                    ),
+                    aoClicar: widget.aplicarFiltros,
+                  ),
+                  SizedBox(height: widget.tema.espacamento * 4),
                 ],
-              ),
-              SizedBox(height: tema.espacamento * 2),
-            ],
-            TextoWidget(
-              texto: "Cidade",
-              tema: tema,
-              cor: Color(tema.baseContent),
-            ),
-            SizedBox(height: tema.espacamento),
-            Container(
-              constraints: const BoxConstraints(maxWidth: 300),
-              child: MenuWidget(
-                tema: tema,
-                escolhas: const ["Cajamar", "Santana de Parnaíba", "São Paulo"],
-                aoClicar: () {},
-              ),
-            ),
-            SizedBox(height: tema.espacamento * 2),
-            TextoWidget(
-              texto: "Intituições de ensino",
-              tema: tema,
-              cor: Color(tema.baseContent),
-            ),
-            SizedBox(height: tema.espacamento),
-            Container(
-              constraints: const BoxConstraints(maxWidth: 300),
-              child: MenuWidget(
-                tema: tema,
-                escolhas: const ["FATEC Santana de Parnaíba", "ETEC Bartolomeu", "ETEC Gino Rezaghi"],
-                aoClicar: () {},
-              ),
-            ),
-            const Spacer(),
-            BotaoWidget(
-              tema: tema,
-              texto: 'Aplicar filtros',
-              icone: Icon(
-                Icons.done,
-                color: Color(tema.base200),
-              ),
-              aoClicar: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                ),
-              ),
-            ),
-            SizedBox(height: tema.espacamento * 4),
-
-          ],
         ),
       );
 }

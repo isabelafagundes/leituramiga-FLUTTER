@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base_com_sombra.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
@@ -11,6 +10,7 @@ class CardUsuarioWidget extends StatelessWidget {
   final String nomeUsuario;
   final String? nomeInstituicao;
   final String? nomeCidade;
+  final int quantidadeLivros;
 
   const CardUsuarioWidget({
     super.key,
@@ -18,6 +18,7 @@ class CardUsuarioWidget extends StatelessWidget {
     required this.nomeUsuario,
     this.nomeInstituicao,
     this.nomeCidade,
+    required this.quantidadeLivros,
   });
 
   @override
@@ -60,7 +61,7 @@ class CardUsuarioWidget extends StatelessWidget {
                     children: [
                       TextoWidget(
                         tema: tema,
-                        texto: "10",
+                        texto: quantidadeLivros.toString(),
                         tamanho: tema.tamanhoFonteP + 2,
                         cor: Color(tema.baseContent),
                       ),
@@ -80,11 +81,12 @@ class CardUsuarioWidget extends StatelessWidget {
           Flexible(
             flex: 2,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextoWidget(
                   tema: tema,
-                  texto: nomeUsuario,
+                  texto: "@$nomeUsuario",
                   cor: Color(tema.baseContent),
                   weight: FontWeight.w500,
                   tamanho: tema.tamanhoFonteG,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
@@ -11,17 +12,37 @@ import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
   final Tema tema;
   final Function() aoClicarProximo;
+  final Function() utilizarEnderecoPerfil;
+  final Function(FormaEntrega) aoClicarFormaEntrega;
+  final Function(bool) aoClicarFrete;
+  final TextEditingController controllerRua;
+  final TextEditingController controllerBairro;
+  final TextEditingController controllerCep;
+  final TextEditingController controllerNumero;
+  final TextEditingController controllerComplemento;
+  final TextEditingController controllerCidade;
+  final TextEditingController controllerEstado;
 
   const ConteudoEnderecoSolicitacaoWidget({
     super.key,
     required this.tema,
     required this.aoClicarProximo,
+    required this.utilizarEnderecoPerfil,
+    required this.aoClicarFormaEntrega,
+    required this.aoClicarFrete,
+    required this.controllerRua,
+    required this.controllerBairro,
+    required this.controllerCep,
+    required this.controllerNumero,
+    required this.controllerComplemento,
+    required this.controllerCidade,
+    required this.controllerEstado,
   });
 
   @override
   Widget build(BuildContext context) {
     return Flex(
-      direction:Responsive.larguraP(context) ? Axis.vertical: Axis.horizontal,
+      direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,7 +63,7 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
                     const Spacer(),
                     SwitcherWidget(
                       tema: tema,
-                      aoClicar: () {},
+                      aoClicar: utilizarEnderecoPerfil,
                     ),
                   ],
                 ),
@@ -66,8 +87,10 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
                           SizedBox(height: tema.espacamento),
                           MenuWidget(
                             tema: tema,
-                            escolhas: ["Correios", "Presencial"],
-                            aoClicar: () {},
+                            escolhas: const ["Correios", "Presencial"],
+                            aoClicar: (valor) => aoClicarFormaEntrega(
+                              FormaEntrega.values.firstWhere((e) => e.toString() == valor),
+                            ),
                           ),
                         ],
                       ),
@@ -90,7 +113,7 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
                           MenuWidget(
                             tema: tema,
                             escolhas: ["Sim", "Não"],
-                            aoClicar: () {},
+                            aoClicar: (valor) => aoClicarFrete(valor == "Sim"),
                           ),
                         ],
                       ),
@@ -106,13 +129,13 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
               Flexible(
                 child: FormularioEnderecoWidget(
                   tema: tema,
-                  controllerRua: TextEditingController(),
-                  controllerBairro: TextEditingController(),
-                  controllerCep: TextEditingController(),
-                  controllerNumero: TextEditingController(),
-                  controllerComplemento: TextEditingController(),
-                  controllerCidade: TextEditingController(),
-                  controllerEstado: TextEditingController(),
+                  controllerRua: controllerRua,
+                  controllerBairro: controllerBairro,
+                  controllerCep: controllerCep,
+                  controllerNumero: controllerNumero,
+                  controllerComplemento: controllerComplemento,
+                  controllerCidade: controllerCidade,
+                  controllerEstado: controllerEstado,
                 ),
               ),
             ],

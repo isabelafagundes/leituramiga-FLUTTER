@@ -74,7 +74,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                     MenuWidget(
                       tema: tema,
                       escolhas: ["São Paulo"],
-                      aoClicar: () {},
+                      aoClicar: (valor) {},
                     ),
                   ],
                 ),
@@ -105,7 +105,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                     MenuWidget(
                       tema: tema,
                       escolhas: ["Cajamar", "Santana de Parnaíba", "São Paulo"],
-                      aoClicar: () {},
+                      aoClicar: (valor) {},
                     ),
                   ],
                 ),

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/component/usuario.component.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/comentario_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
@@ -14,18 +20,42 @@ import 'package:auto_route/annotations.dart';
 
 @RoutePage()
 class UsuarioPage extends StatefulWidget {
-  const UsuarioPage({super.key});
+  final int numeroUsuario;
+
+  const UsuarioPage({super.key, required this.numeroUsuario});
 
   @override
   State<UsuarioPage> createState() => _UsuarioPageState();
 }
 
 class _UsuarioPageState extends State<UsuarioPage> {
+  final UsuarioComponent _usuarioComponent = UsuarioComponent();
+
   TemaState get _temaState => TemaState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
 
   bool _exibindoLivros = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _usuarioComponent.inicializar(
+      UsuarioMockRepo(),
+      ComentarioMockRepo(),
+      EnderecoMockRepo(),
+      LivroMockRepo(),
+      atualizar,
+    );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _usuarioComponent.obterUsuario(widget.numeroUsuario);
+      await _usuarioComponent.obterComentarios(widget.numeroUsuario);
+      await _usuarioComponent.obterLivrosUsuario();
+    });
+  }
+
+  void atualizar() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +78,10 @@ class _UsuarioPageState extends State<UsuarioPage> {
                   ),
                   child: CardPerfilUsuarioWidget(
                     tema: tema,
-                    descricao: "Sou estudante de ADS e tenho interesse em engenharia de software.",
-                    nomeUsuario: "@usuario",
-                    nomeInstituicao: "FATEC Satana de Parnaíba",
-                    nomeCidade: "Cajamar",
+                    descricao: _usuarioComponent.usuarioSelecionado?.descricao ?? "",
+                    nomeUsuario: _usuarioComponent.usuarioSelecionado?.nome ?? "",
+                    nomeInstituicao: _usuarioComponent.usuarioSelecionado?.nomeInstituicao ?? "",
+                    nomeCidade: _usuarioComponent.usuarioSelecionado?.nomeMunicipio ?? "",
                   ),
                 ),
                 SizedBox(
@@ -87,12 +117,22 @@ class _UsuarioPageState extends State<UsuarioPage> {
                 if (_exibindoLivros) ...[
                   GridLivroWidget(
                     tema: tema,
-                    aoClicarLivro: () => Rota.navegar(context, Rota.LIVRO),
+                    livros: _usuarioComponent.itensPaginados,
+                    aoClicarLivro: (numeroLivro) async {
+                      await _usuarioComponent.obterLivro(numeroLivro);
+                      Rota.navegarComArgumentos(
+                        context,
+                        LivrosRoute(
+                          livro: _usuarioComponent.livroSelecionado!,
+                        ),
+                      );
+                    },
                   ),
                 ],
                 if (!_exibindoLivros) ...[
                   GridComentarioWidget(
                     tema: tema,
+                    comentariosPorId: _usuarioComponent.comentariosPorNumero,
                     aoClicarComentario: () {},
                   ),
                 ]

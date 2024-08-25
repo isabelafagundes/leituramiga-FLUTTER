@@ -4,13 +4,15 @@ class ComentarioPerfil extends Entidade {
   final int _numero;
   final int _numeroUsuarioCriador;
   final int _numeroPerfil;
+  final String _nomeUsuarioCriador;
   final String _comentario;
 
-  ComentarioPerfil(
+  ComentarioPerfil.carregar(
     this._numero,
     this._numeroUsuarioCriador,
     this._numeroPerfil,
     this._comentario,
+    this._nomeUsuarioCriador,
   );
 
   @override
@@ -28,4 +30,6 @@ class ComentarioPerfil extends Entidade {
   int get numeroUsuarioCriador => _numeroUsuarioCriador;
 
   int get numero => _numero;
+
+  String get nomeUsuarioCriador => _nomeUsuarioCriador;
 }

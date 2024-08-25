@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/component/solicitacao.component.dart';
+import 'package:leituramiga/domain/notificacao.dart';
+import 'package:leituramiga/domain/solicitacao/resumo_solicitacao.dart';
+import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.service.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/duas_escolhas.widget.dart';
@@ -25,9 +32,37 @@ class ConteudoNotificacoesWidget extends StatefulWidget {
 class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget> {
   bool _exibindoEmAndamento = false;
   bool _visualizarSolicitacao = false;
+  SolicitacaoComponent solicitacaoComponent = SolicitacaoComponent();
+
+  AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
+
+  @override
+  void initState() {
+    super.initState();
+    solicitacaoComponent.inicializar(
+      SolicitacaoMockRepo(),
+      SolicitacaoMockService(),
+      NotificacaoMockRepo(),
+      atualizar,
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await solicitacaoComponent.obterNotificacoes(_autenticacaoState.usuario!.numero!);
+      await solicitacaoComponent.obterSolicitacoesIniciais(_autenticacaoState.usuario!.numero!);
+    });
+  }
+
+  void atualizar() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (solicitacaoComponent.carregando) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return _visualizarSolicitacao
         ? ConteudoResumoSolicitacaoWidget(tema: widget.tema)
         : Container(
@@ -102,34 +137,45 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
                   child: SizedBox(
                     width: 600,
                     child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 5,
-                        itemBuilder: (context, index) {
-                          if (!_exibindoEmAndamento) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                right: widget.tema.espacamento * 2,
-                                bottom: widget.tema.espacamento * 2,
-                              ),
-                              child: CardNotificacaoWidget(
-                                tema: widget.tema,
-                                aoVisualizar: () => setState(() => _visualizarSolicitacao = true),
-                              ),
-                            );
-                          }
-                          if (_exibindoEmAndamento) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                right: widget.tema.espacamento * 2,
-                                bottom: widget.tema.espacamento * 2,
-                              ),
-                              child: CardSolicitacaoWidget(
-                                tema: widget.tema,
-                                aoVisualizar: () => setState(() => _visualizarSolicitacao = true),
-                              ),
-                            );
-                          }
-                        }),
+                      shrinkWrap: true,
+                      itemCount: _exibindoEmAndamento
+                          ? solicitacaoComponent.solicitacoes.length
+                          : solicitacaoComponent.notificacoes.length,
+                      itemBuilder: (context, index) {
+                        Notificacao notificacao = solicitacaoComponent.notificacoes[index];
+                        ResumoSolicitacao resumoSolicitacao = solicitacaoComponent.solicitacoes[index];
+                        if (!_exibindoEmAndamento) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              right: widget.tema.espacamento * 2,
+                              bottom: widget.tema.espacamento * 2,
+                            ),
+                            child: CardNotificacaoWidget(
+                              tema: widget.tema,
+                              aoRecusar: () => solicitacaoComponent.recusarSolicitacao(
+                                  _autenticacaoState.usuario!.numero!, "Motivo"),
+                              aoVisualizar: () => setState(() => _visualizarSolicitacao = true),
+                              notificacao: notificacao,
+                            ),
+                          );
+                        }
+                        if (_exibindoEmAndamento) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              right: widget.tema.espacamento * 2,
+                              bottom: widget.tema.espacamento * 2,
+                            ),
+                            child: CardSolicitacaoWidget(
+                              tema: widget.tema,
+                              solicitacao: resumoSolicitacao,
+                              aoVisualizar: () => setState(() => _visualizarSolicitacao = true),
+                            ),
+                          );
+                        }
+
+                        return const SizedBox();
+                      },
+                    ),
                   ),
                 )
               ],

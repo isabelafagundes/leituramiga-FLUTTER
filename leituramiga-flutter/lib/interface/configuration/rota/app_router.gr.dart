@@ -40,9 +40,14 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     CriarSolicitacaoRoute.name: (routeData) {
+      final args = routeData.argsAs<CriarSolicitacaoRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const CriarSolicitacaoPage(),
+        child: CriarSolicitacaoPage(
+          key: args.key,
+          livro: args.livro,
+          tipoSolicitacao: args.tipoSolicitacao,
+        ),
       );
     },
     EditarPefilRoute.name: (routeData) {
@@ -64,9 +69,13 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     LivrosRoute.name: (routeData) {
+      final args = routeData.argsAs<LivrosRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const LivrosPage(),
+        child: LivrosPage(
+          key: args.key,
+          livro: args.livro,
+        ),
       );
     },
     LoginRoute.name: (routeData) {
@@ -81,16 +90,14 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const PerfilPage(),
       );
     },
-    SolicitacoesRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const SolicitacoesPage(),
-      );
-    },
     UsuarioRoute.name: (routeData) {
+      final args = routeData.argsAs<UsuarioRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const UsuarioPage(),
+        child: UsuarioPage(
+          key: args.key,
+          numeroUsuario: args.numeroUsuario,
+        ),
       );
     },
   };
@@ -154,16 +161,45 @@ class CriarLivroRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [CriarSolicitacaoPage]
-class CriarSolicitacaoRoute extends PageRouteInfo<void> {
-  const CriarSolicitacaoRoute({List<PageRouteInfo>? children})
-      : super(
+class CriarSolicitacaoRoute extends PageRouteInfo<CriarSolicitacaoRouteArgs> {
+  CriarSolicitacaoRoute({
+    Key? key,
+    required Livro livro,
+    required TipoSolicitacao tipoSolicitacao,
+    List<PageRouteInfo>? children,
+  }) : super(
           CriarSolicitacaoRoute.name,
+          args: CriarSolicitacaoRouteArgs(
+            key: key,
+            livro: livro,
+            tipoSolicitacao: tipoSolicitacao,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'CriarSolicitacaoRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<CriarSolicitacaoRouteArgs> page =
+      PageInfo<CriarSolicitacaoRouteArgs>(name);
+}
+
+class CriarSolicitacaoRouteArgs {
+  const CriarSolicitacaoRouteArgs({
+    this.key,
+    required this.livro,
+    required this.tipoSolicitacao,
+  });
+
+  final Key? key;
+
+  final Livro livro;
+
+  final TipoSolicitacao tipoSolicitacao;
+
+  @override
+  String toString() {
+    return 'CriarSolicitacaoRouteArgs{key: $key, livro: $livro, tipoSolicitacao: $tipoSolicitacao}';
+  }
 }
 
 /// generated route for
@@ -210,16 +246,39 @@ class HomeRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LivrosPage]
-class LivrosRoute extends PageRouteInfo<void> {
-  const LivrosRoute({List<PageRouteInfo>? children})
-      : super(
+class LivrosRoute extends PageRouteInfo<LivrosRouteArgs> {
+  LivrosRoute({
+    Key? key,
+    required Livro livro,
+    List<PageRouteInfo>? children,
+  }) : super(
           LivrosRoute.name,
+          args: LivrosRouteArgs(
+            key: key,
+            livro: livro,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'LivrosRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<LivrosRouteArgs> page = PageInfo<LivrosRouteArgs>(name);
+}
+
+class LivrosRouteArgs {
+  const LivrosRouteArgs({
+    this.key,
+    required this.livro,
+  });
+
+  final Key? key;
+
+  final Livro livro;
+
+  @override
+  String toString() {
+    return 'LivrosRouteArgs{key: $key, livro: $livro}';
+  }
 }
 
 /// generated route for
@@ -266,14 +325,38 @@ class SolicitacoesRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [UsuarioPage]
-class UsuarioRoute extends PageRouteInfo<void> {
-  const UsuarioRoute({List<PageRouteInfo>? children})
-      : super(
+class UsuarioRoute extends PageRouteInfo<UsuarioRouteArgs> {
+  UsuarioRoute({
+    Key? key,
+    required int numeroUsuario,
+    List<PageRouteInfo>? children,
+  }) : super(
           UsuarioRoute.name,
+          args: UsuarioRouteArgs(
+            key: key,
+            numeroUsuario: numeroUsuario,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'UsuarioRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<UsuarioRouteArgs> page =
+      PageInfo<UsuarioRouteArgs>(name);
+}
+
+class UsuarioRouteArgs {
+  const UsuarioRouteArgs({
+    this.key,
+    required this.numeroUsuario,
+  });
+
+  final Key? key;
+
+  final int numeroUsuario;
+
+  @override
+  String toString() {
+    return 'UsuarioRouteArgs{key: $key, numeroUsuario: $numeroUsuario}';
+  }
 }

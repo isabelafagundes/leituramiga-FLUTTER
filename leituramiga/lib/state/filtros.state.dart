@@ -8,7 +8,7 @@ class FiltroState {
 
   FiltroState._();
 
-  static FiltroState? get instancia {
+  static FiltroState get instancia {
     _intancia ??= FiltroState._();
     return _intancia!;
   }
@@ -19,18 +19,34 @@ class FiltroState {
   TipoSolicitacao? tipo;
 
   void selecionarMunicipio(Municipio municipio) {
+    if (numeroMunicipio == municipio.numero) {
+      numeroMunicipio = null;
+      return;
+    }
     numeroMunicipio = municipio.numero;
   }
 
   void selecionarInstituicao(InstituicaoDeEnsino instituicao) {
+    if (numeroInstituicao == instituicao.numero) {
+      numeroInstituicao = null;
+      return;
+    }
     numeroInstituicao = instituicao.numero;
   }
 
   void selecionarCategoria(Categoria categoria) {
+    if (numeroCategoria == categoria.numero) {
+      numeroCategoria = null;
+      return;
+    }
     numeroCategoria = categoria.numero;
   }
 
   void selecionarTipo(TipoSolicitacao tipo) {
+    if (this.tipo == tipo) {
+      this.tipo = null;
+      return;
+    }
     this.tipo = tipo;
   }
 

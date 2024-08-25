@@ -21,7 +21,7 @@ class MenuLateralWidget extends StatefulWidget {
 }
 
 class _MenuLateralWidgetState extends State<MenuLateralWidget> {
-  double _larguraExpandida = 250;
+  double _larguraExpandida = 240;
   double _larguraMinimizada = 100;
   bool _expandido = true;
   MenuLateral _itemSelecionado = MenuLateral.PAGINA_PRINCIPAL;
@@ -35,6 +35,7 @@ class _MenuLateralWidgetState extends State<MenuLateralWidget> {
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
+          margin: const EdgeInsets.only(right:10),
           width: _expandido ? _larguraExpandida : _larguraMinimizada,
           padding: EdgeInsets.symmetric(
             vertical: widget.tema.espacamento * 2,
@@ -66,7 +67,7 @@ class _MenuLateralWidgetState extends State<MenuLateralWidget> {
           ),
         ),
         Positioned(
-          right: -16,
+          right: -6,
           top: 30,
           child: BotaoRedondoWidget(
             tema: widget.tema,

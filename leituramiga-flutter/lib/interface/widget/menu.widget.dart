@@ -6,7 +6,7 @@ import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 class MenuWidget extends StatefulWidget {
   final Tema tema;
   final List<String> escolhas;
-  final Function() aoClicar;
+  final Function(String) aoClicar;
 
   const MenuWidget({
     super.key,
@@ -103,6 +103,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                   child: Container(
                     width: render.size.width,
                     height: 200,
+                    padding:  EdgeInsets.symmetric(vertical: widget.tema.espacamento+2),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: Color(widget.tema.neutral).withOpacity(.2)),
@@ -122,6 +123,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                           return ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(widget.tema.base200),
+                              padding: EdgeInsets.symmetric(vertical: widget.tema.espacamento),
                               shadowColor: Colors.transparent,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(widget.tema.borderRadiusM), // Border Radius
@@ -137,7 +139,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                               setState(() {
                                 _label = widget.escolhas[index];
                                 _indiceHover = -1;
-                                widget.aoClicar();
+                                widget.aoClicar(_label);
                               });
                             },
                             child: TextoWidget(

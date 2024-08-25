@@ -26,7 +26,7 @@ class TextoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       texto,
-      textAlign: align ?? TextAlign.justify,
+      textAlign: align ?? TextAlign.start,
       overflow: TextOverflow.ellipsis,
       maxLines: maxLines ?? 2,
       style: TextStyle(

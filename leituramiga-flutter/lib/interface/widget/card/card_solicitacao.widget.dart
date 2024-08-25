@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/domain/solicitacao/resumo_solicitacao.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -9,8 +10,14 @@ import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 class CardSolicitacaoWidget extends StatefulWidget {
   final Tema tema;
   final Function() aoVisualizar;
+  final ResumoSolicitacao solicitacao;
 
-  const CardSolicitacaoWidget({required this.tema, super.key, required this.aoVisualizar});
+  const CardSolicitacaoWidget({
+    required this.tema,
+    super.key,
+    required this.aoVisualizar,
+    required this.solicitacao,
+  });
 
   @override
   State<CardSolicitacaoWidget> createState() => _CardSolicitacaoWidgetState();
@@ -64,7 +71,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                       tema: widget.tema,
                     ),
                     TextoWidget(
-                      texto: "@usuario",
+                      texto: widget.solicitacao.nomeUsuario,
                       tema: widget.tema,
                       weight: FontWeight.w500,
                     ),
@@ -83,27 +90,30 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                           tema: widget.tema,
                         ),
                         TextoWidget(
-                          texto: "20/12/2024",
+                          texto: widget.solicitacao.dataEntrega.formatar("dd/MM/yyyy"),
                           tema: widget.tema,
                         ),
                       ],
                     ),
-                    const Spacer(),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        TextoWidget(
-                          texto: "Data devolução",
-                          weight: FontWeight.w500,
-                          tema: widget.tema,
-                        ),
-                        TextoWidget(
-                          texto: "20/01/2025",
-                          tema: widget.tema,
-                        ),
-                      ],
-                    ),
+                    if(widget.solicitacao.dataDevolucao != null)
+                    ...[
+                      const Spacer(),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          TextoWidget(
+                            texto: "Data devolução",
+                            weight: FontWeight.w500,
+                            tema: widget.tema,
+                          ),
+                          TextoWidget(
+                            texto: widget.solicitacao.dataDevolucao?.formatar("dd/MM/yyyy")??'',
+                            tema: widget.tema,
+                          ),
+                        ],
+                      ),
+                    ]
                   ],
                 ),
                 SizedBox(height: widget.tema.espacamento / 2),
@@ -117,7 +127,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                       tema: widget.tema,
                     ),
                     TextoWidget(
-                      texto: "Rua Dona Salvadora, 251, apto. 56, b. 9",
+                      texto: widget.solicitacao.endereco.toString(),
                       tema: widget.tema,
                     ),
                   ],

@@ -1,14 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_leituramiga/interface/configuration/guards/usuario_logado.guard.dart';
+import 'package:projeto_leituramiga/interface/configuration/guards/usuario_nao_logado.guard.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
-import 'package:projeto_leituramiga/interface/page/autenticacao/esqueceu_senha.page.dart';
 
 enum Rota {
   AUTENTICACAO(url: "/", pageInfo: AutenticacaoRoute.page),
   AREA_LOGADA(url: "/leituramiga/", pageInfo: AreaLogadaRoute.page),
   LOGIN(url: "login", pageInfo: LoginRoute.page),
   CADASTRO_USUARIO(url: "cadastro-usuario", pageInfo: CadastroUsuarioRoute.page),
-  SENHA(url:"esqueceu-senha",pageInfo: EsqueceSenhaRoute.page),
+  SENHA(url: "esqueceu-senha", pageInfo: EsqueceSenhaRoute.page),
   HOME(url: "home", pageInfo: HomeRoute.page),
   LIVRO(url: "livro", pageInfo: LivrosRoute.page),
   USUARIO(url: "usuario", pageInfo: UsuarioRoute.page),
@@ -28,21 +29,21 @@ enum Rota {
           rota: AUTENTICACAO,
           inicial: true,
           subrotas: [
-            adicionar(rota: LOGIN, inicial: true),
-            adicionar(rota: CADASTRO_USUARIO),
-            adicionar(rota: SENHA),
+            adicionar(rota: LOGIN, inicial: true, guards: [UsuarioNaoLogadoGuard()]),
+            adicionar(rota: CADASTRO_USUARIO, guards: [UsuarioNaoLogadoGuard()]),
+            adicionar(rota: SENHA, guards: [UsuarioNaoLogadoGuard()]),
           ],
         ),
         adicionar(
           rota: AREA_LOGADA,
           subrotas: [
             adicionar(rota: HOME, inicial: true),
-            adicionar(rota: LIVRO),
-            adicionar(rota: CRIAR_SOLICITACAO),
-            adicionar(rota: USUARIO),
-            adicionar(rota: PERFIL),
-            adicionar(rota: CRIAR_LIVRO),
-            adicionar(rota: EDITAR_PERFIL),
+            adicionar(rota: LIVRO, guards: [UsuarioLogadoGuard()]),
+            adicionar(rota: CRIAR_SOLICITACAO, guards: [UsuarioLogadoGuard()]),
+            adicionar(rota: USUARIO, guards: [UsuarioLogadoGuard()]),
+            adicionar(rota: PERFIL, guards: [UsuarioLogadoGuard()]),
+            adicionar(rota: CRIAR_LIVRO, guards: [UsuarioLogadoGuard()]),
+            adicionar(rota: EDITAR_PERFIL, guards: [UsuarioLogadoGuard()]),
           ],
         ),
       ];

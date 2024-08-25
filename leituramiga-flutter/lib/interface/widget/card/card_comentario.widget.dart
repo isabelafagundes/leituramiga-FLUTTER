@@ -37,7 +37,7 @@ class CardComentarioWidget extends StatelessWidget {
                   ),
                 ),
                 TextoWidget(
-                  texto: "@usuario",
+                  texto: "@$nomeUsuario",
                   tema: tema,
                   tamanho: tema.tamanhoFonteP + 2,
                 ),

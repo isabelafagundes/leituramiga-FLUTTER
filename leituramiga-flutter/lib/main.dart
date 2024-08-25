@@ -3,6 +3,7 @@ import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.state.dart';
+import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/scroll_horizontal.dart';
 
 void main() {
@@ -25,10 +26,16 @@ class MyApp extends StatelessWidget {
         scrollbarTheme: ScrollbarThemeData(
           thumbColor: WidgetStateProperty.all(Color(tema.accent)), // Cor da barra de rolagem
           thickness: WidgetStateProperty.all(8.0), // Espessura da barra de rolagem
-          radius: Radius.circular(10), // Raio das bordas da barra de rolagem
+          radius: const Radius.circular(10), // Raio das bordas da barra de rolagem
         ),
       ),
       debugShowCheckedModeBanner: false,
+      builder: (context, child) {
+        return NotificacaoWidget(
+          tema: tema,
+          child: child!,
+        );
+      },
       routerConfig: RotaState.instancia!.appRouter.config(),
     );
   }

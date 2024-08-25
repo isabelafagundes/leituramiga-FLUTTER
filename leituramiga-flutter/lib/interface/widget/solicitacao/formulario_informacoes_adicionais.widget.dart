@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
@@ -9,6 +10,9 @@ import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
   final Tema tema;
   final TextEditingController controllerInformacoes;
+  final TextEditingController controllerDataEntrega;
+  final TextEditingController controllerDataDevolucao;
+  final TipoSolicitacao tipoSolicitacao;
   final Function() aoClicarProximo;
 
   const FormularioInformacoesAdicionaisWidget({
@@ -16,6 +20,9 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
     required this.tema,
     required this.controllerInformacoes,
     required this.aoClicarProximo,
+    required this.controllerDataEntrega,
+    required this.controllerDataDevolucao,
+    required this.tipoSolicitacao,
   });
 
   @override
@@ -72,25 +79,27 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                     Flexible(
                       child: InputWidget(
                         tema: tema,
-                        controller: controllerInformacoes,
+                        controller: controllerDataEntrega,
                         label: "Data entrega",
                         tamanho: tema.tamanhoFonteM,
                         onChanged: (valor) {},
                       ),
                     ),
-                    SizedBox(
-                      width: tema.espacamento * 2,
-                      height: tema.espacamento * 2,
-                    ),
-                    Flexible(
-                      child: InputWidget(
-                        tema: tema,
-                        controller: controllerInformacoes,
-                        label: "Data devolução",
-                        tamanho: tema.tamanhoFonteM,
-                        onChanged: (valor) {},
+                    if (tipoSolicitacao == TipoSolicitacao.EMPRESTIMO) ...[
+                      SizedBox(
+                        width: tema.espacamento * 2,
+                        height: tema.espacamento * 2,
                       ),
-                    ),
+                      Flexible(
+                        child: InputWidget(
+                          tema: tema,
+                          controller: controllerDataDevolucao,
+                          label: "Data devolução",
+                          tamanho: tema.tamanhoFonteM,
+                          onChanged: (valor) {},
+                        ),
+                      ),
+                    ]
                   ],
                 ),
               ),

@@ -109,7 +109,8 @@ class BotoesMenuLateralWidget extends StatelessWidget {
               padding: EdgeInsets.only(bottom: tema.espacamento),
               child: BotaoMenuWidget(
                 tema: tema,
-                textoLabel: exibindoMenu ? item.descricao : null,
+                semLabel: !exibindoMenu,
+                textoLabel:  item.descricao,
                 nomeSvg: ativado ? item.iconeAtivado : item.iconeDesativado,
                 executar: () {
                   selecionarItem(item);
@@ -174,7 +175,8 @@ class BotoesMenuLateralWidget extends StatelessWidget {
         BotaoMenuWidget(
           tema: tema,
           iconeAEsquerda: false,
-          textoLabel: exibindoMenu ? "Sair" : null,
+          semLabel: !exibindoMenu,
+          textoLabel:  "Sair" ,
           nomeSvg: "logout",
           executar: () => Rota.navegar(context, Rota.AUTENTICACAO),
           ativado: false,

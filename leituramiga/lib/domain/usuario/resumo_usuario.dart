@@ -24,4 +24,16 @@ class ResumoUsuario extends Entidade {
   Map<String, dynamic> paraMapa() {
     return {};
   }
+
+  int get quantidadeLivros => _quantidadeLivros;
+
+  String get nomeMunicipio => _nomeMunicipio;
+
+  String get nomeInstituicao => _nomeInstituicao;
+
+  String get nomeUsuario => _nomeUsuario;
+
+  String get nome => _nome;
+
+  int get numero => _numero;
 }

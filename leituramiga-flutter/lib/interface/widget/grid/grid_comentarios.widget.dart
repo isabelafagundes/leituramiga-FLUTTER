@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/domain/usuario/comentario_perfil.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_comentario.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/card/card_livro.widget.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class GridComentarioWidget extends StatelessWidget {
   final Tema tema;
   final Function() aoClicarComentario;
+  final Map<int, ComentarioPerfil> comentariosPorId;
 
   const GridComentarioWidget({
     super.key,
     required this.tema,
     required this.aoClicarComentario,
+    required this.comentariosPorId,
   });
 
   @override
@@ -25,13 +27,14 @@ class GridComentarioWidget extends StatelessWidget {
         crossAxisSpacing: tema.espacamento * 2,
       ),
       itemBuilder: (ccontext, indice) {
+        ComentarioPerfil comentario = comentariosPorId.values.elementAt(indice);
         return CardComentarioWidget(
           tema: tema,
-          nomeUsuario: "@usuario",
-          comentario: 'Comentário comentário comentário comentário comentário comentário comentário',
+          nomeUsuario: comentario.nomeUsuarioCriador,
+          comentario: comentario.comentario,
         );
       },
-      itemCount: 3,
+      itemCount: comentariosPorId.length,
     ).animate().fade();
   }
 

@@ -106,12 +106,14 @@ class _PerfilPageState extends State<PerfilPage> {
                 if (_exibindoLivros) ...[
                   GridLivroWidget(
                     tema: tema,
-                    aoClicarLivro: () => Rota.navegar(context, Rota.LIVRO),
+                    livros: [],
+                    aoClicarLivro: (numeroLivro) async {},
                   ),
                 ],
                 if (!_exibindoLivros) ...[
                   GridComentarioWidget(
                     tema: tema,
+                    comentariosPorId: {},
                     aoClicarComentario: () {},
                   ),
                 ]

@@ -39,7 +39,8 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
             children: [
               BotaoMenuWidget(
                 tema: widget.tema,
-                textoLabel: null,
+                textoLabel: "",
+                semLabel: true,
                 executar: () => widget.selecionarItem(MenuLateral.PAGINA_PRINCIPAL),
                 ativado: widget.itemSelecionado == MenuLateral.PAGINA_PRINCIPAL,
                 nomeSvg: widget.itemSelecionado == MenuLateral.PAGINA_PRINCIPAL
@@ -53,14 +54,15 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
               ),
             ],
           ),
-          const Spacer(),
+          SizedBox(width: widget.tema.espacamento *4),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               BotaoMenuWidget(
                 tema: widget.tema,
-                textoLabel: null,
+                textoLabel: "",
+                semLabel: true,
                 executar: () => widget.selecionarItem(MenuLateral.SOLICITACOES),
                 ativado: widget.itemSelecionado == MenuLateral.SOLICITACOES,
                 nomeSvg: widget.itemSelecionado == MenuLateral.SOLICITACOES

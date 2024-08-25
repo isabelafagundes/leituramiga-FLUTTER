@@ -9,7 +9,7 @@ import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:leituramiga/domain/super/entidade.dart';
 
 class Solicitacao extends Entidade {
-  final int _numero;
+  final int? _numero;
   final int _numeroUsuarioProprietario;
   final int _numeroUsuarioCriador;
   final LivrosSolicitacao _livrosCriador;
@@ -42,10 +42,10 @@ class Solicitacao extends Entidade {
     this._status,
     this._dataAceite,
     this._motivoRecusa,
-  )   : _livrosCriador = LivrosSolicitacao.carregar(_numero, _numeroUsuarioCriador, []),
+  )   : _livrosCriador = LivrosSolicitacao.carregar(_numero ?? 0, _numeroUsuarioCriador, []),
         _enderecoUsuarioCriador = _endereco == null;
 
-  int get numero => _numero;
+  int? get numero => _numero;
 
   @override
   String get id => _numero.toString();
@@ -78,7 +78,7 @@ class Solicitacao extends Entidade {
     if (numeroUsuario == _numeroUsuarioCriador) {
       _livrosCriador.adicionar(livro);
     } else {
-      _livrosProprietario ??= LivrosSolicitacao.carregar(_numero, _numeroUsuarioProprietario, []);
+      _livrosProprietario ??= LivrosSolicitacao.carregar(_numero ?? 0, _numeroUsuarioProprietario, []);
       _livrosProprietario!.adicionar(livro);
     }
   }

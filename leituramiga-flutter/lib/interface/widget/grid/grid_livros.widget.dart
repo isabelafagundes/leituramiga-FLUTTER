@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_livro.widget.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class GridLivroWidget extends StatelessWidget {
   final Tema tema;
-  final Function() aoClicarLivro;
+  final Function(int numero) aoClicarLivro;
+  final List<ResumoLivro> livros;
 
   const GridLivroWidget({
     super.key,
     required this.tema,
     required this.aoClicarLivro,
+    required this.livros,
   });
 
   @override
@@ -24,24 +27,27 @@ class GridLivroWidget extends StatelessWidget {
         crossAxisSpacing: tema.espacamento * 2,
       ),
       itemBuilder: (ccontext, indice) {
-        return CardLivroWidget(
+        ResumoLivro livro = livros[indice];
+        return  CardLivroWidget(
           tema: tema,
-          aoClicar: aoClicarLivro,
-          nomeCategoria: "Categoria",
-          nomeUsuario: "@usuario",
-          nomeCidade: "Santana de Parnaíba",
-          nomeInstituicao: "FATEC Santana de Parnaíba",
-          nomeLivro: "Nome do livro",
-          descricao:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque  et malesuada fames ac turpis egestas. Ut a ligula cursus, volutpat lorem.",
+          aoClicar: () => aoClicarLivro(livro.numero),
+          nomeCategoria: livro.nomeCategoria,
+          nomeUsuario: livro.nomeUsuario,
+          nomeCidade: livro.nomeMunicipio,
+          nomeInstituicao: livro.nomeInstituicao,
+          nomeLivro: livro.nomeLivro,
+          descricao: livro.descricao,
         );
       },
-      itemCount: 3,
+      itemCount: livros.length,
     ).animate().fade();
   }
 
   int _obterQuantidadePorLinha(BuildContext context) {
-    double largura = MediaQuery.of(context).size.width;
+    double largura = MediaQuery
+        .of(context)
+        .size
+        .width;
     if (largura > 1500) return 4;
     if (largura > 1200) return 3;
     if (largura > 800) return 2;

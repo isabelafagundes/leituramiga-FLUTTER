@@ -1,7 +1,7 @@
 abstract class SolicitacaoService {
-  Future<void> recusarSolicitacao(String motivo);
+  Future<void> recusarSolicitacao(int numero, String motivo);
 
-  Future<void> aceitarSolicitacao();
+  Future<void> aceitarSolicitacao(int numero);
 
-  Future<void> cancelarSolicitacao();
+  Future<void> cancelarSolicitacao(int numero);
 }

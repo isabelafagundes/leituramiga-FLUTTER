@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/domain/notificacao.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
@@ -8,11 +9,15 @@ import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 class CardNotificacaoWidget extends StatefulWidget {
   final Tema tema;
   final Function() aoVisualizar;
+  final Function() aoRecusar;
+  final Notificacao notificacao;
 
   const CardNotificacaoWidget({
     required this.tema,
     super.key,
     required this.aoVisualizar,
+    required this.notificacao,
+    required this.aoRecusar,
   });
 
   @override
@@ -57,7 +62,7 @@ class _CardNotificacaoWidgetState extends State<CardNotificacaoWidget> {
                     tema: widget.tema,
                   ),
                   TextoWidget(
-                    texto: "@usuario",
+                    texto: widget.notificacao.mensagem,
                     tema: widget.tema,
                     weight: FontWeight.w500,
                   ),
@@ -72,7 +77,7 @@ class _CardNotificacaoWidgetState extends State<CardNotificacaoWidget> {
                     tema: widget.tema,
                     corFundo: Color(widget.tema.base100),
                     corFonte: Color(widget.tema.baseContent),
-                    aoClicar: () {},
+                    aoClicar: widget.aoRecusar,
                     label: "Recusar",
                   ),
                   SizedBox(width: widget.tema.espacamento),

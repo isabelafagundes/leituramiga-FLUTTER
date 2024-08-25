@@ -6,13 +6,19 @@ class ResumoLivro extends Entidade {
   final int _numeroUsuario;
   final String _nomeInstituicao;
   final String _nomeMunicipio;
+  final String _nomeCategoria;
+  final String _descricao;
+  final String _nomeLivro;
 
   ResumoLivro.carregar(
     this._numero,
+    this._nomeCategoria,
     this._nomeUsuario,
     this._numeroUsuario,
     this._nomeInstituicao,
     this._nomeMunicipio,
+    this._descricao,
+    this._nomeLivro,
   );
 
   int get numero => _numero;
@@ -31,5 +37,11 @@ class ResumoLivro extends Entidade {
 
   String get nomeInstituicao => _nomeInstituicao;
 
+  String get nomeCategoria => _nomeCategoria;
+
   String get nomeMunicipio => _nomeMunicipio;
+
+  String get nomeLivro => _nomeLivro;
+
+  String get descricao => _descricao;
 }

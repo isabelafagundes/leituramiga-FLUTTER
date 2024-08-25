@@ -15,10 +15,10 @@ class DataHora {
     }
   }
 
-  void formatar([String formato = "dd/MM/yyyy HH:mm"]) {
+  String formatar([String formato = "dd/MM/yyyy HH:mm"]) {
     DateFormat dateFormat = DateFormat(formato);
     DateTime dateTime = dateFormat.parse(_valor.toString());
-    _valor = dateTime;
+    return DataHora.criar(dateTime).toString();
   }
 
   String _dataFormatada([String formato = "dd/MM/yyyy HH:mm"]) {
@@ -28,12 +28,12 @@ class DataHora {
 
   DateTime get valor => _valor;
 
-  static DateTime hoje() {
-    return DateTime.now();
+  static DataHora hoje() {
+    return DataHora.criar(DateTime.now());
   }
 
-  static DateTime ontem() {
-    return hoje().subtract(Duration(days: 1));
+  static DataHora ontem() {
+    return DataHora.criar(DateTime.now().subtract(Duration(days: 1)));
   }
 
   void subtrair(int dias) {

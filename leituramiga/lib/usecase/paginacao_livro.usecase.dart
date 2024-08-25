@@ -9,9 +9,9 @@ class PaginacaoLivroUseCase {
 
   const PaginacaoLivroUseCase(this._state, this._repo);
 
-  Future<void> obterLivrosIniciais() async {
+  Future<void> obterLivrosIniciais([int? numeroUsuario]) async {
     _state.reiniciar();
-    List<ResumoLivro> pagina = await _repo.obterLivros();
+    List<ResumoLivro> pagina = await _repo.obterLivros(numeroUsuario: numeroUsuario);
     _state.paginar(pagina);
   }
 
@@ -22,15 +22,17 @@ class PaginacaoLivroUseCase {
     TipoSolicitacao? tipo,
     String? pesquisa,
     int? numeroCategoria,
+    int? numeroUsuario,
   }) async {
     List<ResumoLivro> pagina = await _repo.obterLivros(
-      _state.pagina,
-      limite,
-      numeroMunicipio,
-      numeroInstituicao,
-      tipo,
-      pesquisa,
-      numeroCategoria,
+      numeroPagina: _state.pagina,
+      limite: limite,
+      numeroMunicipio: numeroMunicipio,
+      numeroInstituicao: numeroInstituicao,
+      tipo: tipo,
+      pesquisa: pesquisa,
+      numeroCategoria: numeroCategoria,
+      numeroUsuario: numeroUsuario,
     );
     _state.paginar(pagina, limite, pesquisa ?? '');
   }

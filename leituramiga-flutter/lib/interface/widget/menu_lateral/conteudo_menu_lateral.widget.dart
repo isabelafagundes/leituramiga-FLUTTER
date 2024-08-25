@@ -3,12 +3,10 @@ import 'package:projeto_leituramiga/domain/menu_lateral.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
-import 'package:projeto_leituramiga/interface/widget/botao/botao_menu.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/botoes_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/rodape_mobile.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class ConteudoMenuLateralWidget extends StatefulWidget {
@@ -151,6 +149,15 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
               ),
             ),
           ),
+        if (Responsive.larguraM(context) && !exibindoMenu)
+          Positioned(
+            bottom: 0,
+            child: RodapeMobileWidget(
+              tema: widget.tema,
+              itemSelecionado: _itemSelecionado,
+              selecionarItem: (item) => setState(() => _itemSelecionado = item),
+            ),
+          ),
         if (exibindoMenu)
           AnimatedPositioned(
             left: ativarAnimacao ? 0 : -200,
@@ -188,15 +195,6 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                   ),
                 ),
               ],
-            ),
-          ),
-        if (Responsive.larguraM(context))
-          Positioned(
-            bottom: 0,
-            child: RodapeMobileWidget(
-              tema: widget.tema,
-              itemSelecionado: _itemSelecionado,
-              selecionarItem: (item) => setState(() => _itemSelecionado = item),
             ),
           ),
       ],

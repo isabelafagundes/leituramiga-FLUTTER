@@ -3,7 +3,7 @@ import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 
 abstract class LivroRepo {
-  Future<List<ResumoLivro>> obterLivros([
+  Future<List<ResumoLivro>> obterLivros({
     int numeroPagina = 0,
     int limite = 18,
     int? numeroMunicipio,
@@ -11,7 +11,8 @@ abstract class LivroRepo {
     TipoSolicitacao? tipo,
     String? pesquisa,
     int? numeroCategoria,
-  ]);
+    int? numeroUsuario,
+  });
 
   Future<Livro> obterLivro(int numero);
 

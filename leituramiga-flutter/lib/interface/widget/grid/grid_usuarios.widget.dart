@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/domain/usuario/resumo_usuario.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_usuario.widget.dart';
 
 class GridUsuariosWidget extends StatelessWidget {
   final Tema tema;
-  final Function() aoClicarUsuario;
+  final Function(int) aoClicarUsuario;
+  final List<ResumoUsuario> usuarios;
 
   const GridUsuariosWidget({
     super.key,
     required this.tema,
     required this.aoClicarUsuario,
+    required this.usuarios,
   });
 
   @override
@@ -24,20 +27,23 @@ class GridUsuariosWidget extends StatelessWidget {
         crossAxisSpacing: tema.espacamento * 2,
       ),
       itemBuilder: (ccontext, indice) {
+        ResumoUsuario usuario = usuarios[indice];
         return GestureDetector(
-          onTap: aoClicarUsuario,
+          onTap: () => aoClicarUsuario(usuario.numero),
           child: MouseRegion(
             cursor: SystemMouseCursors.click,
-            child: CardUsuarioWidget(
+            child:
+            CardUsuarioWidget(
               tema: tema,
-              nomeUsuario: "@usuario",
-              nomeInstituicao: "FATEC Satana de Parnaíba",
-              nomeCidade: "Cajamar",
+              nomeUsuario: usuario.nomeUsuario,
+              nomeInstituicao: usuario.nomeInstituicao,
+              nomeCidade: usuario.nomeMunicipio,
+              quantidadeLivros: usuario.quantidadeLivros,
             ),
           ),
         );
       },
-      itemCount: 3,
+      itemCount: usuarios.length,
     ).animate().fade();
   }
 
