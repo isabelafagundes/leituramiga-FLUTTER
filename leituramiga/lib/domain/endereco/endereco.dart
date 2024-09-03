@@ -54,7 +54,7 @@ class Endereco extends ObjetoDeValor {
   int? get numero => _numero;
 
   String get enderecoFormatado {
-    String numeroCompleto = _numeroResidencial != null ? "$_numero/$_numeroResidencial" : "$_numero";
+    String numeroCompleto = _numeroResidencial != null ? "$_numeroResidencial" : "";
     String complementoFormatado = _complemento != null ? ", $_complemento" : "";
     return "$_rua, $numeroCompleto$complementoFormatado, $_bairro, ${_municipio.nome} - ${_municipio.estado.descricao}, $_cepFormatado";
   }

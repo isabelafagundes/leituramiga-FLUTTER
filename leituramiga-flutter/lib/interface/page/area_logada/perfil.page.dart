@@ -34,6 +34,7 @@ class _PerfilPageState extends State<PerfilPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        carregando: false,
         alterarFonte: _alterarFonte,
         alterarTema: _alterarTema,
         child: SizedBox(

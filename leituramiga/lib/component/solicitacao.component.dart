@@ -1,3 +1,5 @@
+import 'package:leituramiga/domain/livro/resumo_livro.dart';
+import 'package:leituramiga/domain/solicitacao/livro_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/resumo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/repo/notificacao.repo.dart';
@@ -16,7 +18,8 @@ class SolicitacaoComponent extends State with SolicitacaoState, PaginacaoState<R
   late final SolicitacaoPaginacaoUseCase _paginacaoUseCase;
   late final NotificacaoUseCase _notificacaoUseCase;
 
-  void inicializar(SolicitacaoRepo repo, SolicitacaoService service, NotificacaoRepo notificacaoRepo, Function() atualizar) {
+  void inicializar(
+      SolicitacaoRepo repo, SolicitacaoService service, NotificacaoRepo notificacaoRepo, Function() atualizar) {
     _solicitacaoUseCase = SolicitacaoUseCase(this, repo, service);
     _paginacaoUseCase = SolicitacaoPaginacaoUseCase(this, repo);
     _notificacaoUseCase = NotificacaoUseCase(notificacaoRepo, this);
@@ -76,6 +79,27 @@ class SolicitacaoComponent extends State with SolicitacaoState, PaginacaoState<R
     await executar(
       rotina: () => _notificacaoUseCase.obterNotificacoes(numeroUsuario),
       mensagemErro: "Não foi possível obter as notificações",
+    );
+  }
+
+  Future<void> obterSolicitacao(int numeroSolicitacao) async {
+    await executar(
+      rotina: () => _solicitacaoUseCase.obterSolicitacao(numeroSolicitacao),
+      mensagemErro: "Não foi possível obter a solicitação",
+    );
+  }
+
+  void selecionarLivro(ResumoLivro livro) async {
+    await executar(
+      rotina: () => _solicitacaoUseCase.selecionarLivro(livro),
+      mensagemErro: "Não foi possível selecionar o livro",
+    );
+  }
+
+  void removerLivro(LivroSolicitacao livro) async {
+    await executar(
+      rotina: () => _solicitacaoUseCase.removerLivro(livro),
+      mensagemErro: "Não foi possível remover o livro",
     );
   }
 }

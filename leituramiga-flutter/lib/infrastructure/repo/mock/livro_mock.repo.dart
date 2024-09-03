@@ -16,6 +16,7 @@ class LivroMockRepo extends LivroRepo {
       "Cajamar",
       "O livro está em bom estado",
       "O pequeno príncipe",
+      "Antoine de Saint-Exupéry",
     ),
     ResumoLivro.carregar(
       2,
@@ -26,6 +27,7 @@ class LivroMockRepo extends LivroRepo {
       "Cajamar",
       "Algumas páginas estão amassadas, porém o livro está em bom estado",
       "Engenharia de Software",
+      "Ian Sommerville",
     ),
     ResumoLivro.carregar(
       3,
@@ -36,6 +38,7 @@ class LivroMockRepo extends LivroRepo {
       "Cajamar",
       "Paginas amareladas e capa com marcas de uso",
       "Alice no País das Maravilhas",
+      "Lewis Carroll",
     ),
     ResumoLivro.carregar(
       4,
@@ -46,6 +49,7 @@ class LivroMockRepo extends LivroRepo {
       "Cajamar",
       "Nunca usei e está intacto",
       "O Iluminado",
+      "Stephen King",
     ),
     ResumoLivro.carregar(
       5,
@@ -56,6 +60,7 @@ class LivroMockRepo extends LivroRepo {
       "Cajamar",
       "O livro está em bom estado",
       "Orgulho e Preconceito",
+      "Jane Austen",
     ),
     ResumoLivro.carregar(
       6,
@@ -66,6 +71,7 @@ class LivroMockRepo extends LivroRepo {
       "Cajamar",
       "O livro está em bom estado",
       "O Senhor dos Anéis",
+      "J. R. R. Tolkien",
     ),
     ResumoLivro.carregar(
       7,
@@ -76,6 +82,7 @@ class LivroMockRepo extends LivroRepo {
       "Cajamar",
       "O livro está em bom estado",
       "Fundação",
+      "Isaac Asimov",
     ),
     ResumoLivro.carregar(
       8,
@@ -86,6 +93,7 @@ class LivroMockRepo extends LivroRepo {
       "Cajamar",
       "O livro está em bom estado",
       "Steve Jobs",
+      "Walter Isaacson",
     ),
     ResumoLivro.carregar(
       9,
@@ -96,6 +104,7 @@ class LivroMockRepo extends LivroRepo {
       "Cajamar",
       "O livro está em bom estado",
       "Uma Breve História do Tempo",
+      "Stephen Hawking",
     ),
   ];
 

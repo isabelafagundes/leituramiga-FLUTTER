@@ -17,8 +17,7 @@ class DataHora {
 
   String formatar([String formato = "dd/MM/yyyy HH:mm"]) {
     DateFormat dateFormat = DateFormat(formato);
-    DateTime dateTime = dateFormat.parse(_valor.toString());
-    return DataHora.criar(dateTime).toString();
+    return dateFormat.format(_valor);
   }
 
   String _dataFormatada([String formato = "dd/MM/yyyy HH:mm"]) {

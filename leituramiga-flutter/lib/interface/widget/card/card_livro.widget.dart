@@ -15,6 +15,8 @@ class CardLivroWidget extends StatelessWidget {
   final String? nomeInstituicao;
   final String? nomeCidade;
   final Function() aoClicar;
+  final bool ativado;
+  final bool selecao;
 
   const CardLivroWidget({
     super.key,
@@ -26,6 +28,8 @@ class CardLivroWidget extends StatelessWidget {
     this.nomeCidade,
     required this.nomeCategoria,
     required this.aoClicar,
+    this.ativado = false,
+    this.selecao = false,
   });
 
   @override
@@ -33,14 +37,15 @@ class CardLivroWidget extends StatelessWidget {
     return GestureDetector(
       onTap: aoClicar,
       child: Container(
-        decoration: false
+        decoration: ativado
             ? BoxDecoration(
+                color: Color(tema.base200),
                 border: Border.all(color: Color(tema.accent), width: 3),
                 borderRadius: BorderRadius.circular(tema.borderRadiusM),
               )
             : null,
         child: CardBaseWidget(
-          bordaColorida: true,
+          bordaColorida: !ativado,
           tema: tema,
           child: Flex(
             direction: Axis.horizontal,
@@ -72,26 +77,31 @@ class CardLivroWidget extends StatelessWidget {
               Flexible(
                 flex: 4,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (false)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextoWidget(
+                            tema: tema,
+                            texto: nomeLivro,
+                            cor: Color(tema.baseContent),
+                            weight: FontWeight.w500,
+                            tamanho: tema.tamanhoFonteG,
+                          ),
+                        ),
+                        if (ativado)
                           Icon(
                             Icons.check_circle,
                             color: Color(tema.accent),
                           ),
-                        ],
-                      ),
-                    TextoWidget(
-                      tema: tema,
-                      texto: nomeLivro,
-                      cor: Color(tema.baseContent),
-                      weight: FontWeight.w500,
-                      tamanho: tema.tamanhoFonteG,
+                        if (selecao && !ativado)
+                          Icon(
+                            Icons.add_circle_outline,
+                            color: Color(tema.accent),
+                          ),
+                      ],
                     ),
                     const Spacer(),
                     Container(

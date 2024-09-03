@@ -2,6 +2,7 @@ import 'package:leituramiga/domain/data_hora.dart';
 import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
 import 'package:leituramiga/domain/solicitacao/resumo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
+import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:leituramiga/repo/solicitacao.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
@@ -15,6 +16,7 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
       "isabela",
       DataHora.hoje(),
       null,
+      TipoSolicitacao.TROCA,
     ),
     ResumoSolicitacao.carregar(
       2,
@@ -22,6 +24,7 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
       "isabela",
       DataHora.hoje(),
       null,
+      TipoSolicitacao.DOACAO,
     ),
     ResumoSolicitacao.carregar(
       3,
@@ -29,6 +32,7 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
       "isabela",
       DataHora.hoje(),
       null,
+      TipoSolicitacao.TROCA,
     ),
   ];
 
@@ -47,6 +51,8 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
         TipoStatusSolicitacao.PENDENTE,
         null,
         null,
+        "isabela",
+        TipoSolicitacao.TROCA,
       );
 
   @override

@@ -5,6 +5,7 @@ import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart'
 import 'package:leituramiga/domain/livro/livro.dart';
 import 'package:leituramiga/domain/solicitacao/livros_solicitacao.dart';
 import 'package:leituramiga/domain/endereco/municipio.dart';
+import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:leituramiga/domain/super/entidade.dart';
 
@@ -23,9 +24,11 @@ class Solicitacao extends Entidade {
   Endereco? _endereco;
   final bool _enderecoUsuarioCriador;
   final InstituicaoDeEnsino? _instituicaoDeEnsino;
+  final TipoSolicitacao _tipoSolicitacao;
   final TipoStatusSolicitacao _status;
   final DataHora? _dataAceite;
   final String? _motivoRecusa;
+  final String _nomeUsuario;
 
   Solicitacao.criar(
     this._numero,
@@ -42,6 +45,8 @@ class Solicitacao extends Entidade {
     this._status,
     this._dataAceite,
     this._motivoRecusa,
+    this._nomeUsuario,
+    this._tipoSolicitacao,
   )   : _livrosCriador = LivrosSolicitacao.carregar(_numero ?? 0, _numeroUsuarioCriador, []),
         _enderecoUsuarioCriador = _endereco == null;
 
@@ -116,4 +121,8 @@ class Solicitacao extends Entidade {
   DataHora? get dataAceite => _dataAceite;
 
   DataHora get dataEntrega => _dataEntrega;
+
+  String get nomeUsuario => _nomeUsuario;
+
+  TipoSolicitacao get tipoSolicitacao => _tipoSolicitacao;
 }

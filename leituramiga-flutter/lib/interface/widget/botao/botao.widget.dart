@@ -62,14 +62,6 @@ class _BotaoWidgetState extends State<BotaoWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TextoWidget(
-                  tema: widget.tema,
-                  texto: widget.texto,
-                  tamanho: widget.tema.tamanhoFonteM,
-                  weight: FontWeight.w500,
-                  cor: widget.corTexto ?? Color(widget.tema.base200),
-                ),
-                SizedBox(width: widget.tema.espacamento),
                 Padding(
                   padding: const EdgeInsets.all(2),
                   child: widget.icone ??
@@ -79,13 +71,25 @@ class _BotaoWidgetState extends State<BotaoWidget> {
                         largura: 16,
                       ),
                 ),
+                SizedBox(width: widget.tema.espacamento),
+                TextoWidget(
+                  tema: widget.tema,
+                  texto: widget.texto,
+                  tamanho: widget.tema.tamanhoFonteM,
+                  weight: FontWeight.w500,
+                  cor: widget.corTexto ?? Color(widget.tema.base200),
+                ),
               ],
             ),
           ),
         ),
-      ).animate(target: _hover ? 1 : 0, onComplete: (controller) {
-        if(_hover) controller.repeat();
-      }).shimmer(
+      )
+          .animate(
+              target: _hover ? 1 : 0,
+              onComplete: (controller) {
+                if (_hover) controller.repeat();
+              })
+          .shimmer(
             duration: const Duration(seconds: 1),
             curve: Curves.easeOut,
           ),

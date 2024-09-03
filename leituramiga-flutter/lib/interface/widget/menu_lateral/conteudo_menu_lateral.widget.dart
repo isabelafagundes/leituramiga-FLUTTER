@@ -15,6 +15,7 @@ class ConteudoMenuLateralWidget extends StatefulWidget {
   final Function() alterarTema;
   final Function() alterarFonte;
   final Widget? widgetNoCabecalho;
+  final bool carregando;
 
   const ConteudoMenuLateralWidget({
     super.key,
@@ -23,6 +24,7 @@ class ConteudoMenuLateralWidget extends StatefulWidget {
     required this.alterarTema,
     required this.alterarFonte,
     this.widgetNoCabecalho,
+    this.carregando = false,
   });
 
   @override
@@ -126,7 +128,13 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                       flex: 8,
                       child: Padding(
                         padding: Responsive.larguraM(context) ? const EdgeInsets.only(bottom: 84) : EdgeInsets.zero,
-                        child: widget.child,
+                        child: widget.carregando
+                            ? const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [CircularProgressIndicator()],
+                              )
+                            : widget.child,
                       ),
                     ),
                   ],

@@ -10,6 +10,7 @@ class BotaoRedondoWidget extends StatefulWidget {
   final Widget? icone;
   final Color? corIcone;
   final Color? corFundo;
+  final double tamanhoIcone;
   final EdgeInsets? padding;
 
   const BotaoRedondoWidget({
@@ -21,6 +22,7 @@ class BotaoRedondoWidget extends StatefulWidget {
     this.corFundo,
     this.icone,
     this.padding,
+    this.tamanhoIcone = 16,
   });
 
   @override
@@ -55,16 +57,20 @@ class _BotaoRedondoWidgetState extends State<BotaoRedondoWidget> {
           child: widget.icone ??
               SvgWidget(
                 nomeSvg: widget.nomeSvg,
-                altura: 16,
+                altura: widget.tamanhoIcone,
                 cor: widget.corIcone ?? Color(widget.tema.baseContent),
               ),
         ),
-      ).animate(target: _hover ? 1 : 0, onComplete: (controller) {
-        if(_hover) controller.repeat();
-      }).shimmer(
-        duration: const Duration(seconds: 1),
-        curve: Curves.easeOut,
-      ),
+      )
+          .animate(
+              target: _hover ? 1 : 0,
+              onComplete: (controller) {
+                if (_hover) controller.repeat();
+              })
+          .shimmer(
+            duration: const Duration(seconds: 1),
+            curve: Curves.easeOut,
+          ),
     );
   }
 }

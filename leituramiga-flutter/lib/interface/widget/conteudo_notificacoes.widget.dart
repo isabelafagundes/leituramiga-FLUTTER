@@ -63,8 +63,11 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
       );
     }
 
-    return _visualizarSolicitacao
-        ? ConteudoResumoSolicitacaoWidget(tema: widget.tema)
+    return _visualizarSolicitacao && solicitacaoComponent.solicitacaoSelecionada != null
+        ? ConteudoResumoSolicitacaoWidget(
+            tema: widget.tema,
+            solicitacao: solicitacaoComponent.solicitacaoSelecionada!,
+          )
         : Container(
             width: Responsive.largura(context) <= 600 ? Responsive.largura(context) : 600,
             height: Responsive.largura(context) <= 600 ? Responsive.altura(context) : Responsive.altura(context) - 40,
@@ -133,51 +136,68 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
                   ],
                 ),
                 SizedBox(height: widget.tema.espacamento * 2),
-                Expanded(
-                  child: SizedBox(
-                    width: 600,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _exibindoEmAndamento
-                          ? solicitacaoComponent.solicitacoes.length
-                          : solicitacaoComponent.notificacoes.length,
-                      itemBuilder: (context, index) {
-                        Notificacao notificacao = solicitacaoComponent.notificacoes[index];
-                        ResumoSolicitacao resumoSolicitacao = solicitacaoComponent.solicitacoes[index];
-                        if (!_exibindoEmAndamento) {
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              right: widget.tema.espacamento * 2,
-                              bottom: widget.tema.espacamento * 2,
-                            ),
-                            child: CardNotificacaoWidget(
-                              tema: widget.tema,
-                              aoRecusar: () => solicitacaoComponent.recusarSolicitacao(
-                                  _autenticacaoState.usuario!.numero!, "Motivo"),
-                              aoVisualizar: () => setState(() => _visualizarSolicitacao = true),
-                              notificacao: notificacao,
-                            ),
-                          );
-                        }
-                        if (_exibindoEmAndamento) {
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              right: widget.tema.espacamento * 2,
-                              bottom: widget.tema.espacamento * 2,
-                            ),
-                            child: CardSolicitacaoWidget(
-                              tema: widget.tema,
-                              solicitacao: resumoSolicitacao,
-                              aoVisualizar: () => setState(() => _visualizarSolicitacao = true),
-                            ),
-                          );
-                        }
-
-                        return const SizedBox();
-                      },
+                if (!_exibindoEmAndamento)
+                  Expanded(
+                    child: SizedBox(
+                      width: 600,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: solicitacaoComponent.notificacoes.length,
+                        itemBuilder: (context, index) {
+                          Notificacao? notificacao = solicitacaoComponent.notificacoes[index];
+                          if (!_exibindoEmAndamento && notificacao != null) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                right: widget.tema.espacamento * 2,
+                                bottom: widget.tema.espacamento * 2,
+                              ),
+                              child: CardNotificacaoWidget(
+                                tema: widget.tema,
+                                aoRecusar: (numeroSolicitacao) =>
+                                    solicitacaoComponent.recusarSolicitacao(numeroSolicitacao, "Motivo"),
+                                aoVisualizar: (numeroSolicitacao) async {
+                                  await solicitacaoComponent.obterSolicitacao(numeroSolicitacao);
+                                  setState(() => _visualizarSolicitacao = true);
+                                },
+                                notificacao: notificacao,
+                              ),
+                            );
+                          }
+                          return const SizedBox();
+                        },
+                      ),
                     ),
                   ),
-                )
+                if (_exibindoEmAndamento)
+                  Expanded(
+                    child: SizedBox(
+                      width: 600,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: solicitacaoComponent.itensPaginados.length,
+                        itemBuilder: (context, index) {
+                          ResumoSolicitacao? resumoSolicitacao = solicitacaoComponent.itensPaginados[index];
+                          if (_exibindoEmAndamento && resumoSolicitacao != null) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                right: widget.tema.espacamento * 2,
+                                bottom: widget.tema.espacamento * 2,
+                              ),
+                              child: CardSolicitacaoWidget(
+                                tema: widget.tema,
+                                solicitacao: resumoSolicitacao,
+                                aoVisualizar: (numero) async {
+                                  await solicitacaoComponent.obterSolicitacao(numero);
+                                  setState(() => _visualizarSolicitacao = true);
+                                },
+                              ),
+                            );
+                          }
+                          return const SizedBox();
+                        },
+                      ),
+                    ),
+                  )
               ],
             ),
           );

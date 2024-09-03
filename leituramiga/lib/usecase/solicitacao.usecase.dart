@@ -1,3 +1,7 @@
+import 'package:leituramiga/domain/livro/livro.dart';
+import 'package:leituramiga/domain/livro/resumo_livro.dart';
+import 'package:leituramiga/domain/solicitacao/livro_solicitacao.dart';
+import 'package:leituramiga/domain/solicitacao/livros_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/repo/solicitacao.repo.dart';
 import 'package:leituramiga/service/solicitacao.service.dart';
@@ -38,5 +42,16 @@ class SolicitacaoUseCase {
     _state.solicitacaoEdicao = solicitacao;
   }
 
+  void selecionarLivro(ResumoLivro livro) {
+    LivroSolicitacao livroSolicitacao = LivroSolicitacao.criarDeResumoLivro(livro);
+    if (_state.verificarSelecao(livro)) {
+      _state.livrosSelecionados.removeWhere((element) => element.numero == livro.numero);
+    } else {
+      _state.livrosSelecionados.add(livroSolicitacao);
+    }
+  }
 
+  void removerLivro(LivroSolicitacao livro) {
+    _state.livrosSelecionados.removeWhere((element) => element.numero == livro.numero);
+  }
 }

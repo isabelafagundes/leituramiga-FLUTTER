@@ -2,13 +2,13 @@ import 'package:leituramiga/domain/super/entidade.dart';
 
 class Notificacao extends Entidade {
   final int _numero;
-  final String _mensagem;
+  final String _nomeUsuario;
   final int _numeroUsuario;
   final int _numeroSolicitacao;
 
   Notificacao.carregar(
     this._numero,
-    this._mensagem,
+    this._nomeUsuario,
     this._numeroUsuario,
     this._numeroSolicitacao,
   );
@@ -23,7 +23,7 @@ class Notificacao extends Entidade {
 
   int get numeroUsuario => _numeroUsuario;
 
-  String get mensagem => _mensagem;
+  String get nomeUsuario => _nomeUsuario;
 
   int get numeroSolicitacao => _numeroSolicitacao;
 

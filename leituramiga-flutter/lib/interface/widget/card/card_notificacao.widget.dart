@@ -8,8 +8,8 @@ import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class CardNotificacaoWidget extends StatefulWidget {
   final Tema tema;
-  final Function() aoVisualizar;
-  final Function() aoRecusar;
+  final Function(int) aoVisualizar;
+  final Function(int) aoRecusar;
   final Notificacao notificacao;
 
   const CardNotificacaoWidget({
@@ -62,7 +62,7 @@ class _CardNotificacaoWidgetState extends State<CardNotificacaoWidget> {
                     tema: widget.tema,
                   ),
                   TextoWidget(
-                    texto: widget.notificacao.mensagem,
+                    texto: widget.notificacao.nomeUsuario,
                     tema: widget.tema,
                     weight: FontWeight.w500,
                   ),
@@ -77,14 +77,14 @@ class _CardNotificacaoWidgetState extends State<CardNotificacaoWidget> {
                     tema: widget.tema,
                     corFundo: Color(widget.tema.base100),
                     corFonte: Color(widget.tema.baseContent),
-                    aoClicar: widget.aoRecusar,
+                    aoClicar: () => widget.aoRecusar(widget.notificacao.numero),
                     label: "Recusar",
                   ),
                   SizedBox(width: widget.tema.espacamento),
                   BotaoPequenoWidget(
                     tema: widget.tema,
                     corFonte: kCorFonte,
-                    aoClicar: widget.aoVisualizar,
+                    aoClicar: ()=>widget.aoVisualizar(widget.notificacao.numero),
                     label: "Visualizar",
                   ),
                 ],

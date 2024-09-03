@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:leituramiga/domain/livro/livro.dart';
+import 'package:leituramiga/component/livros.component.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/categoria_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/instituicao_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/chip/chip.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/imagem.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
@@ -18,9 +23,9 @@ import 'package:auto_route/auto_route.dart';
 
 @RoutePage()
 class LivrosPage extends StatefulWidget {
-  final Livro livro;
+  final int numeroLivro;
 
-  const LivrosPage({super.key, required this.livro});
+  const LivrosPage({super.key, @PathParam('numeroLivro') required this.numeroLivro});
 
   @override
   State<LivrosPage> createState() => _LivrosPageState();
@@ -28,10 +33,28 @@ class LivrosPage extends StatefulWidget {
 
 class _LivrosPageState extends State<LivrosPage> {
   TipoSolicitacao? _tipoSolicitacaoSelecionado;
+  final LivrosComponent _livrosComponent = LivrosComponent();
 
   TemaState get _temaState => TemaState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
+
+  @override
+  void initState() {
+    _livrosComponent.inicializar(
+      LivroMockRepo(),
+      CategoriaMockRepo(),
+      InstituicaoMockRepo(),
+      EnderecoMockRepo(),
+      atualizar,
+    );
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _livrosComponent.obterLivro(widget.numeroLivro);
+    });
+  }
+
+  void atualizar() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +64,7 @@ class _LivrosPageState extends State<LivrosPage> {
         tema: tema,
         alterarFonte: _alterarFonte,
         alterarTema: _alterarTema,
+        carregando: _livrosComponent.carregando || _livrosComponent.livroSelecionado == null,
         child: SizedBox(
           width: Responsive.largura(context),
           height: Responsive.altura(context),
@@ -59,10 +83,10 @@ class _LivrosPageState extends State<LivrosPage> {
                     Flexible(
                       child: Column(
                         children: [
-                          Container(
-                            constraints: const BoxConstraints(maxWidth: 500),
-                            height: Responsive.altura(context) * .4,
-                            color: Colors.white,
+                          ImagemWidget(
+                            tema: tema,
+                            visualizacao: true,
+                            salvarImagem: (imagem64) => print(imagem64),
                           ),
                           SizedBox(height: tema.espacamento * 2),
                           Column(
@@ -70,14 +94,14 @@ class _LivrosPageState extends State<LivrosPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               TextoWidget(
-                                texto: widget.livro.nome,
+                                texto: _livrosComponent.livroSelecionado?.nome ?? '',
                                 tema: tema,
                                 tamanho: tema.tamanhoFonteG,
                                 cor: Color(tema.accent),
                               ),
                               SizedBox(height: tema.espacamento),
                               TextoWidget(
-                                texto: widget.livro.nomeAutor,
+                                texto: _livrosComponent.livroSelecionado?.nomeAutor ?? '',
                                 tema: tema,
                                 cor: Color(tema.baseContent),
                               ),
@@ -108,7 +132,7 @@ class _LivrosPageState extends State<LivrosPage> {
                             cor: Color(tema.accent),
                           ),
                           TextoWidget(
-                            texto: widget.livro.descricao,
+                            texto: _livrosComponent.livroSelecionado!.descricao,
                             tema: tema,
                             cor: Color(tema.baseContent),
                           ),
@@ -120,7 +144,7 @@ class _LivrosPageState extends State<LivrosPage> {
                             cor: Color(tema.accent),
                           ),
                           TextoWidget(
-                            texto: widget.livro.descricaoEstado,
+                            texto: _livrosComponent.livroSelecionado!.descricaoEstado,
                             tema: tema,
                             cor: Color(tema.baseContent),
                           ),
@@ -136,21 +160,21 @@ class _LivrosPageState extends State<LivrosPage> {
                                   TextoComIconeWidget(
                                     tema: tema,
                                     nomeSvg: 'usuario/user',
-                                    texto: widget.livro.nomeUsuario,
+                                    texto: _livrosComponent.livroSelecionado!.nomeUsuario,
                                     tamanhoFonte: tema.tamanhoFonteM,
                                   ),
                                   SizedBox(height: tema.espacamento / 2),
                                   TextoComIconeWidget(
                                     tema: tema,
                                     nomeSvg: 'academico/academic-cap',
-                                    texto: widget.livro.nomeInstituicao,
+                                    texto: _livrosComponent.livroSelecionado!.nomeInstituicao,
                                     tamanhoFonte: tema.tamanhoFonteM,
                                   ),
                                   SizedBox(height: tema.espacamento / 2),
                                   TextoComIconeWidget(
                                     tema: tema,
                                     nomeSvg: 'menu/map-pin-fill',
-                                    texto: widget.livro.nomeMunicipio,
+                                    texto: _livrosComponent.livroSelecionado!.nomeMunicipio,
                                     tamanhoFonte: tema.tamanhoFonteM,
                                   ),
                                 ],
@@ -175,7 +199,7 @@ class _LivrosPageState extends State<LivrosPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        if (widget.livro.tiposSolicitacao.contains(TipoSolicitacao.TROCA)) ...[
+                        if (_livrosComponent.livroSelecionado!.tiposSolicitacao.contains(TipoSolicitacao.TROCA)) ...[
                           ChipWidget(
                             tema: tema,
                             cor: kCorPessego,
@@ -186,7 +210,8 @@ class _LivrosPageState extends State<LivrosPage> {
                           ),
                           SizedBox(width: tema.espacamento * 2),
                         ],
-                        if (widget.livro.tiposSolicitacao.contains(TipoSolicitacao.EMPRESTIMO)) ...[
+                        if (_livrosComponent.livroSelecionado!.tiposSolicitacao
+                            .contains(TipoSolicitacao.EMPRESTIMO)) ...[
                           ChipWidget(
                             tema: tema,
                             cor: kCorVerde,
@@ -197,7 +222,7 @@ class _LivrosPageState extends State<LivrosPage> {
                           ),
                           SizedBox(width: tema.espacamento * 2),
                         ],
-                        if (widget.livro.tiposSolicitacao.contains(TipoSolicitacao.DOACAO))
+                        if (_livrosComponent.livroSelecionado!.tiposSolicitacao.contains(TipoSolicitacao.DOACAO))
                           ChipWidget(
                             tema: tema,
                             cor: kCorAzul,
@@ -224,8 +249,8 @@ class _LivrosPageState extends State<LivrosPage> {
                         Rota.navegarComArgumentos(
                           context,
                           CriarSolicitacaoRoute(
-                            livro: widget.livro,
-                            tipoSolicitacao: _tipoSolicitacaoSelecionado!,
+                            numeroLivro: _livrosComponent.livroSelecionado!.numero,
+                            tipoSolicitacao: _tipoSolicitacaoSelecionado!.id,
                           ),
                         );
                       },

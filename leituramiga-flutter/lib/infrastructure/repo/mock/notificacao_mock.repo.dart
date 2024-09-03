@@ -5,19 +5,19 @@ class NotificacaoMockRepo extends NotificacaoRepo {
   List<Notificacao> _notificacoes = [
     Notificacao.carregar(
       1,
-      'Mensagem da notificação 1',
+      'joao',
       1,
       1,
     ),
     Notificacao.carregar(
       2,
-      'Mensagem da notificação 2',
+      'isabela',
       2,
       2,
     ),
     Notificacao.carregar(
       3,
-      'Mensagem da notificação 3',
+      'kauaguedes',
       3,
       3,
     ),

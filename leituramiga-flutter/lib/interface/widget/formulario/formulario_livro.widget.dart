@@ -3,6 +3,7 @@ import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/imagem.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 
 class FormularioLivroWidget extends StatelessWidget {
@@ -21,10 +22,9 @@ class FormularioLivroWidget extends StatelessWidget {
         Flexible(
           child: Column(
             children: [
-              Container(
-                constraints: const BoxConstraints(maxWidth: 500),
-                height: Responsive.altura(context) * .4,
-                color: Colors.white,
+              ImagemWidget(
+                tema: tema,
+                salvarImagem: (imagem64) => print(imagem64),
               ),
               SizedBox(height: tema.espacamento),
               SizedBox(height: tema.espacamento / 2),

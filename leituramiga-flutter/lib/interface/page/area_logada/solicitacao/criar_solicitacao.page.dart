@@ -1,34 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/solicitacao.component.dart';
+import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/domain/data_hora.dart';
 import 'package:leituramiga/domain/endereco/endereco.dart';
-import 'package:leituramiga/domain/livro/livro.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/comentario_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.service.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
+import 'package:projeto_leituramiga/interface/util/sobreposicao.util.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/calendario.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/conteudo_selecao_livros.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/layout_flexivel.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/conteudo_endereco_solicitacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_informacoes_adicionais.widget.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/time_picker.widget.dart';
 
 @RoutePage()
 class CriarSolicitacaoPage extends StatefulWidget {
-  final Livro livro;
-  final TipoSolicitacao tipoSolicitacao;
+  final int numeroLivro;
+  final int tipoSolicitacao;
 
-  const CriarSolicitacaoPage({super.key, required this.livro, required this.tipoSolicitacao});
+  const CriarSolicitacaoPage({
+    super.key,
+    @PathParam('numeroLivro') required this.numeroLivro,
+    @PathParam('tipoSolicitacao') required this.tipoSolicitacao,
+  });
 
   @override
   State<CriarSolicitacaoPage> createState() => _CriarSolicitacaoPageState();
@@ -36,6 +49,7 @@ class CriarSolicitacaoPage extends StatefulWidget {
 
 class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
   final SolicitacaoComponent _solicitacaoComponent = SolicitacaoComponent();
+  final UsuarioComponent _usuarioComponent = UsuarioComponent();
   final TextEditingController controllerInformacoes = TextEditingController();
   final TextEditingController controllerRua = TextEditingController();
   final TextEditingController controllerBairro = TextEditingController();
@@ -46,6 +60,8 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
   final TextEditingController controllerEstado = TextEditingController();
   final TextEditingController controllerDataEntrega = TextEditingController();
   final TextEditingController controllerDataDevolucao = TextEditingController();
+  final TextEditingController controllerHoraEntrega = TextEditingController();
+  final TextEditingController controllerHoraDevolucao = TextEditingController();
 
   CriarSolicitacao estagioPagina = CriarSolicitacao.INFORMACOES_ADICIONAIS;
 
@@ -54,6 +70,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
+  TipoSolicitacao _tipoSolicitacao = TipoSolicitacao.TROCA;
 
   @override
   void initState() {
@@ -64,6 +81,20 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       NotificacaoMockRepo(),
       atualizar,
     );
+    _usuarioComponent.inicializar(
+      UsuarioMockRepo(),
+      ComentarioMockRepo(),
+      EnderecoMockRepo(),
+      LivroMockRepo(),
+      atualizar,
+    );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _usuarioComponent.obterUsuario(1);
+      await _usuarioComponent.obterLivro(widget.numeroLivro);
+      await _usuarioComponent.obterLivrosUsuario();
+      _tipoSolicitacao = TipoSolicitacao.deNumero(widget.tipoSolicitacao);
+    });
   }
 
   void atualizar() {
@@ -76,6 +107,9 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        carregando: _usuarioComponent.carregando ||
+            _solicitacaoComponent.carregando ||
+            _usuarioComponent.livroSelecionado == null,
         alterarFonte: _alterarFonte,
         alterarTema: _alterarTema,
         child: SizedBox(
@@ -93,13 +127,27 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
 
   Widget get paginaSelecionada {
     return switch (estagioPagina) {
+      CriarSolicitacao.SELECIONAR_LIVROS => ConteudoSelecaoLivrosWidget(
+          tema: tema,
+          aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
+          verificarSelecao: _solicitacaoComponent.verificarSelecao,
+          livros: _usuarioComponent.itensPaginados,
+          navegarParaSolicitacao: () => atualizarPagina(CriarSolicitacao.INFORMACOES_ADICIONAIS),
+        ),
       CriarSolicitacao.INFORMACOES_ADICIONAIS => FormularioInformacoesAdicionaisWidget(
           tema: tema,
+          controllerHoraDevolucao: controllerHoraDevolucao,
+          controllerHoraEntrega: controllerHoraEntrega,
+          abrirTimePicker: ([bool ehDevolucao = false]) => abrirTimePicker(ehDevolucao),
+          livrosSolicitacao: _solicitacaoComponent.livrosSelecionados,
           controllerInformacoes: controllerInformacoes,
           aoClicarProximo: () => atualizarPagina(CriarSolicitacao.ENDERECO),
           controllerDataEntrega: controllerDataEntrega,
+          removerLivro: _solicitacaoComponent.removerLivro,
           controllerDataDevolucao: controllerDataDevolucao,
-          tipoSolicitacao: TipoSolicitacao.EMPRESTIMO,
+          tipoSolicitacao: _tipoSolicitacao,
+          abrirDatePicker: ([bool ehDevolucao = false]) => abrirDatePicker(ehDevolucao),
+          aoClicarAdicionarLivro: () => atualizarPagina(CriarSolicitacao.SELECIONAR_LIVROS),
         ),
       CriarSolicitacao.ENDERECO => ConteudoEnderecoSolicitacaoWidget(
           tema: tema,
@@ -158,7 +206,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
     Solicitacao solicitacao = Solicitacao.criar(
       null,
       _autenticacaoState.usuario!.numero!,
-      widget.livro.numeroUsuario,
+      _usuarioComponent.livroSelecionado!.numeroUsuario,
       _solicitacaoComponent.formaEntregaSelecionada!,
       DataHora.deString(controllerDataEntrega.text),
       DataHora.deString(controllerDataDevolucao.text),
@@ -177,6 +225,8 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       TipoStatusSolicitacao.PENDENTE,
       null,
       null,
+      _autenticacaoState.usuario?.nomeUsuario ?? '',
+      _tipoSolicitacao,
     );
 
     _solicitacaoComponent.atualizarSolicitacaoMemoria(solicitacao);
@@ -189,6 +239,52 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
   void _alterarFonte() {
     _temaState.alterarFonte(() => setState(() {}));
   }
+
+  void abrirTimePicker(bool ehHoraDevolucao) {
+    Future<TimeOfDay?> selectedTime = showTimePicker(
+      initialTime: TimeOfDay.now(),
+      context: context,
+      barrierColor: Color(tema.neutral).withOpacity(.2),
+      builder: (context, child) {
+        return TimePickerWidget(tema: tema, child: child!);
+      },
+    );
+
+    selectedTime.then((time) {
+      if (time != null) {
+        if (ehHoraDevolucao) {
+          setState(() => controllerHoraDevolucao.text = time.format(context));
+        } else {
+          setState(() => controllerHoraEntrega.text = time.format(context));
+        }
+      }
+    });
+  }
+
+  void abrirDatePicker(bool ehDataDevolucao) {
+    SobreposicaoUtil.exibir(
+      context,
+      LayoutFlexivelWidget(
+        tema: tema,
+        overlayChild: _obterCalendario(ehDataDevolucao),
+        drawerChild: _obterCalendario(ehDataDevolucao),
+      ),
+    );
+  }
+
+  Widget _obterCalendario(bool ehDataDevolucao) {
+    return CalendarioWidget(
+      tema: tema,
+      aoSelecionarData: (data) async {
+        if (ehDataDevolucao) {
+          setState(() => controllerDataDevolucao.text = DataHora.criar(data).formatar("dd/MM/yyyy"));
+        } else {
+          setState(() => controllerDataEntrega.text = DataHora.criar(data).formatar("dd/MM/yyyy"));
+        }
+        await SobreposicaoUtil.fechar(context);
+      },
+    );
+  }
 }
 
-enum CriarSolicitacao { INFORMACOES_ADICIONAIS, ENDERECO, CONCLUSAO }
+enum CriarSolicitacao { SELECIONAR_LIVROS, INFORMACOES_ADICIONAIS, ENDERECO, CONCLUSAO }

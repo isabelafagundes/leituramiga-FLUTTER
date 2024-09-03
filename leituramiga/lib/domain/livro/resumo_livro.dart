@@ -4,6 +4,7 @@ class ResumoLivro extends Entidade {
   final int _numero;
   final String _nomeUsuario;
   final int _numeroUsuario;
+  final String _nomeAutor;
   final String _nomeInstituicao;
   final String _nomeMunicipio;
   final String _nomeCategoria;
@@ -19,6 +20,7 @@ class ResumoLivro extends Entidade {
     this._nomeMunicipio,
     this._descricao,
     this._nomeLivro,
+    this._nomeAutor,
   );
 
   int get numero => _numero;
@@ -44,4 +46,6 @@ class ResumoLivro extends Entidade {
   String get nomeLivro => _nomeLivro;
 
   String get descricao => _descricao;
+
+  String get nomeAutor => _nomeAutor;
 }

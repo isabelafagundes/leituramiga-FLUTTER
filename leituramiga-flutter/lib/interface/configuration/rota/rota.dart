@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/interface/configuration/guards/usuario_logado.guard.dart';
 import 'package:projeto_leituramiga/interface/configuration/guards/usuario_nao_logado.guard.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
+import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 
 enum Rota {
   AUTENTICACAO(url: "/", pageInfo: AutenticacaoRoute.page),
@@ -11,9 +12,9 @@ enum Rota {
   CADASTRO_USUARIO(url: "cadastro-usuario", pageInfo: CadastroUsuarioRoute.page),
   SENHA(url: "esqueceu-senha", pageInfo: EsqueceSenhaRoute.page),
   HOME(url: "home", pageInfo: HomeRoute.page),
-  LIVRO(url: "livro", pageInfo: LivrosRoute.page),
-  USUARIO(url: "usuario", pageInfo: UsuarioRoute.page),
-  CRIAR_SOLICITACAO(url: "criar-solicitacao", pageInfo: CriarSolicitacaoRoute.page),
+  LIVRO(url: "livro/:numeroLivro", pageInfo: LivrosRoute.page),
+  USUARIO(url: "usuario/:numeroUsuario", pageInfo: UsuarioRoute.page),
+  CRIAR_SOLICITACAO(url: "criar-solicitacao/:numeroLivro/:tipoSolicitacao", pageInfo: CriarSolicitacaoRoute.page),
   PERFIL(url: "perfil", pageInfo: PerfilRoute.page),
   EDITAR_PERFIL(url: "editar-perfil", pageInfo: EditarPefilRoute.page),
   CRIAR_LIVRO(url: "adicionar-livro", pageInfo: CriarLivroRoute.page);
@@ -37,7 +38,7 @@ enum Rota {
         adicionar(
           rota: AREA_LOGADA,
           subrotas: [
-            adicionar(rota: HOME, inicial: true),
+            adicionar(rota: HOME, inicial: true, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: LIVRO, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: CRIAR_SOLICITACAO, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: USUARIO, guards: [UsuarioLogadoGuard()]),
@@ -49,7 +50,11 @@ enum Rota {
       ];
 
   static void navegar(BuildContext context, Rota rota) {
-    AutoRouter.of(context).navigateNamed(rota.url);
+    try {
+      AutoRouter.of(context).navigateNamed(rota.url);
+    } catch (e) {
+      Notificacoes.mostrar("Não foi possível navegar");
+    }
   }
 
   static void navegarComArgumentos(BuildContext context, PageRouteInfo rota) {
@@ -65,7 +70,7 @@ enum Rota {
   }
 
   static CustomRoute adicionar({
-    bool manterEstado = false,
+    bool manterEstado = true,
     List<AutoRouteGuard>? guards,
     List<AutoRoute>? subrotas,
     required Rota rota,

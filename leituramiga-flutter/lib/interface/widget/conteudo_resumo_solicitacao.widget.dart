@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
+import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -8,15 +10,16 @@ import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
   final Tema tema;
+  final Solicitacao solicitacao;
 
-  const ConteudoResumoSolicitacaoWidget({super.key, required this.tema});
+  const ConteudoResumoSolicitacaoWidget({super.key, required this.tema, required this.solicitacao});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(tema.espacamento * 2),
-      width: Responsive.largura(context) <= 600? Responsive.largura(context) : 600,
-      height: Responsive.largura(context) <= 600? Responsive.altura(context) : null,
+      width: Responsive.largura(context) <= 600 ? Responsive.largura(context) : 600,
+      height: Responsive.largura(context) <= 600 ? Responsive.altura(context) : null,
       child: Column(
         children: [
           Flex(
@@ -38,7 +41,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                           tema: tema,
                         ),
                         TextoWidget(
-                          texto: "@usuario",
+                          texto: "@${solicitacao.nomeUsuario}",
                           tema: tema,
                           weight: FontWeight.w500,
                         ),
@@ -57,27 +60,28 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                               tema: tema,
                             ),
                             TextoWidget(
-                              texto: "20/12/2024",
+                              texto: solicitacao.dataEntrega.formatar("dd/MM/yyyy"),
                               tema: tema,
                             ),
                           ],
                         ),
                         const Spacer(),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            TextoWidget(
-                              texto: "Data devolução",
-                              weight: FontWeight.w500,
-                              tema: tema,
-                            ),
-                            TextoWidget(
-                              texto: "20/01/2025",
-                              tema: tema,
-                            ),
-                          ],
-                        ),
+                        if (solicitacao.dataDevolucao != null)
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              TextoWidget(
+                                texto: "Data devolução",
+                                weight: FontWeight.w500,
+                                tema: tema,
+                              ),
+                              TextoWidget(
+                                texto: solicitacao.dataDevolucao?.formatar("dd/MM/yyyy") ?? '',
+                                tema: tema,
+                              ),
+                            ],
+                          ),
                       ],
                     ),
                     SizedBox(height: tema.espacamento / 2),
@@ -91,7 +95,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                           tema: tema,
                         ),
                         TextoWidget(
-                          texto: "Rua Dona Salvadora, 251, apto. 56, b. 9",
+                          texto: solicitacao.endereco!.enderecoFormatado,
                           tema: tema,
                         ),
                         SizedBox(height: tema.espacamento / 2),
@@ -101,7 +105,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                           tema: tema,
                         ),
                         TextoWidget(
-                          texto: "O endereço é próximo a uma padaria.",
+                          texto: solicitacao.informacoesAdicionais.isEmpty? "Sem informações adicionais" : solicitacao.informacoesAdicionais,
                           tema: tema,
                         ),
                         SizedBox(height: tema.espacamento / 2),
@@ -119,7 +123,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                                   tema: tema,
                                 ),
                                 TextoWidget(
-                                  texto: "Presencial",
+                                  texto: solicitacao.formaEntrega.descricao,
                                   tema: tema,
                                 ),
                               ],
@@ -133,9 +137,22 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                                   weight: FontWeight.w500,
                                   tema: tema,
                                 ),
-                                TextoWidget(
-                                  texto: "Doação",
-                                  tema: tema,
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: tema.espacamento,
+                                    vertical: tema.espacamento / 1.5,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: _obterCor(),
+                                    borderRadius: BorderRadius.circular(tema.borderRadiusM),
+                                    border: Border.all(color: Color(tema.neutral).withOpacity(.2)),
+                                  ),
+                                  child: TextoWidget(
+                                    texto: solicitacao.tipoSolicitacao.descricao,
+                                    tema: tema,
+                                    weight: FontWeight.w500,
+                                    cor: kCorFonte,
+                                  ),
                                 ),
                               ],
                             ),
@@ -197,19 +214,19 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
             direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
             mainAxisSize: MainAxisSize.min,
             children: [
-              if(false)
-              BotaoWidget(
-                tema: tema,
-                corTexto: kCorFonte,
-                texto: "Aceitar",
-                aoClicar: () {},
-                icone: Icon(
-                  Icons.done,
-                  color: kCorFonte,
+              if (solicitacao.tipoSolicitacao != TipoSolicitacao.TROCA)
+                BotaoWidget(
+                  tema: tema,
+                  corTexto: kCorFonte,
+                  texto: "Aceitar",
+                  aoClicar: () {},
+                  icone: Icon(
+                    Icons.done,
+                    color: kCorFonte,
+                  ),
+                  corFundo: Color(tema.success),
                 ),
-                corFundo: Color(tema.success),
-              ),
-              if(true)
+              if (solicitacao.tipoSolicitacao == TipoSolicitacao.TROCA)
                 BotaoWidget(
                   tema: tema,
                   corTexto: kCorFonte,
@@ -221,7 +238,6 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                   ),
                   corFundo: Color(tema.accent),
                 ),
-
               SizedBox(height: tema.espacamento * 2, width: tema.espacamento * 2),
               BotaoWidget(
                 tema: tema,
@@ -239,5 +255,13 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Color _obterCor() {
+    return switch (solicitacao.tipoSolicitacao) {
+      TipoSolicitacao.EMPRESTIMO => kCorVerde,
+      TipoSolicitacao.DOACAO => kCorAzul,
+      TipoSolicitacao.TROCA => kCorPessego,
+    };
   }
 }

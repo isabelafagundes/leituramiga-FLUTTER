@@ -22,7 +22,7 @@ import 'package:auto_route/annotations.dart';
 class UsuarioPage extends StatefulWidget {
   final int numeroUsuario;
 
-  const UsuarioPage({super.key, required this.numeroUsuario});
+  const UsuarioPage({super.key, @PathParam("numeroUsuario") required this.numeroUsuario});
 
   @override
   State<UsuarioPage> createState() => _UsuarioPageState();
@@ -118,12 +118,12 @@ class _UsuarioPageState extends State<UsuarioPage> {
                   GridLivroWidget(
                     tema: tema,
                     livros: _usuarioComponent.itensPaginados,
-                    aoClicarLivro: (numeroLivro) async {
-                      await _usuarioComponent.obterLivro(numeroLivro);
+                    aoClicarLivro: (livro) async {
+                      await _usuarioComponent.obterLivro(livro.numero);
                       Rota.navegarComArgumentos(
                         context,
                         LivrosRoute(
-                          livro: _usuarioComponent.livroSelecionado!,
+                          numeroLivro: _usuarioComponent.livroSelecionado!.numero,
                         ),
                       );
                     },

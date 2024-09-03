@@ -1,4 +1,5 @@
 import 'package:leituramiga/domain/livro/livro.dart';
+import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:leituramiga/domain/super/entidade.dart';
 
 class LivroSolicitacao extends Entidade {
@@ -16,6 +17,14 @@ class LivroSolicitacao extends Entidade {
     return LivroSolicitacao.carregar(
       livro.numero,
       livro.nome,
+      livro.nomeAutor,
+    );
+  }
+
+  factory LivroSolicitacao.criarDeResumoLivro(ResumoLivro livro) {
+    return LivroSolicitacao.carregar(
+      livro.numero,
+      livro.nomeLivro,
       livro.nomeAutor,
     );
   }

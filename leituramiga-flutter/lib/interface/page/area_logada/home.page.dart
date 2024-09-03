@@ -75,6 +75,7 @@ class _HomePageState extends State<HomePage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        carregando: _livrosComponent.carregando || _usuariosComponent.carregando,
         widgetNoCabecalho: _livrosComponent.carregando || _usuariosComponent.carregando
             ? const Center(
                 child: CircularProgressIndicator(),
@@ -149,12 +150,12 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.only(right: tema.espacamento + 4),
                     child: GridLivroWidget(
                       tema: tema,
-                      aoClicarLivro: (numeroLivro) async {
-                        await _livrosComponent.obterLivro(numeroLivro);
+                      aoClicarLivro: (livro) async {
+                        await _livrosComponent.obterLivro(livro.numero);
                         Rota.navegarComArgumentos(
                           context,
                           LivrosRoute(
-                            livro: _livrosComponent.livroSelecionado!,
+                            numeroLivro: _livrosComponent.livroSelecionado!.numero,
                           ),
                         );
                       },

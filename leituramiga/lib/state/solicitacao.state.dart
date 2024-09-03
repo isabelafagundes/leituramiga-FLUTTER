@@ -1,6 +1,9 @@
 import 'package:leituramiga/domain/endereco/municipio.dart';
 import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
+import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
+import 'package:leituramiga/domain/solicitacao/livro_solicitacao.dart';
+import 'package:leituramiga/domain/solicitacao/livros_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/resumo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 
@@ -10,6 +13,11 @@ mixin class SolicitacaoState {
   FormaEntrega? formaEntregaSelecionada;
   Municipio? municipioSelecionado;
   InstituicaoDeEnsino? instituicaoSelecionada;
-  List<int> livrosSelecionados = [];
+  List<LivroSolicitacao> livrosSelecionados = [];
   List<ResumoSolicitacao> solicitacoes = [];
+
+
+  bool verificarSelecao(ResumoLivro livro) {
+    return livrosSelecionados.any((element) => element.numero == livro.numero);
+  }
 }

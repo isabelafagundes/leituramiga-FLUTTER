@@ -11,9 +11,11 @@ class InputWidget extends StatefulWidget {
   final bool senha;
   final TextEditingController controller;
   final Function(String) onChanged;
+  final Function()? onTap;
   final List<TextInputFormatter>? formatters;
   final double? tamanho;
   final TextInputType? tipoInput;
+  final bool readOnly;
 
   const InputWidget({
     super.key,
@@ -27,6 +29,8 @@ class InputWidget extends StatefulWidget {
     this.formatters,
     this.tamanho,
     this.tipoInput,
+    this.readOnly = false,
+    this.onTap,
   });
 
   @override
@@ -87,6 +91,8 @@ class _InputWidgetState extends State<InputWidget> {
               ],
             ),
             child: TextFormField(
+              onTap: widget.onTap,
+              readOnly: widget.readOnly,
               keyboardType: widget.tipoInput ?? TextInputType.text,
               onChanged: widget.onChanged,
               cursorColor: Color(widget.tema.accent),

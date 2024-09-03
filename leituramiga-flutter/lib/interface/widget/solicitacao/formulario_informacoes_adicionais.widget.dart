@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/domain/solicitacao/livro_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -12,8 +13,15 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
   final TextEditingController controllerInformacoes;
   final TextEditingController controllerDataEntrega;
   final TextEditingController controllerDataDevolucao;
+  final TextEditingController controllerHoraDevolucao;
+  final TextEditingController controllerHoraEntrega;
   final TipoSolicitacao tipoSolicitacao;
+  final List<LivroSolicitacao> livrosSolicitacao;
   final Function() aoClicarProximo;
+  final Function(LivroSolicitacao) removerLivro;
+  final Function([bool devolucao]) abrirDatePicker;
+  final Function([bool devolucao]) abrirTimePicker;
+  final Function() aoClicarAdicionarLivro;
 
   const FormularioInformacoesAdicionaisWidget({
     super.key,
@@ -23,6 +31,13 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
     required this.controllerDataEntrega,
     required this.controllerDataDevolucao,
     required this.tipoSolicitacao,
+    required this.aoClicarAdicionarLivro,
+    required this.livrosSolicitacao,
+    required this.removerLivro,
+    required this.abrirDatePicker,
+    required this.abrirTimePicker,
+    required this.controllerHoraDevolucao,
+    required this.controllerHoraEntrega,
   });
 
   @override
@@ -44,7 +59,12 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                 tamanho: tema.tamanhoFonteM,
               ),
               SizedBox(height: tema.espacamento),
-              CardLivrosSolicitacaoWidget(tema: tema),
+              CardLivrosSolicitacaoWidget(
+                tema: tema,
+                removerLivro: removerLivro,
+                livrosSolicitacao: livrosSolicitacao,
+                aoClicarAdicionarLivro: aoClicarAdicionarLivro,
+              ),
             ],
           ),
         ),
@@ -79,30 +99,69 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                     Flexible(
                       child: InputWidget(
                         tema: tema,
+                        onTap: abrirDatePicker,
+                        readOnly: true,
                         controller: controllerDataEntrega,
                         label: "Data entrega",
                         tamanho: tema.tamanhoFonteM,
                         onChanged: (valor) {},
                       ),
                     ),
-                    if (tipoSolicitacao == TipoSolicitacao.EMPRESTIMO) ...[
-                      SizedBox(
-                        width: tema.espacamento * 2,
-                        height: tema.espacamento * 2,
+                    SizedBox(
+                      width: tema.espacamento * 2,
+                      height: tema.espacamento * 2,
+                    ),
+                    Flexible(
+                      child: InputWidget(
+                        tema: tema,
+                        onTap: () => abrirTimePicker(),
+                        readOnly: true,
+                        controller: controllerHoraEntrega,
+                        label: "Hora entrega",
+                        tamanho: tema.tamanhoFonteM,
+                        onChanged: (valor) {},
                       ),
+                    ),
+                  ],
+                ),
+              ),
+              if (tipoSolicitacao == TipoSolicitacao.EMPRESTIMO)
+                Flexible(
+                  child: Flex(
+                    mainAxisSize: MainAxisSize.min,
+                    direction: Responsive.larguraPP(context) ? Axis.vertical : Axis.horizontal,
+                    children: [
                       Flexible(
                         child: InputWidget(
                           tema: tema,
-                          controller: controllerDataDevolucao,
+                          onTap: () => abrirDatePicker(true),
+                          readOnly: true,
+                          controller: controllerDataEntrega,
                           label: "Data devolução",
                           tamanho: tema.tamanhoFonteM,
                           onChanged: (valor) {},
                         ),
                       ),
-                    ]
-                  ],
+                      if (tipoSolicitacao == TipoSolicitacao.EMPRESTIMO) ...[
+                        SizedBox(
+                          width: tema.espacamento * 2,
+                          height: tema.espacamento * 2,
+                        ),
+                        Flexible(
+                          child: InputWidget(
+                            tema: tema,
+                            onTap: () => abrirTimePicker(true),
+                            readOnly: true,
+                            controller: controllerHoraDevolucao,
+                            label: "Hora devolução",
+                            tamanho: tema.tamanhoFonteM,
+                            onChanged: (valor) {},
+                          ),
+                        ),
+                      ]
+                    ],
+                  ),
                 ),
-              ),
               SizedBox(height: tema.espacamento * 3),
               Flexible(
                 child: BotaoWidget(
