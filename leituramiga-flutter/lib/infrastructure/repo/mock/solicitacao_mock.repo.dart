@@ -45,7 +45,7 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
         DataHora.hoje(),
         null,
         DataHora.hoje(),
-        "",
+        "Vou esperar no refeitório da faculdade",
         EnderecoMockRepo().endereco,
         InstituicaoMockRepo().instituicoes[0],
         TipoStatusSolicitacao.PENDENTE,
@@ -53,6 +53,7 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
         null,
         "isabela",
         TipoSolicitacao.TROCA,
+        1,
       );
 
   @override

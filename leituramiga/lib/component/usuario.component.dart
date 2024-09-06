@@ -49,6 +49,13 @@ class UsuarioComponent extends State
     );
   }
 
+  Future<void> obterUsuarioSolicitacao(int numero) async {
+    await executar(
+      rotina: () async => _usuarioUseCase.obterUsuarioSolicitacao(numero),
+      mensagemErro: "Não foi possível obter o usuário",
+    );
+  }
+
   Future<void> obterComentarios(int numero) async {
     await executar(
       rotina: () async => _comentarioUseCase.obterComentarios(numero),
@@ -130,6 +137,13 @@ class UsuarioComponent extends State
   void atualizarEnderecoMemoria(Endereco endereco) {
     executar(
       rotina: () => _enderecoUseCase.atualizarEnderecoEmMemoria(endereco),
+      mensagemErro: "Não foi possível atualizar o endereço",
+    );
+  }
+
+  Future<void> obterCidades() async {
+    executar(
+      rotina: () => _enderecoUseCase.obterMunicipios(),
       mensagemErro: "Não foi possível atualizar o endereço",
     );
   }

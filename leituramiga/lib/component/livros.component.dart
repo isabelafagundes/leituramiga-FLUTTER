@@ -1,4 +1,5 @@
 import 'package:leituramiga/domain/endereco/municipio.dart';
+import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
 import 'package:leituramiga/domain/livro/categoria.dart';
 import 'package:leituramiga/domain/livro/resumo_livro.dart';
@@ -113,6 +114,12 @@ class LivrosComponent extends State
     );
   }
 
+  void selecionarEstado(UF uf) {
+     executar(
+    rotina: () async => filtroState.selecionarEstado(uf),
+    mensagemErro: "Não foi possível obter as instituições",
+    );
+  }
 
   Future<void> obterMunicipios() async {
     await executar(

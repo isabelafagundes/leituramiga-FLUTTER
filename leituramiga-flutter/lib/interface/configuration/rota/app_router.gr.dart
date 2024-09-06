@@ -43,7 +43,7 @@ abstract class _$AppRouter extends RootStackRouter {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<CriarSolicitacaoRouteArgs>(
           orElse: () => CriarSolicitacaoRouteArgs(
-                numeroLivro: pathParams.getInt('numeroLivro'),
+                numeroLivro: pathParams.optInt('numeroLivro'),
                 tipoSolicitacao: pathParams.getInt('tipoSolicitacao'),
               ));
       return AutoRoutePage<dynamic>(
@@ -111,6 +111,19 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    VisualizarSolicitacaoRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<VisualizarSolicitacaoRouteArgs>(
+          orElse: () => VisualizarSolicitacaoRouteArgs(
+              numeroSolicitacao: pathParams.getInt('numeroSolicitacao')));
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: VisualizarSolicitacaoPage(
+          key: args.key,
+          numeroSolicitacao: args.numeroSolicitacao,
+        ),
+      );
+    },
   };
 }
 
@@ -175,7 +188,7 @@ class CriarLivroRoute extends PageRouteInfo<void> {
 class CriarSolicitacaoRoute extends PageRouteInfo<CriarSolicitacaoRouteArgs> {
   CriarSolicitacaoRoute({
     Key? key,
-    required int numeroLivro,
+    required int? numeroLivro,
     required int tipoSolicitacao,
     List<PageRouteInfo>? children,
   }) : super(
@@ -207,7 +220,7 @@ class CriarSolicitacaoRouteArgs {
 
   final Key? key;
 
-  final int numeroLivro;
+  final int? numeroLivro;
 
   final int tipoSolicitacao;
 
@@ -361,5 +374,45 @@ class UsuarioRouteArgs {
   @override
   String toString() {
     return 'UsuarioRouteArgs{key: $key, numeroUsuario: $numeroUsuario}';
+  }
+}
+
+/// generated route for
+/// [VisualizarSolicitacaoPage]
+class VisualizarSolicitacaoRoute
+    extends PageRouteInfo<VisualizarSolicitacaoRouteArgs> {
+  VisualizarSolicitacaoRoute({
+    Key? key,
+    required int numeroSolicitacao,
+    List<PageRouteInfo>? children,
+  }) : super(
+          VisualizarSolicitacaoRoute.name,
+          args: VisualizarSolicitacaoRouteArgs(
+            key: key,
+            numeroSolicitacao: numeroSolicitacao,
+          ),
+          rawPathParams: {'numeroSolicitacao': numeroSolicitacao},
+          initialChildren: children,
+        );
+
+  static const String name = 'VisualizarSolicitacaoRoute';
+
+  static const PageInfo<VisualizarSolicitacaoRouteArgs> page =
+      PageInfo<VisualizarSolicitacaoRouteArgs>(name);
+}
+
+class VisualizarSolicitacaoRouteArgs {
+  const VisualizarSolicitacaoRouteArgs({
+    this.key,
+    required this.numeroSolicitacao,
+  });
+
+  final Key? key;
+
+  final int numeroSolicitacao;
+
+  @override
+  String toString() {
+    return 'VisualizarSolicitacaoRouteArgs{key: $key, numeroSolicitacao: $numeroSolicitacao}';
   }
 }

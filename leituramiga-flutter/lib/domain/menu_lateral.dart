@@ -8,20 +8,21 @@ enum MenuLateral {
     iconeDesativado: "menu/home",
     rota: Rota.HOME,
   ),
-  SOLICITAR_CADASTRO(
-    id: 2,
-    descricao: "Suporte",
-    iconeAtivado: "menu/plus-circle-fill",
-    iconeDesativado: "menu/plus-circle",
-    rota: Rota.CRIAR_SOLICITACAO,
-  ),
   SOLICITACOES(
     id: 2,
     descricao: "Solicitações",
     iconeAtivado: "compartilhar_fill",
     iconeDesativado: "compartilhar",
-    rota: Rota.CRIAR_SOLICITACAO,
+    rota: Rota.SUPORTE,
+  ),
+  SUPORTE(
+    id: 3,
+    descricao: "Suporte",
+    iconeAtivado: "menu/plus-circle-fill",
+    iconeDesativado: "menu/plus-circle",
+    rota: Rota.SUPORTE,
   );
+
 
   final int id;
   final String descricao;

@@ -207,6 +207,7 @@ class _HomePageState extends State<HomePage> {
   Widget get obterFiltros {
     return LayoutFiltroWidget(
       tema: tema,
+      selecionarEstado: _livrosComponent.selecionarEstado,
       carrergando: _livrosComponent.carregando,
       categoriaSelecionada: _livrosComponent.filtroState.numeroCategoria,
       categoriasPorId: _livrosComponent.categoriasPorNumero,

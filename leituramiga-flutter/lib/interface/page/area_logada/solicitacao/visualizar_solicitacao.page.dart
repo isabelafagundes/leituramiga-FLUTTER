@@ -34,21 +34,19 @@ import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/time_picker.widget.dart';
 
 @RoutePage()
-class CriarSolicitacaoPage extends StatefulWidget {
-  final int? numeroLivro;
-  final int tipoSolicitacao;
+class VisualizarSolicitacaoPage extends StatefulWidget {
+  final int numeroSolicitacao;
 
-  const CriarSolicitacaoPage({
+  const VisualizarSolicitacaoPage({
     super.key,
-    @PathParam('numeroLivro') required this.numeroLivro,
-    @PathParam('tipoSolicitacao') required this.tipoSolicitacao,
+    @PathParam('numeroSolicitacao') required this.numeroSolicitacao,
   });
 
   @override
-  State<CriarSolicitacaoPage> createState() => _CriarSolicitacaoPageState();
+  State<VisualizarSolicitacaoPage> createState() => _VisualizarSolicitacaoPageState();
 }
 
-class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
+class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
   final SolicitacaoComponent _solicitacaoComponent = SolicitacaoComponent();
   final UsuarioComponent _usuarioComponent = UsuarioComponent();
   final TextEditingController controllerInformacoes = TextEditingController();
@@ -73,7 +71,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
-  TipoSolicitacao _tipoSolicitacao = TipoSolicitacao.TROCA;
+  final TipoSolicitacao _tipoSolicitacao = TipoSolicitacao.TROCA;
 
   @override
   void initState() {
@@ -93,11 +91,12 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _usuarioComponent.obterUsuario(1);
-      if (widget.numeroLivro != null) await _usuarioComponent.obterLivro(widget.numeroLivro!);
+      await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
       await _obterUsuarioSolicitacao();
+      await _usuarioComponent.obterUsuario(1);
       await _usuarioComponent.obterLivrosUsuario();
-      _tipoSolicitacao = TipoSolicitacao.deNumero(widget.tipoSolicitacao);
+      await _usuarioComponent.obterCidades();
+      _preencherControllers();
     });
   }
 
@@ -157,10 +156,11 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
           tema: tema,
           aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
           aoSelecionarFrete: (frete) => setState(() => controllerFrete.text = frete),
-          estados: UF.values.map((e) => e.descricao).toList(),
-          cidades: [],
-          controllerFrete: controllerFrete,
           controllerFormaEntrega: controllerFormaEntrega,
+          controllerFrete: controllerFrete,
+          usuarios: [_autenticacaoState.usuario!.nomeUsuario, _usuarioComponent.usuarioSolicitacao!.nomeUsuario],
+          estados: UF.values.map((e) => e.descricao).toList(),
+          cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome).toList(),
           aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
           aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
           aoClicarProximo: () => atualizarPagina(CriarSolicitacao.CONCLUSAO),
@@ -173,7 +173,6 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
           controllerNumero: controllerNumero,
           controllerComplemento: controllerComplemento,
           controllerCidade: controllerCidade,
-          usuarios: [_autenticacaoState.usuario!.nomeUsuario, _usuarioComponent.usuarioSolicitacao!.nomeUsuario],
           controllerEstado: controllerEstado,
         ),
       CriarSolicitacao.CONCLUSAO => Flex(
@@ -215,9 +214,36 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
     };
   }
 
+  void _preencherControllers() {
+    controllerRua.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.rua ?? '';
+    controllerBairro.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.bairro ?? '';
+    controllerCep.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.cep ?? '';
+    controllerNumero.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.numeroResidencial ?? '';
+    controllerComplemento.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.complemento ?? '';
+    controllerCidade.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.municipio.nome ?? '';
+    controllerEstado.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.municipio.estado.descricao ?? '';
+    controllerDataEntrega.text = _solicitacaoComponent.solicitacaoSelecionada?.dataEntrega.formatar("dd/MM/yyyy") ?? '';
+    controllerDataDevolucao.text =
+        _solicitacaoComponent.solicitacaoSelecionada?.dataDevolucao?.formatar("dd/MM/yyyy") ?? '';
+    controllerHoraEntrega.text = _solicitacaoComponent.solicitacaoSelecionada?.dataEntrega.formatar("HH:mm") ?? '';
+    controllerHoraDevolucao.text = _solicitacaoComponent.solicitacaoSelecionada?.dataDevolucao?.formatar("HH:mm") ?? '';
+    controllerFormaEntrega.text = _solicitacaoComponent.solicitacaoSelecionada?.formaEntrega.descricao ?? "Selecione";
+    controllerInformacoes.text = _solicitacaoComponent.solicitacaoSelecionada?.informacoesAdicionais ?? "";
+    controllerFrete.text =
+        _solicitacaoComponent.solicitacaoSelecionada!.numeroUsuarioFrete == _autenticacaoState.usuario!.numero
+            ? _autenticacaoState.usuario!.nomeUsuario
+            : _usuarioComponent.usuarioSelecionado!.nomeUsuario;
+    setState(() {});
+  }
+
   Future<void> _obterUsuarioSolicitacao() async {
-    int numero = _usuarioComponent.livroSelecionado!.numeroUsuario;
-    await _usuarioComponent.obterUsuarioSolicitacao(numero);
+    int numeroUsuarioCriador = _solicitacaoComponent.solicitacaoSelecionada!.numeroUsuarioCriador;
+    int numeroUsuarioProprietario = _solicitacaoComponent.solicitacaoSelecionada!.numeroUsuarioProprietario;
+    if (numeroUsuarioCriador == _autenticacaoState.usuario!.numero) {
+      await _usuarioComponent.obterUsuarioSolicitacao(numeroUsuarioProprietario);
+    } else {
+      await _usuarioComponent.obterUsuarioSolicitacao(numeroUsuarioCriador);
+    }
   }
 
   void _criarSolicitacao() {

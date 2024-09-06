@@ -23,6 +23,13 @@ class EsqueceSenhaPage extends StatefulWidget {
 }
 
 class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
+  final TextEditingController controllerRua = TextEditingController();
+  final TextEditingController controllerBairro = TextEditingController();
+  final TextEditingController controllerCep = TextEditingController();
+  final TextEditingController controllerNumero = TextEditingController();
+  final TextEditingController controllerComplemento = TextEditingController();
+  final TextEditingController controllerCidade = TextEditingController();
+  final TextEditingController controllerEstado = TextEditingController();
   EtapaSenha? _etapaCadastro = EtapaSenha.EMAIL;
 
   TemaState get _temaState => TemaState.instancia;
@@ -50,47 +57,47 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
               ],
               Responsive.larguraP(context)
                   ? Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: tema.espacamento * 2,
-                  vertical: tema.espacamento,
-                ),
-                child: _obterPaginaAtual(),
-              )
+                      padding: EdgeInsets.symmetric(
+                        horizontal: tema.espacamento * 2,
+                        vertical: tema.espacamento,
+                      ),
+                      child: _obterPaginaAtual(),
+                    )
                   : Padding(
-                padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
-                child: CardBaseWidget(
-                  largura: 650,
-                  altura: 560,
-                  cursorDeClick: false,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: tema.espacamento * 2,
-                    vertical: tema.espacamento * 2,
-                  ),
-                  tema: tema,
-                  child: Flex(
-                    direction: Axis.vertical,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      if (_etapaCadastro != EtapaSenha.REDIRECIONAMENTO)
-                        Flexible(
-                          child: EtapasWidget(
-                            tema: tema,
-                            etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
-                          ),
+                      padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
+                      child: CardBaseWidget(
+                        largura: 650,
+                        altura: 560,
+                        cursorDeClick: false,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: tema.espacamento * 2,
+                          vertical: tema.espacamento * 2,
                         ),
-                      SizedBox(height: tema.espacamento * 2),
-                      Flexible(
-                        flex: 12,
-                        child: Padding(
-                          padding: EdgeInsets.all(tema.espacamento * 2),
-                          child: _obterPaginaAtual(),
+                        tema: tema,
+                        child: Flex(
+                          direction: Axis.vertical,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            if (_etapaCadastro != EtapaSenha.REDIRECIONAMENTO)
+                              Flexible(
+                                child: EtapasWidget(
+                                  tema: tema,
+                                  etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
+                                ),
+                              ),
+                            SizedBox(height: tema.espacamento * 2),
+                            Flexible(
+                              flex: 12,
+                              child: Padding(
+                                padding: EdgeInsets.all(tema.espacamento * 2),
+                                child: _obterPaginaAtual(),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
             ],
           ),
         ),
@@ -101,98 +108,102 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
   Widget _obterPaginaAtual() {
     return switch (_etapaCadastro) {
       EtapaSenha.EMAIL => SizedBox(
-        height: 600,
-        child: FormularioUsuarioWidget(
-          tema: tema,
-          controllerConfirmacaoSenha: TextEditingController(),
-          controllerEmail: TextEditingController(),
-          controllerNome: TextEditingController(),
-          controllerSenha: TextEditingController(),
-          controllerUsuario: TextEditingController(),
-          aoCadastrar: () => atualizarPagina(EtapaSenha.CODIGO),
+          height: 600,
+          child: FormularioUsuarioWidget(
+            tema: tema,
+            controllerConfirmacaoSenha: TextEditingController(),
+            controllerEmail: TextEditingController(),
+            controllerNome: TextEditingController(),
+            controllerSenha: TextEditingController(),
+            controllerUsuario: TextEditingController(),
+            aoCadastrar: () => atualizarPagina(EtapaSenha.CODIGO),
+          ),
         ),
-      ),
       EtapaSenha.CODIGO => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          FormularioEnderecoWidget(
-            tema: tema,
-            controllerRua: TextEditingController(),
-            controllerBairro: TextEditingController(),
-            controllerCep: TextEditingController(),
-            controllerNumero: TextEditingController(),
-            controllerComplemento: TextEditingController(),
-            controllerCidade: TextEditingController(),
-            controllerEstado: TextEditingController(),
-          ),
-          SizedBox(height: tema.espacamento * 4),
-          BotaoWidget(
-            tema: tema,
-            texto: 'Próximo',
-            nomeIcone: "seta/arrow-long-right",
-            aoClicar: () => atualizarPagina(EtapaSenha.CODIGO),
-          ),
-        ],
-      ),
-      EtapaSenha.CODIGO => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SvgWidget(
-            nomeSvg: "codigo_verificacao",
-            altura: 220,
-          ),
-          SizedBox(height: tema.espacamento * 4),
-          TextoWidget(
-            texto: "Informe o código de segurança enviado no email email@email.com!",
-            tema: tema,
-            align: TextAlign.center,
-            cor: Color(tema.baseContent),
-          ),
-          SizedBox(height: tema.espacamento * 2),
-          SizedBox(
-            width: 300,
-            child: InputWidget(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            FormularioEnderecoWidget(
               tema: tema,
-              tipoInput: const TextInputType.numberWithOptions(decimal: false),
-              controller: TextEditingController(),
-              onChanged: (texto) {},
+              estados: [],
+              cidades: [],
+              aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
+              aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
+              controllerRua: TextEditingController(),
+              controllerBairro: TextEditingController(),
+              controllerCep: TextEditingController(),
+              controllerNumero: TextEditingController(),
+              controllerComplemento: TextEditingController(),
+              controllerCidade: TextEditingController(),
+              controllerEstado: TextEditingController(),
             ),
-          ),
-          SizedBox(height: tema.espacamento * 4),
-          BotaoWidget(
-            tema: tema,
-            texto: 'Próximo',
-            nomeIcone: "seta/arrow-long-right",
-            aoClicar: () => atualizarPagina(EtapaSenha.REDIRECIONAMENTO),
-          ),
-        ],
-      ),
+            SizedBox(height: tema.espacamento * 4),
+            BotaoWidget(
+              tema: tema,
+              texto: 'Próximo',
+              nomeIcone: "seta/arrow-long-right",
+              aoClicar: () => atualizarPagina(EtapaSenha.CODIGO),
+            ),
+          ],
+        ),
+      EtapaSenha.CODIGO => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SvgWidget(
+              nomeSvg: "codigo_verificacao",
+              altura: 220,
+            ),
+            SizedBox(height: tema.espacamento * 4),
+            TextoWidget(
+              texto: "Informe o código de segurança enviado no email email@email.com!",
+              tema: tema,
+              align: TextAlign.center,
+              cor: Color(tema.baseContent),
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            SizedBox(
+              width: 300,
+              child: InputWidget(
+                tema: tema,
+                tipoInput: const TextInputType.numberWithOptions(decimal: false),
+                controller: TextEditingController(),
+                onChanged: (texto) {},
+              ),
+            ),
+            SizedBox(height: tema.espacamento * 4),
+            BotaoWidget(
+              tema: tema,
+              texto: 'Próximo',
+              nomeIcone: "seta/arrow-long-right",
+              aoClicar: () => atualizarPagina(EtapaSenha.REDIRECIONAMENTO),
+            ),
+          ],
+        ),
       _ => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SvgWidget(
-            nomeSvg: "pessoas_com_livro",
-            altura: 280,
-          ),
-          SizedBox(height: tema.espacamento * 4),
-          TextoWidget(
-            texto: "Sua conta foi criada com sucesso!\nFaça o login e comece a compartilhar livros!",
-            tema: tema,
-            align: TextAlign.center,
-            cor: Color(tema.baseContent),
-          ),
-          SizedBox(height: tema.espacamento * 4),
-          BotaoWidget(
-            tema: tema,
-            texto: 'Ir para login',
-            nomeIcone: "seta/arrow-long-right",
-            aoClicar: () => Rota.navegar(context, Rota.LOGIN),
-          ),
-        ],
-      ),
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SvgWidget(
+              nomeSvg: "pessoas_com_livro",
+              altura: 280,
+            ),
+            SizedBox(height: tema.espacamento * 4),
+            TextoWidget(
+              texto: "Sua conta foi criada com sucesso!\nFaça o login e comece a compartilhar livros!",
+              tema: tema,
+              align: TextAlign.center,
+              cor: Color(tema.baseContent),
+            ),
+            SizedBox(height: tema.espacamento * 4),
+            BotaoWidget(
+              tema: tema,
+              texto: 'Ir para login',
+              nomeIcone: "seta/arrow-long-right",
+              aoClicar: () => Rota.navegar(context, Rota.LOGIN),
+            ),
+          ],
+        ),
     };
   }
 

@@ -14,6 +14,10 @@ class FormularioEnderecoWidget extends StatelessWidget {
   final TextEditingController controllerComplemento;
   final TextEditingController controllerCidade;
   final TextEditingController controllerEstado;
+  final Function(String) aoSelecionarCidade;
+  final Function(String) aoSelecionarEstado;
+  final List<String> cidades;
+  final List<String> estados;
 
   const FormularioEnderecoWidget({
     super.key,
@@ -25,6 +29,10 @@ class FormularioEnderecoWidget extends StatelessWidget {
     required this.controllerComplemento,
     required this.controllerCidade,
     required this.controllerEstado,
+    required this.aoSelecionarCidade,
+    required this.aoSelecionarEstado,
+    required this.cidades,
+    required this.estados,
   });
 
   @override
@@ -73,8 +81,9 @@ class FormularioEnderecoWidget extends StatelessWidget {
                     SizedBox(height: tema.espacamento),
                     MenuWidget(
                       tema: tema,
-                      escolhas: ["São Paulo"],
-                      aoClicar: (valor) {},
+                      valorSelecionado: controllerEstado.text.isEmpty ? null : controllerEstado.text,
+                      escolhas: estados,
+                      aoClicar: aoSelecionarEstado,
                     ),
                   ],
                 ),
@@ -104,8 +113,9 @@ class FormularioEnderecoWidget extends StatelessWidget {
                     SizedBox(height: tema.espacamento),
                     MenuWidget(
                       tema: tema,
-                      escolhas: ["Cajamar", "Santana de Parnaíba", "São Paulo"],
-                      aoClicar: (valor) {},
+                      valorSelecionado: controllerCidade.text.isEmpty ? null : controllerCidade.text,
+                      escolhas: cidades,
+                      aoClicar: aoSelecionarCidade,
                     ),
                   ],
                 ),

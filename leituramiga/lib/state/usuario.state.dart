@@ -4,4 +4,5 @@ import 'package:leituramiga/domain/usuario/usuario.dart';
 mixin class UsuarioState {
   Usuario? usuarioSelecionado;
   Usuario? usuarioEdicao;
+  Usuario? usuarioSolicitacao;
 }

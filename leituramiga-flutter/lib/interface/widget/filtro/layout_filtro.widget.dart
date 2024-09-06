@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leituramiga/domain/endereco/municipio.dart';
+import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
 import 'package:leituramiga/domain/livro/categoria.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
@@ -26,6 +27,7 @@ class LayoutFiltroWidget extends StatefulWidget {
   final Function(InstituicaoDeEnsino) selecionarInstituicao;
   final Function(TipoSolicitacao) selecionarTipoSolicitacao;
   final Function(Municipio) selecionarMunicipio;
+  final Function(UF) selecionarEstado;
   final int? categoriaSelecionada;
   final bool carrergando;
 
@@ -43,6 +45,7 @@ class LayoutFiltroWidget extends StatefulWidget {
     required this.instituicoesPorId,
     this.categoriaSelecionada,
     required this.carrergando,
+    required this.selecionarEstado,
   });
 
   @override
@@ -145,6 +148,24 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                     ),
                     SizedBox(height: widget.tema.espacamento * 2),
                   ],
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextoWidget(
+                        texto: "Estado",
+                        tema: widget.tema,
+                        cor: Color(widget.tema.baseContent),
+                      ),
+                      SizedBox(height: widget.tema.espacamento),
+                      MenuWidget(
+                        tema: widget.tema,
+                        valorSelecionado: FiltroState.instancia.estado?.descricao,
+                        escolhas: UF.values.map((e) => e.toString()).toList(),
+                        aoClicar: (estado) => widget.selecionarEstado(UF.deDescricao(estado)),
+                      ),
+                    ],
+                  ),
                   TextoWidget(
                     texto: "Cidade",
                     tema: widget.tema,
@@ -155,8 +176,11 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                     constraints: const BoxConstraints(maxWidth: 300),
                     child: MenuWidget(
                       tema: widget.tema,
+                      valorSelecionado: widget.municipiosPorId.values
+                          .firstWhere((element) => element.numero == FiltroState.instancia.numeroMunicipio!)
+                          .nome,
                       escolhas: widget.municipiosPorId.values.map((e) => e.nome).toList(),
-                      aoClicar: (nomeCidade) => setState((){
+                      aoClicar: (nomeCidade) => setState(() {
                         widget.selecionarMunicipio(
                           widget.municipiosPorId.values.firstWhere((element) => element.nome == nomeCidade),
                         );

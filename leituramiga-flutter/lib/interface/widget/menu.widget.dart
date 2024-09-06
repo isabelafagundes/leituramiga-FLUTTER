@@ -7,12 +7,14 @@ class MenuWidget extends StatefulWidget {
   final Tema tema;
   final List<String> escolhas;
   final Function(String) aoClicar;
+  final String? valorSelecionado;
 
   const MenuWidget({
     super.key,
     required this.aoClicar,
     required this.tema,
     required this.escolhas,
+    this.valorSelecionado,
   });
 
   @override
@@ -25,6 +27,14 @@ class _MenuWidgetState extends State<MenuWidget> {
   int _indiceHover = -1;
   bool _visivel = false;
   String _label = 'Selecione';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() => _label = widget.valorSelecionado ?? "Selecione");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +112,8 @@ class _MenuWidgetState extends State<MenuWidget> {
                   color: Colors.transparent,
                   child: Container(
                     width: render.size.width,
-                    height: 200,
-                    padding:  EdgeInsets.symmetric(vertical: widget.tema.espacamento+2),
+                    constraints: const BoxConstraints(maxHeight: 200),
+                    padding: EdgeInsets.symmetric(vertical: widget.tema.espacamento + 2),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: Color(widget.tema.neutral).withOpacity(.2)),

@@ -26,8 +26,21 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
     return Container(
       height: 84,
       width: Responsive.largura(context),
+      decoration: BoxDecoration(
+        color: Color(widget.tema.base200),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(widget.tema.borderRadiusXG),
+          topRight: Radius.circular(widget.tema.borderRadiusXG),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Color(widget.tema.neutral).withOpacity(.2),
+            offset: Offset(0, -2),
+            blurRadius: 4,
+          ),
+        ],
+      ),
       padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 4),
-      color: Color(widget.tema.base200),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -76,6 +89,28 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
               ),
             ],
           ),
+          SizedBox(width: widget.tema.espacamento *4),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              BotaoMenuWidget(
+                tema: widget.tema,
+                textoLabel: "",
+                semLabel: true,
+                executar: () => widget.selecionarItem(MenuLateral.SUPORTE),
+                ativado: widget.itemSelecionado == MenuLateral.SUPORTE,
+                nomeSvg: widget.itemSelecionado == MenuLateral.SUPORTE
+                    ? MenuLateral.SUPORTE.iconeAtivado
+                    : MenuLateral.SUPORTE.iconeDesativado,
+              ),
+              SizedBox(height: widget.tema.espacamento / 2),
+              TextoWidget(
+                texto: MenuLateral.SUPORTE.descricao,
+                tema: widget.tema,
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -97,6 +132,6 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
       },
     );
     widget.selecionarItem(navegarParaSolicitacoes ? MenuLateral.SOLICITACOES : MenuLateral.PAGINA_PRINCIPAL);
-    Rota.navegar(context, navegarParaSolicitacoes ? Rota.CRIAR_SOLICITACAO : Rota.HOME);
+    Rota.navegar(context, navegarParaSolicitacoes ? Rota.SUPORTE : Rota.HOME);
   }
 }

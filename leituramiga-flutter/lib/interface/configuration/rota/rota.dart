@@ -14,10 +14,11 @@ enum Rota {
   HOME(url: "home", pageInfo: HomeRoute.page),
   LIVRO(url: "livro/:numeroLivro", pageInfo: LivrosRoute.page),
   USUARIO(url: "usuario/:numeroUsuario", pageInfo: UsuarioRoute.page),
-  CRIAR_SOLICITACAO(url: "criar-solicitacao/:numeroLivro/:tipoSolicitacao", pageInfo: CriarSolicitacaoRoute.page),
+  SUPORTE(url: "criar-solicitacao/:numeroLivro/:tipoSolicitacao", pageInfo: CriarSolicitacaoRoute.page),
   PERFIL(url: "perfil", pageInfo: PerfilRoute.page),
   EDITAR_PERFIL(url: "editar-perfil", pageInfo: EditarPefilRoute.page),
-  CRIAR_LIVRO(url: "adicionar-livro", pageInfo: CriarLivroRoute.page);
+  CRIAR_LIVRO(url: "adicionar-livro", pageInfo: CriarLivroRoute.page),
+  SOLICITACAO(url: "solicitacao/:numeroSolicitacao", pageInfo: VisualizarSolicitacaoRoute.page);
 
   final PageInfo<dynamic> pageInfo;
   final String url;
@@ -40,11 +41,12 @@ enum Rota {
           subrotas: [
             adicionar(rota: HOME, inicial: true, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: LIVRO, guards: [UsuarioLogadoGuard()]),
-            adicionar(rota: CRIAR_SOLICITACAO, guards: [UsuarioLogadoGuard()]),
+            adicionar(rota: SUPORTE, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: USUARIO, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: PERFIL, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: CRIAR_LIVRO, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: EDITAR_PERFIL, guards: [UsuarioLogadoGuard()]),
+            adicionar(rota: SOLICITACAO, guards: [UsuarioLogadoGuard()]),
           ],
         ),
       ];

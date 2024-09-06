@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/component/usuario.component.dart';
+import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/comentario_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
@@ -22,11 +28,35 @@ class PerfilPage extends StatefulWidget {
 }
 
 class _PerfilPageState extends State<PerfilPage> {
+  final UsuarioComponent _usuarioComponent = UsuarioComponent();
+
   TemaState get _temaState => TemaState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
 
   bool _exibindoLivros = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _usuarioComponent.inicializar(
+      UsuarioMockRepo(),
+      ComentarioMockRepo(),
+      EnderecoMockRepo(),
+      LivroMockRepo(),
+      atualizar,
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      int numeroUsuario = AutenticacaoState.instancia.usuario!.numero!;
+      await _usuarioComponent.obterUsuario(numeroUsuario);
+      await _usuarioComponent.obterLivrosUsuario();
+      await _usuarioComponent.obterComentarios(numeroUsuario);
+    });
+  }
+
+  void atualizar() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +82,10 @@ class _PerfilPageState extends State<PerfilPage> {
                     children: [
                       CardPerfilUsuarioWidget(
                         tema: tema,
-                        descricao: "Sou estudante de ADS e tenho interesse em engenharia de software.",
-                        nomeUsuario: "@usuario",
-                        nomeInstituicao: "FATEC Satana de Parnaíba",
-                        nomeCidade: "Cajamar",
+                        descricao: _usuarioComponent.usuarioSelecionado!.descricao,
+                        nomeUsuario: _usuarioComponent.usuarioSelecionado!.nomeUsuario,
+                        nomeInstituicao: _usuarioComponent.usuarioSelecionado!.instituicaoDeEnsino.nome,
+                        nomeCidade: _usuarioComponent.usuarioSolicitacao!.nomeMunicipio,
                       ),
                       Positioned(
                         top: 12,
@@ -107,14 +137,14 @@ class _PerfilPageState extends State<PerfilPage> {
                 if (_exibindoLivros) ...[
                   GridLivroWidget(
                     tema: tema,
-                    livros: [],
+                    livros: _usuarioComponent.livrosPorNumero.values.toList(),
                     aoClicarLivro: (numeroLivro) async {},
                   ),
                 ],
                 if (!_exibindoLivros) ...[
                   GridComentarioWidget(
                     tema: tema,
-                    comentariosPorId: {},
+                    comentariosPorId: _usuarioComponent.comentariosPorNumero,
                     aoClicarComentario: () {},
                   ),
                 ]

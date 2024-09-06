@@ -51,9 +51,8 @@ class _ImagemWidgetState extends State<ImagemWidget> {
       alignment: Alignment.center,
       children: [
         Container(
-          constraints: const BoxConstraints(maxWidth: 500),
-          width: Responsive.largura(context) * .4,
-          height: Responsive.altura(context) * .4,
+          width: Responsive.largura(context)<=1000 ? Responsive.largura(context) : Responsive.largura(context) * .4,
+          height: Responsive.largura(context)<=1000 ?250 :Responsive.altura(context) * .4,
           decoration: BoxDecoration(
             color: Color(widget.tema.neutral).withOpacity(.2),
             border: Border.all(color: Color(widget.tema.neutral).withOpacity(.1)),

@@ -16,7 +16,8 @@ class InputWidget extends StatefulWidget {
   final double? tamanho;
   final TextInputType? tipoInput;
   final bool readOnly;
-
+  final double alturaCampo;
+final bool expandir;
   const InputWidget({
     super.key,
     required this.tema,
@@ -31,6 +32,8 @@ class InputWidget extends StatefulWidget {
     this.tipoInput,
     this.readOnly = false,
     this.onTap,
+    this.alturaCampo = 30,
+    this.expandir = false,
   });
 
   @override
@@ -78,7 +81,7 @@ class _InputWidgetState extends State<InputWidget> {
             ),
           ),
           child: Container(
-            height: 30,
+            height: widget.alturaCampo,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(widget.tema.borderRadiusG),
               boxShadow: [
@@ -93,6 +96,10 @@ class _InputWidgetState extends State<InputWidget> {
             child: TextFormField(
               onTap: widget.onTap,
               readOnly: widget.readOnly,
+              expands: widget.expandir,
+              maxLines: null,
+              textAlignVertical: TextAlignVertical.top,
+              minLines: null,
               keyboardType: widget.tipoInput ?? TextInputType.text,
               onChanged: widget.onChanged,
               cursorColor: Color(widget.tema.accent),

@@ -7,6 +7,8 @@ import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.service.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/duas_escolhas.widget.dart';
@@ -66,7 +68,13 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
     return _visualizarSolicitacao && solicitacaoComponent.solicitacaoSelecionada != null
         ? ConteudoResumoSolicitacaoWidget(
             tema: widget.tema,
+            aoAceitar: () {},
+            aoEscolher: _escolherLivros,
             solicitacao: solicitacaoComponent.solicitacaoSelecionada!,
+            edicao: _exibindoEmAndamento,
+            aoCancelar: () {},
+            aoEditar: _escolherLivros,
+            aoRecusar: () {},
           )
         : Container(
             width: Responsive.largura(context) <= 600 ? Responsive.largura(context) : 600,
@@ -201,5 +209,13 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
               ],
             ),
           );
+  }
+
+  void _escolherLivros() {
+    Navigator.pop(context);
+    Rota.navegarComArgumentos(
+      context,
+      VisualizarSolicitacaoRoute(numeroSolicitacao: solicitacaoComponent.solicitacaoSelecionada!.numero!),
+    );
   }
 }

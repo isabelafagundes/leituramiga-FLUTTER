@@ -34,5 +34,10 @@ enum UF {
     return UF.values.where((e) => e.id == id).firstOrNull ?? SP;
   }
 
+  factory UF.deDescricao(String descricao) {
+    return UF.values.where((e) => e.descricao == descricao).firstOrNull ?? SP;
+
+  }
+
   const UF({required this.id, required this.descricao});
 }

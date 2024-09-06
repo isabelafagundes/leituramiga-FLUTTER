@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart';
@@ -11,8 +14,24 @@ import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
   final Tema tema;
   final Solicitacao solicitacao;
+  final bool edicao;
+  final Function() aoCancelar;
+  final Function() aoEditar;
+  final Function() aoRecusar;
+  final Function() aoEscolher;
+  final Function() aoAceitar;
 
-  const ConteudoResumoSolicitacaoWidget({super.key, required this.tema, required this.solicitacao});
+  const ConteudoResumoSolicitacaoWidget({
+    super.key,
+    required this.tema,
+    required this.solicitacao,
+    required this.edicao,
+    required this.aoCancelar,
+    required this.aoEditar,
+    required this.aoRecusar,
+    required this.aoEscolher,
+    required this.aoAceitar,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +124,9 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                           tema: tema,
                         ),
                         TextoWidget(
-                          texto: solicitacao.informacoesAdicionais.isEmpty? "Sem informações adicionais" : solicitacao.informacoesAdicionais,
+                          texto: solicitacao.informacoesAdicionais.isEmpty
+                              ? "Sem informações adicionais"
+                              : solicitacao.informacoesAdicionais,
                           tema: tema,
                         ),
                         SizedBox(height: tema.espacamento / 2),
@@ -154,6 +175,37 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                                     cor: kCorFonte,
                                   ),
                                 ),
+
+                              ],
+                            ),
+                            if(solicitacao.formaEntrega == FormaEntrega.CORREIOS)
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                TextoWidget(
+                                  texto: "Quem pagará o frete?",
+                                  weight: FontWeight.w500,
+                                  tema: tema,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: tema.espacamento,
+                                    vertical: tema.espacamento / 1.5,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: _obterCor(),
+                                    borderRadius: BorderRadius.circular(tema.borderRadiusM),
+                                    border: Border.all(color: Color(tema.neutral).withOpacity(.2)),
+                                  ),
+                                  child: TextoWidget(
+                                    texto: solicitacao.tipoSolicitacao.descricao,
+                                    tema: tema,
+                                    weight: FontWeight.w500,
+                                    cor: kCorFonte,
+                                  ),
+                                ),
+
                               ],
                             ),
                           ],
@@ -214,46 +266,83 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
             direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (solicitacao.tipoSolicitacao != TipoSolicitacao.TROCA)
-                BotaoWidget(
-                  tema: tema,
-                  corTexto: kCorFonte,
-                  texto: "Aceitar",
-                  aoClicar: () {},
-                  icone: Icon(
-                    Icons.done,
-                    color: kCorFonte,
-                  ),
-                  corFundo: Color(tema.success),
-                ),
-              if (solicitacao.tipoSolicitacao == TipoSolicitacao.TROCA)
-                BotaoWidget(
-                  tema: tema,
-                  corTexto: kCorFonte,
-                  texto: "Escolher livros",
-                  aoClicar: () {},
-                  icone: Icon(
-                    Icons.bookmark_add_outlined,
-                    color: kCorFonte,
-                  ),
-                  corFundo: Color(tema.accent),
-                ),
+              _obterBotaoEsquerdo(context),
               SizedBox(height: tema.espacamento * 2, width: tema.espacamento * 2),
-              BotaoWidget(
-                tema: tema,
-                corTexto: kCorFonte,
-                texto: "Recusar",
-                aoClicar: () {},
-                icone: Icon(
-                  Icons.close,
-                  color: kCorFonte,
-                ),
-                corFundo: Color(tema.error),
-              ),
+              _obterBotaoDireito,
             ],
           )
         ],
       ),
+    );
+  }
+
+  Widget _obterBotaoEsquerdo(BuildContext context) {
+    print(solicitacao.tipoSolicitacao);
+    if (edicao) {
+      return BotaoWidget(
+        tema: tema,
+        corTexto: kCorFonte,
+        texto: "Editar",
+        aoClicar: aoEditar,
+        icone: Icon(
+          Icons.edit,
+          color: kCorFonte,
+        ),
+        corFundo: Color(tema.accent),
+      );
+    }
+
+    if (solicitacao.tipoSolicitacao == TipoSolicitacao.TROCA) {
+      return BotaoWidget(
+        tema: tema,
+        corTexto: kCorFonte,
+        texto: "Escolher livros",
+        aoClicar: aoEscolher,
+        icone: Icon(
+          Icons.bookmark_add_outlined,
+          color: kCorFonte,
+        ),
+        corFundo: Color(tema.accent),
+      );
+    }
+
+    return BotaoWidget(
+      tema: tema,
+      corTexto: kCorFonte,
+      texto: "Aceitar",
+      aoClicar: aoAceitar,
+      icone: Icon(
+        Icons.done,
+        color: kCorFonte,
+      ),
+      corFundo: Color(tema.success),
+    );
+  }
+
+  Widget get _obterBotaoDireito {
+    if (edicao) {
+      return BotaoWidget(
+        tema: tema,
+        corTexto: kCorFonte,
+        texto: "Cancelar",
+        aoClicar: aoCancelar,
+        icone: Icon(
+          Icons.close,
+          color: kCorFonte,
+        ),
+        corFundo: Color(tema.error),
+      );
+    }
+    return BotaoWidget(
+      tema: tema,
+      corTexto: kCorFonte,
+      texto: "Recusar",
+      aoClicar: aoRecusar,
+      icone: Icon(
+        Icons.close,
+        color: kCorFonte,
+      ),
+      corFundo: Color(tema.error),
     );
   }
 

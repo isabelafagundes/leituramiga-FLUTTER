@@ -20,6 +20,18 @@ class EditarPefilPage extends StatefulWidget {
 }
 
 class _EditarPefilPageState extends State<EditarPefilPage> {
+  final TextEditingController controllerRua = TextEditingController();
+  final TextEditingController controllerBairro = TextEditingController();
+  final TextEditingController controllerCep = TextEditingController();
+  final TextEditingController controllerNumero = TextEditingController();
+  final TextEditingController controllerComplemento = TextEditingController();
+  final TextEditingController controllerCidade = TextEditingController();
+  final TextEditingController controllerEstado = TextEditingController();
+  final TextEditingController controllerEmail = TextEditingController();
+  final TextEditingController controllerNome = TextEditingController();
+  final TextEditingController controllerNomeUsuario = TextEditingController();
+  final TextEditingController controllerSenha = TextEditingController();
+  final TextEditingController controllerConfirmacaoSenha = TextEditingController();
   EditarPerfil? _estagioAtual = EditarPerfil.DADOS_GERAIS;
 
   TemaState get _temaState => TemaState.instancia;
@@ -93,31 +105,35 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
   Widget get _obterPagina {
     return switch (_estagioAtual) {
       EditarPerfil.DADOS_GERAIS => Column(
-        children: [
-          FormularioUsuarioWidget(
-            tema: tema,
-            controllerConfirmacaoSenha: TextEditingController(),
-            controllerEmail: TextEditingController(),
-            controllerNome: TextEditingController(),
-            controllerSenha: TextEditingController(),
-            controllerUsuario: TextEditingController(),
-            aoCadastrar: () {},
-          ),
-        ],
-      ),
+          children: [
+            FormularioUsuarioWidget(
+              tema: tema,
+              controllerConfirmacaoSenha: controllerConfirmacaoSenha,
+              controllerEmail: controllerEmail,
+              controllerNome: controllerNome,
+              controllerSenha: controllerSenha,
+              controllerUsuario: controllerNomeUsuario,
+              aoCadastrar: () {},
+            ),
+          ],
+        ),
       EditarPerfil.ENDERECO => Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             FormularioEnderecoWidget(
               tema: tema,
-              controllerRua: TextEditingController(),
-              controllerBairro: TextEditingController(),
-              controllerCep: TextEditingController(),
-              controllerNumero: TextEditingController(),
-              controllerComplemento: TextEditingController(),
-              controllerCidade: TextEditingController(),
-              controllerEstado: TextEditingController(),
+              estados: [],
+              cidades: [],
+              aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
+              aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
+              controllerRua: controllerRua,
+              controllerBairro: controllerBairro,
+              controllerCep: controllerCep,
+              controllerNumero: controllerNumero,
+              controllerComplemento: controllerComplemento,
+              controllerCidade: controllerCidade,
+              controllerEstado: controllerEstado,
             ),
             SizedBox(height: tema.espacamento * 4),
             BotaoWidget(

@@ -29,6 +29,7 @@ class Solicitacao extends Entidade {
   final DataHora? _dataAceite;
   final String? _motivoRecusa;
   final String _nomeUsuario;
+  final int _numeroUsuarioFrete;
 
   Solicitacao.criar(
     this._numero,
@@ -47,6 +48,7 @@ class Solicitacao extends Entidade {
     this._motivoRecusa,
     this._nomeUsuario,
     this._tipoSolicitacao,
+    this._numeroUsuarioFrete,
   )   : _livrosCriador = LivrosSolicitacao.carregar(_numero ?? 0, _numeroUsuarioCriador, []),
         _enderecoUsuarioCriador = _endereco == null;
 
@@ -125,4 +127,6 @@ class Solicitacao extends Entidade {
   String get nomeUsuario => _nomeUsuario;
 
   TipoSolicitacao get tipoSolicitacao => _tipoSolicitacao;
+
+  int get numeroUsuarioFrete => _numeroUsuarioFrete;
 }

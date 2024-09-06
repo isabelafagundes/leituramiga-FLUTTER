@@ -43,7 +43,6 @@ class _CarrosselCategoriaWidgetState extends State<CarrosselCategoriaWidget> {
         ? const SizedBox()
         : SizedBox(
             height: 40,
-            width: Responsive.largura(context) <= 500 ? Responsive.largura(context) : 500,
             child: Stack(
               alignment: Alignment.center,
               children: [

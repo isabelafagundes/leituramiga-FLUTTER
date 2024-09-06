@@ -29,11 +29,11 @@ class EnderecoMockRepo extends EnderecoRepo {
 
   Endereco get endereco => Endereco.carregar(
         1,
-        "Rua das Flores",
-        "Jardim das Rosas",
         '123',
-        "07700000",
         "Casa",
+        "Rua das Flores",
+        "07700000",
+        "Jardim das Rosas",
         municipios[0],
       );
 

@@ -1,4 +1,5 @@
 import 'package:leituramiga/domain/endereco/municipio.dart';
+import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
 import 'package:leituramiga/domain/livro/categoria.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
@@ -16,7 +17,16 @@ class FiltroState {
   int? numeroMunicipio;
   int? numeroInstituicao;
   int? numeroCategoria;
+  UF? estado;
   TipoSolicitacao? tipo;
+
+  void selecionarEstado(UF uf) {
+    if (estado == uf) {
+      estado = null;
+      return;
+    }
+    estado = uf;
+  }
 
   void selecionarMunicipio(Municipio municipio) {
     if (numeroMunicipio == municipio.numero) {

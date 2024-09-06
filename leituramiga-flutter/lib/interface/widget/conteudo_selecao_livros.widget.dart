@@ -4,6 +4,7 @@ import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/dica.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/grid/grid_livros.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
@@ -32,7 +33,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
           direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextoWidget(
+            DicaWidget(
               tema: tema,
               texto: "Selecione os livros que deseja adicionar na solicitação:",
             ),
@@ -64,7 +65,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
                   SizedBox(height: tema.espacamento),
                   const SvgWidget(
                     nomeSvg: "empty_state",
-                    altura: 60,
+                    altura: 80,
                   ),
                 ],
               )

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/component/usuario.component.dart';
+import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/comentario_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
@@ -9,7 +15,6 @@ import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart'
 import 'package:projeto_leituramiga/interface/widget/etapas.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/formulario/formulario_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/solicitacao/conteudo_endereco_solicitacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_endereco.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
@@ -24,11 +29,46 @@ class CadastroUsuarioPage extends StatefulWidget {
 }
 
 class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
+  final UsuarioComponent _usuarioComponent = UsuarioComponent();
+
+  final TextEditingController controllerRua = TextEditingController();
+  final TextEditingController controllerBairro = TextEditingController();
+  final TextEditingController controllerCep = TextEditingController();
+  final TextEditingController controllerNumero = TextEditingController();
+  final TextEditingController controllerComplemento = TextEditingController();
+  final TextEditingController controllerCidade = TextEditingController();
+  final TextEditingController controllerEstado = TextEditingController();
+  final TextEditingController controllerEmail = TextEditingController();
+  final TextEditingController controllerNome = TextEditingController();
+  final TextEditingController controllerNomeUsuario = TextEditingController();
+  final TextEditingController controllerSenha = TextEditingController();
+  final TextEditingController controllerConfirmacaoSenha = TextEditingController();
+
   EtapaCadastro? _etapaCadastro = EtapaCadastro.DADOS_GERAIS;
 
   TemaState get _temaState => TemaState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
+
+  void atualizar() {
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    _usuarioComponent.inicializar(
+      UsuarioMockRepo(),
+      ComentarioMockRepo(),
+      EnderecoMockRepo(),
+      LivroMockRepo(),
+      atualizar,
+    );
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _usuarioComponent.obterCidades();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,11 +145,11 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
           height: 600,
           child: FormularioUsuarioWidget(
             tema: tema,
-            controllerConfirmacaoSenha: TextEditingController(),
-            controllerEmail: TextEditingController(),
-            controllerNome: TextEditingController(),
-            controllerSenha: TextEditingController(),
-            controllerUsuario: TextEditingController(),
+            controllerConfirmacaoSenha: controllerConfirmacaoSenha,
+            controllerEmail: controllerEmail,
+            controllerNome: controllerNome,
+            controllerSenha: controllerSenha,
+            controllerUsuario: controllerNomeUsuario,
             aoCadastrar: () => atualizarPagina(EtapaCadastro.ENDERECO),
           ),
         ),
@@ -119,13 +159,17 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
           children: [
             FormularioEnderecoWidget(
               tema: tema,
-              controllerRua: TextEditingController(),
-              controllerBairro: TextEditingController(),
-              controllerCep: TextEditingController(),
-              controllerNumero: TextEditingController(),
-              controllerComplemento: TextEditingController(),
-              controllerCidade: TextEditingController(),
-              controllerEstado: TextEditingController(),
+              estados: UF.values.map((e) => e.descricao).toList(),
+              cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.toString()).toList(),
+              aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
+              aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
+              controllerRua: controllerRua,
+              controllerBairro: controllerBairro,
+              controllerCep: controllerCep,
+              controllerNumero: controllerNumero,
+              controllerComplemento: controllerComplemento,
+              controllerCidade: controllerCidade,
+              controllerEstado: controllerEstado,
             ),
             SizedBox(height: tema.espacamento * 4),
             BotaoWidget(
