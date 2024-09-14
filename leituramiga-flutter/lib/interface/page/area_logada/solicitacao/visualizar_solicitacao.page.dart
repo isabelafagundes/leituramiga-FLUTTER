@@ -9,6 +9,7 @@ import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
+import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/comentario_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
@@ -115,12 +116,40 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
             _usuarioComponent.usuarioSolicitacao == null,
         alterarFonte: _alterarFonte,
         alterarTema: _alterarTema,
-        child: SizedBox(
-          width: Responsive.largura(context),
-          height: Responsive.altura(context),
-          child: SingleChildScrollView(
-            child: paginaSelecionada,
-          ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            SizedBox(
+              width: Responsive.largura(context),
+              height: Responsive.altura(context),
+              child: SingleChildScrollView(
+                physics: (estagioPagina == CriarSolicitacao.SELECIONAR_LIVROS
+                    ? NeverScrollableScrollPhysics()
+                    : ScrollPhysics()),
+                child: paginaSelecionada,
+              ),
+            ),
+            if (estagioPagina == CriarSolicitacao.SELECIONAR_LIVROS && !Responsive.larguraP(context))
+              Positioned(
+                bottom: 14,
+                child: Container(
+                  color: Color(tema.base100),
+                  child: Row(
+                    children: [
+                      BotaoWidget(
+                        tema: tema,
+                        texto: "Salvar livros",
+                        icone: Icon(
+                          Icons.check,
+                          color: kCorFonte,
+                        ),
+                        aoClicar: () => atualizarPagina(CriarSolicitacao.INFORMACOES_ADICIONAIS),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+          ],
         ),
       ),
     );

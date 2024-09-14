@@ -10,6 +10,7 @@ class GridLivroWidget extends StatelessWidget {
   final bool Function(ResumoLivro)? verificarSelecao;
   final List<ResumoLivro> livros;
   final bool selecao;
+  final bool comScroll;
 
   const GridLivroWidget({
     super.key,
@@ -18,12 +19,14 @@ class GridLivroWidget extends StatelessWidget {
     required this.livros,
     this.verificarSelecao,
     this.selecao = false,
+    this.comScroll = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
+      physics: comScroll ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: _obterQuantidadePorLinha(context),
         mainAxisExtent: 220,

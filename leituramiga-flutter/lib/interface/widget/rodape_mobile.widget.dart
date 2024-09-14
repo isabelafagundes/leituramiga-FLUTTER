@@ -24,7 +24,7 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 84,
+      height: 90,
       width: Responsive.largura(context),
       decoration: BoxDecoration(
         color: Color(widget.tema.base200),
@@ -41,75 +41,101 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
         ],
       ),
       padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 4),
-      child: Row(
+      child: Flex(
+        direction: Axis.horizontal,
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              BotaoMenuWidget(
-                tema: widget.tema,
-                textoLabel: "",
-                semLabel: true,
-                executar: () => widget.selecionarItem(MenuLateral.PAGINA_PRINCIPAL),
-                ativado: widget.itemSelecionado == MenuLateral.PAGINA_PRINCIPAL,
-                nomeSvg: widget.itemSelecionado == MenuLateral.PAGINA_PRINCIPAL
-                    ? MenuLateral.PAGINA_PRINCIPAL.iconeAtivado
-                    : MenuLateral.PAGINA_PRINCIPAL.iconeDesativado,
-              ),
-              SizedBox(height: widget.tema.espacamento / 2),
-              TextoWidget(
-                texto: MenuLateral.PAGINA_PRINCIPAL.descricao,
-                tema: widget.tema,
-              ),
-            ],
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Spacer(),
+                FittedBox(
+                  child: BotaoMenuWidget(
+                    tema: widget.tema,
+                    textoLabel: "",
+                    semLabel: true,
+                    executar: () => widget.selecionarItem(MenuLateral.PAGINA_PRINCIPAL),
+                    ativado: widget.itemSelecionado == MenuLateral.PAGINA_PRINCIPAL,
+                    nomeSvg: widget.itemSelecionado == MenuLateral.PAGINA_PRINCIPAL
+                        ? MenuLateral.PAGINA_PRINCIPAL.iconeAtivado
+                        : MenuLateral.PAGINA_PRINCIPAL.iconeDesativado,
+                  ),
+                ),
+                SizedBox(height: widget.tema.espacamento / 2),
+                TextoWidget(
+                  texto: MenuLateral.PAGINA_PRINCIPAL.descricao,
+                  tema: widget.tema,
+                  align: TextAlign.center,
+                ),
+                const Spacer(),
+              ],
+            ),
           ),
-          SizedBox(width: widget.tema.espacamento *4),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              BotaoMenuWidget(
-                tema: widget.tema,
-                textoLabel: "",
-                semLabel: true,
-                executar: () => widget.selecionarItem(MenuLateral.SOLICITACOES),
-                ativado: widget.itemSelecionado == MenuLateral.SOLICITACOES,
-                nomeSvg: widget.itemSelecionado == MenuLateral.SOLICITACOES
-                    ? MenuLateral.SOLICITACOES.iconeAtivado
-                    : MenuLateral.SOLICITACOES.iconeDesativado,
-              ),
-              SizedBox(height: widget.tema.espacamento / 2),
-              TextoWidget(
-                texto: MenuLateral.SOLICITACOES.descricao,
-                tema: widget.tema,
-              ),
-            ],
+          SizedBox(width: Responsive.larguraP(context) ? widget.tema.espacamento * 2 : widget.tema.espacamento * 4),
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Spacer(),
+                FittedBox(
+                  child: BotaoMenuWidget(
+                    tema: widget.tema,
+                    textoLabel: "",
+                    semLabel: true,
+                    executar: () => widget.selecionarItem(MenuLateral.SOLICITACOES),
+                    ativado: widget.itemSelecionado == MenuLateral.SOLICITACOES,
+                    nomeSvg: widget.itemSelecionado == MenuLateral.SOLICITACOES
+                        ? MenuLateral.SOLICITACOES.iconeAtivado
+                        : MenuLateral.SOLICITACOES.iconeDesativado,
+                  ),
+                ),
+                SizedBox(height: widget.tema.espacamento / 2),
+                Expanded(
+                  child: TextoWidget(
+                    texto: MenuLateral.SOLICITACOES.descricao,
+                    align: TextAlign.center,
+                    tema: widget.tema,
+                  ),
+                ),
+                const Spacer(),
+              ],
+            ),
           ),
-          SizedBox(width: widget.tema.espacamento *4),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              BotaoMenuWidget(
-                tema: widget.tema,
-                textoLabel: "",
-                semLabel: true,
-                executar: () => widget.selecionarItem(MenuLateral.SUPORTE),
-                ativado: widget.itemSelecionado == MenuLateral.SUPORTE,
-                nomeSvg: widget.itemSelecionado == MenuLateral.SUPORTE
-                    ? MenuLateral.SUPORTE.iconeAtivado
-                    : MenuLateral.SUPORTE.iconeDesativado,
-              ),
-              SizedBox(height: widget.tema.espacamento / 2),
-              TextoWidget(
-                texto: MenuLateral.SUPORTE.descricao,
-                tema: widget.tema,
-              ),
-            ],
+          SizedBox(width: Responsive.larguraP(context) ? widget.tema.espacamento * 2 : widget.tema.espacamento * 4),
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Spacer(),
+                FittedBox(
+                  child: BotaoMenuWidget(
+                    tema: widget.tema,
+                    textoLabel: "",
+                    semLabel: true,
+                    executar: () => widget.selecionarItem(MenuLateral.SUPORTE),
+                    ativado: widget.itemSelecionado == MenuLateral.SUPORTE,
+                    nomeSvg: widget.itemSelecionado == MenuLateral.SUPORTE
+                        ? MenuLateral.SUPORTE.iconeAtivado
+                        : MenuLateral.SUPORTE.iconeDesativado,
+                  ),
+                ),
+                SizedBox(height: widget.tema.espacamento / 2),
+                Expanded(
+                  child: TextoWidget(
+                    align: TextAlign.center,
+                    texto: MenuLateral.SUPORTE.descricao,
+                    tema: widget.tema,
+                  ),
+                ),
+                const Spacer(),
+              ],
+            ),
           ),
         ],
       ),

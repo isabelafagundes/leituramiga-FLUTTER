@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/solicitacao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
@@ -9,6 +10,7 @@ import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
+import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/comentario_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
@@ -119,9 +121,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
         child: SizedBox(
           width: Responsive.largura(context),
           height: Responsive.altura(context),
-          child: SingleChildScrollView(
-            child: paginaSelecionada,
-          ),
+          child: paginaSelecionada,
         ),
       ),
     );
@@ -138,43 +138,47 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
           livros: _usuarioComponent.itensPaginados,
           navegarParaSolicitacao: () => atualizarPagina(CriarSolicitacao.INFORMACOES_ADICIONAIS),
         ),
-      CriarSolicitacao.INFORMACOES_ADICIONAIS => FormularioInformacoesAdicionaisWidget(
-          tema: tema,
-          controllerHoraDevolucao: controllerHoraDevolucao,
-          controllerHoraEntrega: controllerHoraEntrega,
-          abrirTimePicker: ([bool ehDevolucao = false]) => abrirTimePicker(ehDevolucao),
-          livrosSolicitacao: _solicitacaoComponent.livrosSelecionados,
-          controllerInformacoes: controllerInformacoes,
-          aoClicarProximo: () => atualizarPagina(CriarSolicitacao.ENDERECO),
-          controllerDataEntrega: controllerDataEntrega,
-          removerLivro: _solicitacaoComponent.removerLivro,
-          controllerDataDevolucao: controllerDataDevolucao,
-          tipoSolicitacao: _tipoSolicitacao,
-          abrirDatePicker: ([bool ehDevolucao = false]) => abrirDatePicker(ehDevolucao),
-          aoClicarAdicionarLivro: () => atualizarPagina(CriarSolicitacao.SELECIONAR_LIVROS),
+      CriarSolicitacao.INFORMACOES_ADICIONAIS => SingleChildScrollView(
+          child: FormularioInformacoesAdicionaisWidget(
+            tema: tema,
+            controllerHoraDevolucao: controllerHoraDevolucao,
+            controllerHoraEntrega: controllerHoraEntrega,
+            abrirTimePicker: ([bool ehDevolucao = false]) => abrirTimePicker(ehDevolucao),
+            livrosSolicitacao: _solicitacaoComponent.livrosSelecionados,
+            controllerInformacoes: controllerInformacoes,
+            aoClicarProximo: () => atualizarPagina(CriarSolicitacao.ENDERECO),
+            controllerDataEntrega: controllerDataEntrega,
+            removerLivro: _solicitacaoComponent.removerLivro,
+            controllerDataDevolucao: controllerDataDevolucao,
+            tipoSolicitacao: _tipoSolicitacao,
+            abrirDatePicker: ([bool ehDevolucao = false]) => abrirDatePicker(ehDevolucao),
+            aoClicarAdicionarLivro: () => atualizarPagina(CriarSolicitacao.SELECIONAR_LIVROS),
+          ),
         ),
-      CriarSolicitacao.ENDERECO => ConteudoEnderecoSolicitacaoWidget(
-          tema: tema,
-          aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
-          aoSelecionarFrete: (frete) => setState(() => controllerFrete.text = frete),
-          estados: UF.values.map((e) => e.descricao).toList(),
-          cidades: [],
-          controllerFrete: controllerFrete,
-          controllerFormaEntrega: controllerFormaEntrega,
-          aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
-          aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
-          aoClicarProximo: () => atualizarPagina(CriarSolicitacao.CONCLUSAO),
-          utilizarEnderecoPerfil: () {},
-          aoClicarFormaEntrega: (formaEntrega) {},
-          aoClicarFrete: (frete) {},
-          controllerRua: controllerRua,
-          controllerBairro: controllerBairro,
-          controllerCep: controllerCep,
-          controllerNumero: controllerNumero,
-          controllerComplemento: controllerComplemento,
-          controllerCidade: controllerCidade,
-          usuarios: [_autenticacaoState.usuario!.nomeUsuario, _usuarioComponent.usuarioSolicitacao!.nomeUsuario],
-          controllerEstado: controllerEstado,
+      CriarSolicitacao.ENDERECO => SingleChildScrollView(
+          child: ConteudoEnderecoSolicitacaoWidget(
+            tema: tema,
+            aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
+            aoSelecionarFrete: (frete) => setState(() => controllerFrete.text = frete),
+            estados: UF.values.map((e) => e.descricao).toList(),
+            cidades: [],
+            controllerFrete: controllerFrete,
+            controllerFormaEntrega: controllerFormaEntrega,
+            aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
+            aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
+            aoClicarProximo: () => atualizarPagina(CriarSolicitacao.CONCLUSAO),
+            utilizarEnderecoPerfil: () {},
+            aoClicarFormaEntrega: (formaEntrega) {},
+            aoClicarFrete: (frete) {},
+            controllerRua: controllerRua,
+            controllerBairro: controllerBairro,
+            controllerCep: controllerCep,
+            controllerNumero: controllerNumero,
+            controllerComplemento: controllerComplemento,
+            controllerCidade: controllerCidade,
+            usuarios: [_autenticacaoState.usuario!.nomeUsuario, _usuarioComponent.usuarioSolicitacao!.nomeUsuario],
+            controllerEstado: controllerEstado,
+          ),
         ),
       CriarSolicitacao.CONCLUSAO => Flex(
           direction: Axis.vertical,

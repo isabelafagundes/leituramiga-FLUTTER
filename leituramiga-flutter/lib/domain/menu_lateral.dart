@@ -3,7 +3,7 @@ import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 enum MenuLateral {
   PAGINA_PRINCIPAL(
     id: 1,
-    descricao: "Página principal",
+    descricao: "Início",
     iconeAtivado: "menu/home-fill",
     iconeDesativado: "menu/home",
     rota: Rota.HOME,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
@@ -13,6 +14,7 @@ class FormularioUsuarioWidget extends StatelessWidget {
   final TextEditingController controllerUsuario;
   final TextEditingController controllerConfirmacaoSenha;
   final Function() aoCadastrar;
+  final Widget? botaoInferior;
 
   const FormularioUsuarioWidget({
     super.key,
@@ -23,13 +25,14 @@ class FormularioUsuarioWidget extends StatelessWidget {
     required this.controllerUsuario,
     required this.controllerConfirmacaoSenha,
     required this.aoCadastrar,
+    this.botaoInferior,
   });
 
   @override
   Widget build(BuildContext context) {
     return Flex(
       direction: Axis.vertical,
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -72,41 +75,18 @@ class FormularioUsuarioWidget extends StatelessWidget {
           ),
         ),
         SizedBox(height: tema.espacamento * 2),
-        Flexible(
-          child: Flex(
-            direction: Axis.horizontal,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                child: InputWidget(
-                  tema: tema,
-                  controller: controllerSenha,
-                  label: "Senha",
-                  senha: true,
-                  tamanho: tema.tamanhoFonteM,
-                  onChanged: (valor) {},
-                ),
-              ),
-              SizedBox(
-                height: tema.espacamento * 2,
-                width: tema.espacamento * 2,
-              ),
-              Flexible(
-                child: InputWidget(
-                  tema: tema,
-                  controller: controllerConfirmacaoSenha,
-                  label: "Confirmar senha",
-                  senha: true,
-                  tamanho: tema.tamanhoFonteM,
-                  onChanged: (valor) {},
-                ),
-              ),
-            ],
+        if (Responsive.larguraP(context)) ..._obterChildren,
+        if (!Responsive.larguraP(context))
+          Flexible(
+            child: Flex(
+              direction: Axis.horizontal,
+              mainAxisSize: MainAxisSize.min,
+              children: _obterChildren,
+            ),
           ),
-        ),
         SizedBox(height: tema.espacamento * 4),
         Flexible(
-          child: BotaoWidget(
+          child: botaoInferior?? BotaoWidget(
             tema: tema,
             texto: 'Próximo',
             nomeIcone: "seta/arrow-long-right",
@@ -116,5 +96,34 @@ class FormularioUsuarioWidget extends StatelessWidget {
         SizedBox(height: tema.espacamento * 2),
       ],
     );
+  }
+
+  List<Widget> get _obterChildren {
+    return [
+      Flexible(
+        child: InputWidget(
+          tema: tema,
+          controller: controllerSenha,
+          label: "Senha",
+          senha: true,
+          tamanho: tema.tamanhoFonteM,
+          onChanged: (valor) {},
+        ),
+      ),
+      SizedBox(
+        height: tema.espacamento * 2,
+        width: tema.espacamento * 2,
+      ),
+      Flexible(
+        child: InputWidget(
+          tema: tema,
+          controller: controllerConfirmacaoSenha,
+          label: "Confirmar senha",
+          senha: true,
+          tamanho: tema.tamanhoFonteM,
+          onChanged: (valor) {},
+        ),
+      ),
+    ];
   }
 }

@@ -82,14 +82,14 @@ class _PerfilPageState extends State<PerfilPage> {
                     children: [
                       CardPerfilUsuarioWidget(
                         tema: tema,
-                        descricao: _usuarioComponent.usuarioSelecionado!.descricao,
-                        nomeUsuario: _usuarioComponent.usuarioSelecionado!.nomeUsuario,
-                        nomeInstituicao: _usuarioComponent.usuarioSelecionado!.instituicaoDeEnsino.nome,
-                        nomeCidade: _usuarioComponent.usuarioSolicitacao!.nomeMunicipio,
+                        descricao: _usuarioComponent.usuarioSelecionado?.descricao??'',
+                        nomeUsuario: _usuarioComponent.usuarioSelecionado?.nomeUsuario??'',
+                        nomeInstituicao: _usuarioComponent.usuarioSelecionado?.instituicaoDeEnsino.nome??'',
+                        nomeCidade: _usuarioComponent.usuarioSolicitacao?.nomeMunicipio??"",
                       ),
                       Positioned(
-                        top: 12,
-                        right: 12,
+                        top: 4,
+                        right: 4,
                         child: BotaoRedondoWidget(
                           tema: tema,
                           nomeSvg: 'filtro',
