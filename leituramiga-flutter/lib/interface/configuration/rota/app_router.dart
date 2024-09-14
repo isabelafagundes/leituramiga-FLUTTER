@@ -1,7 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:leituramiga/domain/livro/livro.dart';
-import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/area_logada.page.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/autenticacao.page.dart';
@@ -10,6 +8,7 @@ import 'package:projeto_leituramiga/interface/page/area_logada/editar_perfil.pag
 import 'package:projeto_leituramiga/interface/page/area_logada/livro.page.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/perfil.page.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/solicitacao/criar_solicitacao.page.dart';
+import 'package:projeto_leituramiga/interface/page/area_logada/solicitacao/detalhes_solicitacao.page.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/solicitacao/visualizar_solicitacao.page.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/usuario.page.dart';
 import 'package:projeto_leituramiga/interface/page/autenticacao/cadastro_usuario.page.dart';

@@ -54,23 +54,22 @@ class BotoesMenuLateralWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if(exibindoMenu)
-                Expanded(
-                  child: TextoWidget(
-                    texto: "LeiturAmiga",
-                    tema: tema,
-                    cor: Color(tema.accent),
-                    fontFamily: tema.familiaDeFonteSecundaria,
-                    weight: FontWeight.w500,
-                    tamanho: tema.tamanhoFonteG,
-                  ).animate(onComplete: (controller) => controller.repeat()).shimmer(
-                        duration: const Duration(seconds: 1),
-                        delay: const Duration(seconds: 1),
-                        curve: Curves.easeOut,
-                      ),
-                ),
-                if(exibindoMenu)
-                SizedBox(width: tema.espacamento),
+                if (exibindoMenu)
+                  Expanded(
+                    child: TextoWidget(
+                      texto: "LeiturAmiga",
+                      tema: tema,
+                      cor: Color(tema.accent),
+                      fontFamily: tema.familiaDeFonteSecundaria,
+                      weight: FontWeight.w500,
+                      tamanho: tema.tamanhoFonteG,
+                    ).animate(onComplete: (controller) => controller.repeat()).shimmer(
+                          duration: const Duration(seconds: 1),
+                          delay: const Duration(seconds: 1),
+                          curve: Curves.easeOut,
+                        ),
+                  ),
+                if (exibindoMenu) SizedBox(width: tema.espacamento),
                 FittedBox(
                   child: Container(
                     padding: const EdgeInsets.all(7),
@@ -89,16 +88,16 @@ class BotoesMenuLateralWidget extends StatelessWidget {
                       nomeSvg: "menu/book-open",
                     ),
                   ).animate(onComplete: (controller) => controller.repeat()).shimmer(
-                    duration: const Duration(seconds: 1),
-                    delay: const Duration(seconds: 1),
-                    curve: Curves.easeOut,
-                  ),
+                        duration: const Duration(seconds: 1),
+                        delay: const Duration(seconds: 1),
+                        curve: Curves.easeOut,
+                      ),
                 ),
               ],
             ),
           ),
         ),
-        SizedBox(height: tema.espacamento*2),
+        SizedBox(height: tema.espacamento * 2),
         ListView.builder(
           itemCount: MenuLateral.values.length,
           shrinkWrap: true,
@@ -110,7 +109,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
               child: BotaoMenuWidget(
                 tema: tema,
                 semLabel: !exibindoMenu,
-                textoLabel:  item.descricao,
+                textoLabel: item.descricao,
                 nomeSvg: ativado ? item.iconeAtivado : item.iconeDesativado,
                 executar: () {
                   selecionarItem(item);
@@ -176,7 +175,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
           tema: tema,
           iconeAEsquerda: false,
           semLabel: !exibindoMenu,
-          textoLabel:  "Sair" ,
+          textoLabel: "Sair",
           nomeSvg: "logout",
           executar: () => Rota.navegar(context, Rota.AUTENTICACAO),
           ativado: false,
@@ -186,7 +185,8 @@ class BotoesMenuLateralWidget extends StatelessWidget {
   }
 
   void _exibirPopUp(BuildContext context) async {
-    bool navegarParaSolicitacoes = await showDialog(
+    Rota.navegar(context, Rota.HOME);
+    bool? navegarParaSolicitacoes = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return PopUpPadraoWidget(
@@ -200,7 +200,8 @@ class BotoesMenuLateralWidget extends StatelessWidget {
         );
       },
     );
-    selecionarItem(navegarParaSolicitacoes ? MenuLateral.SOLICITACOES : MenuLateral.PAGINA_PRINCIPAL);
-    Rota.navegar(context, navegarParaSolicitacoes ? Rota.SUPORTE : Rota.HOME);
+    if(navegarParaSolicitacoes == null) return;
+    selecionarItem(navegarParaSolicitacoes  ? MenuLateral.SOLICITACOES : MenuLateral.PAGINA_PRINCIPAL);
+    Rota.navegar(context, navegarParaSolicitacoes  ? Rota.SUPORTE : Rota.HOME);
   }
 }

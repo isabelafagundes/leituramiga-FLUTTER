@@ -53,7 +53,7 @@ class _InputWidgetState extends State<InputWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 65,
+      height: widget.alturaCampo+20,
       child: Flex(
         direction: Axis.vertical,
         mainAxisAlignment: MainAxisAlignment.start,

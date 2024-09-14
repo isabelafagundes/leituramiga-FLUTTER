@@ -7,6 +7,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 class GridLivroWidget extends StatelessWidget {
   final Tema tema;
   final Function(ResumoLivro) aoClicarLivro;
+  final Function(ResumoLivro)? aoSelecionarLivro;
   final bool Function(ResumoLivro)? verificarSelecao;
   final List<ResumoLivro> livros;
   final bool selecao;
@@ -20,6 +21,7 @@ class GridLivroWidget extends StatelessWidget {
     this.verificarSelecao,
     this.selecao = false,
     this.comScroll = true,
+    this.aoSelecionarLivro,
   });
 
   @override
@@ -38,6 +40,7 @@ class GridLivroWidget extends StatelessWidget {
         return CardLivroWidget(
           tema: tema,
           aoClicar: () => aoClicarLivro(livro),
+          aoClicarSelecao: aoSelecionarLivro == null ? null : () => aoSelecionarLivro!(livro),
           nomeCategoria: livro.nomeCategoria,
           nomeUsuario: livro.nomeUsuario,
           nomeCidade: livro.nomeMunicipio,

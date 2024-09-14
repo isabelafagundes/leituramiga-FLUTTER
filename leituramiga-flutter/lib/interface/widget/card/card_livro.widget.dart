@@ -15,6 +15,7 @@ class CardLivroWidget extends StatelessWidget {
   final String? nomeInstituicao;
   final String? nomeCidade;
   final Function() aoClicar;
+  final Function()? aoClicarSelecao;
   final bool ativado;
   final bool selecao;
 
@@ -30,120 +31,146 @@ class CardLivroWidget extends StatelessWidget {
     required this.aoClicar,
     this.ativado = false,
     this.selecao = false,
+    this.aoClicarSelecao,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: aoClicar,
-      child: Container(
-        decoration: ativado
-            ? BoxDecoration(
-                color: Color(tema.base200),
-                border: Border.all(color: Color(tema.accent), width: 3),
-                borderRadius: BorderRadius.circular(tema.borderRadiusM),
-              )
-            : null,
-        child: CardBaseWidget(
-          bordaColorida: !ativado,
-          tema: tema,
-          child: Flex(
-            direction: Axis.horizontal,
-            children: [
-              Flexible(
-                flex: 3,
-                child: Stack(
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              decoration: ativado
+                  ? BoxDecoration(
+                      color: Color(tema.base200),
+                      border: Border.all(color: Color(tema.accent), width: 3),
+                      borderRadius: BorderRadius.circular(tema.borderRadiusM),
+                    )
+                  : null,
+              child: CardBaseWidget(
+                bordaColorida: !ativado,
+                tema: tema,
+                child: Flex(
+                  direction: Axis.horizontal,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(tema.neutral).withOpacity(.1),
-                        borderRadius: BorderRadius.circular(tema.tamanhoFonteP),
+                    Flexible(
+                      flex: 3,
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Color(tema.neutral).withOpacity(.1),
+                              borderRadius: BorderRadius.circular(tema.tamanhoFonteP),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 4,
+                            left: 4,
+                            child: ChipWidget(
+                              tema: tema,
+                              texto: nomeCategoria,
+                              cor: kCorPessego,
+                              corTexto: const Color(0xff464A52),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Positioned(
-                      bottom: 4,
-                      left: 4,
-                      child: ChipWidget(
-                        tema: tema,
-                        texto: nomeCategoria,
-                        cor: kCorPessego,
-                        corTexto: const Color(0xff464A52),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(width: tema.espacamento),
-              Flexible(
-                flex: 4,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextoWidget(
+                    SizedBox(width: tema.espacamento),
+                    Flexible(
+                      flex: 4,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextoWidget(
+                                  tema: tema,
+                                  texto: nomeLivro,
+                                  cor: Color(tema.baseContent),
+                                  weight: FontWeight.w500,
+                                  tamanho: tema.tamanhoFonteG,
+                                ),
+                              ),
+                              if (ativado)
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Color(tema.accent),
+                                ),
+                            ],
+                          ),
+                          const Spacer(),
+                          Container(
+                            constraints: const BoxConstraints(maxWidth: 200),
+                            child: TextoWidget(
+                              texto: descricao,
+                              tema: tema,
+                              cor: Color(tema.baseContent),
+                              weight: FontWeight.w400,
+                              maxLines: 3,
+                              align: TextAlign.justify,
+                              tamanho: tema.tamanhoFonteM,
+                            ),
+                          ),
+                          const Spacer(),
+                          TextoComIconeWidget(
                             tema: tema,
-                            texto: nomeLivro,
-                            cor: Color(tema.baseContent),
-                            weight: FontWeight.w500,
-                            tamanho: tema.tamanhoFonteG,
+                            nomeSvg: 'usuario/user',
+                            texto: nomeUsuario,
                           ),
-                        ),
-                        if (ativado)
-                          Icon(
-                            Icons.check_circle,
-                            color: Color(tema.accent),
-                          ),
-                        if (selecao && !ativado)
-                          Icon(
-                            Icons.add_circle_outline,
-                            color: Color(tema.accent),
-                          ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Container(
-                      constraints: const BoxConstraints(maxWidth: 200),
-                      child: TextoWidget(
-                        texto: descricao,
-                        tema: tema,
-                        cor: Color(tema.baseContent),
-                        weight: FontWeight.w400,
-                        maxLines: 3,
-                        align: TextAlign.justify,
-                        tamanho: tema.tamanhoFonteM,
+                          if (nomeInstituicao != null) ...[
+                            SizedBox(height: tema.espacamento / 2),
+                            TextoComIconeWidget(
+                              tema: tema,
+                              nomeSvg: 'academico/academic-cap',
+                              texto: nomeInstituicao!,
+                            ),
+                          ],
+                          if (nomeCidade != null) ...[
+                            SizedBox(height: tema.espacamento / 2),
+                            TextoComIconeWidget(
+                              tema: tema,
+                              nomeSvg: 'menu/map-pin-fill',
+                              texto: nomeCidade!,
+                            ),
+                          ]
+                        ],
                       ),
                     ),
-                    const Spacer(),
-                    TextoComIconeWidget(
-                      tema: tema,
-                      nomeSvg: 'usuario/user',
-                      texto: nomeUsuario,
-                    ),
-                    if (nomeInstituicao != null) ...[
-                      SizedBox(height: tema.espacamento / 2),
-                      TextoComIconeWidget(
-                        tema: tema,
-                        nomeSvg: 'academico/academic-cap',
-                        texto: nomeInstituicao!,
-                      ),
-                    ],
-                    if (nomeCidade != null) ...[
-                      SizedBox(height: tema.espacamento / 2),
-                      TextoComIconeWidget(
-                        tema: tema,
-                        nomeSvg: 'menu/map-pin-fill',
-                        texto: nomeCidade!,
-                      ),
-                    ]
                   ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+          if (selecao)
+            Positioned(
+              top: 0,
+              left:0,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: aoClicarSelecao,
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Color(tema.accent),
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Icon(
+                      Icons.add,
+                      color: kCorFonte,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

@@ -19,7 +19,6 @@ import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.re
 import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.service.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
-import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/util/sobreposicao.util.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
@@ -116,41 +115,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
             _usuarioComponent.usuarioSolicitacao == null,
         alterarFonte: _alterarFonte,
         alterarTema: _alterarTema,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            SizedBox(
-              width: Responsive.largura(context),
-              height: Responsive.altura(context),
-              child: SingleChildScrollView(
-                physics: (estagioPagina == CriarSolicitacao.SELECIONAR_LIVROS
-                    ? NeverScrollableScrollPhysics()
-                    : ScrollPhysics()),
-                child: paginaSelecionada,
-              ),
-            ),
-            if (estagioPagina == CriarSolicitacao.SELECIONAR_LIVROS && !Responsive.larguraP(context))
-              Positioned(
-                bottom: 14,
-                child: Container(
-                  color: Color(tema.base100),
-                  child: Row(
-                    children: [
-                      BotaoWidget(
-                        tema: tema,
-                        texto: "Salvar livros",
-                        icone: Icon(
-                          Icons.check,
-                          color: kCorFonte,
-                        ),
-                        aoClicar: () => atualizarPagina(CriarSolicitacao.INFORMACOES_ADICIONAIS),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-          ],
-        ),
+        child: paginaSelecionada,
       ),
     );
   }
@@ -161,83 +126,92 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
     return switch (estagioPagina) {
       CriarSolicitacao.SELECIONAR_LIVROS => ConteudoSelecaoLivrosWidget(
           tema: tema,
+          textoPopUp: "Deseja selecionar os livros e aceitar a solicitação?",
+          aoClicarLivro: _solicitacaoComponent.selecionarLivro,
           aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
           verificarSelecao: _solicitacaoComponent.verificarSelecao,
           livros: _usuarioComponent.itensPaginados,
           navegarParaSolicitacao: () => atualizarPagina(CriarSolicitacao.INFORMACOES_ADICIONAIS),
         ),
-      CriarSolicitacao.INFORMACOES_ADICIONAIS => FormularioInformacoesAdicionaisWidget(
-          tema: tema,
-          controllerHoraDevolucao: controllerHoraDevolucao,
-          controllerHoraEntrega: controllerHoraEntrega,
-          abrirTimePicker: ([bool ehDevolucao = false]) => abrirTimePicker(ehDevolucao),
-          livrosSolicitacao: _solicitacaoComponent.livrosSelecionados,
-          controllerInformacoes: controllerInformacoes,
-          aoClicarProximo: () => atualizarPagina(CriarSolicitacao.ENDERECO),
-          controllerDataEntrega: controllerDataEntrega,
-          removerLivro: _solicitacaoComponent.removerLivro,
-          controllerDataDevolucao: controllerDataDevolucao,
-          tipoSolicitacao: _tipoSolicitacao,
-          abrirDatePicker: ([bool ehDevolucao = false]) => abrirDatePicker(ehDevolucao),
-          aoClicarAdicionarLivro: () => atualizarPagina(CriarSolicitacao.SELECIONAR_LIVROS),
+      CriarSolicitacao.INFORMACOES_ADICIONAIS => SingleChildScrollView(
+          child: FormularioInformacoesAdicionaisWidget(
+            tema: tema,
+            controllerHoraDevolucao: controllerHoraDevolucao,
+            controllerHoraEntrega: controllerHoraEntrega,
+            abrirTimePicker: ([bool ehDevolucao = false]) => abrirTimePicker(ehDevolucao),
+            livrosSolicitacao: _solicitacaoComponent.livrosSelecionados,
+            controllerInformacoes: controllerInformacoes,
+            aoClicarProximo: () => atualizarPagina(CriarSolicitacao.ENDERECO),
+            controllerDataEntrega: controllerDataEntrega,
+            removerLivro: _solicitacaoComponent.removerLivro,
+            controllerDataDevolucao: controllerDataDevolucao,
+            tipoSolicitacao: _tipoSolicitacao,
+            abrirDatePicker: ([bool ehDevolucao = false]) => abrirDatePicker(ehDevolucao),
+            aoClicarAdicionarLivro: () => atualizarPagina(CriarSolicitacao.SELECIONAR_LIVROS),
+          ),
         ),
-      CriarSolicitacao.ENDERECO => ConteudoEnderecoSolicitacaoWidget(
-          tema: tema,
-          aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
-          aoSelecionarFrete: (frete) => setState(() => controllerFrete.text = frete),
-          controllerFormaEntrega: controllerFormaEntrega,
-          controllerFrete: controllerFrete,
-          usuarios: [_autenticacaoState.usuario!.nomeUsuario, _usuarioComponent.usuarioSolicitacao!.nomeUsuario],
-          estados: UF.values.map((e) => e.descricao).toList(),
-          cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome).toList(),
-          aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
-          aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
-          aoClicarProximo: () => atualizarPagina(CriarSolicitacao.CONCLUSAO),
-          utilizarEnderecoPerfil: () {},
-          aoClicarFormaEntrega: (formaEntrega) {},
-          aoClicarFrete: (frete) {},
-          controllerRua: controllerRua,
-          controllerBairro: controllerBairro,
-          controllerCep: controllerCep,
-          controllerNumero: controllerNumero,
-          controllerComplemento: controllerComplemento,
-          controllerCidade: controllerCidade,
-          controllerEstado: controllerEstado,
+      CriarSolicitacao.ENDERECO => SingleChildScrollView(
+          child: ConteudoEnderecoSolicitacaoWidget(
+            tema: tema,
+            aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
+            aoSelecionarFrete: (frete) => setState(() => controllerFrete.text = frete),
+            estados: UF.values.map((e) => e.descricao).toList(),
+            cidades: [],
+            controllerFrete: controllerFrete,
+            controllerFormaEntrega: controllerFormaEntrega,
+            aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
+            aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
+            aoClicarProximo: () => atualizarPagina(CriarSolicitacao.CONCLUSAO),
+            utilizarEnderecoPerfil: () {},
+            aoClicarFormaEntrega: (formaEntrega) {},
+            aoClicarFrete: (frete) {},
+            controllerRua: controllerRua,
+            controllerBairro: controllerBairro,
+            controllerCep: controllerCep,
+            controllerNumero: controllerNumero,
+            controllerComplemento: controllerComplemento,
+            controllerCidade: controllerCidade,
+            usuarios: [_autenticacaoState.usuario!.nomeUsuario, _usuarioComponent.usuarioSolicitacao!.nomeUsuario],
+            controllerEstado: controllerEstado,
+          ),
         ),
-      CriarSolicitacao.CONCLUSAO => Flex(
-          direction: Axis.vertical,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Flexible(
-              child: SvgWidget(
-                altura: 350,
-                nomeSvg: "solicitacao_fim",
-              ),
-            ),
-            SizedBox(height: tema.espacamento * 2),
-            Flexible(
-              child: SizedBox(
-                width: 400,
-                child: TextoWidget(
-                  align: TextAlign.center,
-                  texto:
-                      "Sua solicitação foi enviada! Quando @usuário respondê-la, você será notificado e receberá um e-mail.",
-                  tema: tema,
-                  maxLines: 5,
+      CriarSolicitacao.CONCLUSAO => SingleChildScrollView(
+          child: Flex(
+            direction: Axis.vertical,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Flexible(
+                child: SvgWidget(
+                  altura: 350,
+                  nomeSvg: "solicitacao_fim",
                 ),
               ),
-            ),
-            SizedBox(height: tema.espacamento * 4),
-            Flexible(
-              child: BotaoWidget(
-                tema: tema,
-                texto: 'Conclusão',
-                nomeIcone: "seta/arrow-long-right",
-                aoClicar: () => Rota.navegar(context, Rota.HOME),
+              SizedBox(height: tema.espacamento * 2),
+              Flexible(
+                child: SizedBox(
+                  width: 400,
+                  child: TextoWidget(
+                    align: TextAlign.center,
+                    texto:
+                        "Sua solicitação foi enviada! Quando @usuário respondê-la, você será notificado e receberá um e-mail.",
+                    tema: tema,
+                    maxLines: 5,
+                  ),
+                ),
               ),
-            ),
-            SizedBox(height: tema.espacamento * 4),
-          ],
+              SizedBox(height: tema.espacamento * 4),
+              Flexible(
+                child: BotaoWidget(
+                  tema: tema,
+                  texto: 'Finalizar',
+                  nomeIcone: "seta/arrow-long-right",
+                  icone: Icon(Icons.check, color: kCorFonte),
+                  aoClicar: () => Rota.navegar(context, Rota.HOME),
+                ),
+              ),
+              SizedBox(height: tema.espacamento * 4),
+            ],
+          ),
         ),
       _ => const SizedBox(),
     };

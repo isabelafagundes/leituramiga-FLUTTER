@@ -20,7 +20,6 @@ import 'package:projeto_leituramiga/interface/widget/filtro/layout_filtro.widget
 import 'package:projeto_leituramiga/interface/widget/grid/grid_livros.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/grid/grid_usuarios.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -56,7 +55,6 @@ class _HomePageState extends State<HomePage> {
     );
     _usuariosComponent.inicializar(UsuarioMockRepo(), atualizar);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Notificacoes.mostrar("Bem-vindo ao LeiturAmiga!", Emoji.SUCESSO);
       await _livrosComponent.obterLivrosIniciais();
       await _livrosComponent.obterCategorias();
       await _livrosComponent.obterInstituicoes();
@@ -75,6 +73,7 @@ class _HomePageState extends State<HomePage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        exibirPerfil: true,
         carregando: _livrosComponent.carregando || _usuariosComponent.carregando,
         widgetNoCabecalho: _livrosComponent.carregando || _usuariosComponent.carregando
             ? const Center(
@@ -85,10 +84,13 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      BarraPesquisaWidget(
-                        tema: tema,
-                        aoPesquisar: (valor) {},
-                        controller: _controllerPesquisa,
+                      SizedBox(
+                        height: 50,
+                        child: BarraPesquisaWidget(
+                          tema: tema,
+                          aoPesquisar: (valor) {},
+                          controller: _controllerPesquisa,
+                        ),
                       ),
                       SizedBox(width: tema.espacamento),
                       BotaoRedondoWidget(

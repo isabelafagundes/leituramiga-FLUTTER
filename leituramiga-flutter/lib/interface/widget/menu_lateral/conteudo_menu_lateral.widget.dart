@@ -4,6 +4,7 @@ import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/botoes_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/rodape_mobile.widget.dart';
@@ -14,8 +15,10 @@ class ConteudoMenuLateralWidget extends StatefulWidget {
   final Tema tema;
   final Function() alterarTema;
   final Function() alterarFonte;
+  final Function()? voltar;
   final Widget? widgetNoCabecalho;
   final bool carregando;
+  final bool exibirPerfil;
 
   const ConteudoMenuLateralWidget({
     super.key,
@@ -25,6 +28,8 @@ class ConteudoMenuLateralWidget extends StatefulWidget {
     required this.alterarFonte,
     this.widgetNoCabecalho,
     this.carregando = false,
+    this.exibirPerfil = false,
+    this.voltar,
   });
 
   @override
@@ -60,70 +65,96 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
               ],
               Expanded(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          if (Responsive.larguraM(context)) ...[
-                            BotaoRedondoWidget(
-                              tema: widget.tema,
-                              nomeSvg: '',
-                              icone: Icon(
-                                Icons.more_horiz_rounded,
-                                color: Color(widget.tema.accent),
-                              ),
-                              aoClicar: () {
-                                setState(() => exibindoMenu = !exibindoMenu);
-                                Future.delayed(
-                                  const Duration(milliseconds: 100),
-                                  () => setState(
-                                    () => ativarAnimacao = true,
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                          widget.widgetNoCabecalho ?? const SizedBox(),
-                          const Spacer(),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              TextoWidget(
-                                texto: "Olá,",
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            if (Responsive.larguraM(context)) ...[
+                              BotaoRedondoWidget(
                                 tema: widget.tema,
-                                cor: Color(widget.tema.baseContent),
-                              ),
-                              TextoWidget(
-                                texto: "Isabela!",
-                                tema: widget.tema,
-                                cor: Color(widget.tema.accent),
+                                nomeSvg: '',
+                                icone: Icon(
+                                  Icons.more_horiz_rounded,
+                                  color: Color(widget.tema.accent),
+                                ),
+                                aoClicar: () {
+                                  setState(() => exibindoMenu = !exibindoMenu);
+                                  Future.delayed(
+                                    const Duration(milliseconds: 100),
+                                    () => setState(
+                                      () => ativarAnimacao = true,
+                                    ),
+                                  );
+                                },
                               ),
                             ],
-                          ),
-                          SizedBox(width: widget.tema.espacamento),
-                          MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: GestureDetector(
-                              onTap: () => Rota.navegar(context, Rota.PERFIL),
-                              child: Container(
-                                width: 60,
+                            widget.widgetNoCabecalho ?? const SizedBox(),
+                            if (widget.exibirPerfil) ...[
+                              const Spacer(),
+                              SizedBox(
                                 height: 60,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
-                                  color: Color(widget.tema.neutral).withOpacity(.1),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    TextoWidget(
+                                      texto: "Olá,",
+                                      tema: widget.tema,
+                                      cor: Color(widget.tema.baseContent),
+                                    ),
+                                    TextoWidget(
+                                      texto: "Isabela!",
+                                      tema: widget.tema,
+                                      cor: Color(widget.tema.accent),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                          ),
-                        ],
+                              SizedBox(width: widget.tema.espacamento),
+                              MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: GestureDetector(
+                                  onTap: () => Rota.navegar(context, Rota.PERFIL),
+                                  child: Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
+                                      color: Color(widget.tema.neutral).withOpacity(.1),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                            if (!widget.exibirPerfil && widget.voltar != null) ...[
+                              const Spacer(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  BotaoPequenoWidget(
+                                    tema: widget.tema,
+                                    padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 2),
+                                    corFundo: Color(widget.tema.base200),
+                                    aoClicar: () => Rota.navegar(context, Rota.HOME),
+                                    label: "Voltar",
+                                    corFonte: Color(widget.tema.baseContent),
+                                    icone: Icon(
+                                      Icons.chevron_left_outlined,
+                                      color: Color(widget.tema.baseContent),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ]
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: widget.tema.espacamento * 2),
+                    if (widget.exibirPerfil) SizedBox(height: widget.tema.espacamento * 2),
                     Expanded(
                       flex: 8,
                       child: Padding(

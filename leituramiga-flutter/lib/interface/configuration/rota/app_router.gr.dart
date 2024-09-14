@@ -55,6 +55,18 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    DetalhesSolicitacaoRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<DetalhesSolicitacaoRouteArgs>(
+          orElse: () => DetalhesSolicitacaoRouteArgs(numeroSolicitacao: pathParams.getInt('numeroSolicitacao')));
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DetalhesSolicitacaoPage(
+          key: args.key,
+          numeroSolicitacao: args.numeroSolicitacao,
+        ),
+      );
+    },
     EditarPefilRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -76,8 +88,7 @@ abstract class _$AppRouter extends RootStackRouter {
     LivrosRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<LivrosRouteArgs>(
-          orElse: () =>
-              LivrosRouteArgs(numeroLivro: pathParams.getInt('numeroLivro')));
+          orElse: () => LivrosRouteArgs(numeroLivro: pathParams.getInt('numeroLivro')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: LivrosPage(
@@ -101,8 +112,7 @@ abstract class _$AppRouter extends RootStackRouter {
     UsuarioRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<UsuarioRouteArgs>(
-          orElse: () => UsuarioRouteArgs(
-              numeroUsuario: pathParams.getInt('numeroUsuario')));
+          orElse: () => UsuarioRouteArgs(numeroUsuario: pathParams.getInt('numeroUsuario')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: UsuarioPage(
@@ -114,8 +124,7 @@ abstract class _$AppRouter extends RootStackRouter {
     VisualizarSolicitacaoRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<VisualizarSolicitacaoRouteArgs>(
-          orElse: () => VisualizarSolicitacaoRouteArgs(
-              numeroSolicitacao: pathParams.getInt('numeroSolicitacao')));
+          orElse: () => VisualizarSolicitacaoRouteArgs(numeroSolicitacao: pathParams.getInt('numeroSolicitacao')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: VisualizarSolicitacaoPage(
@@ -207,8 +216,7 @@ class CriarSolicitacaoRoute extends PageRouteInfo<CriarSolicitacaoRouteArgs> {
 
   static const String name = 'CriarSolicitacaoRoute';
 
-  static const PageInfo<CriarSolicitacaoRouteArgs> page =
-      PageInfo<CriarSolicitacaoRouteArgs>(name);
+  static const PageInfo<CriarSolicitacaoRouteArgs> page = PageInfo<CriarSolicitacaoRouteArgs>(name);
 }
 
 class CriarSolicitacaoRouteArgs {
@@ -227,6 +235,44 @@ class CriarSolicitacaoRouteArgs {
   @override
   String toString() {
     return 'CriarSolicitacaoRouteArgs{key: $key, numeroLivro: $numeroLivro, tipoSolicitacao: $tipoSolicitacao}';
+  }
+}
+
+/// generated route for
+/// [DetalhesSolicitacaoPage]
+class DetalhesSolicitacaoRoute extends PageRouteInfo<DetalhesSolicitacaoRouteArgs> {
+  DetalhesSolicitacaoRoute({
+    Key? key,
+    required int numeroSolicitacao,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DetalhesSolicitacaoRoute.name,
+          args: DetalhesSolicitacaoRouteArgs(
+            key: key,
+            numeroSolicitacao: numeroSolicitacao,
+          ),
+          rawPathParams: {'numeroSolicitacao': numeroSolicitacao},
+          initialChildren: children,
+        );
+
+  static const String name = 'DetalhesSolicitacaoRoute';
+
+  static const PageInfo<DetalhesSolicitacaoRouteArgs> page = PageInfo<DetalhesSolicitacaoRouteArgs>(name);
+}
+
+class DetalhesSolicitacaoRouteArgs {
+  const DetalhesSolicitacaoRouteArgs({
+    this.key,
+    required this.numeroSolicitacao,
+  });
+
+  final Key? key;
+
+  final int numeroSolicitacao;
+
+  @override
+  String toString() {
+    return 'DetalhesSolicitacaoRouteArgs{key: $key, numeroSolicitacao: $numeroSolicitacao}';
   }
 }
 
@@ -357,8 +403,7 @@ class UsuarioRoute extends PageRouteInfo<UsuarioRouteArgs> {
 
   static const String name = 'UsuarioRoute';
 
-  static const PageInfo<UsuarioRouteArgs> page =
-      PageInfo<UsuarioRouteArgs>(name);
+  static const PageInfo<UsuarioRouteArgs> page = PageInfo<UsuarioRouteArgs>(name);
 }
 
 class UsuarioRouteArgs {
@@ -379,8 +424,7 @@ class UsuarioRouteArgs {
 
 /// generated route for
 /// [VisualizarSolicitacaoPage]
-class VisualizarSolicitacaoRoute
-    extends PageRouteInfo<VisualizarSolicitacaoRouteArgs> {
+class VisualizarSolicitacaoRoute extends PageRouteInfo<VisualizarSolicitacaoRouteArgs> {
   VisualizarSolicitacaoRoute({
     Key? key,
     required int numeroSolicitacao,
@@ -397,8 +441,7 @@ class VisualizarSolicitacaoRoute
 
   static const String name = 'VisualizarSolicitacaoRoute';
 
-  static const PageInfo<VisualizarSolicitacaoRouteArgs> page =
-      PageInfo<VisualizarSolicitacaoRouteArgs>(name);
+  static const PageInfo<VisualizarSolicitacaoRouteArgs> page = PageInfo<VisualizarSolicitacaoRouteArgs>(name);
 }
 
 class VisualizarSolicitacaoRouteArgs {

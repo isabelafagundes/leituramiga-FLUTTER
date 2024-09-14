@@ -78,7 +78,7 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
           )
         : Container(
             width: Responsive.largura(context) <= 600 ? Responsive.largura(context) : 600,
-            height: Responsive.largura(context) <= 600 ? Responsive.altura(context) : Responsive.altura(context) - 40,
+            height: 800,
             padding: EdgeInsets.all(widget.tema.espacamento * 2),
             child: Column(
               children: [
@@ -164,8 +164,13 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
                                 aoRecusar: (numeroSolicitacao) =>
                                     solicitacaoComponent.recusarSolicitacao(numeroSolicitacao, "Motivo"),
                                 aoVisualizar: (numeroSolicitacao) async {
-                                  await solicitacaoComponent.obterSolicitacao(numeroSolicitacao);
-                                  setState(() => _visualizarSolicitacao = true);
+                                  Rota.navegarComArgumentos(
+                                    context,
+                                    DetalhesSolicitacaoRoute(
+                                      numeroSolicitacao: numeroSolicitacao,
+                                    ),
+                                  );
+                                  Navigator.pop(context);
                                 },
                                 notificacao: notificacao,
                               ),
@@ -195,8 +200,13 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
                                 tema: widget.tema,
                                 solicitacao: resumoSolicitacao,
                                 aoVisualizar: (numero) async {
-                                  await solicitacaoComponent.obterSolicitacao(numero);
-                                  setState(() => _visualizarSolicitacao = true);
+                                  Rota.navegarComArgumentos(
+                                    context,
+                                    DetalhesSolicitacaoRoute(
+                                      numeroSolicitacao: numero,
+                                    ),
+                                  );
+                                  Navigator.pop(context);
                                 },
                               ),
                             );

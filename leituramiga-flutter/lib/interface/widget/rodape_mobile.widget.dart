@@ -143,6 +143,7 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
   }
 
   void _exibirPopUp(BuildContext context) async {
+    Rota.navegar(context, Rota.HOME);
     bool navegarParaSolicitacoes = await showDialog(
       context: context,
       builder: (BuildContext context) {

@@ -62,6 +62,7 @@ class _LivrosPageState extends State<LivrosPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        voltar: () => Rota.navegar(context, Rota.HOME),
         alterarFonte: _alterarFonte,
         alterarTema: _alterarTema,
         carregando: _livrosComponent.carregando || _livrosComponent.livroSelecionado == null,
@@ -82,6 +83,7 @@ class _LivrosPageState extends State<LivrosPage> {
                         crossAxisAlignment:
                             Responsive.larguraM(context) ? CrossAxisAlignment.center : CrossAxisAlignment.start,
                         children: [
+
                           Flexible(
                             child: Column(
                               children: [

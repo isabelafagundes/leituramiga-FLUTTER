@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
-import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
@@ -44,7 +43,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flex(
       direction: Axis.vertical,
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
       children: [
         TextoWidget(
           texto: "Preencha com o endereço que será feita a entrega!",

@@ -120,23 +120,28 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
                       height: tema.espacamento * 2,
                     ),
                     Flexible(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextoWidget(
-                            texto: "Quem pagará o frete?",
-                            tema: tema,
-                            cor: Color(tema.baseContent),
+                      child: Opacity(
+                        opacity: 0,
+                        child: IgnorePointer(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextoWidget(
+                                texto: "Quem pagará o frete?",
+                                tema: tema,
+                                cor: Color(tema.baseContent),
+                              ),
+                              SizedBox(height: tema.espacamento),
+                              MenuWidget(
+                                tema: tema,
+                                valorSelecionado: controllerFrete.text.isNotEmpty ? controllerFrete.text : null,
+                                escolhas: usuarios,
+                                aoClicar: (valor) => aoClicarFrete(valor),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: tema.espacamento),
-                          MenuWidget(
-                            tema: tema,
-                            valorSelecionado: controllerFrete.text.isNotEmpty ? controllerFrete.text : null,
-                            escolhas: usuarios,
-                            aoClicar: (valor) => aoClicarFrete(valor),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ],

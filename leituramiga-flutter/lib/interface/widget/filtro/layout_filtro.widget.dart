@@ -158,14 +158,18 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                         cor: Color(widget.tema.baseContent),
                       ),
                       SizedBox(height: widget.tema.espacamento),
-                      MenuWidget(
-                        tema: widget.tema,
-                        valorSelecionado: FiltroState.instancia.estado?.descricao,
-                        escolhas: UF.values.map((e) => e.toString()).toList(),
-                        aoClicar: (estado) => widget.selecionarEstado(UF.deDescricao(estado)),
+                      Container(
+                        constraints: const BoxConstraints(maxWidth: 300),
+                        child: MenuWidget(
+                          tema: widget.tema,
+                          valorSelecionado: FiltroState.instancia.estado?.descricao,
+                          escolhas: UF.values.map((e) => e.toString()).toList(),
+                          aoClicar: (estado) => widget.selecionarEstado(UF.deDescricao(estado)),
+                        ),
                       ),
                     ],
                   ),
+                  SizedBox(height: widget.tema.espacamento * 2),
                   TextoWidget(
                     texto: "Cidade",
                     tema: widget.tema,
@@ -177,8 +181,9 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                     child: MenuWidget(
                       tema: widget.tema,
                       valorSelecionado: widget.municipiosPorId.values
-                          .firstWhere((element) => element.numero == FiltroState.instancia.numeroMunicipio!)
-                          .nome,
+                          .where((element) => element.numero == FiltroState.instancia.numeroMunicipio)
+                          .firstOrNull
+                          ?.nome,
                       escolhas: widget.municipiosPorId.values.map((e) => e.nome).toList(),
                       aoClicar: (nomeCidade) => setState(() {
                         widget.selecionarMunicipio(

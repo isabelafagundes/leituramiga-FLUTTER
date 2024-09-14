@@ -11,6 +11,7 @@ class BotaoPequenoWidget extends StatefulWidget {
   final Color? corFonte;
   final String label;
   final Widget? icone;
+  final EdgeInsets? padding;
 
   const BotaoPequenoWidget({
     super.key,
@@ -20,6 +21,7 @@ class BotaoPequenoWidget extends StatefulWidget {
     this.corFonte,
     required this.label,
     this.icone,
+    this.padding,
   });
 
   @override
@@ -39,7 +41,7 @@ class _BotaoPequenoWidgetState extends State<BotaoPequenoWidget> {
         onTap: widget.aoClicar,
         child: Container(
           height: 30,
-          padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 3),
+          padding: widget.padding ?? EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 3),
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -70,12 +72,16 @@ class _BotaoPequenoWidgetState extends State<BotaoPequenoWidget> {
               ],
             ),
           ),
-        ).animate(target: _hover ? 1 : 0, onComplete: (controller) {
-          if(_hover) controller.repeat();
-        }).shimmer(
-          duration: const Duration(seconds: 1),
-          curve: Curves.easeOut,
-        ),
+        )
+            .animate(
+                target: _hover ? 1 : 0,
+                onComplete: (controller) {
+                  if (_hover) controller.repeat();
+                })
+            .shimmer(
+              duration: const Duration(seconds: 1),
+              curve: Curves.easeOut,
+            ),
       ),
     );
   }

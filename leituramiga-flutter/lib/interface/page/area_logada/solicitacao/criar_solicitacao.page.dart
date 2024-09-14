@@ -133,9 +133,11 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
     return switch (estagioPagina) {
       CriarSolicitacao.SELECIONAR_LIVROS => ConteudoSelecaoLivrosWidget(
           tema: tema,
+          aoClicarLivro: _solicitacaoComponent.selecionarLivro ,
           aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
           verificarSelecao: _solicitacaoComponent.verificarSelecao,
           livros: _usuarioComponent.itensPaginados,
+          textoPopUp: "Deseja adicionar os livros selecionados na solicitação?",
           navegarParaSolicitacao: () => atualizarPagina(CriarSolicitacao.INFORMACOES_ADICIONAIS),
         ),
       CriarSolicitacao.INFORMACOES_ADICIONAIS => SingleChildScrollView(
@@ -180,40 +182,43 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
             controllerEstado: controllerEstado,
           ),
         ),
-      CriarSolicitacao.CONCLUSAO => Flex(
-          direction: Axis.vertical,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Flexible(
-              child: SvgWidget(
-                altura: 350,
-                nomeSvg: "solicitacao_fim",
-              ),
-            ),
-            SizedBox(height: tema.espacamento * 2),
-            Flexible(
-              child: SizedBox(
-                width: 400,
-                child: TextoWidget(
-                  align: TextAlign.center,
-                  texto:
-                      "Sua solicitação foi enviada! Quando @usuário respondê-la, você será notificado e receberá um e-mail.",
-                  tema: tema,
-                  maxLines: 5,
+      CriarSolicitacao.CONCLUSAO => SingleChildScrollView(
+          child: Flex(
+            direction: Axis.vertical,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Flexible(
+                child: SvgWidget(
+                  altura: 350,
+                  nomeSvg: "solicitacao_fim",
                 ),
               ),
-            ),
-            SizedBox(height: tema.espacamento * 4),
-            Flexible(
-              child: BotaoWidget(
-                tema: tema,
-                texto: 'Conclusão',
-                nomeIcone: "seta/arrow-long-right",
-                aoClicar: () => Rota.navegar(context, Rota.HOME),
+              SizedBox(height: tema.espacamento * 2),
+              Flexible(
+                child: SizedBox(
+                  width: 400,
+                  child: TextoWidget(
+                    align: TextAlign.center,
+                    texto:
+                        "Sua solicitação foi enviada! Quando @usuário respondê-la, você será notificado e receberá um e-mail.",
+                    tema: tema,
+                    maxLines: 5,
+                  ),
+                ),
               ),
-            ),
-            SizedBox(height: tema.espacamento * 4),
-          ],
+              SizedBox(height: tema.espacamento * 4),
+              Flexible(
+                child: BotaoWidget(
+                  tema: tema,
+                  texto: 'Finalizar',
+                  nomeIcone: "seta/arrow-long-right",
+                  icone: Icon(Icons.check, color: kCorFonte),
+                  aoClicar: () => Rota.navegar(context, Rota.HOME),
+                ),
+              ),
+              SizedBox(height: tema.espacamento * 4),
+            ],
+          ),
         ),
       _ => const SizedBox(),
     };

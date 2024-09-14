@@ -12,6 +12,8 @@ class Email extends ObjetoDeValor {
     if (!_endereco.contains('@')) throw EmailInvalido("Não possui @!");
     if (!_endereco.contains('.com')) throw EmailInvalido("Não possui .com!");
   }
+
+  String get endereco => _endereco;
 }
 
 class EmailInvalido extends ErroDominio {

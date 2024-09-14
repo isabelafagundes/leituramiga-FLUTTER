@@ -27,14 +27,13 @@ class _BarraPesquisaWidgetState extends State<BarraPesquisaWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          alignment: Alignment.center,
-          constraints: const BoxConstraints(maxWidth: 250),
-          child: InputWidget(
+    return Container(
+      alignment: Alignment.center,
+      constraints: const BoxConstraints(maxWidth: 250),
+      child: Column(
+        children: [
+          InputWidget(
+            alturaCampo: 30,
             tema: widget.tema,
             onChanged: (valor) => _debouncer.executar(() => widget.aoPesquisar(valor)),
             controller: widget.controller,
@@ -49,8 +48,8 @@ class _BarraPesquisaWidgetState extends State<BarraPesquisaWidget> {
             ),
             placeholder: widget.placeholder,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
