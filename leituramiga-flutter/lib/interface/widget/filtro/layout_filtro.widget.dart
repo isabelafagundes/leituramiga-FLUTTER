@@ -149,8 +149,8 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                     SizedBox(height: widget.tema.espacamento * 2),
                   ],
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       TextoWidget(
                         texto: "Estado",

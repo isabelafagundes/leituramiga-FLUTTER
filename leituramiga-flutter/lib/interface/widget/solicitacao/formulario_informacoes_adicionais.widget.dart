@@ -88,6 +88,8 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                   controller: controllerInformacoes,
                   label: "Informações adicionais",
                   tamanho: tema.tamanhoFonteM,
+                  expandir: true,
+                  alturaCampo: 90,
                   onChanged: (valor) {},
                 ),
               ),

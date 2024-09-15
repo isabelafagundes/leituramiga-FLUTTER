@@ -71,23 +71,6 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Flexible(
-                child: Row(
-                  children: [
-                    TextoWidget(
-                      texto: "Usar endereço do seu perfil?",
-                      tema: tema,
-                      cor: Color(tema.baseContent),
-                    ),
-                    const Spacer(),
-                    SwitcherWidget(
-                      tema: tema,
-                      aoClicar: utilizarEnderecoPerfil,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: tema.espacamento * 2),
-              Flexible(
                 child: Flex(
                   mainAxisSize: MainAxisSize.min,
                   direction: Responsive.larguraPP(context) ? Axis.vertical : Axis.horizontal,
@@ -120,30 +103,23 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
                       height: tema.espacamento * 2,
                     ),
                     Flexible(
-                      child: Opacity(
-                        opacity: 0,
-                        child: IgnorePointer(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextoWidget(
-                                texto: "Quem pagará o frete?",
-                                tema: tema,
-                                cor: Color(tema.baseContent),
-                              ),
-                              SizedBox(height: tema.espacamento),
-                              MenuWidget(
-                                tema: tema,
-                                valorSelecionado: controllerFrete.text.isNotEmpty ? controllerFrete.text : null,
-                                escolhas: usuarios,
-                                aoClicar: (valor) => aoClicarFrete(valor),
-                              ),
-                            ],
+                      flex: 2,
+                      child: Row(
+                        children: [
+                          TextoWidget(
+                            texto: "Usar endereço do seu perfil?",
+                            tema: tema,
+                            cor: Color(tema.baseContent),
                           ),
-                        ),
+                          const Spacer(),
+                          SwitcherWidget(
+                            tema: tema,
+                            aoClicar: utilizarEnderecoPerfil,
+                          ),
+                        ],
                       ),
                     ),
+
                   ],
                 ),
               ),

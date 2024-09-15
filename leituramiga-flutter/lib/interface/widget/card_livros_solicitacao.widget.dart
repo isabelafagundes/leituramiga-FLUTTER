@@ -37,7 +37,7 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
         horizontal: widget.tema.espacamento,
       ),
       child: Container(
-        constraints: BoxConstraints(maxHeight: Responsive.larguraP(context) ? 250 : 400),
+        constraints: BoxConstraints(maxHeight: Responsive.larguraP(context) ? 250 : Responsive.altura(context)*.76),
         child: Column(
           children: [
             SizedBox(height: widget.tema.espacamento / 2),

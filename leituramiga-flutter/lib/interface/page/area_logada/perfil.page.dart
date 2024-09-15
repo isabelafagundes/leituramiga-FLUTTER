@@ -65,6 +65,7 @@ class _PerfilPageState extends State<PerfilPage> {
       child: ConteudoMenuLateralWidget(
         tema: tema,
         carregando: false,
+        voltar: ()=> Rota.navegar(context, Rota.HOME),
         alterarFonte: _alterarFonte,
         alterarTema: _alterarTema,
         child: SizedBox(
@@ -85,7 +86,7 @@ class _PerfilPageState extends State<PerfilPage> {
                         descricao: _usuarioComponent.usuarioSelecionado?.descricao??'',
                         nomeUsuario: _usuarioComponent.usuarioSelecionado?.nomeUsuario??'',
                         nomeInstituicao: _usuarioComponent.usuarioSelecionado?.instituicaoDeEnsino.nome??'',
-                        nomeCidade: _usuarioComponent.usuarioSolicitacao?.nomeMunicipio??"",
+                        nomeCidade: _usuarioComponent.usuarioSelecionado?.nomeMunicipio??"",
                       ),
                       Positioned(
                         top: 4,
@@ -137,7 +138,7 @@ class _PerfilPageState extends State<PerfilPage> {
                 if (_exibindoLivros) ...[
                   GridLivroWidget(
                     tema: tema,
-                    livros: _usuarioComponent.livrosPorNumero.values.toList(),
+                    livros: _usuarioComponent.itensPaginados,
                     aoClicarLivro: (numeroLivro) async {},
                   ),
                 ],

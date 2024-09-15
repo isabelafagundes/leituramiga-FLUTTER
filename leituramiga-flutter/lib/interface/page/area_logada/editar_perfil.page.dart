@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
@@ -45,6 +46,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        voltar: ()=> Rota.navegar(context, Rota.HOME),
         alterarTema: _alterarTema,
         alterarFonte: _alterarFonte,
         child: SingleChildScrollView(

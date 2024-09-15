@@ -113,6 +113,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        voltar: () => Rota.navegar(context, Rota.HOME),
         carregando: _usuarioComponent.carregando ||
             _solicitacaoComponent.carregando ||
             _usuarioComponent.usuarioSolicitacao == null,

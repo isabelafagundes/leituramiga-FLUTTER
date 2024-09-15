@@ -49,8 +49,8 @@ class GridUsuariosWidget extends StatelessWidget {
 
   int _obterQuantidadePorLinha(BuildContext context) {
     double largura = MediaQuery.of(context).size.width;
-    if (largura > 1500) return 5;
-    if (largura > 1200) return 4;
+    if (largura > 1600) return 5;
+    if (largura > 1400) return 4;
     if (largura > 800) return 3;
     return 1;
   }

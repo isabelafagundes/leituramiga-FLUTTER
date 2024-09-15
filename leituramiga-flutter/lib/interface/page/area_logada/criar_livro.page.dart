@@ -8,6 +8,7 @@ import 'package:projeto_leituramiga/infrastructure/repo/mock/categoria_mock.repo
 import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/instituicao_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/formulario/formulario_livro.widget.dart';
@@ -61,6 +62,7 @@ class _CriarLivroPageState extends State<CriarLivroPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        voltar: ()=> Rota.navegar(context, Rota.HOME),
         carregando: _livrosComponent.carregando || _livrosComponent.categoriasPorNumero.isEmpty,
         alterarFonte: _alterarFonte,
         alterarTema: _alterarTema,
