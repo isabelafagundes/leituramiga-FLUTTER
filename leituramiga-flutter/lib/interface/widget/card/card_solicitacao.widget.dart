@@ -84,7 +84,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextoWidget(
-                              texto: "Solicitação em andamento com ",
+                              texto: "Solicitação com ",
                               tema: widget.tema,
                             ),
                             TextoWidget(

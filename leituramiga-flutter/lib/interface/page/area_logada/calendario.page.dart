@@ -81,13 +81,15 @@ class _CalendarioPageState extends State<CalendarioPage> {
                   locale: 'pt_BR',
                   firstDay: DateTime.utc(2010, 10, 16),
                   lastDay: DateTime.utc(2030, 3, 14),
-                  focusedDay: DataHora.hoje().valor,
+                  focusedDay: DataHora
+                      .hoje()
+                      .valor,
                   selectedDayPredicate: (day) => isSameDay(dataSelecionada?.valor, day),
                   rangeStartDay: null,
                   rangeEndDay: null,
                   calendarFormat: CalendarFormat.month,
                   rangeSelectionMode: RangeSelectionMode.disabled,
-                  eventLoader: (day) => obterEventos(day),
+                  eventLoader: obterEventos,
                   startingDayOfWeek: StartingDayOfWeek.monday,
                   calendarStyle: CalendarStyle(
                     outsideDaysVisible: false,
@@ -127,49 +129,46 @@ class _CalendarioPageState extends State<CalendarioPage> {
                 SizedBox(width: tema.espacamento * 4),
                 SizedBox(
                   height: 800,
-                  child: dataSelecionada == null
-                      ? const SizedBox()
-                      : Column(
-                          children: [
-                            TextoWidget(
-                              texto: 'Solicitações',
-                              tema: tema,
-                              weight: FontWeight.w500,
-                              tamanho: tema.tamanhoFonteG,
-                            ),
-                            SizedBox(height: tema.espacamento * 2),
-                            solicitacoesSelecionadas.isEmpty
-                                ? TextoWidget(
-                                    texto: 'Nenhuma solicitação para esta data',
-                                    tema: tema,
-                                    weight: FontWeight.w500,
-                                    tamanho: tema.tamanhoFonteM,
-                                  )
-                                : Expanded(
-                                    child: GridView.builder(
-                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: Responsive.larguraP(context) ? 1 : 2,
-                                        crossAxisSpacing: tema.espacamento * 2,
-                                        mainAxisSpacing: tema.espacamento * 2,
-                                        childAspectRatio: 1.5,
-                                        mainAxisExtent: 205,
-                                      ),
-                                      itemCount: solicitacoesSelecionadas.length,
-                                      itemBuilder: (context, index) {
-                                        final solicitacao = solicitacoesSelecionadas[index];
-                                        return Padding(
-                                          padding: EdgeInsets.only(bottom: tema.espacamento * 2),
-                                          child: CardSolicitacaoWidget(
-                                            tema: tema,
-                                            solicitacao: solicitacao,
-                                            aoVisualizar: (int) {},
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                          ],
+                  child: Column(
+                    children: [
+                      TextoWidget(
+                        texto: 'Solicitações',
+                        tema: tema,
+                        weight: FontWeight.w500,
+                        tamanho: tema.tamanhoFonteG,
+                      ),
+                      SizedBox(height: tema.espacamento * 2),
+                      solicitacoesSelecionadas.isEmpty
+                          ? TextoWidget(
+                        texto: 'Nenhuma solicitação para esta data.',
+                        tema: tema,
+                        tamanho: tema.tamanhoFonteM,
+                      )
+                          : Expanded(
+                        child: GridView.builder(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: Responsive.larguraP(context) ? 1 : 2,
+                            crossAxisSpacing: tema.espacamento * 2,
+                            mainAxisSpacing: tema.espacamento * 2,
+                            childAspectRatio: 1.5,
+                            mainAxisExtent: 205,
+                          ),
+                          itemCount: solicitacoesSelecionadas.length,
+                          itemBuilder: (context, index) {
+                            final solicitacao = solicitacoesSelecionadas[index];
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: tema.espacamento * 2),
+                              child: CardSolicitacaoWidget(
+                                tema: tema,
+                                solicitacao: solicitacao,
+                                aoVisualizar: (int) {},
+                              ),
+                            );
+                          },
                         ),
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),
@@ -179,41 +178,47 @@ class _CalendarioPageState extends State<CalendarioPage> {
     );
   }
 
-  List<ResumoSolicitacao>  obterEventos(DateTime data) => solicitacaoComponent.itensPaginados
-      .where((solicitacao) =>
-  isSameDay(solicitacao.dataEntrega.valor,data) ||
-      isSameDay(solicitacao.dataDevolucao?.valor, data))
-      .toList();
+  List<ResumoSolicitacao> obterEventos(DateTime data) =>
+      solicitacaoComponent.itensPaginados
+          .where((solicitacao) =>
+      isSameDay(solicitacao.dataEntrega.valor, data) ||
+          isSameDay(solicitacao.dataDevolucao?.valor, data))
+          .toList();
 
-  List<ResumoSolicitacao> get solicitacoesSelecionadas => solicitacaoComponent.itensPaginados
-      .where((solicitacao) =>
-          isSameDay(solicitacao.dataEntrega.valor, dataSelecionada?.valor) ||
+  List<ResumoSolicitacao> get solicitacoesSelecionadas =>
+      solicitacaoComponent.itensPaginados
+          .where((solicitacao) =>
+      isSameDay(solicitacao.dataEntrega.valor, dataSelecionada?.valor) ||
           isSameDay(solicitacao.dataDevolucao?.valor, dataSelecionada?.valor))
-      .toList();
+          .toList();
 
   void _selecionarData(DateTime data) {
     setState(() => dataSelecionada = DataHora.criar(data));
   }
 
-  TextStyle get textStyleDisabled => TextStyle(
+  TextStyle get textStyleDisabled =>
+      TextStyle(
         color: Color(tema.baseContent).withOpacity(.2),
         fontSize: tema.tamanhoFonteM,
         fontFamily: tema.familiaDeFontePrimaria,
       );
 
-  TextStyle get textStyle => TextStyle(
+  TextStyle get textStyle =>
+      TextStyle(
         color: Color(tema.baseContent),
         fontSize: tema.tamanhoFonteM,
         fontFamily: tema.familiaDeFontePrimaria,
       );
 
-  TextStyle get textStyleSelected => TextStyle(
+  TextStyle get textStyleSelected =>
+      TextStyle(
         color: kCorFonte,
         fontSize: tema.tamanhoFonteM,
         fontFamily: tema.familiaDeFontePrimaria,
       );
 
-  TextStyle get textStyleBold => TextStyle(
+  TextStyle get textStyleBold =>
+      TextStyle(
         color: Color(tema.baseContent),
         fontSize: tema.tamanhoFonteM,
         fontWeight: FontWeight.w500,

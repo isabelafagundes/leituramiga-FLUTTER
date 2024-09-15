@@ -59,6 +59,7 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
   Widget build(BuildContext context) {
     return LayoutFlexivelWidget(
       tema: widget.tema,
+      alturaOverlay: 550,
       overlayChild: obterConteudo(context),
       drawerChild: obterConteudo(context),
     );
@@ -67,7 +68,7 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
   Widget obterConteudo(BuildContext context) => Container(
         padding: EdgeInsets.symmetric(vertical: widget.tema.espacamento * 2),
         width: 550,
-        height: Responsive.largura(context) < 600 ? 500 : Responsive.altura(context),
+        height: Responsive.largura(context) < 600 ? 550 : Responsive.altura(context),
         child: Column(
           children: widget.carrergando
               ? [

@@ -30,7 +30,7 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
       3,
       EnderecoMockRepo().endereco,
       "isabela",
-      DataHora.hoje(),
+      DataHora.ontem(),
       null,
       TipoSolicitacao.TROCA,
     ),

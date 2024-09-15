@@ -18,9 +18,16 @@ enum MenuLateral {
   CALENDARIO(
     id: 3,
     descricao: "Calendário",
-    iconeAtivado: "menu/plus-circle-fill",
-    iconeDesativado: "menu/plus-circle",
+    iconeAtivado: "calendar-fill",
+    iconeDesativado: "calendar",
     rota: Rota.CALENDARIO,
+  ),
+  PERFIL(
+    id: 4,
+    descricao: "Perfil",
+    iconeAtivado: "usuario/user",
+    iconeDesativado: "usuario/user-outline",
+    rota: Rota.PERFIL,
   ),
   SUPORTE(
     id: 4,

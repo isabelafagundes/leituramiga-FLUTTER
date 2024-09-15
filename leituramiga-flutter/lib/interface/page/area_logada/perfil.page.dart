@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
+import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/comentario_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
@@ -127,6 +128,8 @@ class _PerfilPageState extends State<PerfilPage> {
                         if (_exibindoLivros)
                           BotaoPequenoWidget(
                             tema: tema,
+                            icone: Icon(Icons.add, color: kCorFonte),
+                            padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
                             aoClicar: _exibindoLivros ? () => Rota.navegar(context, Rota.CRIAR_LIVRO) : () {},
                             label: _exibindoLivros ? "Adicionar livro" : "Criar comentário",
                           ),

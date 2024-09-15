@@ -31,35 +31,39 @@ class ConteudoLivrosSolicitacaoWidget extends StatelessWidget {
               ),
             ),
             SizedBox(height: tema.espacamento),
-            ListView.builder(
+            GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: Responsive.larguraP(context) ? 1 : 2,
+                childAspectRatio: 1.5,
+                crossAxisSpacing: tema.espacamento,
+                mainAxisSpacing: tema.espacamento,
+                mainAxisExtent: 76,
+              ),
               itemCount: 5,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return Column(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: tema.espacamento * 2),
-                      child: CardBaseWidget(
-                        tema: tema,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextoWidget(
-                                texto: "Nome livro",
-                                tamanho: tema.tamanhoFonteM,
-                                weight: FontWeight.w500,
-                                tema: tema,
-                              ),
-                              TextoWidget(
-                                texto: "Nome e sobrenome do autor",
-                                tema: tema,
-                                tamanho: tema.tamanhoFonteP,
-                              ),
-                            ],
-                          ),
+                    CardBaseWidget(
+                      tema: tema,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextoWidget(
+                              texto: "Nome livro",
+                              tamanho: tema.tamanhoFonteM,
+                              weight: FontWeight.w500,
+                              tema: tema,
+                            ),
+                            TextoWidget(
+                              texto: "Nome e sobrenome do autor",
+                              tema: tema,
+                              tamanho: tema.tamanhoFonteP,
+                            ),
+                          ],
                         ),
                       ),
                     ),
