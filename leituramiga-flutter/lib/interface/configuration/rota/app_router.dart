@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/area_logada.page.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/autenticacao.page.dart';
+import 'package:projeto_leituramiga/interface/page/area_logada/calendario.page.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/criar_livro.page.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/editar_perfil.page.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/livro.page.dart';

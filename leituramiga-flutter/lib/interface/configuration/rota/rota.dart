@@ -18,6 +18,7 @@ enum Rota {
   PERFIL(url: "perfil", pageInfo: PerfilRoute.page),
   EDITAR_PERFIL(url: "editar-perfil", pageInfo: EditarPefilRoute.page),
   CRIAR_LIVRO(url: "adicionar-livro", pageInfo: CriarLivroRoute.page),
+  CALENDARIO(url: "calendario", pageInfo: CalendarioRoute.page),
   DETALHES_SOLICITACAO(url: "detalhes-solicitacao/:numeroSolicitacao", pageInfo: DetalhesSolicitacaoRoute.page),
   SOLICITACAO(url: "solicitacao/:numeroSolicitacao", pageInfo: VisualizarSolicitacaoRoute.page);
 
@@ -49,6 +50,8 @@ enum Rota {
             adicionar(rota: EDITAR_PERFIL, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: SOLICITACAO, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: DETALHES_SOLICITACAO, guards: [UsuarioLogadoGuard()]),
+            adicionar(rota: CALENDARIO, guards: [UsuarioLogadoGuard()]),
+
           ],
         ),
       ];

@@ -15,8 +15,15 @@ enum MenuLateral {
     iconeDesativado: "compartilhar",
     rota: Rota.SUPORTE,
   ),
-  SUPORTE(
+  CALENDARIO(
     id: 3,
+    descricao: "Calendário",
+    iconeAtivado: "menu/plus-circle-fill",
+    iconeDesativado: "menu/plus-circle",
+    rota: Rota.CALENDARIO,
+  ),
+  SUPORTE(
+    id: 4,
     descricao: "Suporte",
     iconeAtivado: "menu/plus-circle-fill",
     iconeDesativado: "menu/plus-circle",
