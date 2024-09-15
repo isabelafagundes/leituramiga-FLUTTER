@@ -13,7 +13,7 @@ enum MenuLateral {
     descricao: "Solicitações",
     iconeAtivado: "compartilhar_fill",
     iconeDesativado: "compartilhar",
-    rota: Rota.SUPORTE,
+    rota: Rota.DETALHES_SOLICITACAO,
   ),
   CALENDARIO(
     id: 3,
@@ -30,7 +30,7 @@ enum MenuLateral {
     rota: Rota.PERFIL,
   ),
   SUPORTE(
-    id: 4,
+    id:5,
     descricao: "Suporte",
     iconeAtivado: "menu/plus-circle-fill",
     iconeDesativado: "menu/plus-circle",

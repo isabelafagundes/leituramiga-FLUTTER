@@ -8,6 +8,7 @@ import 'package:projeto_leituramiga/infrastructure/repo/mock/comentario_mock.rep
 import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
@@ -65,8 +66,8 @@ class _PerfilPageState extends State<PerfilPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
-        carregando: false,
-        voltar: ()=> Rota.navegar(context, Rota.HOME),
+        carregando: _usuarioComponent.carregando || _usuarioComponent.usuarioSelecionado == null,
+        voltar: () => Rota.navegar(context, Rota.HOME),
         alterarFonte: _alterarFonte,
         alterarTema: _alterarTema,
         child: SizedBox(
@@ -84,10 +85,10 @@ class _PerfilPageState extends State<PerfilPage> {
                     children: [
                       CardPerfilUsuarioWidget(
                         tema: tema,
-                        descricao: _usuarioComponent.usuarioSelecionado?.descricao??'',
-                        nomeUsuario: _usuarioComponent.usuarioSelecionado?.nomeUsuario??'',
-                        nomeInstituicao: _usuarioComponent.usuarioSelecionado?.instituicaoDeEnsino.nome??'',
-                        nomeCidade: _usuarioComponent.usuarioSelecionado?.nomeMunicipio??"",
+                        descricao: _usuarioComponent.usuarioSelecionado?.descricao ?? '',
+                        nomeUsuario: _usuarioComponent.usuarioSelecionado?.nomeUsuario ?? '',
+                        nomeInstituicao: _usuarioComponent.usuarioSelecionado?.instituicaoDeEnsino.nome ?? '',
+                        nomeCidade: _usuarioComponent.usuarioSelecionado?.nomeMunicipio ?? "",
                       ),
                       Positioned(
                         top: 4,
@@ -142,7 +143,10 @@ class _PerfilPageState extends State<PerfilPage> {
                   GridLivroWidget(
                     tema: tema,
                     livros: _usuarioComponent.itensPaginados,
-                    aoClicarLivro: (numeroLivro) async {},
+                    aoClicarLivro: (numeroLivro) async => Rota.navegarComArgumentos(
+                      context,
+                      LivrosRoute(numeroLivro: numeroLivro.numero),
+                    ),
                   ),
                 ],
                 if (!_exibindoLivros) ...[

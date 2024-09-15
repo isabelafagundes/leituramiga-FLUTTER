@@ -170,7 +170,7 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
                                       numeroSolicitacao: numeroSolicitacao,
                                     ),
                                   );
-                                  Navigator.pop(context);
+                                  Navigator.pop(context, true);
                                 },
                                 notificacao: notificacao,
                               ),
@@ -206,7 +206,7 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
                                       numeroSolicitacao: numero,
                                     ),
                                   );
-                                  Navigator.pop(context);
+                                  Navigator.pop(context, true);
                                 },
                               ),
                             );

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/menu_lateral.dart';
@@ -103,7 +104,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
           shrinkWrap: true,
           itemBuilder: (context, indice) {
             MenuLateral item = MenuLateral.values[indice];
-            bool ativado = itemSelecionado == item;
+            bool ativado = AutoRouter.of(context).current.path == item.rota.url;
             return Padding(
               padding: EdgeInsets.only(bottom: tema.espacamento),
               child: BotaoMenuWidget(
@@ -193,9 +194,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
           tema: tema,
           conteudo: ConteudoNotificacoesWidget(
             tema: tema,
-            aoVisualizarSolicitacao: () {
-              Navigator.pop(context, true);
-            },
+            aoVisualizarSolicitacao: () => Navigator.pop(context, true),
           ),
         );
       },
