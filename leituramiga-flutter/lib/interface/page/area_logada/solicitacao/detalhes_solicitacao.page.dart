@@ -14,6 +14,7 @@ import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.re
 import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.service.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
@@ -22,9 +23,13 @@ import 'package:projeto_leituramiga/interface/widget/conteudo_livros_solicitacao
 import 'package:projeto_leituramiga/interface/widget/conteudo_resumo_solicitacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/conteudo_selecao_livros.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/contudo_contato.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/tab.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 @RoutePage()
 class DetalhesSolicitacaoPage extends StatefulWidget {
@@ -127,7 +132,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
                     children: [
                       TabWidget(
                         tema: tema,
-                       validarAtivo: (opcao) => _abaSelecionada.descricao != opcao,
+                        validarAtivo: (opcao) => _abaSelecionada.descricao != opcao,
                         opcoes: _opcoes,
                         aoSelecionar: (index) =>
                             _atualizarAbaSelecionada(DetalhesSolicitacao.deDescricao(_opcoes[index])),
@@ -197,7 +202,12 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
         tema: tema,
         corTexto: kCorFonte,
         texto: "Editar",
-        aoClicar: () {},
+        aoClicar: () => Rota.navegarComArgumentos(
+          context,
+          VisualizarSolicitacaoRoute(
+            numeroSolicitacao: widget.numeroSolicitacao,
+          ),
+        ),
         icone: Icon(
           Icons.edit,
           color: kCorFonte,
@@ -239,7 +249,14 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
         tema: tema,
         corTexto: kCorFonte,
         texto: "Cancelar",
-        aoClicar: () {},
+        aoClicar: () async => showDialog(
+          context: context,
+          builder: (context) => obterPopUp(
+            "Caso deseje cancelar a solicitação, informe o motivo e selecione 'Cancelar'.",
+            "Cancelar",
+            context,
+          ),
+        ),
         icone: Icon(
           Icons.close,
           color: kCorFonte,
@@ -251,12 +268,80 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
       tema: tema,
       corTexto: kCorFonte,
       texto: "Recusar",
-      aoClicar: () {},
+      aoClicar: () async {
+        await showDialog(
+          context: context,
+          builder: (context) => obterPopUp(
+            "Caso deseje recusar a solicitação, informe o motivo e selecione 'Recusar'.",
+            "Recusar",
+            context,
+          ),
+        );
+      },
       icone: Icon(
         Icons.close,
         color: kCorFonte,
       ),
       corFundo: Color(tema.error),
+    );
+  }
+
+  Widget obterPopUp(String texto, String textoBotao, BuildContext context) {
+    return PopUpPadraoWidget(
+      tema: tema,
+      conteudo: Container(
+        padding: EdgeInsets.all(tema.espacamento * 2),
+        height: 350,
+        width: 400,
+        child: Column(
+          children: [
+            Icon(
+              Icons.warning_rounded,
+              color: Color(tema.baseContent),
+              size: 50,
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            TextoWidget(
+              texto: texto,
+              tema: tema,
+              align: TextAlign.center,
+              tamanho: tema.tamanhoFonteM,
+              weight: FontWeight.w500,
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            InputWidget(
+              tema: tema,
+              label: "Motivo",
+              controller: TextEditingController(),
+              onChanged: (valor) {},
+            ),
+            SizedBox(height: tema.espacamento * 4),
+            BotaoWidget(
+              tema: tema,
+              corTexto: kCorFonte,
+              texto: textoBotao,
+              aoClicar: () {},
+              icone: Icon(
+                Icons.close,
+                color: kCorFonte,
+              ),
+              corFundo: Color(tema.error),
+            ),
+            SizedBox(height: tema.espacamento),
+            BotaoWidget(
+              tema: tema,
+              corTexto: Color(tema.baseContent),
+              texto: "Voltar",
+              aoClicar: () => Navigator.pop(context),
+              icone: SvgWidget(
+                nomeSvg: 'seta/arrow-long-left',
+                cor: Color(tema.baseContent),
+              ),
+              corFundo: Color(tema.base200),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
