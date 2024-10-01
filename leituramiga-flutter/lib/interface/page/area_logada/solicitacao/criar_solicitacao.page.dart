@@ -10,7 +10,6 @@ import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
-import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/comentario_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
@@ -113,12 +112,11 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        atualizar: atualizar,
         voltar: () => Rota.navegar(context, Rota.HOME),
         carregando: _usuarioComponent.carregando ||
             _solicitacaoComponent.carregando ||
             _usuarioComponent.usuarioSolicitacao == null,
-        alterarFonte: _alterarFonte,
-        alterarTema: _alterarTema,
         child: SizedBox(
           width: Responsive.largura(context),
           height: Responsive.altura(context),
@@ -213,7 +211,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
                   tema: tema,
                   texto: 'Finalizar',
                   nomeIcone: "seta/arrow-long-right",
-                  icone: Icon(Icons.check, color: kCorFonte),
+                  icone: Icon(Icons.check, color: Color(tema.base200)),
                   aoClicar: () => Rota.navegar(context, Rota.HOME),
                 ),
               ),
@@ -264,14 +262,6 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
   int get _obterNumeroUsuarioFrete {
     if (controllerFrete.text == "Sim") return _autenticacaoState.usuario!.numero!;
     return _usuarioComponent.usuarioSelecionado!.numero!;
-  }
-
-  void _alterarTema() {
-    _temaState.alterarTema(tema.id == 1 ? 2 : 1, () => setState(() {}));
-  }
-
-  void _alterarFonte() {
-    _temaState.alterarFonte(() => setState(() {}));
   }
 
   void abrirTimePicker(bool ehHoraDevolucao) {

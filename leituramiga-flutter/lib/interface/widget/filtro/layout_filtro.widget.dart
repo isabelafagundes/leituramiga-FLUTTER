@@ -164,7 +164,7 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                         child: MenuWidget(
                           tema: widget.tema,
                           valorSelecionado: FiltroState.instancia.estado?.descricao,
-                          escolhas: UF.values.map((e) => e.toString()).toList(),
+                          escolhas: UF.values.map((e) => e.descricao.toString()).toList(),
                           aoClicar: (estado) => widget.selecionarEstado(UF.deDescricao(estado)),
                         ),
                       ),

@@ -46,9 +46,8 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        atualizar: ()=> setState(() {}),
         voltar: ()=> Rota.navegar(context, Rota.HOME),
-        alterarTema: _alterarTema,
-        alterarFonte: _alterarFonte,
         child: SingleChildScrollView(
           child: SizedBox(
             height: Responsive.larguraP(context) ? 1000 : Responsive.altura(context)*.8,
@@ -159,13 +158,6 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
     setState(() => _estagioAtual = etapa);
   }
 
-  void _alterarTema() {
-    _temaState.alterarTema(tema.id == 1 ? 2 : 1, () => setState(() {}));
-  }
-
-  void _alterarFonte() {
-    _temaState.alterarFonte(() => setState(() {}));
-  }
 }
 
 enum EditarPerfil {

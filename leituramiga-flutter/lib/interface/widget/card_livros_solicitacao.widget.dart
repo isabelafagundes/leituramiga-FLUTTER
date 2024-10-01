@@ -46,7 +46,7 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextoWidget(
-                  texto: "Livros da solictação",
+                  texto: "Livros da solicitação",
                   tema: widget.tema,
                   cor: Color(widget.tema.baseContent),
                   tamanho: widget.tema.tamanhoFonteG,
@@ -75,6 +75,7 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                         children: [
                           SvgWidget(
                             nomeSvg: "empty_state",
+                            cor: Color(widget.tema.accent),
                             altura: Responsive.larguraP(context) ? 120 : 160,
                           ),
                           SizedBox(height: widget.tema.espacamento),

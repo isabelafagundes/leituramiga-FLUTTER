@@ -63,8 +63,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
-        alterarFonte: _alterarFonte,
-        alterarTema: _alterarTema,
+        atualizar: atualizar,
         child: SizedBox(
           width: Responsive.largura(context),
           height: Responsive.altura(context),
@@ -142,13 +141,5 @@ class _UsuarioPageState extends State<UsuarioPage> {
         ),
       ),
     );
-  }
-
-  void _alterarTema() {
-    _temaState.alterarTema(tema.id == 1 ? 2 : 1, () => setState(() {}));
-  }
-
-  void _alterarFonte() {
-    _temaState.alterarFonte(() => setState(() {}));
   }
 }

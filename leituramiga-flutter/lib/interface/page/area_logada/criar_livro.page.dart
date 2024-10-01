@@ -64,8 +64,6 @@ class _CriarLivroPageState extends State<CriarLivroPage> {
         tema: tema,
         voltar: ()=> Rota.navegar(context, Rota.HOME),
         carregando: _livrosComponent.carregando || _livrosComponent.categoriasPorNumero.isEmpty,
-        alterarFonte: _alterarFonte,
-        alterarTema: _alterarTema,
         child: SizedBox(
           width: Responsive.largura(context),
           height: Responsive.altura(context),
@@ -93,11 +91,4 @@ class _CriarLivroPageState extends State<CriarLivroPage> {
     );
   }
 
-  void _alterarTema() {
-    _temaState.alterarTema(tema.id == 1 ? 2 : 1, () => setState(() {}));
-  }
-
-  void _alterarFonte() {
-    _temaState.alterarFonte(() => setState(() {}));
-  }
 }

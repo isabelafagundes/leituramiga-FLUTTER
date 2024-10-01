@@ -73,6 +73,7 @@ class _HomePageState extends State<HomePage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        atualizar: atualizar,
         exibirPerfil: true,
         carregando: _livrosComponent.carregando || _usuariosComponent.carregando,
         widgetNoCabecalho: _livrosComponent.carregando || _usuariosComponent.carregando
@@ -101,8 +102,6 @@ class _HomePageState extends State<HomePage> {
                     ],
                   )
                 : null,
-        alterarFonte: _alterarFonte,
-        alterarTema: _alterarTema,
         child: SizedBox(
           width: Responsive.largura(context),
           height: Responsive.altura(context),
@@ -196,14 +195,6 @@ class _HomePageState extends State<HomePage> {
   Future<void> selecionarLivros() async {
     setState(() => _exibindoLivros = true);
     await _livrosComponent.obterLivrosIniciais();
-  }
-
-  void _alterarTema() {
-    _temaState.alterarTema(tema.id == 1 ? 2 : 1, () => setState(() {}));
-  }
-
-  void _alterarFonte() {
-    _temaState.alterarFonte(() => setState(() {}));
   }
 
   Widget get obterFiltros {

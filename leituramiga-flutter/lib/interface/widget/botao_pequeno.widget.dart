@@ -40,7 +40,7 @@ class _BotaoPequenoWidgetState extends State<BotaoPequenoWidget> {
       child: GestureDetector(
         onTap: widget.aoClicar,
         child: Container(
-          height: 30,
+          height: 35,
           padding: widget.padding ?? EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 3),
           decoration: BoxDecoration(
             boxShadow: [

@@ -65,9 +65,8 @@ class _CalendarioPageState extends State<CalendarioPage> {
       child: ConteudoMenuLateralWidget(
         tema: tema,
         voltar: () => Rota.navegar(context, Rota.HOME),
+        atualizar: atualizar,
         carregando: solicitacaoComponent.carregando || solicitacaoComponent.itensPaginados.isEmpty || !mounted,
-        alterarFonte: _alterarFonte,
-        alterarTema: _alterarTema,
         child: SizedBox(
           width: Responsive.largura(context),
           height: Responsive.altura(context),
@@ -81,9 +80,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                   locale: 'pt_BR',
                   firstDay: DateTime.utc(2010, 10, 16),
                   lastDay: DateTime.utc(2030, 3, 14),
-                  focusedDay: DataHora
-                      .hoje()
-                      .valor,
+                  focusedDay: DataHora.hoje().valor,
                   selectedDayPredicate: (day) => isSameDay(dataSelecionada?.valor, day),
                   rangeStartDay: null,
                   rangeEndDay: null,
@@ -140,33 +137,33 @@ class _CalendarioPageState extends State<CalendarioPage> {
                       SizedBox(height: tema.espacamento * 2),
                       solicitacoesSelecionadas.isEmpty
                           ? TextoWidget(
-                        texto: 'Nenhuma solicitação para esta data.',
-                        tema: tema,
-                        tamanho: tema.tamanhoFonteM,
-                      )
+                              texto: 'Nenhuma solicitação para esta data.',
+                              tema: tema,
+                              tamanho: tema.tamanhoFonteM,
+                            )
                           : Expanded(
-                        child: GridView.builder(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: Responsive.larguraP(context) ? 1 : 2,
-                            crossAxisSpacing: tema.espacamento * 2,
-                            mainAxisSpacing: tema.espacamento * 2,
-                            childAspectRatio: 1.5,
-                            mainAxisExtent: 205,
-                          ),
-                          itemCount: solicitacoesSelecionadas.length,
-                          itemBuilder: (context, index) {
-                            final solicitacao = solicitacoesSelecionadas[index];
-                            return Padding(
-                              padding: EdgeInsets.only(bottom: tema.espacamento * 2),
-                              child: CardSolicitacaoWidget(
-                                tema: tema,
-                                solicitacao: solicitacao,
-                                aoVisualizar: (int) {},
+                              child: GridView.builder(
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: Responsive.larguraP(context) ? 1 : 2,
+                                  crossAxisSpacing: tema.espacamento * 2,
+                                  mainAxisSpacing: tema.espacamento * 2,
+                                  childAspectRatio: 1.5,
+                                  mainAxisExtent: 220,
+                                ),
+                                itemCount: solicitacoesSelecionadas.length,
+                                itemBuilder: (context, index) {
+                                  final solicitacao = solicitacoesSelecionadas[index];
+                                  return Padding(
+                                    padding: EdgeInsets.only(bottom: tema.espacamento * 2),
+                                    child: CardSolicitacaoWidget(
+                                      tema: tema,
+                                      solicitacao: solicitacao,
+                                      aoVisualizar: (int) {},
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
-                      ),
+                            ),
                     ],
                   ),
                 )
@@ -178,58 +175,44 @@ class _CalendarioPageState extends State<CalendarioPage> {
     );
   }
 
-  List<ResumoSolicitacao> obterEventos(DateTime data) =>
-      solicitacaoComponent.itensPaginados
-          .where((solicitacao) =>
-      isSameDay(solicitacao.dataEntrega.valor, data) ||
-          isSameDay(solicitacao.dataDevolucao?.valor, data))
-          .toList();
+  List<ResumoSolicitacao> obterEventos(DateTime data) => solicitacaoComponent.itensPaginados
+      .where((solicitacao) =>
+          isSameDay(solicitacao.dataEntrega.valor, data) || isSameDay(solicitacao.dataDevolucao?.valor, data))
+      .toList();
 
-  List<ResumoSolicitacao> get solicitacoesSelecionadas =>
-      solicitacaoComponent.itensPaginados
-          .where((solicitacao) =>
-      isSameDay(solicitacao.dataEntrega.valor, dataSelecionada?.valor) ||
+  List<ResumoSolicitacao> get solicitacoesSelecionadas => solicitacaoComponent.itensPaginados
+      .where((solicitacao) =>
+          isSameDay(solicitacao.dataEntrega.valor, dataSelecionada?.valor) ||
           isSameDay(solicitacao.dataDevolucao?.valor, dataSelecionada?.valor))
-          .toList();
+      .toList();
 
   void _selecionarData(DateTime data) {
     setState(() => dataSelecionada = DataHora.criar(data));
   }
 
-  TextStyle get textStyleDisabled =>
-      TextStyle(
+  TextStyle get textStyleDisabled => TextStyle(
         color: Color(tema.baseContent).withOpacity(.2),
         fontSize: tema.tamanhoFonteM,
         fontFamily: tema.familiaDeFontePrimaria,
       );
 
-  TextStyle get textStyle =>
-      TextStyle(
+  TextStyle get textStyle => TextStyle(
         color: Color(tema.baseContent),
         fontSize: tema.tamanhoFonteM,
         fontFamily: tema.familiaDeFontePrimaria,
       );
 
-  TextStyle get textStyleSelected =>
-      TextStyle(
+  TextStyle get textStyleSelected => TextStyle(
         color: kCorFonte,
         fontSize: tema.tamanhoFonteM,
         fontFamily: tema.familiaDeFontePrimaria,
       );
 
-  TextStyle get textStyleBold =>
-      TextStyle(
+  TextStyle get textStyleBold => TextStyle(
         color: Color(tema.baseContent),
         fontSize: tema.tamanhoFonteM,
         fontWeight: FontWeight.w500,
         fontFamily: tema.familiaDeFontePrimaria,
       );
 
-  void _alterarTema() {
-    _temaState.alterarTema(tema.id == 1 ? 2 : 1, () => setState(() {}));
-  }
-
-  void _alterarFonte() {
-    _temaState.alterarFonte(() => setState(() {}));
-  }
 }

@@ -110,11 +110,10 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        atualizar: atualizar,
         carregando: _usuarioComponent.carregando ||
             _solicitacaoComponent.carregando ||
             _usuarioComponent.usuarioSolicitacao == null,
-        alterarFonte: _alterarFonte,
-        alterarTema: _alterarTema,
         child: paginaSelecionada,
       ),
     );
@@ -283,14 +282,6 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
   int get _obterNumeroUsuarioFrete {
     if (controllerFrete.text == "Sim") return _autenticacaoState.usuario!.numero!;
     return _usuarioComponent.usuarioSelecionado!.numero!;
-  }
-
-  void _alterarTema() {
-    _temaState.alterarTema(tema.id == 1 ? 2 : 1, () => setState(() {}));
-  }
-
-  void _alterarFonte() {
-    _temaState.alterarFonte(() => setState(() {}));
   }
 
   void abrirTimePicker(bool ehHoraDevolucao) {

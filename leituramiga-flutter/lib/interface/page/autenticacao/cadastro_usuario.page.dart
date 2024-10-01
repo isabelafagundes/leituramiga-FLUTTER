@@ -202,6 +202,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                 tema: tema,
                 tipoInput: const TextInputType.numberWithOptions(decimal: false),
                 controller: TextEditingController(),
+                alturaCampo: 35,
                 onChanged: (texto) {},
               ),
             ),

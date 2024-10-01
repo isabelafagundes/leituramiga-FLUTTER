@@ -103,9 +103,8 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        atualizar: atualizar,
         carregando: _solicitacaoComponent.carregando || _solicitacaoComponent.solicitacaoSelecionada == null,
-        alterarTema: _alterarTema,
-        alterarFonte: _alterarFonte,
         voltar: () => Rota.navegar(context, Rota.HOME),
         child: SingleChildScrollView(
           physics:
@@ -160,14 +159,6 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
   }
 
   List<String> get _opcoes => DetalhesSolicitacao.values.where((e) => e.aba).map((e) => e.descricao).toList();
-
-  void _alterarTema() {
-    _temaState.alterarTema(tema.id == 1 ? 2 : 1, () => setState(() {}));
-  }
-
-  void _alterarFonte() {
-    _temaState.alterarFonte(() => setState(() {}));
-  }
 
   Widget get _obterAba {
     return switch (_abaSelecionada) {

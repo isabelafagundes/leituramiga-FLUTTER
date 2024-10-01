@@ -10,7 +10,7 @@ class TextoComSwitcherWidget extends StatelessWidget {
   final String label;
   final Widget primeiroIcone;
   final Widget segundoIcone;
-
+  final bool valorInicial;
   final Function() aoAlterar;
 
   const TextoComSwitcherWidget({
@@ -21,6 +21,7 @@ class TextoComSwitcherWidget extends StatelessWidget {
     required this.primeiroIcone,
     required this.segundoIcone,
     required this.aoAlterar,
+    this.valorInicial = false,
   });
 
   @override
@@ -41,6 +42,7 @@ class TextoComSwitcherWidget extends StatelessWidget {
           ],
           SwitcherWidget(
             tema: tema,
+            valorInicial: valorInicial,
             iconeAtivado: primeiroIcone,
             iconeDesativado: segundoIcone,
             aoClicar: aoAlterar,

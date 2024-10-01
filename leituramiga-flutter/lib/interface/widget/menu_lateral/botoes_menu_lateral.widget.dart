@@ -155,6 +155,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
           tema: tema,
           exibirLabel: exibindoMenu,
           label: "Tema:",
+          valorInicial: tema.id == 2,
           segundoIcone: Padding(
             padding: const EdgeInsets.all(2),
             child: SvgWidget(

@@ -62,9 +62,8 @@ class _LivrosPageState extends State<LivrosPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        atualizar: atualizar,
         voltar: () => Rota.navegar(context, Rota.HOME),
-        alterarFonte: _alterarFonte,
-        alterarTema: _alterarTema,
         carregando: _livrosComponent.carregando || _livrosComponent.livroSelecionado == null,
         child: SizedBox(
           width: Responsive.largura(context),
@@ -271,11 +270,4 @@ class _LivrosPageState extends State<LivrosPage> {
     );
   }
 
-  void _alterarTema() {
-    _temaState.alterarTema(tema.id == 1 ? 2 : 1, () => setState(() {}));
-  }
-
-  void _alterarFonte() {
-    _temaState.alterarFonte(() => setState(() {}));
-  }
 }

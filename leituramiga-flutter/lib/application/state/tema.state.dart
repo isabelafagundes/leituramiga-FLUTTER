@@ -1,4 +1,5 @@
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/infrastructure/service/sessao_flutter.service.dart';
 
 mixin class TemaState {
   static TemaState? _instancia;
@@ -10,10 +11,43 @@ mixin class TemaState {
     return _instancia!;
   }
 
-  Tema? get temaSelecionado =>
-      _temas
-          .where((tema) => tema.selecionado)
-          .firstOrNull;
+  Future<void> atualizarTemaSelecionado(Function() atualizar) async {
+    final int idTemaAnterior = await SessaoFlutterService.instancia.obterTema();
+    alterarTema(idTemaAnterior, atualizar);
+    await alterarTemaSessao(idTemaAnterior, atualizar);
+  }
+
+  Future<void> atualizarTemaPeloId(int idTema, Function() atualizar) async {
+    alterarTema(idTema, atualizar);
+    await alterarTemaSessao(idTema, atualizar);
+    atualizar();
+  }
+
+  Future<void> atualizarFonteSelecionada(Function() atualizar) async {
+    final bool modoFonte = await SessaoFlutterService.instancia.obterModoFonteGrande();
+    alterarFonte(atualizar);
+    await alterarFonteSessao(!modoFonte, atualizar);
+  }
+
+  Future<void> alterarTemaSessao(int idTema, Function() atualizar) async {
+    await SessaoFlutterService.instancia.alterarTema(idTema);
+    atualizar();
+  }
+
+  Future<void> alterarFonteSessao(bool modoFonte, Function() atualizar) async {
+    await SessaoFlutterService.instancia.alterarFonte(modoFonte);
+  }
+
+  Tema? get temaSelecionado {
+    return _temas.where((tema) => tema.selecionado).firstOrNull;
+  }
+
+  Function() atualizarPricipal = () {};
+
+  void definirAtualizar(Function() atualizar) {
+    atualizarPricipal = atualizar;
+    atualizarPricipal();
+  }
 
   void alterarTema(int idTema, Function() atualizar) {
     bool temaModoGrande = temaSelecionado!.modoFonteGrande;
@@ -22,11 +56,13 @@ mixin class TemaState {
       if (tema.id == idTema) tema.alterarFonte(temaModoGrande);
     }
     atualizar();
+    atualizarPricipal();
   }
 
   void alterarFonte(Function() atualizar) {
     temaSelecionado!.alterarFonte(!temaSelecionado!.modoFonteGrande);
     atualizar();
+    atualizarPricipal();
   }
 
   final Tema _temaEscuro = Tema.criar(
@@ -56,7 +92,6 @@ mixin class TemaState {
     modoFonteGrande: false,
     familiaDeFontePrimaria: 'Montserrat',
     familiaDeFonteSecundaria: 'MontserratAlternates',
-
   );
 
   final Tema _temaClaro = Tema.criar(
@@ -70,7 +105,7 @@ mixin class TemaState {
     corSuccess: "2dc04b",
     corWarning: "ffad00",
     corError: "ff899a",
-    corBase200: "FFFDFF",
+    corBase200: "F5F2F0",
     corBaseContent: "464A52",
     corNeutralPrimary: "004342",
     espacamento: 8.0,

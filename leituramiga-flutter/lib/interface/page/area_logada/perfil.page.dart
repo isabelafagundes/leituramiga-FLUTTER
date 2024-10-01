@@ -66,10 +66,9 @@ class _PerfilPageState extends State<PerfilPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        atualizar: atualizar,
         carregando: _usuarioComponent.carregando || _usuarioComponent.usuarioSelecionado == null,
         voltar: () => Rota.navegar(context, Rota.HOME),
-        alterarFonte: _alterarFonte,
-        alterarTema: _alterarTema,
         child: SizedBox(
           width: Responsive.largura(context),
           height: Responsive.altura(context),
@@ -164,11 +163,4 @@ class _PerfilPageState extends State<PerfilPage> {
     );
   }
 
-  void _alterarTema() {
-    _temaState.alterarTema(tema.id == 1 ? 2 : 1, () => setState(() {}));
-  }
-
-  void _alterarFonte() {
-    _temaState.alterarFonte(() => setState(() {}));
-  }
 }

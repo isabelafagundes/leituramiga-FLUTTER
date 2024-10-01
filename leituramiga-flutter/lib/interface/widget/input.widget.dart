@@ -33,7 +33,7 @@ class InputWidget extends StatefulWidget {
     this.tipoInput,
     this.readOnly = false,
     this.onTap,
-    this.alturaCampo = 40,
+    this.alturaCampo = 45,
     this.expandir = false,
   });
 

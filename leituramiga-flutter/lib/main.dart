@@ -20,11 +20,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => Rota.navegar(context, Rota.AUTENTICACAO));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Rota.navegar(context, Rota.AUTENTICACAO);
+      TemaState.instancia.definirAtualizar(atualizar);
+      TemaState.instancia.atualizarTemaSelecionado(atualizar);
+    });
+  }
+
+  void atualizar() {
+    if (mounted) setState(() {});
   }
 
   @override
