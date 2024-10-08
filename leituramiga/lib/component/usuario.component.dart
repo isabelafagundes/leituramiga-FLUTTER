@@ -1,4 +1,5 @@
 import 'package:leituramiga/domain/endereco/endereco.dart';
+import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:leituramiga/domain/usuario/comentario_perfil.dart';
 import 'package:leituramiga/domain/usuario/usuario.dart';
@@ -127,9 +128,9 @@ class UsuarioComponent extends State
     );
   }
 
-  Future<void> atualizarEndereco(int numeroUsuario) async {
+  Future<void> atualizarEndereco() async {
     await executar(
-      rotina: () async => _enderecoUseCase.atualizarEndereco(numeroUsuario),
+      rotina: () async => _enderecoUseCase.atualizarEndereco(),
       mensagemErro: "Não foi possível atualizar o endereço",
     );
   }
@@ -141,9 +142,9 @@ class UsuarioComponent extends State
     );
   }
 
-  Future<void> obterCidades() async {
+  Future<void> obterCidades(UF uf, [String? pesquisa]) async {
     executar(
-      rotina: () => _enderecoUseCase.obterMunicipios(),
+      rotina: () => _enderecoUseCase.obterMunicipios(uf, pesquisa),
       mensagemErro: "Não foi possível atualizar o endereço",
     );
   }

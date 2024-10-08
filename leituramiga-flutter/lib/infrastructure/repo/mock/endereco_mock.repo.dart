@@ -38,19 +38,21 @@ class EnderecoMockRepo extends EnderecoRepo {
       );
 
   @override
-  Future<void> atualizarEndereco(Endereco endereco, int usuario) {
+  Future<void> atualizarEndereco(Endereco endereco) {
     // TODO: implement atualizarEndereco
     throw UnimplementedError();
   }
 
   @override
-  Future<Endereco> obterEndereco(int numero) {
+  Future<Endereco> obterEndereco() {
     // TODO: implement obterEndereco
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Municipio>> obterMunicipios() async {
-    return municipios;
+  Future<List<Municipio>> obterMunicipios(UF uf, [String? pesquisa]) {
+    // TODO: implement obterMunicipios
+    throw UnimplementedError();
   }
+
 }

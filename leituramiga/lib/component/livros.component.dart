@@ -115,15 +115,15 @@ class LivrosComponent extends State
   }
 
   void selecionarEstado(UF uf) {
-     executar(
-    rotina: () async => filtroState.selecionarEstado(uf),
-    mensagemErro: "Não foi possível obter as instituições",
+    executar(
+      rotina: () async => filtroState.selecionarEstado(uf),
+      mensagemErro: "Não foi possível obter as instituições",
     );
   }
 
-  Future<void> obterMunicipios() async {
+  Future<void> obterMunicipios(UF uf, [String? pesquisa]) async {
     await executar(
-      rotina: () async => await _enderecoUseCase.obterMunicipios(),
+      rotina: () async => await _enderecoUseCase.obterMunicipios(uf, pesquisa),
       mensagemErro: "Não foi possível obter os municípios",
     );
   }

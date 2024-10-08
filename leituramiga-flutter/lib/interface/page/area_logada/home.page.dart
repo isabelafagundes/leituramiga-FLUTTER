@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/livros.component.dart';
 import 'package:leituramiga/component/usuarios.component.dart';
+import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/categoria_mock.repo.dart';
@@ -58,7 +59,6 @@ class _HomePageState extends State<HomePage> {
       await _livrosComponent.obterLivrosIniciais();
       await _livrosComponent.obterCategorias();
       await _livrosComponent.obterInstituicoes();
-      await _livrosComponent.obterMunicipios();
       await _usuariosComponent.obterUsuariosIniciais();
     });
   }
@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> {
   Widget get obterFiltros {
     return LayoutFiltroWidget(
       tema: tema,
-      selecionarEstado: _livrosComponent.selecionarEstado,
+      selecionarEstado: _selecionarEstado,
       carrergando: _livrosComponent.carregando,
       categoriaSelecionada: _livrosComponent.filtroState.numeroCategoria,
       categoriasPorId: _livrosComponent.categoriasPorNumero,
@@ -211,5 +211,11 @@ class _HomePageState extends State<HomePage> {
       aplicarFiltros: () => SobreposicaoUtil.fechar(context),
       usuario: !_exibindoLivros,
     );
+  }
+
+  Future<void> _selecionarEstado(UF uf) async {
+    _livrosComponent.selecionarEstado(uf);
+    await _livrosComponent.obterMunicipios(uf);
+
   }
 }

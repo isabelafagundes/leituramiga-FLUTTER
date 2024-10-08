@@ -95,7 +95,8 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
       await _obterUsuarioSolicitacao();
       await _usuarioComponent.obterUsuario(_autenticacaoState.usuario!.email.endereco);
       await _usuarioComponent.obterLivrosUsuario();
-      await _usuarioComponent.obterCidades();
+      UF? uf = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.municipio.estado;
+      await _usuarioComponent.obterCidades(uf!);
       _preencherControllers();
     });
   }

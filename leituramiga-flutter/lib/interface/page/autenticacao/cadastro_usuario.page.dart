@@ -32,9 +32,6 @@ class CadastroUsuarioPage extends StatefulWidget {
 class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   final UsuarioComponent _usuarioComponent = UsuarioComponent();
   AutenticacaoComponent autenticacaoComponent = AutenticacaoComponent();
-
-
-
   final TextEditingController controllerRua = TextEditingController();
   final TextEditingController controllerBairro = TextEditingController();
   final TextEditingController controllerCep = TextEditingController();
@@ -68,10 +65,6 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
       atualizar,
     );
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _usuarioComponent.obterCidades();
-    });
   }
 
   @override
@@ -165,7 +158,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
               tema: tema,
               estados: UF.values.map((e) => e.descricao).toList(),
               cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.toString()).toList(),
-              aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
+              aoSelecionarEstado: _selecionarEstado,
               aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
               controllerRua: controllerRua,
               controllerBairro: controllerBairro,
@@ -244,6 +237,11 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
           ],
         ),
     };
+  }
+
+  Future<void> _selecionarEstado(String estado) async {
+    setState(() => controllerEstado.text = estado);
+    await _usuarioComponent.obterCidades(UF.deDescricao(estado));
   }
 
   void atualizarPagina(EtapaCadastro? etapa) {

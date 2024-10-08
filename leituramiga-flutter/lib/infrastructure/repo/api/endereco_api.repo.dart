@@ -1,5 +1,6 @@
 import 'package:leituramiga/domain/endereco/endereco.dart';
 import 'package:leituramiga/domain/endereco/municipio.dart';
+import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/repo/endereco.repo.dart';
 import 'package:projeto_leituramiga/application/state/configuracao_api.state.dart';
 import 'package:projeto_leituramiga/infrastructure/service/auth/http.client.dart';
@@ -31,8 +32,10 @@ class EnderecoApiRepo extends EnderecoRepo with ConfiguracaoApiState {
   }
 
   @override
-  Future<List<Municipio>> obterMunicipios() async {
-    return await _client.get("$host/cidades").catchError((erro) {
+  Future<List<Municipio>> obterMunicipios(UF uf, [String? pesquisa]) async {
+    String url = "$host/cidades/${uf.descricao}";
+    if(pesquisa != null) url += "?pesquisa=$pesquisa";
+    return await _client.get(url).catchError((erro) {
       throw erro;
     }).then((response) => (response.data as List).map((e) => Municipio.carregarDeMapa(e)).toList());
   }
