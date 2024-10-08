@@ -93,7 +93,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
       await _obterUsuarioSolicitacao();
-      await _usuarioComponent.obterUsuario(1);
+      await _usuarioComponent.obterUsuario(_autenticacaoState.usuario!.email.endereco);
       await _usuarioComponent.obterLivrosUsuario();
       await _usuarioComponent.obterCidades();
       _preencherControllers();
@@ -231,28 +231,24 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
     controllerHoraDevolucao.text = _solicitacaoComponent.solicitacaoSelecionada?.dataDevolucao?.formatar("HH:mm") ?? '';
     controllerFormaEntrega.text = _solicitacaoComponent.solicitacaoSelecionada?.formaEntrega.descricao ?? "Selecione";
     controllerInformacoes.text = _solicitacaoComponent.solicitacaoSelecionada?.informacoesAdicionais ?? "";
-    controllerFrete.text =
-        _solicitacaoComponent.solicitacaoSelecionada!.numeroUsuarioFrete == _autenticacaoState.usuario!.numero
-            ? _autenticacaoState.usuario!.nomeUsuario
-            : _usuarioComponent.usuarioSelecionado!.nomeUsuario;
     setState(() {});
   }
 
   Future<void> _obterUsuarioSolicitacao() async {
-    int numeroUsuarioCriador = _solicitacaoComponent.solicitacaoSelecionada!.numeroUsuarioCriador;
-    int numeroUsuarioProprietario = _solicitacaoComponent.solicitacaoSelecionada!.numeroUsuarioProprietario;
-    if (numeroUsuarioCriador == _autenticacaoState.usuario!.numero) {
-      await _usuarioComponent.obterUsuarioSolicitacao(numeroUsuarioProprietario);
+    String emailoUsuarioCriador = _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioCriador;
+    String emailUsuarioProprietario = _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioProprietario;
+    if (emailoUsuarioCriador == _autenticacaoState.usuario!.email) {
+      await _usuarioComponent.obterUsuarioSolicitacao(emailUsuarioProprietario);
     } else {
-      await _usuarioComponent.obterUsuarioSolicitacao(numeroUsuarioCriador);
+      await _usuarioComponent.obterUsuarioSolicitacao(emailoUsuarioCriador);
     }
   }
 
   void _criarSolicitacao() {
     Solicitacao solicitacao = Solicitacao.criar(
       null,
-      _autenticacaoState.usuario!.numero!,
-      _usuarioComponent.livroSelecionado!.numeroUsuario,
+      _autenticacaoState.usuario!.email.endereco!,
+      _usuarioComponent.livroSelecionado!.emailUsuario,
       _solicitacaoComponent.formaEntregaSelecionada!,
       DataHora.deString(controllerDataEntrega.text),
       DataHora.deString(controllerDataDevolucao.text),
@@ -273,15 +269,9 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
       null,
       _autenticacaoState.usuario?.nomeUsuario ?? '',
       _tipoSolicitacao,
-      _obterNumeroUsuarioFrete,
     );
 
     _solicitacaoComponent.atualizarSolicitacaoMemoria(solicitacao);
-  }
-
-  int get _obterNumeroUsuarioFrete {
-    if (controllerFrete.text == "Sim") return _autenticacaoState.usuario!.numero!;
-    return _usuarioComponent.usuarioSelecionado!.numero!;
   }
 
   void abrirTimePicker(bool ehHoraDevolucao) {

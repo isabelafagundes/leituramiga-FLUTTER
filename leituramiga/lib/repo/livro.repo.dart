@@ -11,7 +11,7 @@ abstract class LivroRepo {
     TipoSolicitacao? tipo,
     String? pesquisa,
     int? numeroCategoria,
-    int? numeroUsuario,
+    String? emailUsuario,
   });
 
   Future<Livro> obterLivro(int numero);

@@ -6,7 +6,7 @@ import 'package:projeto_leituramiga/interface/widget/card/card_usuario.widget.da
 
 class GridUsuariosWidget extends StatelessWidget {
   final Tema tema;
-  final Function(int) aoClicarUsuario;
+  final Function(String) aoClicarUsuario;
   final List<ResumoUsuario> usuarios;
 
   const GridUsuariosWidget({
@@ -29,7 +29,7 @@ class GridUsuariosWidget extends StatelessWidget {
       itemBuilder: (ccontext, indice) {
         ResumoUsuario usuario = usuarios[indice];
         return GestureDetector(
-          onTap: () => aoClicarUsuario(usuario.numero),
+          onTap: () => aoClicarUsuario(usuario.nomeUsuario),
           child: MouseRegion(
             cursor: SystemMouseCursors.click,
             child:

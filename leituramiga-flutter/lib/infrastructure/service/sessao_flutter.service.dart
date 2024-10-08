@@ -58,4 +58,10 @@ class SessaoFlutterService extends SessaoService {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getInt('idTema') ?? 1;
   }
+
+  @override
+  Future<void> limpar() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
 }

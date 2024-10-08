@@ -8,13 +8,13 @@ class UsuarioUseCase {
 
   const UsuarioUseCase(this._repo, this._state);
 
-  Future<void> obterUsuario(int numero) async {
-    Usuario usuario = await _repo.obterUsuario(numero);
+  Future<void> obterUsuario(String email) async {
+    Usuario usuario = await _repo.obterUsuario(email);
     _state.usuarioSelecionado = usuario;
   }
 
-  Future<void> obterUsuarioSolicitacao(int numero) async {
-    Usuario usuario = await _repo.obterUsuario(numero);
+  Future<void> obterUsuarioSolicitacao(String email) async {
+    Usuario usuario = await _repo.obterUsuario(email);
     print(usuario.nomeUsuario);
     _state.usuarioSolicitacao = usuario;
   }
@@ -24,8 +24,8 @@ class UsuarioUseCase {
     await _repo.atualizarUsuario(_state.usuarioEdicao!);
   }
 
-  Future<void> excluirUsuario(int numero) async {
-    await _repo.excluirUsuario(numero);
+  Future<void> desativarUsuario() async {
+    await _repo.desativarUsuario();
   }
 
   void atualizarUsuarioMemoria(Usuario usuario) {

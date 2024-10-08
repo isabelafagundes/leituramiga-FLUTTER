@@ -49,10 +49,10 @@ class _PerfilPageState extends State<PerfilPage> {
       atualizar,
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      int numeroUsuario = AutenticacaoState.instancia.usuario!.numero!;
-      await _usuarioComponent.obterUsuario(numeroUsuario);
+      String email = AutenticacaoState.instancia.usuario!.email.endereco;
+      await _usuarioComponent.obterUsuario(email);
       await _usuarioComponent.obterLivrosUsuario();
-      await _usuarioComponent.obterComentarios(numeroUsuario);
+      await _usuarioComponent.obterComentarios(email);
     });
   }
 
@@ -86,7 +86,7 @@ class _PerfilPageState extends State<PerfilPage> {
                         tema: tema,
                         descricao: _usuarioComponent.usuarioSelecionado?.descricao ?? '',
                         nomeUsuario: _usuarioComponent.usuarioSelecionado?.nomeUsuario ?? '',
-                        nomeInstituicao: _usuarioComponent.usuarioSelecionado?.instituicaoDeEnsino.nome ?? '',
+                        nomeInstituicao: _usuarioComponent.usuarioSelecionado?.instituicaoDeEnsino?.nome ?? '',
                         nomeCidade: _usuarioComponent.usuarioSelecionado?.nomeMunicipio ?? "",
                       ),
                       Positioned(

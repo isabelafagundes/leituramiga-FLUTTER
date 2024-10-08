@@ -16,13 +16,13 @@ class ComentarioMockRepo extends ComentarioRepo {
   }
 
   @override
-  Future<void> excluirComentario(int numeroComentario, int numeroPerfil) {
+  Future<void> excluirComentario(int numeroComentario, String email) {
     // TODO: implement excluirComentario
     throw UnimplementedError();
   }
 
   @override
-  Future<List<ComentarioPerfil>> obterComentarios(int numeroPerfil) async {
+  Future<List<ComentarioPerfil>> obterComentarios(String email) async {
     return comentarioss;
   }
 }

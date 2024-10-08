@@ -8,14 +8,14 @@ class SolicitacaoPaginacaoUseCase {
 
   const SolicitacaoPaginacaoUseCase(this._state, this._repo);
 
-  Future<void> obterSolicitacoesIniciais(int numeroUsuario) async {
+  Future<void> obterSolicitacoesIniciais(String emailUsuario) async {
     _state.reiniciar();
-    List<ResumoSolicitacao> pagina = await _repo.obterSolicitacoes(numeroUsuario);
+    List<ResumoSolicitacao> pagina = await _repo.obterSolicitacoes(emailUsuario);
     _state.paginar(pagina, 50);
   }
 
-  Future<void> obterSolicitacoesPaginadas(int numeroUsuario) async {
-    List<ResumoSolicitacao> pagina = await _repo.obterSolicitacoes(numeroUsuario, _state.pagina);
+  Future<void> obterSolicitacoesPaginadas(String emailUsuario) async {
+    List<ResumoSolicitacao> pagina = await _repo.obterSolicitacoes(emailUsuario, _state.pagina);
     _state.paginar(pagina, 50);
   }
 }

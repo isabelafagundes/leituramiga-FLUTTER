@@ -26,16 +26,16 @@ class SolicitacaoComponent extends State with SolicitacaoState, PaginacaoState<R
     super.atualizar = atualizar;
   }
 
-  Future<void> obterSolicitacoesIniciais(int numeroUsuario) async {
+  Future<void> obterSolicitacoesIniciais(String emailUsuario) async {
     await executar(
-      rotina: () => _paginacaoUseCase.obterSolicitacoesIniciais(numeroUsuario),
+      rotina: () => _paginacaoUseCase.obterSolicitacoesIniciais(emailUsuario),
       mensagemErro: "Não foi possível obter as solicitações",
     );
   }
 
-  Future<void> obterSolicitacoesPaginadas(int numeroUsuario) async {
+  Future<void> obterSolicitacoesPaginadas(String emailUsuario) async {
     await executar(
-      rotina: () => _paginacaoUseCase.obterSolicitacoesPaginadas(numeroUsuario),
+      rotina: () => _paginacaoUseCase.obterSolicitacoesPaginadas(emailUsuario),
       mensagemErro: "Não foi possível obter as solicitações",
     );
   }
@@ -75,9 +75,9 @@ class SolicitacaoComponent extends State with SolicitacaoState, PaginacaoState<R
     );
   }
 
-  Future<void> obterNotificacoes(int numeroUsuario) async {
+  Future<void> obterNotificacoes(String emailUsuario) async {
     await executar(
-      rotina: () => _notificacaoUseCase.obterNotificacoes(numeroUsuario),
+      rotina: () => _notificacaoUseCase.obterNotificacoes(emailUsuario),
       mensagemErro: "Não foi possível obter as notificações",
     );
   }

@@ -87,7 +87,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
-      await _usuarioComponent.obterUsuario(1);
+      await _usuarioComponent.obterUsuario(_solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioCriador);
       await _usuarioComponent.obterLivrosUsuario();
       await _usuarioComponent.obterCidades();
     });

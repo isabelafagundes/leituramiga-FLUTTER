@@ -10,9 +10,11 @@ abstract class UsuarioRepo {
     String? pesquisa,
   ]);
 
-  Future<Usuario> obterUsuario(int numeroUsuario);
+  Future<Usuario> obterUsuario(String emailUsuario);
 
-  Future<void> excluirUsuario(int numero);
+  Future<Usuario> obterUsuarioPerfil();
+
+  Future<void> desativarUsuario();
 
   Future<void> atualizarUsuario(Usuario usuario);
 }

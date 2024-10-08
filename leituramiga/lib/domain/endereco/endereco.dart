@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:leituramiga/domain/endereco/municipio.dart';
 import 'package:leituramiga/domain/super/erro_dominio.dart';
 import 'package:leituramiga/domain/super/objeto_de_valor.dart';
@@ -52,6 +54,34 @@ class Endereco extends ObjetoDeValor {
   String? get numeroResidencial => _numeroResidencial;
 
   int? get numero => _numero;
+
+  Map<String, dynamic> paraMapa([String? emailUsuario]) {
+    return {
+      "logradouro": rua,
+      "complemento": complemento,
+      "bairro": bairro,
+      "cep": cep,
+      "nomeCidade": municipio.nome,
+      "codigoCidade": municipio.numero,
+      "emailUsuario": emailUsuario,
+    };
+  }
+
+  factory Endereco.carregarDeMapa(Map<String, dynamic> enderecoAsMap) {
+    return Endereco.carregar(
+      enderecoAsMap["id"],
+      enderecoAsMap["numero"],
+      enderecoAsMap["complemento"],
+      enderecoAsMap["logradouro"],
+      enderecoAsMap["cep"],
+      enderecoAsMap["bairro"],
+      Municipio.carregar(
+        enderecoAsMap["codigoCidade"],
+        enderecoAsMap["nomeCidade"],
+        enderecoAsMap["estado"],
+      ),
+    );
+  }
 
   String get enderecoFormatado {
     String numeroCompleto = _numeroResidencial != null ? "$_numeroResidencial" : "";

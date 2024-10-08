@@ -1,5 +1,5 @@
 import 'package:leituramiga/domain/notificacao.dart';
 
 abstract class NotificacaoRepo {
-  Future<List<Notificacao>> obterNotificacoes(int numeroUsuario);
+  Future<List<Notificacao>> obterNotificacoes(String emailUsuario);
 }

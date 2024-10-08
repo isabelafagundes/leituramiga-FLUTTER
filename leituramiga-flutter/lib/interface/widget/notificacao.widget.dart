@@ -7,6 +7,14 @@ import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+Future<void> notificarCasoErro(Future<void> Function() rotina) async {
+  try {
+    await rotina();
+  } catch (e) {
+    Notificacoes.mostrar(e.toString(), Emoji.ERRO);
+  }
+}
+
 class Notificacoes {
   static final Queue<Notificacao> _notificacoes = Queue();
   static Notificacao? notificacaoAtual;
@@ -23,7 +31,7 @@ class Notificacoes {
     _processarNotificacoes();
   }
 
-  static void  _processarNotificacoes() {
+  static void _processarNotificacoes() {
     while (_notificacoes.isNotEmpty) {
       notificacaoAtual = _notificacoes.removeFirst();
       atualizar();
@@ -131,9 +139,9 @@ class _NotificacaoWidgetState extends State<NotificacaoWidget> {
                       )
                     ],
                   ).animate(target: Notificacoes.notificacaoAtual == null ? 0 : 1).fade(
-                    duration: const Duration(milliseconds: 100),
-                    curve: Curves.easeInOut,
-                  ),
+                        duration: const Duration(milliseconds: 100),
+                        curve: Curves.easeInOut,
+                      ),
                 ),
               ),
             )

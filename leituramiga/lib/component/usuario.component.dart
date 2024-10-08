@@ -42,23 +42,23 @@ class UsuarioComponent extends State
     super.atualizar = atualizar;
   }
 
-  Future<void> obterUsuario(int numero) async {
+  Future<void> obterUsuario(String email) async {
     await executar(
-      rotina: () async => _usuarioUseCase.obterUsuario(numero),
+      rotina: () async => _usuarioUseCase.obterUsuario(email),
       mensagemErro: "Não foi possível obter o usuário",
     );
   }
 
-  Future<void> obterUsuarioSolicitacao(int numero) async {
+  Future<void> obterUsuarioSolicitacao(String email) async {
     await executar(
-      rotina: () async => _usuarioUseCase.obterUsuarioSolicitacao(numero),
+      rotina: () async => _usuarioUseCase.obterUsuarioSolicitacao(email),
       mensagemErro: "Não foi possível obter o usuário",
     );
   }
 
-  Future<void> obterComentarios(int numero) async {
+  Future<void> obterComentarios(String email) async {
     await executar(
-      rotina: () async => _comentarioUseCase.obterComentarios(numero),
+      rotina: () async => _comentarioUseCase.obterComentarios(email),
       mensagemErro: "Não foi possível obter os comentários",
     );
   }
@@ -81,8 +81,8 @@ class UsuarioComponent extends State
     await executar(
       rotina: () async {
         if (usuarioSelecionado == null) return;
-        int numero = usuarioSelecionado!.numero!;
-        return _paginacaoLivroUseCase.obterLivrosIniciais(numero);
+        String email = usuarioSelecionado!.email!.endereco;
+        return _paginacaoLivroUseCase.obterLivrosIniciais(email);
       },
       mensagemErro: "Não foi possível obter os livros do usuário",
     );
@@ -99,8 +99,8 @@ class UsuarioComponent extends State
     await executar(
       rotina: () async {
         if (usuarioSelecionado == null) return;
-        int numero = usuarioSelecionado!.numero!;
-        return _paginacaoLivroUseCase.obterLivrosPaginados(limite: limite, numeroUsuario: numero);
+        String email = usuarioSelecionado!.email!.endereco;
+        return _paginacaoLivroUseCase.obterLivrosPaginados(limite: limite, emailUsuario: email);
       },
       mensagemErro: "Não foi possível obter os livros do usuário",
     );
@@ -120,9 +120,9 @@ class UsuarioComponent extends State
     );
   }
 
-  Future<void> excluirUsuario(int numero) async {
+  Future<void> desativarUsuario() async {
     await executar(
-      rotina: () async => _usuarioUseCase.excluirUsuario(numero),
+      rotina: () async => _usuarioUseCase.desativarUsuario(),
       mensagemErro: "Não foi possível excluir o usuário",
     );
   }

@@ -48,8 +48,8 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
       atualizar,
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await solicitacaoComponent.obterNotificacoes(_autenticacaoState.usuario!.numero!);
-      await solicitacaoComponent.obterSolicitacoesIniciais(_autenticacaoState.usuario!.numero!);
+      await solicitacaoComponent.obterNotificacoes(_autenticacaoState.usuario!.email!.endereco);
+      await solicitacaoComponent.obterSolicitacoesIniciais(_autenticacaoState.usuario!.email.endereco);
     });
   }
 

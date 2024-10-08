@@ -130,7 +130,7 @@ class LivroMockRepo extends LivroRepo {
       "O livro está em bom estado",
       1,
       [TipoSolicitacao.DOACAO, TipoSolicitacao.TROCA],
-      1,
+      "isabela",
       DataHora.hoje(),
       DataHora.hoje(),
       TipoStatusLivro.DISPONIVEL,
@@ -141,16 +141,10 @@ class LivroMockRepo extends LivroRepo {
   }
 
   @override
-  Future<List<ResumoLivro>> obterLivros({
-    int numeroPagina = 0,
-    int limite = 18,
-    int? numeroMunicipio,
-    int? numeroInstituicao,
-    TipoSolicitacao? tipo,
-    String? pesquisa,
-    int? numeroCategoria,
-    int? numeroUsuario,
-  }) {
-    return Future.value(livros);
+  Future<List<ResumoLivro>> obterLivros({int numeroPagina = 0, int limite = 18, int? numeroMunicipio, int? numeroInstituicao, TipoSolicitacao? tipo, String? pesquisa, int? numeroCategoria, String? emailUsuario}) {
+    // TODO: implement obterLivros
+    throw UnimplementedError();
   }
+
+
 }

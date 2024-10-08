@@ -12,4 +12,6 @@ abstract class SessaoService {
   Future<int> obterTema();
 
   Future<bool> obterModoFonteGrande();
+
+  Future<void> limpar();
 }

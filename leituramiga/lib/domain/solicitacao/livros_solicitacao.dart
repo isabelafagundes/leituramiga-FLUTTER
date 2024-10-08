@@ -3,12 +3,12 @@ import 'package:leituramiga/domain/solicitacao/livro_solicitacao.dart';
 
 class LivrosSolicitacao {
   final int _numeroSolicitacao;
-  final int _numeroUsuario;
+  final String _emailUsuario;
   List<LivroSolicitacao> _livros;
 
   LivrosSolicitacao.carregar(
     this._numeroSolicitacao,
-    this._numeroUsuario,
+    this._emailUsuario,
     this._livros,
   );
 
@@ -19,7 +19,7 @@ class LivrosSolicitacao {
 
   List<LivroSolicitacao> get livros => _livros;
 
-  int get numeroUsuario => _numeroUsuario;
+  String get emailUsuario => _emailUsuario;
 
   int get numeroSolicitacao => _numeroSolicitacao;
 }

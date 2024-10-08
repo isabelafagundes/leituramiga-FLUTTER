@@ -24,7 +24,7 @@ class NotificacaoMockRepo extends NotificacaoRepo {
   ];
 
   @override
-  Future<List<Notificacao>> obterNotificacoes(int numeroUsuario) async {
+  Future<List<Notificacao>> obterNotificacoes(String emailUsuario) async {
     return _notificacoes;
   }
 }

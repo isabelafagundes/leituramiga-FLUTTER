@@ -29,9 +29,9 @@ class UsuariosComponent extends State with UsuarioState, PaginacaoState<ResumoUs
     );
   }
 
-  Future<void> obterUsuario(int numero) async {
+  Future<void> obterUsuario(String email) async {
     await executar(
-      rotina: () async => _useCase.obterUsuario(numero),
+      rotina: () async => _useCase.obterUsuario(email),
       mensagemErro: "Não foi possível obter o usuário",
     );
   }

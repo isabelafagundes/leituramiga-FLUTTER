@@ -11,8 +11,8 @@ import 'package:leituramiga/domain/super/entidade.dart';
 
 class Solicitacao extends Entidade {
   final int? _numero;
-  final int _numeroUsuarioProprietario;
-  final int _numeroUsuarioCriador;
+  final String _emailUsuarioProprietario;
+  final String _emailUsuarioCriador;
   final LivrosSolicitacao _livrosCriador;
   LivrosSolicitacao? _livrosProprietario;
   final FormaEntrega _formaEntrega;
@@ -29,12 +29,11 @@ class Solicitacao extends Entidade {
   final DataHora? _dataAceite;
   final String? _motivoRecusa;
   final String _nomeUsuario;
-  final int _numeroUsuarioFrete;
 
   Solicitacao.criar(
     this._numero,
-    this._numeroUsuarioProprietario,
-    this._numeroUsuarioCriador,
+    this._emailUsuarioProprietario,
+    this._emailUsuarioCriador,
     this._formaEntrega,
     this._dataCriacao,
     this._dataEntrega,
@@ -48,8 +47,7 @@ class Solicitacao extends Entidade {
     this._motivoRecusa,
     this._nomeUsuario,
     this._tipoSolicitacao,
-    this._numeroUsuarioFrete,
-  )   : _livrosCriador = LivrosSolicitacao.carregar(_numero ?? 0, _numeroUsuarioCriador, []),
+  )   : _livrosCriador = LivrosSolicitacao.carregar(_numero ?? 0, _emailUsuarioCriador, []),
         _enderecoUsuarioCriador = _endereco == null;
 
   int? get numero => _numero;
@@ -81,18 +79,17 @@ class Solicitacao extends Entidade {
     _endereco = endereco;
   }
 
-  void adicionar(Livro livro, int numeroUsuario) {
-    if (numeroUsuario == _numeroUsuarioCriador) {
+  void adicionar(Livro livro, String emailUsuario) {
+    if (emailUsuario == _emailUsuarioCriador) {
       _livrosCriador.adicionar(livro);
     } else {
-      _livrosProprietario ??= LivrosSolicitacao.carregar(_numero ?? 0, _numeroUsuarioProprietario, []);
+      _livrosProprietario ??= LivrosSolicitacao.carregar(_numero ?? 0, _emailUsuarioProprietario, []);
       _livrosProprietario!.adicionar(livro);
     }
   }
 
-  int get numeroUsuarioProprietario => _numeroUsuarioProprietario;
 
-  int get numeroUsuarioCriador => _numeroUsuarioCriador;
+  String get emailUsuarioProprietario => _emailUsuarioProprietario;
 
   LivrosSolicitacao get livrosCriador => _livrosCriador;
 
@@ -128,5 +125,5 @@ class Solicitacao extends Entidade {
 
   TipoSolicitacao get tipoSolicitacao => _tipoSolicitacao;
 
-  int get numeroUsuarioFrete => _numeroUsuarioFrete;
+  String get emailUsuarioCriador => _emailUsuarioCriador;
 }

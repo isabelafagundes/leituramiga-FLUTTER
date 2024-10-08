@@ -169,11 +169,9 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.only(right: tema.espacamento + 4),
                     child: GridUsuariosWidget(
                       tema: tema,
-                      aoClicarUsuario: (numero) => Rota.navegarComArgumentos(
+                      aoClicarUsuario: (username) => Rota.navegarComArgumentos(
                         context,
-                        UsuarioRoute(
-                          numeroUsuario: 1,
-                        ),
+                        UsuarioRoute(identificador: username),
                       ),
                       usuarios: _usuariosComponent.itensPaginados,
                     ),

@@ -38,8 +38,8 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
 
   Solicitacao get solicitacao => Solicitacao.criar(
         1,
-        2,
-        1,
+        "isabela@gmail.com",
+        "kaua@gmail.com",
         FormaEntrega.PRESENCIAL,
         DataHora.hoje(),
         DataHora.hoje(),
@@ -53,7 +53,6 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
         null,
         "isabela",
         TipoSolicitacao.TROCA,
-        1,
       );
 
   @override
@@ -68,7 +67,7 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
   }
 
   @override
-  Future<List<ResumoSolicitacao>> obterSolicitacoes(int numeroUsuario, [int numeroPagina = 0, int limite = 50]) async {
+  Future<List<ResumoSolicitacao>> obterSolicitacoes(String numeroUsuario, [int numeroPagina = 0, int limite = 50]) async {
     return _solicitacoes;
   }
 }

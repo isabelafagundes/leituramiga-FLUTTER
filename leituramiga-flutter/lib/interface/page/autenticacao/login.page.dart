@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/component/autenticacao.component.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
-import 'package:projeto_leituramiga/interface/page/autenticacao/cadastro_usuario.page.dart';
-import 'package:projeto_leituramiga/interface/page/area_logada/home.page.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -22,6 +23,26 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  AutenticacaoComponent autenticacaoComponent = AutenticacaoComponent();
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController senhaController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    autenticacaoComponent.inicializar(
+      AppModule.autenticacaoService,
+      AppModule.sessaoService,
+      AppModule.usuarioRepo,
+      atualizar,
+    );
+  }
+
+  void atualizar() {
+    setState(() {});
+  }
+
   TemaState get _temaState => TemaState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
@@ -97,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                           const Spacer(),
                           InputWidget(
                             tema: tema,
-                            controller: TextEditingController(),
+                            controller: emailController,
                             label: "Email ou usuário",
                             tamanho: tema.tamanhoFonteM,
                             onChanged: (valor) {},
@@ -105,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                           SizedBox(height: tema.espacamento * 2),
                           InputWidget(
                             tema: tema,
-                            controller: TextEditingController(),
+                            controller: senhaController,
                             label: "Senha",
                             senha: true,
                             tamanho: tema.tamanhoFonteM,
@@ -130,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                             tema: tema,
                             texto: 'Login',
                             nomeIcone: "seta/arrow-long-right",
-                            aoClicar: () => Rota.navegar(context, Rota.AREA_LOGADA),
+                            aoClicar: _logar,
                           ),
                           SizedBox(height: tema.espacamento * 2),
                           Row(
@@ -169,5 +190,20 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void _validarCredenciais() {
+    if (emailController.text.isEmpty || senhaController.text.isEmpty) {
+      Notificacoes.mostrar("Preencha todos os campos", Emoji.ALERTA);
+      return;
+    }
+  }
+
+  Future<void> _logar() async {
+    _validarCredenciais();
+    await notificarCasoErro(() async {
+      await autenticacaoComponent.logar(emailController.text, senhaController.text);
+      Rota.navegar(context, Rota.AREA_LOGADA);
+    });
   }
 }

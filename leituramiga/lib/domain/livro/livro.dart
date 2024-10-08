@@ -14,7 +14,7 @@ class Livro extends Entidade {
   final String _nomeInstituicao;
   final String _nomeMunicipio;
   final List<TipoSolicitacao> _tiposSolicitacao;
-  final int _numeroUsuario;
+  final String _emailUsuario;
   final DataHora _dataCriacao;
   final DataHora? _dataUltimaSolicitacao;
   final TipoStatusLivro _status;
@@ -27,7 +27,7 @@ class Livro extends Entidade {
     this._descricaoEstado,
     this._numeroCategoria,
     this._tiposSolicitacao,
-    this._numeroUsuario,
+    this._emailUsuario,
     this._dataCriacao,
     this._dataUltimaSolicitacao,
     this._status,
@@ -60,7 +60,7 @@ class Livro extends Entidade {
 
   List<TipoSolicitacao> get tiposSolicitacao => _tiposSolicitacao;
 
-  int get numeroUsuario => _numeroUsuario;
+  String get emailUsuario => _emailUsuario;
 
   DataHora? get dataUltimaSolicitacao => _dataUltimaSolicitacao;
 

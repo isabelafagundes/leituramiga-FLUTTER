@@ -94,7 +94,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _usuarioComponent.obterUsuario(1);
+      await _usuarioComponent.obterUsuario(_autenticacaoState.usuario!.email.endereco);
       if (widget.numeroLivro != null) await _usuarioComponent.obterLivro(widget.numeroLivro!);
       await _obterUsuarioSolicitacao();
       await _usuarioComponent.obterLivrosUsuario();
@@ -224,15 +224,15 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
   }
 
   Future<void> _obterUsuarioSolicitacao() async {
-    int numero = _usuarioComponent.livroSelecionado!.numeroUsuario;
-    await _usuarioComponent.obterUsuarioSolicitacao(numero);
+    String email = _usuarioComponent.livroSelecionado!.emailUsuario;
+    await _usuarioComponent.obterUsuarioSolicitacao(email);
   }
 
   void _criarSolicitacao() {
     Solicitacao solicitacao = Solicitacao.criar(
       null,
-      _autenticacaoState.usuario!.numero!,
-      _usuarioComponent.livroSelecionado!.numeroUsuario,
+      _autenticacaoState.usuario!.email.endereco,
+      _usuarioComponent.livroSelecionado!.emailUsuario,
       _solicitacaoComponent.formaEntregaSelecionada!,
       DataHora.deString(controllerDataEntrega.text),
       DataHora.deString(controllerDataDevolucao.text),
@@ -253,15 +253,14 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       null,
       _autenticacaoState.usuario?.nomeUsuario ?? '',
       _tipoSolicitacao,
-      _obterNumeroUsuarioFrete,
     );
 
     _solicitacaoComponent.atualizarSolicitacaoMemoria(solicitacao);
   }
 
-  int get _obterNumeroUsuarioFrete {
-    if (controllerFrete.text == "Sim") return _autenticacaoState.usuario!.numero!;
-    return _usuarioComponent.usuarioSelecionado!.numero!;
+  String get _obterNumeroUsuarioFrete {
+    if (controllerFrete.text == "Sim") return _autenticacaoState.usuario!.email.endereco!;
+    return _usuarioComponent.usuarioSelecionado!.email.endereco!;
   }
 
   void abrirTimePicker(bool ehHoraDevolucao) {

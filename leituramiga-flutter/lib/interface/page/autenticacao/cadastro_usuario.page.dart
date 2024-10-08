@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/component/autenticacao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
@@ -30,6 +31,9 @@ class CadastroUsuarioPage extends StatefulWidget {
 
 class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   final UsuarioComponent _usuarioComponent = UsuarioComponent();
+  AutenticacaoComponent autenticacaoComponent = AutenticacaoComponent();
+
+
 
   final TextEditingController controllerRua = TextEditingController();
   final TextEditingController controllerBairro = TextEditingController();

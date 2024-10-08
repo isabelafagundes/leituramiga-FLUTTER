@@ -7,41 +7,19 @@ import 'package:leituramiga/repo/usuario.repo.dart';
 class UsuarioMockRepo extends UsuarioRepo {
   List<ResumoUsuario> usuarios = [
     ResumoUsuario.carregar(
-      1,
       "Isabela Fagundes",
       "isabela",
       "Fatec Santana de Parnaíba",
       "Cajamar",
       4,
+      "isabela@gmail.com",
     ),
-    ResumoUsuario.carregar(
-      2,
-      "Kaua Guedes",
-      "kauaguedes",
-      "Fatec Santana de Parnaíba",
-      "Cajamar",
-      5,
-    ),
-    ResumoUsuario.carregar(
-      3,
-      "João da Silva",
-      "joao",
-      "UNIP Alphaville",
-      "Cajamar",
-      3,
-    ),
-    ResumoUsuario.carregar(
-      4,
-      "Maria da Silva",
-      "maria",
-      "UNINOVE Vila Maria",
-      "Cajamar",
-      2,
-    ),
+    ResumoUsuario.carregar("Kaua Guedes", "kauaguedes", "Fatec Santana de Parnaíba", "Cajamar", 5, "kaua@gmail.com"),
+    ResumoUsuario.carregar("João da Silva", "joao", "UNIP Alphaville", "Cajamar", 3, "joao@gmail.com"),
+    ResumoUsuario.carregar("Maria da Silva", "maria", "UNINOVE Vila Maria", "Cajamar", 2, "maria@gmail.com"),
   ];
 
   Usuario get usuario => Usuario.carregar(
-        1,
         "Isabela Fagundes",
         "isabela",
         Email.criar("isabela@gmail.com"),
@@ -51,6 +29,8 @@ class UsuarioMockRepo extends UsuarioRepo {
         InstituicaoDeEnsino.carregar(1, "FATEC", "FATEC Santana de Parnaíba"),
         1,
         "Cajamar",
+        "",
+        null,
       );
 
   @override
@@ -60,13 +40,13 @@ class UsuarioMockRepo extends UsuarioRepo {
   }
 
   @override
-  Future<void> excluirUsuario(int numero) {
+  Future<void> desativarUsuario() async {
     // TODO: implement excluirUsuario
     throw UnimplementedError();
   }
 
   @override
-  Future<Usuario> obterUsuario(int numeroUsuario) async {
+  Future<Usuario> obterUsuario(String emailUsuario) async {
     return Future.delayed(Duration(seconds: 1), () => usuario);
   }
 
@@ -79,5 +59,11 @@ class UsuarioMockRepo extends UsuarioRepo {
     String? pesquisa,
   ]) {
     return Future.value(usuarios);
+  }
+
+  @override
+  Future<Usuario> obterUsuarioPerfil() {
+    // TODO: implement obterUsuarioPerfil
+    throw UnimplementedError();
   }
 }

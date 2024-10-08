@@ -8,8 +8,8 @@ class NotificacaoUseCase {
 
   const NotificacaoUseCase(this._repo, this._state);
 
-  Future<void> obterNotificacoes(int numeroUsuario) async {
-    List<Notificacao> notificacoes = await _repo.obterNotificacoes(numeroUsuario);
+  Future<void> obterNotificacoes(String emailUsuario) async {
+    List<Notificacao> notificacoes = await _repo.obterNotificacoes(emailUsuario);
     _state.notificacoes = notificacoes;
   }
 }

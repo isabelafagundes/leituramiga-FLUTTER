@@ -22,6 +22,14 @@ class Municipio extends Entidade {
     return {};
   }
 
+  factory Municipio.carregarDeMapa(Map<String, dynamic> municipioAsMap) {
+    return Municipio.carregar(
+      municipioAsMap["codigoCidade"],
+      municipioAsMap["nome"],
+      municipioAsMap["estado"],
+    );
+  }
+
   String get nome => _nome;
 
   UF get estado => _estado;

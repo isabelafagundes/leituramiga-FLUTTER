@@ -20,9 +20,9 @@ import 'package:auto_route/annotations.dart';
 
 @RoutePage()
 class UsuarioPage extends StatefulWidget {
-  final int numeroUsuario;
+  final String identificador;
 
-  const UsuarioPage({super.key, @PathParam("numeroUsuario") required this.numeroUsuario});
+  const UsuarioPage({super.key, @PathParam("username") required this.identificador});
 
   @override
   State<UsuarioPage> createState() => _UsuarioPageState();
@@ -49,8 +49,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _usuarioComponent.obterUsuario(widget.numeroUsuario);
-      await _usuarioComponent.obterComentarios(widget.numeroUsuario);
+      await _usuarioComponent.obterUsuario(widget.identificador);
+      await _usuarioComponent.obterComentarios(widget.identificador);
       await _usuarioComponent.obterLivrosUsuario();
     });
   }
