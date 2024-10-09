@@ -3,6 +3,7 @@ import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/menu.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
@@ -12,7 +13,11 @@ class FormularioUsuarioWidget extends StatelessWidget {
   final TextEditingController controllerEmail;
   final TextEditingController controllerSenha;
   final TextEditingController controllerUsuario;
+  final TextEditingController controllerTelefone;
   final TextEditingController controllerConfirmacaoSenha;
+  final TextEditingController controllerInstituicao;
+  final List<String> instituicoes;
+  final Function(String) aoSelecionarInstituicao;
   final Function() aoCadastrar;
   final Widget? botaoInferior;
 
@@ -26,6 +31,10 @@ class FormularioUsuarioWidget extends StatelessWidget {
     required this.controllerConfirmacaoSenha,
     required this.aoCadastrar,
     this.botaoInferior,
+    required this.controllerTelefone,
+    required this.controllerInstituicao,
+    required this.instituicoes,
+    required this.aoSelecionarInstituicao,
   });
 
   @override
@@ -84,14 +93,51 @@ class FormularioUsuarioWidget extends StatelessWidget {
               children: _obterChildren,
             ),
           ),
+        SizedBox(height: tema.espacamento * 2),
+        Flexible(
+          child: InputWidget(
+            tema: tema,
+            controller: controllerTelefone,
+            label: "Número de telefone",
+            tamanho: tema.tamanhoFonteM,
+            onChanged: (valor) {},
+          ),
+        ),
+        SizedBox(height: tema.espacamento * 2),
+        Flexible(
+          child: SizedBox(
+            height: 65,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextoWidget(
+                  texto: "Instiuição de ensino",
+                  tema: tema,
+                  cor: Color(tema.baseContent),
+                ),
+                SizedBox(height: tema.espacamento / 2),
+                Expanded(
+                  child: MenuWidget(
+                    tema: tema,
+                    valorSelecionado: controllerInstituicao.text.isEmpty ? null : controllerInstituicao.text,
+                    escolhas: instituicoes,
+                    aoClicar: aoSelecionarInstituicao,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         SizedBox(height: tema.espacamento * 4),
         Flexible(
-          child: botaoInferior?? BotaoWidget(
-            tema: tema,
-            texto: 'Próximo',
-            nomeIcone: "seta/arrow-long-right",
-            aoClicar: aoCadastrar,
-          ),
+          child: botaoInferior ??
+              BotaoWidget(
+                tema: tema,
+                texto: 'Próximo',
+                nomeIcone: "seta/arrow-long-right",
+                aoClicar: aoCadastrar,
+              ),
         ),
         SizedBox(height: tema.espacamento * 2),
       ],

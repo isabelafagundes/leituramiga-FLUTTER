@@ -69,7 +69,7 @@ class Endereco extends ObjetoDeValor {
 
   factory Endereco.carregarDeMapa(Map<String, dynamic> enderecoAsMap) {
     return Endereco.carregar(
-      enderecoAsMap["id"],
+      enderecoAsMap["codigoEndereco"],
       enderecoAsMap["numero"],
       enderecoAsMap["complemento"],
       enderecoAsMap["logradouro"],

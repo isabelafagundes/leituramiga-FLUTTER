@@ -117,6 +117,10 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
             controllerSenha: TextEditingController(),
             controllerUsuario: TextEditingController(),
             aoCadastrar: () => atualizarPagina(EtapaSenha.CODIGO),
+            controllerTelefone: TextEditingController(),
+            controllerInstituicao: TextEditingController(),
+            instituicoes: [],
+            aoSelecionarInstituicao: (String) {},
           ),
         ),
       EtapaSenha.CODIGO => Column(

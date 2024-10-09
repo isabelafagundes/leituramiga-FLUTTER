@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
+import 'package:leituramiga/domain/senha.dart';
 import 'package:leituramiga/domain/usuario/email.dart';
 import 'package:leituramiga/domain/usuario/usuario.dart';
 
@@ -18,6 +19,9 @@ class AutenticacaoState {
   String accessToken = "";
   String refreshToken = "";
   Usuario? usuario;
+  Senha senha = Senha.criar();
+
+  void validarSenha() => senha.validarSenha();
 
   // Usuario? get usuario => Usuario.carregar(
   //       1,

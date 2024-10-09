@@ -48,4 +48,25 @@ class AutenticacaoComponent extends State {
       mensagemErro: "Não foi possível logar",
     );
   }
+
+  Future<void> validarCodigoSeguranca(String codigo, String email) async {
+    executar(
+      rotina: () async => await _useCase.validarCodigoSeguranca(codigo, email),
+      mensagemErro: "Não foi possível validar o código",
+    );
+  }
+
+  Future<void> atualizarSenha(String senha) async {
+    executar(
+      rotina: () async => _useCase.atualizarSenha(senha),
+      mensagemErro: "Não foi possível atualizar a senha",
+    );
+  }
+
+  Future<void> atualizarConfirmacaoSenha(String confirmacaoSenha) async {
+    executar(
+      rotina: () async => _useCase.atualizarConfirmacaoSenha(confirmacaoSenha),
+      mensagemErro: "Não foi possível atualizar a confirmação da senha",
+    );
+  }
 }

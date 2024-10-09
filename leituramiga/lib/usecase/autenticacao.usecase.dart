@@ -48,4 +48,17 @@ class AutenticacaoUseCase {
     Usuario usuario = await _repo.obterUsuario(email);
     _state.usuario = usuario;
   }
+
+  Future<void> validarCodigoSeguranca(String codigo, String email) async {
+    await _autenticacaoService.verificarCodigoSeguranca(codigo, email);
+  }
+
+  void atualizarSenha(String senha) {
+    _state.senha.atualizarSenha(senha);
+  }
+
+  void atualizarConfirmacaoSenha(String confirmacaoSenha) {
+    _state.senha.atualizarConfirmacaoSenha(confirmacaoSenha);
+  }
+
 }

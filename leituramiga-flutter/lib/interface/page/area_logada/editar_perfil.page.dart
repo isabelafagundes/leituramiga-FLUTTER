@@ -34,6 +34,8 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
   final TextEditingController controllerNomeUsuario = TextEditingController();
   final TextEditingController controllerSenha = TextEditingController();
   final TextEditingController controllerConfirmacaoSenha = TextEditingController();
+  final TextEditingController controllerTelefone = TextEditingController();
+  final TextEditingController controllerInstituicaoEnsino = TextEditingController();
   EditarPerfil? _estagioAtual = EditarPerfil.DADOS_GERAIS;
 
   TemaState get _temaState => TemaState.instancia;
@@ -46,11 +48,11 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
-        atualizar: ()=> setState(() {}),
-        voltar: ()=> Rota.navegar(context, Rota.HOME),
+        atualizar: () => setState(() {}),
+        voltar: () => Rota.navegar(context, Rota.HOME),
         child: SingleChildScrollView(
           child: SizedBox(
-            height: Responsive.larguraP(context) ? 1000 : Responsive.altura(context)*.8,
+            height: Responsive.larguraP(context) ? 1000 : Responsive.altura(context) * .8,
             child: Flex(
               direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -117,6 +119,9 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
           controllerConfirmacaoSenha: controllerConfirmacaoSenha,
           controllerEmail: controllerEmail,
           controllerNome: controllerNome,
+          controllerInstituicao: controllerInstituicaoEnsino,
+          controllerTelefone: controllerTelefone,
+          instituicoes: [],
           controllerSenha: controllerSenha,
           controllerUsuario: controllerNomeUsuario,
           aoCadastrar: () {},
@@ -127,6 +132,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
             icone: Icon(Icons.check, color: kCorFonte),
             aoClicar: () {},
           ),
+          aoSelecionarInstituicao: (instituicao) => setState(() => controllerInstituicaoEnsino.text = instituicao),
         ),
       EditarPerfil.ENDERECO => FormularioEnderecoWidget(
           tema: tema,
@@ -157,7 +163,6 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
   void atualizarPagina(EditarPerfil? etapa) {
     setState(() => _estagioAtual = etapa);
   }
-
 }
 
 enum EditarPerfil {

@@ -1,4 +1,5 @@
 import 'package:leituramiga/domain/endereco/endereco.dart';
+import 'package:leituramiga/domain/senha.dart';
 import 'package:leituramiga/domain/super/erro_dominio.dart';
 import 'package:leituramiga/domain/usuario/email.dart';
 import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
@@ -17,6 +18,7 @@ class Usuario extends Entidade {
   final int? _numeroEndereco;
   final String imagem;
   final Endereco? endereco;
+  final Senha? senha;
 
   Usuario.criar(
     this._nome,
@@ -30,6 +32,7 @@ class Usuario extends Entidade {
     this._nomeMunicipio,
     this.imagem,
     this.endereco,
+    this.senha,
   ) {
     _validarNomeUsuario();
   }
@@ -45,8 +48,9 @@ class Usuario extends Entidade {
     this._numeroEndereco,
     this._nomeMunicipio,
     this.imagem,
-    this.endereco,
-  ) {
+    this.endereco, [
+    this.senha,
+  ]) {
     _validarNomeUsuario();
   }
 
@@ -64,6 +68,7 @@ class Usuario extends Entidade {
       "imagem": imagem,
       "codigoInstituicao": instituicaoDeEnsino?.numero,
       "endereco": endereco?.paraMapa(email.endereco),
+      "senha": senha?.senha,
     };
   }
 
@@ -95,29 +100,28 @@ class Usuario extends Entidade {
 
   factory Usuario.carregarDeMapa(Map<String, dynamic> usuarioAsMap) {
     return Usuario.carregar(
-      usuarioAsMap["nome"],
-      usuarioAsMap["username"],
-      usuarioAsMap["email"],
-      usuarioAsMap["celular"] == null
-          ? null
-          : Telefone.criar(
-              usuarioAsMap["celular"].substring(2),
-              usuarioAsMap["celular"].substring(0, 1),
-            ),
-      0,
-      usuarioAsMap["descricao"],
-      usuarioAsMap["codigoInstituicao"] == null
-          ? null
-          : InstituicaoDeEnsino.carregar(
-              usuarioAsMap["codigoInstituicao"],
-              usuarioAsMap["nomeInstituicao"],
-              "",
-            ),
-      usuarioAsMap["codigoEndereco"],
-      usuarioAsMap["nomeCidade"],
-      usuarioAsMap["imagem"],
-      usuarioAsMap["endereco"] == null?null: Endereco.carregarDeMapa(usuarioAsMap["endereco"])
-    );
+        usuarioAsMap["nome"],
+        usuarioAsMap["username"],
+        usuarioAsMap["email"],
+        usuarioAsMap["celular"] == null
+            ? null
+            : Telefone.criar(
+                usuarioAsMap["celular"].substring(2, 11),
+                usuarioAsMap["celular"].substring(0, 1),
+              ),
+        0,
+        usuarioAsMap["descricao"],
+        usuarioAsMap["codigoInstituicao"] == null
+            ? null
+            : InstituicaoDeEnsino.carregar(
+                usuarioAsMap["codigoInstituicao"],
+                usuarioAsMap["nomeInstituicao"],
+                "",
+              ),
+        usuarioAsMap["codigoEndereco"],
+        usuarioAsMap["nomeCidade"],
+        usuarioAsMap["imagem"],
+        usuarioAsMap["endereco"] == null ? null : Endereco.carregarDeMapa(usuarioAsMap["endereco"]));
   }
 }
 

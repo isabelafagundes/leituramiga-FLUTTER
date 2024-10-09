@@ -15,7 +15,7 @@ class Livro extends Entidade {
   final String _nomeMunicipio;
   final List<TipoSolicitacao> _tiposSolicitacao;
   final String _emailUsuario;
-  final DataHora _dataCriacao;
+  final DataHora? _dataCriacao;
   final DataHora? _dataUltimaSolicitacao;
   final TipoStatusLivro _status;
 
@@ -38,32 +38,47 @@ class Livro extends Entidade {
 
   int? get numero => _numero;
 
-  DataHora get dataCriacao => _dataCriacao;
+  DataHora? get dataCriacao => _dataCriacao;
 
   @override
   String get id => _numero.toString();
 
   @override
   Map<String, dynamic> paraMapa() {
-    return {};
+    return {
+      "codigoLivro": _numero,
+      "titulo": _nome,
+      "autor": _nomeAutor,
+      "descricao": _descricao,
+      "estadoFisico": _descricaoEstado,
+      "codigoCategoria": _numeroCategoria,
+      "tiposSolicitacao": _tiposSolicitacao.join(","),
+      "emailUsuario": _emailUsuario,
+      "dataCriacao": _dataCriacao?.formatar(),
+      "dataUltimaSolicitacao": _dataUltimaSolicitacao?.formatar(),
+      "codigoStatusLivro": _status.id,
+      "nomeUsuario": _nomeUsuario,
+      "nomeInstituicao": _nomeInstituicao,
+      "nomeCidade": _nomeMunicipio,
+    };
   }
 
   factory Livro.carregarDeMapa(Map<String, dynamic> livroAsMap) {
     return Livro.carregar(
-      livroAsMap['numero'],
-      livroAsMap['nome'],
-      livroAsMap['nomeAutor'],
+      livroAsMap['codigoLivro'],
+      livroAsMap['titulo'],
+      livroAsMap['autor'],
       livroAsMap['descricao'],
-      livroAsMap['descricaoEstado'],
-      livroAsMap['numeroCategoria'],
-      livroAsMap['tiposSolicitacao'],
+      livroAsMap['estadoFisico'],
+      livroAsMap['codigoCategoria'],
+      livroAsMap['tiposSolicitacao'].split(",").map((e) => TipoSolicitacao.deNumero(int.parse(e))).toList(),
       livroAsMap['emailUsuario'],
-      DataHora.criar(livroAsMap['dataCriacao']),
-      DataHora.criar(livroAsMap['dataUltimaSolicitacao']),
-      TipoStatusLivro.values[livroAsMap['status']],
+      livroAsMap['dataCriacao'] == null ? null : DataHora.criar(livroAsMap['dataCriacao']),
+      livroAsMap['dataUltimaSolicitacao'] == null ? null : DataHora.criar(livroAsMap['dataUltimaSolicitacao']),
+      TipoStatusLivro.obterDeNumero(livroAsMap['codigoStatusLivro']),
       livroAsMap['nomeUsuario'],
       livroAsMap['nomeInstituicao'],
-      livroAsMap['nomeMunicipio'],
+      livroAsMap['nomeCidade'],
     );
   }
 
