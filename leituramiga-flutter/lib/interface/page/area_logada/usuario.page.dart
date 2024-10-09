@@ -122,7 +122,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
                       Rota.navegarComArgumentos(
                         context,
                         LivrosRoute(
-                          numeroLivro: _usuarioComponent.livroSelecionado!.numero,
+                          numeroLivro: _usuarioComponent.livroSelecionado!.numero!,
                         ),
                       );
                     },

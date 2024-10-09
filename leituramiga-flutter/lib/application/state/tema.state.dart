@@ -1,5 +1,5 @@
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/infrastructure/service/sessao_flutter.service.dart';
+import 'package:projeto_leituramiga/infrastructure/service/auth/sessao_flutter.service.dart';
 
 mixin class TemaState {
   static TemaState? _instancia;

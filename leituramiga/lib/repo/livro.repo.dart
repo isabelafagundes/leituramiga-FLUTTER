@@ -16,7 +16,7 @@ abstract class LivroRepo {
 
   Future<Livro> obterLivro(int numero);
 
-  Future<void> excluirLivro(int numero);
+  Future<void> deletarLivro(int numero);
 
   Future<void> atualizarLivro(Livro livro);
 }

@@ -14,7 +14,7 @@ class LivroUseCase {
   }
 
   Future<void> excluirLivro(int numero) async {
-    await _repo.excluirLivro(numero);
+    await _repo.deletarLivro(numero);
   }
 
   Future<void> obterLivro(int numero) async {

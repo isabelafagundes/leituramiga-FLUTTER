@@ -13,7 +13,7 @@ import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.
 import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.service.dart';
+import 'package:projeto_leituramiga/infrastructure/service/mock/solicitacao_mock.service.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
@@ -62,6 +62,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
   final TextEditingController controllerHoraDevolucao = TextEditingController();
   final TextEditingController controllerFrete = TextEditingController();
   final TextEditingController controllerFormaEntrega = TextEditingController();
+  final TextEditingController controllerMotivo = TextEditingController();
 
   DetalhesSolicitacao _abaSelecionada = DetalhesSolicitacao.INFORMACOES;
 
@@ -165,13 +166,9 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
       DetalhesSolicitacao.INFORMACOES => SizedBox(
           child: ConteudoResumoSolicitacaoWidget(
             tema: tema,
-            aoAceitar: () {},
-            aoEscolher: () {},
+            usuarioSolicitante: _usuarioComponent.usuarioSelecionado!.nome,
             solicitacao: _solicitacaoComponent.solicitacaoSelecionada!,
             edicao: true,
-            aoCancelar: () {},
-            aoEditar: () {},
-            aoRecusar: () {},
           ),
         ),
       DetalhesSolicitacao.LIVROS => ConteudoLivrosSolicitacaoWidget(
@@ -246,6 +243,9 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
             "Caso deseje cancelar a solicitação, informe o motivo e selecione 'Cancelar'.",
             "Cancelar",
             context,
+            () => _solicitacaoComponent.cancelarSolicitacao(
+              _solicitacaoComponent.solicitacaoSelecionada!.numero!,
+            ),
           ),
         ),
         icone: Icon(
@@ -266,6 +266,10 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
             "Caso deseje recusar a solicitação, informe o motivo e selecione 'Recusar'.",
             "Recusar",
             context,
+            () => _solicitacaoComponent.recusarSolicitacao(
+              _solicitacaoComponent.solicitacaoSelecionada!.numero!,
+              controllerMotivo.text,
+            ),
           ),
         );
       },
@@ -277,7 +281,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
     );
   }
 
-  Widget obterPopUp(String texto, String textoBotao, BuildContext context) {
+  Widget obterPopUp(String texto, String textoBotao, BuildContext context, Function() aoClicar) {
     return PopUpPadraoWidget(
       tema: tema,
       conteudo: Container(
@@ -303,7 +307,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
             InputWidget(
               tema: tema,
               label: "Motivo",
-              controller: TextEditingController(),
+              controller: controllerMotivo,
               onChanged: (valor) {},
             ),
             SizedBox(height: tema.espacamento * 4),
@@ -311,7 +315,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
               tema: tema,
               corTexto: kCorFonte,
               texto: textoBotao,
-              aoClicar: () {},
+              aoClicar: aoClicar,
               icone: Icon(
                 Icons.close,
                 color: kCorFonte,

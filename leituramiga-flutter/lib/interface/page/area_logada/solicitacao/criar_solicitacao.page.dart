@@ -16,7 +16,7 @@ import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.
 import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.service.dart';
+import 'package:projeto_leituramiga/infrastructure/service/mock/solicitacao_mock.service.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -247,20 +247,14 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
         controllerComplemento.text,
         _solicitacaoComponent.municipioSelecionado!,
       ),
-      _solicitacaoComponent.instituicaoSelecionada!,
       TipoStatusSolicitacao.PENDENTE,
       null,
       null,
-      _autenticacaoState.usuario?.nomeUsuario ?? '',
       _tipoSolicitacao,
+      null,
     );
 
     _solicitacaoComponent.atualizarSolicitacaoMemoria(solicitacao);
-  }
-
-  String get _obterNumeroUsuarioFrete {
-    if (controllerFrete.text == "Sim") return _autenticacaoState.usuario!.email.endereco!;
-    return _usuarioComponent.usuarioSelecionado!.email.endereco!;
   }
 
   void abrirTimePicker(bool ehHoraDevolucao) {

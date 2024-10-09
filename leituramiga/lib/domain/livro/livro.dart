@@ -4,7 +4,7 @@ import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/livro/tipo_status_livro.dart';
 
 class Livro extends Entidade {
-  final int _numero;
+  final int? _numero;
   final String _nome;
   final String _nomeAutor;
   final String _descricao;
@@ -36,7 +36,7 @@ class Livro extends Entidade {
     this._nomeMunicipio,
   );
 
-  int get numero => _numero;
+  int? get numero => _numero;
 
   DataHora get dataCriacao => _dataCriacao;
 
@@ -46,6 +46,25 @@ class Livro extends Entidade {
   @override
   Map<String, dynamic> paraMapa() {
     return {};
+  }
+
+  factory Livro.carregarDeMapa(Map<String, dynamic> livroAsMap) {
+    return Livro.carregar(
+      livroAsMap['numero'],
+      livroAsMap['nome'],
+      livroAsMap['nomeAutor'],
+      livroAsMap['descricao'],
+      livroAsMap['descricaoEstado'],
+      livroAsMap['numeroCategoria'],
+      livroAsMap['tiposSolicitacao'],
+      livroAsMap['emailUsuario'],
+      DataHora.criar(livroAsMap['dataCriacao']),
+      DataHora.criar(livroAsMap['dataUltimaSolicitacao']),
+      TipoStatusLivro.values[livroAsMap['status']],
+      livroAsMap['nomeUsuario'],
+      livroAsMap['nomeInstituicao'],
+      livroAsMap['nomeMunicipio'],
+    );
   }
 
   String get nome => _nome;

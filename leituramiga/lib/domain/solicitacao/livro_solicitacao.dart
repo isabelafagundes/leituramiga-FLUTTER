@@ -15,7 +15,7 @@ class LivroSolicitacao extends Entidade {
 
   factory LivroSolicitacao.criarDeLivro(Livro livro) {
     return LivroSolicitacao.carregar(
-      livro.numero,
+      livro.numero!,
       livro.nome,
       livro.nomeAutor,
     );
@@ -26,6 +26,14 @@ class LivroSolicitacao extends Entidade {
       livro.numero,
       livro.nomeLivro,
       livro.nomeAutor,
+    );
+  }
+
+  factory LivroSolicitacao.carregarDeMapa(Map<String, dynamic> mapa) {
+    return LivroSolicitacao.carregar(
+      mapa['numero'],
+      mapa['nome'],
+      mapa['nomeAutor'],
     );
   }
 

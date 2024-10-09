@@ -26,7 +26,7 @@ class InstituicaoMockRepo extends InstituicaoEnsinoRepo {
   ];
 
   @override
-  Future<List<InstituicaoDeEnsino>> obterInstituicoes() async {
+  Future<List<InstituicaoDeEnsino>> obterInstituicoes([String? pesquisa]) async {
     return instituicoes;
   }
 }

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
-import 'package:projeto_leituramiga/infrastructure/service/sessao_flutter.service.dart';
+import 'package:projeto_leituramiga/infrastructure/service/auth/sessao_flutter.service.dart';
 
 class Interceptor extends InterceptorsWrapper {
   static Interceptor? _instancia;

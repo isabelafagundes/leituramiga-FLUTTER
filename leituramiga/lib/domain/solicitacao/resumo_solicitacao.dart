@@ -27,7 +27,25 @@ class ResumoSolicitacao extends Entidade {
 
   @override
   Map<String, dynamic> paraMapa() {
-    return {};
+    return {
+      'numero': _numero,
+      'endereco': _endereco.paraMapa(),
+      'nomeUsuario': _nomeUsuario,
+      'dataEntrega': _dataEntrega.toString(),
+      'dataDevolucao': _dataDevolucao?.toString(),
+      'tipo': _tipo.index,
+    };
+  }
+
+  factory ResumoSolicitacao.carregarDeMapa(Map<String, dynamic> mapa) {
+    return ResumoSolicitacao.carregar(
+      mapa['numero'],
+      Endereco.carregarDeMapa(mapa['endereco']),
+      mapa['nomeUsuario'],
+      DataHora.deString(mapa['dataEntrega']),
+      DataHora.deString(mapa['dataDevolucao']),
+      TipoSolicitacao.values[mapa['tipo']],
+    );
   }
 
   Endereco get endereco => _endereco;

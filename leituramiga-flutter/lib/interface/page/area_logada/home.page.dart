@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                         Rota.navegarComArgumentos(
                           context,
                           LivrosRoute(
-                            numeroLivro: _livrosComponent.livroSelecionado!.numero,
+                            numeroLivro: _livrosComponent.livroSelecionado!.numero!,
                           ),
                         );
                       },

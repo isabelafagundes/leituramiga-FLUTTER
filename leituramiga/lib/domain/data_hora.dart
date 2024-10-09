@@ -6,9 +6,10 @@ class DataHora {
 
   DataHora.criar(this._valor);
 
-  factory DataHora.deString(String data) {
+  factory DataHora.deString(String data, [String formato = "yyyy-MM-dd HH:mm:ss"]) {
     try {
-      DateTime dateTime = DateTime.parse(data);
+      DateFormat dateFormat = DateFormat(formato);
+      DateTime dateTime = dateFormat.parse(data);
       return DataHora.criar(dateTime);
     } catch (e) {
       throw DataInvalida();

@@ -1,4 +1,5 @@
 import 'package:leituramiga/domain/super/entidade.dart';
+import 'package:leituramiga/domain/usuario/resumo_usuario.dart';
 
 class ResumoLivro extends Entidade {
   final int _numero;
@@ -31,6 +32,20 @@ class ResumoLivro extends Entidade {
   @override
   Map<String, dynamic> paraMapa() {
     return {};
+  }
+
+  factory ResumoLivro.carregarDeMapa(Map<String, dynamic> resumoLivroAsMap) {
+    return ResumoLivro.carregar(
+      resumoLivroAsMap['numero'],
+      resumoLivroAsMap['nomeCategoria'],
+      resumoLivroAsMap['nomeUsuario'],
+      resumoLivroAsMap['numeroUsuario'],
+      resumoLivroAsMap['nomeInstituicao'],
+      resumoLivroAsMap['nomeMunicipio'],
+      resumoLivroAsMap['descricao'],
+      resumoLivroAsMap['nomeLivro'],
+      resumoLivroAsMap['nomeAutor'],
+    );
   }
 
   String get nomeUsuario => _nomeUsuario;

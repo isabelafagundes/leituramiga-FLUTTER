@@ -13,7 +13,14 @@ class Categoria extends Entidade {
 
   @override
   Map<String, dynamic> paraMapa() {
-    return {};
+    return {
+      'numero': _numero,
+      'descricao': _descricao,
+    };
+  }
+
+  factory Categoria.carregarDeMapa(Map<String, dynamic> mapa) {
+    return Categoria.carregar(mapa['numero'], mapa['descricao']);
   }
 
   String get descricao => _descricao;

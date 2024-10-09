@@ -47,12 +47,11 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
         DataHora.hoje(),
         "Vou esperar no refeitório da faculdade",
         EnderecoMockRepo().endereco,
-        InstituicaoMockRepo().instituicoes[0],
         TipoStatusSolicitacao.PENDENTE,
         null,
         null,
-        "isabela",
         TipoSolicitacao.TROCA,
+        null,
       );
 
   @override
@@ -67,7 +66,8 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
   }
 
   @override
-  Future<List<ResumoSolicitacao>> obterSolicitacoes(String numeroUsuario, [int numeroPagina = 0, int limite = 50]) async {
+  Future<List<ResumoSolicitacao>> obterSolicitacoes(String numeroUsuario,
+      [int numeroPagina = 0, int limite = 50]) async {
     return _solicitacoes;
   }
 }
