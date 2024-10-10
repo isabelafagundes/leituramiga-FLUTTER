@@ -1,10 +1,11 @@
 import 'package:leituramiga/domain/endereco/endereco.dart';
+import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
 import 'package:leituramiga/domain/senha.dart';
+import 'package:leituramiga/domain/super/entidade.dart';
 import 'package:leituramiga/domain/super/erro_dominio.dart';
 import 'package:leituramiga/domain/usuario/email.dart';
-import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
-import 'package:leituramiga/domain/super/entidade.dart';
 import 'package:leituramiga/domain/usuario/telefone.dart';
+import 'package:leituramiga/domain/usuario/tipo_usuario.dart';
 
 class Usuario extends Entidade {
   final String _nome;
@@ -19,6 +20,7 @@ class Usuario extends Entidade {
   final String imagem;
   final Endereco? endereco;
   final Senha? senha;
+  final TipoUsuario _tipoUsuario;
 
   Usuario.criar(
     this._nome,
@@ -32,8 +34,9 @@ class Usuario extends Entidade {
     this._nomeMunicipio,
     this.imagem,
     this.endereco,
-    this.senha,
-  ) {
+    this.senha, [
+    this._tipoUsuario = TipoUsuario.USUARIO,
+  ]) {
     _validarNomeUsuario();
   }
 
@@ -50,6 +53,7 @@ class Usuario extends Entidade {
     this.imagem,
     this.endereco, [
     this.senha,
+    this._tipoUsuario = TipoUsuario.USUARIO,
   ]) {
     _validarNomeUsuario();
   }
@@ -69,6 +73,7 @@ class Usuario extends Entidade {
       "codigoInstituicao": instituicaoDeEnsino?.numero,
       "endereco": endereco?.paraMapa(email.endereco),
       "senha": senha?.senha,
+      "tipoUsuario": _tipoUsuario.id,
     };
   }
 
@@ -127,4 +132,12 @@ class Usuario extends Entidade {
 
 class UsuarioInvalido extends ErroDominio {
   UsuarioInvalido(String mensagem) : super("O usuário é inválido: $mensagem");
+}
+
+class CredenciaisIncorretas extends ErroDominio {
+  CredenciaisIncorretas() : super("As credenciais são inválidas");
+}
+
+class UsuarioNaoEncontrado extends ErroDominio {
+  UsuarioNaoEncontrado() : super("O usuário não encontrado. Crie uma conta!");
 }

@@ -33,7 +33,7 @@ class EnderecoApiRepo extends EnderecoRepo with ConfiguracaoApiState {
 
   @override
   Future<List<Municipio>> obterMunicipios(UF uf, [String? pesquisa]) async {
-    String url = "$host/cidades/${uf.descricao}";
+    String url = "$host/cidades/${uf.name}";
     if(pesquisa != null) url += "?pesquisa=$pesquisa";
     return await _client.get(url).catchError((erro) {
       throw erro;

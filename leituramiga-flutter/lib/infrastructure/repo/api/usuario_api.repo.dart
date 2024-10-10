@@ -18,6 +18,7 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
 
   @override
   Future<void> atualizarUsuario(Usuario usuario) async {
+    print(usuario.paraMapa());
     await _client.post("$host/criar-usuario", data: usuario.paraMapa()).catchError((erro) {
       throw erro;
     });

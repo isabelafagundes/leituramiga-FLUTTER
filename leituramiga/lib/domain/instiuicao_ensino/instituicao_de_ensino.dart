@@ -17,7 +17,7 @@ class InstituicaoDeEnsino extends Entidade {
 
   factory InstituicaoDeEnsino.carregarDeMapa(Map<String, dynamic> mapa) {
     return InstituicaoDeEnsino.carregar(
-      mapa["numero"],
+      mapa["id"],
       mapa["sigla"],
       mapa["nome"],
     );

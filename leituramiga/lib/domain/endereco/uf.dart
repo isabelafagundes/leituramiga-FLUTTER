@@ -36,7 +36,10 @@ enum UF {
 
   factory UF.deDescricao(String descricao) {
     return UF.values.where((e) => e.descricao == descricao).firstOrNull ?? SP;
+  }
 
+  factory UF.deSigla(String sigla) {
+    return UF.values.where((e) => e.name == sigla).firstOrNull ?? SP;
   }
 
   const UF({required this.id, required this.descricao});

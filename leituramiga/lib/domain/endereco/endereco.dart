@@ -62,8 +62,10 @@ class Endereco extends ObjetoDeValor {
       "bairro": bairro,
       "cep": cep,
       "nomeCidade": municipio.nome,
+      "estado": municipio.estado.name,
       "codigoCidade": municipio.numero,
       "emailUsuario": emailUsuario,
+      "numero": numeroResidencial,
     };
   }
 

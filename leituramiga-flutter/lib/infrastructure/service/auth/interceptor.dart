@@ -38,10 +38,6 @@ class Interceptor extends InterceptorsWrapper {
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) async {
-    print('Erro na requisição: ${err.response?.statusCode} ${err.response?.statusMessage}');
-    await _atualizarTokenSeNaoAutorizado(err.response!);
-    await _deslogarSeTentativasExcedidas(err.response!);
-    _resetarTentativasSeSucesso(err.response!);
     handler.next(err);
   }
 

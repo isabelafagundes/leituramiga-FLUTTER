@@ -75,12 +75,32 @@ class FormularioUsuarioWidget extends StatelessWidget {
         ),
         SizedBox(height: tema.espacamento * 2),
         Flexible(
-          child: InputWidget(
-            tema: tema,
-            controller: controllerEmail,
-            label: "Email",
-            tamanho: tema.tamanhoFonteM,
-            onChanged: (valor) {},
+          child: Flex(
+            direction: Axis.horizontal,
+            children: [
+              Flexible(
+                flex: 2,
+                child: InputWidget(
+                  tema: tema,
+                  controller: controllerEmail,
+                  label: "Email",
+                  tamanho: tema.tamanhoFonteM,
+                  onChanged: (valor) {},
+                ),
+              ),
+              SizedBox(
+                width: tema.espacamento * 2,
+              ),
+              Flexible(
+                child: InputWidget(
+                  tema: tema,
+                  controller: controllerTelefone,
+                  label: "Número de telefone",
+                  tamanho: tema.tamanhoFonteM,
+                  onChanged: (valor) {},
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(height: tema.espacamento * 2),
@@ -93,16 +113,6 @@ class FormularioUsuarioWidget extends StatelessWidget {
               children: _obterChildren,
             ),
           ),
-        SizedBox(height: tema.espacamento * 2),
-        Flexible(
-          child: InputWidget(
-            tema: tema,
-            controller: controllerTelefone,
-            label: "Número de telefone",
-            tamanho: tema.tamanhoFonteM,
-            onChanged: (valor) {},
-          ),
-        ),
         SizedBox(height: tema.espacamento * 2),
         Flexible(
           child: SizedBox(
@@ -130,6 +140,7 @@ class FormularioUsuarioWidget extends StatelessWidget {
           ),
         ),
         SizedBox(height: tema.espacamento * 4),
+        if(botaoInferior is! SizedBox)
         Flexible(
           child: botaoInferior ??
               BotaoWidget(

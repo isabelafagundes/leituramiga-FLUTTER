@@ -195,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
   void _validarCredenciais() {
     if (emailController.text.isEmpty || senhaController.text.isEmpty) {
       Notificacoes.mostrar("Preencha todos os campos", Emoji.ALERTA);
-      return;
+      throw Exception("Preencha todos os campos");
     }
   }
 

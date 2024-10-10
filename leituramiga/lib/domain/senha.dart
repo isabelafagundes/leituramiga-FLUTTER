@@ -1,3 +1,5 @@
+import 'package:leituramiga/domain/super/erro_dominio.dart';
+
 class Senha {
   String _senha = "";
   String _confirmacaoSenha = "";
@@ -13,13 +15,13 @@ class Senha {
     RegExp letras = RegExp(r'[a-zA-Z]');
     RegExp especiais = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
 
-    if (_senha.length < 6) throw Exception("A senha deve ter no mínimo 6 caracteres.");
-    if (!_senha.contains(numeros)) throw Exception("A senha deve ter no mínimo 1 número.");
-    if (!_senha.contains(letras)) throw Exception("A senha deve ter no mínimo 1 letra.");
-    if (!_senha.contains(especiais)) throw Exception("A senha deve ter no mínimo 1 caractere especial.");
-    if (_senha != _confirmacaoSenha) throw Exception("As senhas não coincidem.");
-    if (_senha.isNotEmpty && _confirmacaoSenha.isEmpty) throw Exception("Confirme a senha.");
-    if (_senha.isEmpty && _confirmacaoSenha.isNotEmpty) throw Exception("Digite a senha.");
+    if (_senha.length < 6) throw SenhaInvalida("A senha deve ter no mínimo 6 caracteres.");
+    if (!_senha.contains(numeros)) throw SenhaInvalida("A senha deve ter no mínimo 1 número.");
+    if (!_senha.contains(letras)) throw SenhaInvalida("A senha deve ter no mínimo 1 letra.");
+    if (!_senha.contains(especiais)) throw SenhaInvalida("A senha deve ter no mínimo 1 caractere especial.");
+    if (_senha != _confirmacaoSenha) throw SenhaInvalida("As senhas não coincidem.");
+    if (_senha.isNotEmpty && _confirmacaoSenha.isEmpty) throw SenhaInvalida("Confirme a senha.");
+    if (_senha.isEmpty && _confirmacaoSenha.isNotEmpty) throw SenhaInvalida("Digite a senha.");
   }
 
   String obterErro() {
@@ -45,4 +47,8 @@ class Senha {
   void atualizarConfirmacaoSenha(String confirmacaoSenha) {
     _confirmacaoSenha = confirmacaoSenha;
   }
+}
+
+class SenhaInvalida extends ErroDominio {
+  SenhaInvalida(String mensagem) : super("A senha é inválida: $mensagem");
 }

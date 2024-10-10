@@ -43,7 +43,7 @@ class AutenticacaoComponent extends State {
   }
 
   Future<void> logar(String email, String senha) async {
-    executar(
+    await executar(
       rotina: () async => await _useCase.logar(email, senha),
       mensagemErro: "Não foi possível logar",
     );

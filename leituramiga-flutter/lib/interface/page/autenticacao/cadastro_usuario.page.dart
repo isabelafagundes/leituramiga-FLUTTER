@@ -1,11 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/autenticacao.component.dart';
+import 'package:leituramiga/component/instituicao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/domain/endereco/endereco.dart';
 import 'package:leituramiga/domain/endereco/municipio.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
+import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
 import 'package:leituramiga/domain/usuario/email.dart';
-import 'package:leituramiga/component/instituicao.component.dart';
 import 'package:leituramiga/domain/usuario/telefone.dart';
 import 'package:leituramiga/domain/usuario/usuario.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
@@ -24,7 +26,6 @@ import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_endereco.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
-import 'package:auto_route/auto_route.dart';
 
 @RoutePage()
 class CadastroUsuarioPage extends StatefulWidget {
@@ -53,7 +54,8 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   final TextEditingController controllerCodigoSeguranca = TextEditingController();
   final TextEditingController controllerTelefone = TextEditingController();
   final TextEditingController controllerInstituicao = TextEditingController();
-
+  Telefone? telefone;
+  Email? email;
   EtapaCadastro? _etapaCadastro = EtapaCadastro.DADOS_GERAIS;
 
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
@@ -81,11 +83,26 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
       AppModule.usuarioRepo,
       atualizar,
     );
+    _instituicaoComponent.inicializar(
+      AppModule.instituicaoEnsinoRepo,
+      atualizar,
+    );
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _instituicaoComponent.obterInstituicoes();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_instituicaoComponent.carregando || _usuarioComponent.carregando || _autenticacaoComponent.carregando) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return BackgroundWidget(
       tema: tema,
       child: Center(
@@ -115,7 +132,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                       padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
                       child: CardBaseWidget(
                         largura: 650,
-                        altura: 560,
+                        altura: 700,
                         cursorDeClick: false,
                         padding: EdgeInsets.symmetric(
                           horizontal: tema.espacamento * 2,
@@ -156,19 +173,58 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   Widget _obterPaginaAtual() {
     return switch (_etapaCadastro) {
       EtapaCadastro.DADOS_GERAIS => SizedBox(
-          height: 600,
-          child: FormularioUsuarioWidget(
-            tema: tema,
-            controllerConfirmacaoSenha: controllerConfirmacaoSenha,
-            controllerEmail: controllerEmail,
-            controllerNome: controllerNome,
-            controllerSenha: controllerSenha,
-            controllerTelefone: controllerTelefone,
-            controllerInstituicao: controllerInstituicao,
-            instituicoes: _instituicaoComponent.instituicoesPorNumero.values.map((e) => e.nome).toList(),
-            aoSelecionarInstituicao: (instituicao) => setState(() => controllerInstituicao.text = instituicao),
-            controllerUsuario: controllerNomeUsuario,
-            aoCadastrar: () => atualizarPagina(EtapaCadastro.ENDERECO),
+          height: 800,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 450,
+                child: FormularioUsuarioWidget(
+                  tema: tema,
+                  controllerConfirmacaoSenha: controllerConfirmacaoSenha,
+                  controllerEmail: controllerEmail,
+                  controllerNome: controllerNome,
+                  controllerSenha: controllerSenha,
+                  controllerTelefone: controllerTelefone,
+                  controllerInstituicao: controllerInstituicao,
+                  instituicoes: _instituicaoComponent.instituicoesPorNumero.values.map((e) => e.nome).toList(),
+                  aoSelecionarInstituicao: (instituicao) => setState(() => controllerInstituicao.text = instituicao),
+                  controllerUsuario: controllerNomeUsuario,
+                  botaoInferior: SizedBox(),
+                  aoCadastrar: () => atualizarPagina(EtapaCadastro.ENDERECO),
+                ),
+              ),
+              BotaoWidget(
+                tema: tema,
+                texto: 'Próximo',
+                nomeIcone: "seta/arrow-long-right",
+                aoClicar: () {
+                  notificarCasoErro(() async {
+                    _autenticacaoComponent.atualizarSenha(controllerSenha.text);
+                    _autenticacaoComponent.atualizarConfirmacaoSenha(controllerConfirmacaoSenha.text);
+                    _autenticacaoState.validarSenha();
+                    telefone = controllerTelefone.text.isNotEmpty
+                        ? Telefone.criar(
+                            controllerTelefone.text.trim().substring(2, 11),
+                            controllerTelefone.text.trim().substring(0, 2),
+                          )
+                        : null;
+                    email = Email.criar(controllerEmail.text.trim());
+                    bool camposValidos = _validarCamposDadosGerais();
+                    if (!camposValidos) return Notificacoes.mostrar("Preencha todos os campos corretamente!");
+                    atualizarPagina(EtapaCadastro.ENDERECO);
+                  });
+                },
+              ),
+              SizedBox(height: tema.espacamento * 2),
+              BotaoWidget(
+                tema: tema,
+                texto: 'Voltar',
+                corFundo: Color(tema.base100),
+                corTexto: Color(tema.baseContent),
+                nomeIcone: "seta/arrow-long-left",
+                aoClicar: () => atualizarPagina(EtapaCadastro.DADOS_GERAIS),
+              ),
+            ],
           ),
         ),
       EtapaCadastro.ENDERECO => Column(
@@ -178,7 +234,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
             FormularioEnderecoWidget(
               tema: tema,
               estados: UF.values.map((e) => e.descricao).toList(),
-              cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.toString()).toList(),
+              cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome.toString()).toList(),
               aoSelecionarEstado: _selecionarEstado,
               aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
               controllerRua: controllerRua,
@@ -195,6 +251,14 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
               texto: 'Próximo',
               nomeIcone: "seta/arrow-long-right",
               aoClicar: _criarUsuario,
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            BotaoWidget(
+              tema: tema,
+              texto: 'Voltar',
+              corFundo: Color(tema.base100),
+              nomeIcone: "seta/arrow-long-left",
+              aoClicar: () => atualizarPagina(EtapaCadastro.DADOS_GERAIS),
             ),
           ],
         ),
@@ -263,9 +327,11 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   Future<void> _criarUsuario() async {
     notificarCasoErro(() async {
       _autenticacaoState.validarSenha();
+      bool camposValidos = _validarCamposEndereco();
+      if(!camposValidos) return Notificacoes.mostrar("Preencha todos os campos corretamente!");
       _usuarioComponent.atualizarUsuarioMemoria(_obterUsuario());
-      atualizarPagina(EtapaCadastro.CODIGO);
       await _usuarioComponent.atualizarUsuario();
+      atualizarPagina(EtapaCadastro.CODIGO);
     });
   }
 
@@ -285,35 +351,59 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
     setState(() => _etapaCadastro = etapa);
   }
 
+  bool _validarCamposDadosGerais() {
+    return controllerNome.text.isNotEmpty &&
+        controllerNomeUsuario.text.isNotEmpty &&
+        controllerEmail.text.isNotEmpty &&
+        controllerSenha.text.isNotEmpty &&
+        controllerConfirmacaoSenha.text.isNotEmpty &&
+        controllerSenha.text == controllerConfirmacaoSenha.text;
+  }
+
+  bool _validarCamposEndereco() {
+    return controllerRua.text.isNotEmpty &&
+        controllerBairro.text.isNotEmpty &&
+        controllerCep.text.isNotEmpty &&
+        controllerNumero.text.isNotEmpty &&
+        controllerCidade.text.isNotEmpty &&
+        controllerEstado.text.isNotEmpty;
+  }
+
   Endereco get endereco {
     Municipio municipio = _usuarioComponent.municipiosPorNumero.values.firstWhere(
-      (element) => element.toString() == controllerCidade.text,
+      (element) => element.nome == controllerCidade.text,
     );
 
     return Endereco.criar(
-      controllerRua.text,
-      controllerBairro.text,
-      controllerCep.text,
       controllerNumero.text,
       controllerComplemento.text,
+      controllerRua.text,
+      controllerCep.text,
+      controllerBairro.text,
       municipio,
     );
   }
 
   Usuario _obterUsuario() {
+    InstituicaoDeEnsino? instituicao = _instituicaoComponent.instituicoesPorNumero.values
+        .where(
+          (element) => element.nome == controllerInstituicao.text,
+        )
+        .firstOrNull;
+
     return Usuario.criar(
-      controllerNome.text,
-      controllerNomeUsuario.text,
-      Email.criar(controllerEmail.text),
+      controllerNome.text.trim(),
+      controllerNomeUsuario.text.trim(),
+      Email.criar(controllerEmail.text.trim()),
       controllerTelefone.text.isNotEmpty
           ? Telefone.criar(
-              controllerTelefone.text.substring(0, 1),
-              controllerTelefone.text.substring(2, 11),
+              controllerTelefone.text.trim().substring(2, 11),
+              controllerTelefone.text.trim().substring(0, 2),
             )
           : null,
       0,
       "",
-      null,
+      instituicao,
       null,
       "",
       "",

@@ -6,6 +6,8 @@ class Telefone extends ObjetoDeValor {
   final String _prefixo;
 
   Telefone.criar(this._numero, this._prefixo) {
+    print(_numero);
+    print(_prefixo);
     if (_numero.length != 9 && _numero.length != 8) throw TelefoneInvalido("O número de caracteres incorreto!");
     if (_prefixo.length != 2) throw TelefoneInvalido("O número de caracteres incorreto!");
   }

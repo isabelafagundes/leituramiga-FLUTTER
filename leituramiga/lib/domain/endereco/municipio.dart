@@ -1,5 +1,5 @@
-import 'package:leituramiga/domain/super/entidade.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
+import 'package:leituramiga/domain/super/entidade.dart';
 
 class Municipio extends Entidade {
   final int _numero;
@@ -25,8 +25,10 @@ class Municipio extends Entidade {
   factory Municipio.carregarDeMapa(Map<String, dynamic> municipioAsMap) {
     return Municipio.carregar(
       municipioAsMap["codigoCidade"],
-      municipioAsMap["nome"],
-      municipioAsMap["estado"],
+      municipioAsMap["nomeCidade"],
+      UF.deSigla(
+        municipioAsMap["estado"],
+      ),
     );
   }
 

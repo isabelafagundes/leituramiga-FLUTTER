@@ -1,3 +1,4 @@
+import 'package:leituramiga/domain/usuario/usuario.dart';
 import 'package:leituramiga/domain/usuario/usuario_autenticado.dart';
 import 'package:leituramiga/service/autenticacao.service.dart';
 import 'package:projeto_leituramiga/application/state/configuracao_api.state.dart';
@@ -35,6 +36,8 @@ class AutenticacaoApiService extends AutenticacaoService with ConfiguracaoApiSta
       "$host/login",
       data: {"email": email, "senha": senha},
     ).catchError((erro) {
+      if (erro.response.statusCode == 401) throw CredenciaisIncorretas();
+      if (erro.response.statusCode == 404) throw UsuarioNaoEncontrado();
       throw erro;
     }).then((response) => UsuarioAutenticado.carregarDeMapa(response.data));
   }

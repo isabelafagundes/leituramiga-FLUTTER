@@ -21,6 +21,7 @@ mixin class State {
       alterarCarregamento(false);
     } catch (erro) {
       adicionarErro(mensagemErro);
+      rethrow;
     }
   }
 }
