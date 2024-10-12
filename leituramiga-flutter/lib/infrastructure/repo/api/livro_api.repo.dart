@@ -73,7 +73,8 @@ class LivroApiRepo extends LivroRepo with ConfiguracaoApiState {
       numeroCategoria: numeroCategoria,
       emailUsuario: emailUsuario,
     );
-    return await _client.get("$host/livros", data: filtros).catchError((erro) {
+    print(filtros);
+    return await _client.post("$host/livros", data: filtros).catchError((erro) {
       throw erro;
     }).then((response) => (response.data as List).map((e) => ResumoLivro.carregarDeMapa(e)).toList());
   }
@@ -92,12 +93,12 @@ class LivroApiRepo extends LivroRepo with ConfiguracaoApiState {
       "numeroPagina": numeroPagina,
       "tamanhoPagina": limite,
     };
-    if (numeroMunicipio != null) filtros["numeroCidade"] = numeroMunicipio;
-    if (numeroInstituicao != null) filtros["numeroInstituicao"] = numeroInstituicao;
-    if (pesquisa != null) filtros["pesquisa"] = pesquisa;
-    if (numeroCategoria != null) filtros["numeroCategoria"] = numeroCategoria;
-    if (emailUsuario != null) filtros["emailUsuario"] = emailUsuario;
-    if (tipo != null) filtros["tipo"] = tipo.id;
+    filtros["numeroCidade"] = numeroMunicipio;
+    filtros["numeroInstituicao"] = numeroInstituicao;
+    filtros["pesquisa"] = pesquisa;
+    filtros["numeroCategoria"] = numeroCategoria;
+    filtros["emailUsuario"] = emailUsuario == null || emailUsuario.isEmpty ? null : emailUsuario;
+    filtros["tipo"] = tipo?.id;
     return filtros;
   }
 }

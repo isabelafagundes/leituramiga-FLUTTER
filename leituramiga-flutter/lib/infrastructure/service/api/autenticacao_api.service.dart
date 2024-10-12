@@ -31,19 +31,22 @@ class AutenticacaoApiService extends AutenticacaoService with ConfiguracaoApiSta
   }
 
   @override
-  Future<UsuarioAutenticado?> logar(String email, String senha) async {
-    await _client.post(
+  Future<UsuarioAutenticado> logar(String email, String senha) async {
+    return await _client.post(
       "$host/login",
       data: {"email": email, "senha": senha},
     ).catchError((erro) {
       if (erro.response.statusCode == 401) throw CredenciaisIncorretas();
       if (erro.response.statusCode == 404) throw UsuarioNaoEncontrado();
+      if (erro.response.statusCode == 412) throw UsuarioNaoAtivo();
+      if (erro.response.statusCode == 409) throw CredenciaisExistentes();
       throw erro;
     }).then((response) => UsuarioAutenticado.carregarDeMapa(response.data));
   }
 
   @override
   Future<void> verificarCodigoSeguranca(String codigo, String email) async {
+    print(email);
     await _client.post(
       "$host/verificar-codigo-seguranca",
       data: {"codigo": codigo, "email": email},

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 class BotaoPequenoWidget extends StatefulWidget {
   final Tema tema;
@@ -68,6 +68,7 @@ class _BotaoPequenoWidgetState extends State<BotaoPequenoWidget> {
                   weight: FontWeight.w500,
                   cor: widget.corFonte ?? kCorFonte,
                   texto: widget.label,
+                  tamanho: widget.tema.tamanhoFonteM + 2,
                 ),
               ],
             ),

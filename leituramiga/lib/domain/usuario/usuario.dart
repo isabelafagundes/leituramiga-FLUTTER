@@ -104,15 +104,16 @@ class Usuario extends Entidade {
   }
 
   factory Usuario.carregarDeMapa(Map<String, dynamic> usuarioAsMap) {
+    print("MAPA: $usuarioAsMap");
     return Usuario.carregar(
         usuarioAsMap["nome"],
         usuarioAsMap["username"],
-        usuarioAsMap["email"],
+        Email.criar(usuarioAsMap["email"]),
         usuarioAsMap["celular"] == null
             ? null
             : Telefone.criar(
                 usuarioAsMap["celular"].substring(2, 11),
-                usuarioAsMap["celular"].substring(0, 1),
+                usuarioAsMap["celular"].substring(0, 2),
               ),
         0,
         usuarioAsMap["descricao"],
@@ -120,8 +121,8 @@ class Usuario extends Entidade {
             ? null
             : InstituicaoDeEnsino.carregar(
                 usuarioAsMap["codigoInstituicao"],
-                usuarioAsMap["nomeInstituicao"],
                 "",
+                usuarioAsMap["nomeInstituicao"],
               ),
         usuarioAsMap["codigoEndereco"],
         usuarioAsMap["nomeCidade"],
@@ -140,4 +141,12 @@ class CredenciaisIncorretas extends ErroDominio {
 
 class UsuarioNaoEncontrado extends ErroDominio {
   UsuarioNaoEncontrado() : super("O usuário não encontrado. Crie uma conta!");
+}
+
+class UsuarioNaoAtivo extends ErroDominio {
+  UsuarioNaoAtivo() : super("O usuário não ativo. Confirme seu código!");
+}
+
+class CredenciaisExistentes extends ErroDominio {
+  CredenciaisExistentes() : super("O email ou o usuário já existe!");
 }

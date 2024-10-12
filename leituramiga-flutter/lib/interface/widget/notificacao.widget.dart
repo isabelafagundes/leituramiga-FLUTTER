@@ -11,8 +11,8 @@ Future<void> notificarCasoErro(Future<void> Function() rotina) async {
   try {
     await rotina();
   } catch (e) {
+    print(e.toString());
     Notificacoes.mostrar(e.toString(), Emoji.ERRO);
-    print(StackTrace.current);
   }
 }
 

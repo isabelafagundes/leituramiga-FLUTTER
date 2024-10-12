@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:leituramiga/domain/solicitacao/livro_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card_livros_solicitacao.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/dica.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
@@ -88,6 +88,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                   controller: controllerInformacoes,
                   label: "Informações adicionais",
                   tamanho: tema.tamanhoFonteM,
+                  formatters: [LengthLimitingTextInputFormatter(256)],
                   expandir: true,
                   alturaCampo: 90,
                   onChanged: (valor) {},

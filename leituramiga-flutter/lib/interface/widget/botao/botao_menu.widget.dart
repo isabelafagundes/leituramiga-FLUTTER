@@ -48,7 +48,7 @@ class _BotaoMenuWidgetState extends State<BotaoMenuWidget> {
       onExit: (_) => setState(() => _hover = false),
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: widget.executar,
+        onTap: () => widget.executar(),
         child: TooltipWidget(
           tema: widget.tema,
           desativado: !widget.semLabel,

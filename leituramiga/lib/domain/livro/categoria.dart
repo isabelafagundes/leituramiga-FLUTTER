@@ -20,7 +20,7 @@ class Categoria extends Entidade {
   }
 
   factory Categoria.carregarDeMapa(Map<String, dynamic> mapa) {
-    return Categoria.carregar(mapa['numero'], mapa['descricao']);
+    return Categoria.carregar(mapa['id'], mapa['descricao']);
   }
 
   String get descricao => _descricao;

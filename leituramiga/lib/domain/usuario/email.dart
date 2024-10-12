@@ -10,7 +10,6 @@ class Email extends ObjetoDeValor {
 
   void _validarEmail() {
     if (!_endereco.contains('@')) throw EmailInvalido("Não possui @!");
-    if (!_endereco.contains('.com')) throw EmailInvalido("Não possui .com!");
   }
 
   String get endereco => _endereco;

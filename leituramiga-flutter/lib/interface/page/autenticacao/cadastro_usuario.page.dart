@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:leituramiga/component/autenticacao.component.dart';
 import 'package:leituramiga/component/instituicao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
@@ -22,6 +23,7 @@ import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart'
 import 'package:projeto_leituramiga/interface/widget/etapas.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/formulario/formulario_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/logo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_endereco.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
@@ -113,9 +115,17 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
             children: [
               if (_etapaCadastro != EtapaCadastro.REDIRECIONAMENTO && Responsive.larguraP(context)) ...[
                 SizedBox(height: tema.espacamento * 2),
+                Container(
+                  width: 235,
+                  child: LogoWidget(
+                    tema: tema,
+                    tamanho: tema.tamanhoFonteM * 2,
+                  ),
+                ),
+                SizedBox(height: tema.espacamento * 2),
                 EtapasWidget(
                   tema: tema,
-                  corFundo: Color(tema.base200),
+                  corFundo: Color(tema.base200).withOpacity(.8),
                   etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
                 ),
                 SizedBox(height: tema.espacamento * 4),
@@ -131,8 +141,8 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                   : Padding(
                       padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
                       child: CardBaseWidget(
-                        largura: 650,
-                        altura: 700,
+                        largura: 850,
+                        altura: 740,
                         cursorDeClick: false,
                         padding: EdgeInsets.symmetric(
                           horizontal: tema.espacamento * 2,
@@ -146,9 +156,22 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                           children: [
                             if (_etapaCadastro != EtapaCadastro.REDIRECIONAMENTO)
                               Flexible(
-                                child: EtapasWidget(
-                                  tema: tema,
-                                  etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
+                                flex: 2,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: 235,
+                                      child: LogoWidget(
+                                        tema: tema,
+                                        tamanho: tema.tamanhoFonteM * 2,
+                                      ),
+                                    ),
+                                    SizedBox(height: tema.espacamento * 2),
+                                    EtapasWidget(
+                                      tema: tema,
+                                      etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
+                                    ),
+                                  ],
                                 ),
                               ),
                             SizedBox(height: tema.espacamento * 2),
@@ -177,7 +200,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
           child: Column(
             children: [
               SizedBox(
-                height: 450,
+                height: !Responsive.larguraP(context) ? 450 : 550,
                 child: FormularioUsuarioWidget(
                   tema: tema,
                   controllerConfirmacaoSenha: controllerConfirmacaoSenha,
@@ -222,13 +245,13 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                 corFundo: Color(tema.base100),
                 corTexto: Color(tema.baseContent),
                 nomeIcone: "seta/arrow-long-left",
-                aoClicar: () => atualizarPagina(EtapaCadastro.DADOS_GERAIS),
+                aoClicar: () => Rota.navegar(context, Rota.LOGIN),
               ),
             ],
           ),
         ),
       EtapaCadastro.ENDERECO => Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             FormularioEnderecoWidget(
@@ -257,6 +280,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
               tema: tema,
               texto: 'Voltar',
               corFundo: Color(tema.base100),
+              corTexto: Color(tema.baseContent),
               nomeIcone: "seta/arrow-long-left",
               aoClicar: () => atualizarPagina(EtapaCadastro.DADOS_GERAIS),
             ),
@@ -272,7 +296,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
             ),
             SizedBox(height: tema.espacamento * 4),
             TextoWidget(
-              texto: "Informe o código de segurança enviado no email email@email.com!",
+              texto: "Informe o código de segurança enviado no email ${controllerEmail.text}",
               tema: tema,
               align: TextAlign.center,
               cor: Color(tema.baseContent),
@@ -285,6 +309,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                 tipoInput: const TextInputType.numberWithOptions(decimal: false),
                 controller: controllerCodigoSeguranca,
                 alturaCampo: 35,
+                formatters: [LengthLimitingTextInputFormatter(5)],
                 onChanged: (texto) {},
               ),
             ),
@@ -294,6 +319,15 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
               texto: 'Próximo',
               nomeIcone: "seta/arrow-long-right",
               aoClicar: _validarCodigoSeguranca,
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            BotaoWidget(
+              tema: tema,
+              texto: 'Voltar',
+              corFundo: Color(tema.base100),
+              corTexto: Color(tema.baseContent),
+              nomeIcone: "seta/arrow-long-left",
+              aoClicar: () => atualizarPagina(EtapaCadastro.ENDERECO),
             ),
           ],
         ),
@@ -328,7 +362,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
     notificarCasoErro(() async {
       _autenticacaoState.validarSenha();
       bool camposValidos = _validarCamposEndereco();
-      if(!camposValidos) return Notificacoes.mostrar("Preencha todos os campos corretamente!");
+      if (!camposValidos) return Notificacoes.mostrar("Preencha todos os campos corretamente!");
       _usuarioComponent.atualizarUsuarioMemoria(_obterUsuario());
       await _usuarioComponent.atualizarUsuario();
       atualizarPagina(EtapaCadastro.CODIGO);

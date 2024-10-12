@@ -18,7 +18,6 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
 
   @override
   Future<void> atualizarUsuario(Usuario usuario) async {
-    print(usuario.paraMapa());
     await _client.post("$host/criar-usuario", data: usuario.paraMapa()).catchError((erro) {
       throw erro;
     });
@@ -35,10 +34,12 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
   Future<Usuario> obterUsuario(String emailUsuario) async {
     return await _client.post(
       "$host/usuario",
-      data: {"email": emailUsuario},
+      data: {"email": emailUsuario, "username": emailUsuario},
     ).catchError((erro) {
       throw erro;
-    }).then((response) => Usuario.carregarDeMapa(response.data));
+    }).then((response) {
+      return Usuario.carregarDeMapa(response.data);
+    });
   }
 
   @override
@@ -57,7 +58,7 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
       "pesquisa": pesquisa,
     };
 
-    return await _client.get("$host/usuarios").catchError((erro) {
+    return await _client.post("$host/usuarios", data: mapaFiltros).catchError((erro) {
       throw erro;
     }).then(
       (response) => (response.data as List).map((e) => ResumoUsuario.carregarDeMapa(e)).toList(),

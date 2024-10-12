@@ -16,7 +16,7 @@ class AutenticacaoUseCase {
 
   Future<void> deslogar() async {
     _state.limparTokens();
-    _sessaoService.limpar();
+    await _sessaoService.limpar();
   }
 
   Future<void> desativar() async {
@@ -39,7 +39,7 @@ class AutenticacaoUseCase {
       _state.atualizarAccessToken(usuario.accessToken);
       _state.atualizarRefreshToken(usuario.refreshToken);
       await _sessaoService.salvarToken({'accessToken': usuario.accessToken, 'refreshToken': usuario.refreshToken});
-      _obterUsuario(email);
+      await _obterUsuario(email);
     }
     return usuario;
   }
@@ -61,4 +61,13 @@ class AutenticacaoUseCase {
     _state.senha.atualizarConfirmacaoSenha(confirmacaoSenha);
   }
 
+  Future<void> carregarSessao() async {
+    Map<String, dynamic> tokens = await _sessaoService.obterTokens();
+    if (tokens.isNotEmpty && tokens['accessToken'] != null && tokens['refreshToken'] != null) {
+      _state.atualizarAccessToken(tokens['accessToken']!);
+      _state.atualizarRefreshToken(tokens['refreshToken']!);
+      Usuario usuario = await _repo.obterUsuarioPerfil();
+      _state.usuario = usuario;
+    }
+  }
 }

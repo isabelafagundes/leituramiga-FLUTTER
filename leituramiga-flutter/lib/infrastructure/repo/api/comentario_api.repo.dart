@@ -31,7 +31,7 @@ class ComentarioApiRepo extends ComentarioRepo with ConfiguracaoApiState {
 
   @override
   Future<List<ComentarioPerfil>> obterComentarios(String email) async {
-    return await _client.get("$host/comentario", data: {"email": email}).catchError((erro) {
+    return await _client.post("$host/comentarios", data: {"email": email, "username": email}).catchError((erro) {
       throw erro;
     }).then((response) => (response.data as List).map((e) => ComentarioPerfil.carregarDeMapa(e)).toList());
   }

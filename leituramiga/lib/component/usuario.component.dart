@@ -50,6 +50,13 @@ class UsuarioComponent extends State
     );
   }
 
+  Future<void> obterPerfil() async {
+    await executar(
+      rotina: () async => _usuarioUseCase.obterPerfil(),
+      mensagemErro: "Não foi possível obter o perfil",
+    );
+  }
+
   Future<void> obterUsuarioSolicitacao(String email) async {
     await executar(
       rotina: () async => _usuarioUseCase.obterUsuarioSolicitacao(email),

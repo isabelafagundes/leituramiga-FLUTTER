@@ -1,14 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/livros.component.dart';
 import 'package:leituramiga/component/usuarios.component.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/categoria_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/instituicao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
+import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -22,7 +19,6 @@ import 'package:projeto_leituramiga/interface/widget/grid/grid_livros.widget.dar
 import 'package:projeto_leituramiga/interface/widget/grid/grid_usuarios.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
-import 'package:auto_route/auto_route.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -48,13 +44,16 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     _livrosComponent.inicializar(
-      LivroMockRepo(),
-      CategoriaMockRepo(),
-      InstituicaoMockRepo(),
-      EnderecoMockRepo(),
+      AppModule.livroRepo,
+      AppModule.categoriaRepo,
+      AppModule.instituicaoEnsinoRepo,
+      AppModule.enderecoRepo,
       atualizar,
     );
-    _usuariosComponent.inicializar(UsuarioMockRepo(), atualizar);
+    _usuariosComponent.inicializar(
+      AppModule.usuarioRepo,
+      atualizar,
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _livrosComponent.obterLivrosIniciais();
       await _livrosComponent.obterCategorias();
@@ -202,7 +201,7 @@ class _HomePageState extends State<HomePage> {
       carrergando: _livrosComponent.carregando,
       categoriaSelecionada: _livrosComponent.filtroState.numeroCategoria,
       categoriasPorId: _livrosComponent.categoriasPorNumero,
-      selecionarCategoria: _livrosComponent.selecionarCategoria,
+      selecionarCategoria: _livrosComponent.selecionarCategoriaFiltro,
       instituicoesPorId: _livrosComponent.instituicoesPorNumero,
       selecionarInstituicao: _livrosComponent.selecionarInstituicao,
       selecionarMunicipio: _livrosComponent.selecionarMunicipio,
@@ -216,6 +215,5 @@ class _HomePageState extends State<HomePage> {
   Future<void> _selecionarEstado(UF uf) async {
     _livrosComponent.selecionarEstado(uf);
     await _livrosComponent.obterMunicipios(uf);
-
   }
 }

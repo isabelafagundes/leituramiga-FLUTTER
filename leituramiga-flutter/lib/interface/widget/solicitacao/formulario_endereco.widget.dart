@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
@@ -21,7 +23,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
   final List<String> estados;
   final Widget? botaoInferior;
 
-  const FormularioEnderecoWidget({
+  FormularioEnderecoWidget({
     super.key,
     required this.tema,
     required this.controllerRua,
@@ -38,6 +40,11 @@ class FormularioEnderecoWidget extends StatelessWidget {
     this.aoSalvar,
     this.botaoInferior,
   });
+
+  MaskTextInputFormatter _mascaraCEP = MaskTextInputFormatter(
+    mask: "#####-###",
+    filter: {"#": RegExp(r'[0-9]')},
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +69,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                   tema: tema,
                   controller: controllerCep,
                   label: "CEP",
+                  formatters: [_mascaraCEP],
                   tamanho: tema.tamanhoFonteM,
                   onChanged: (valor) {},
                 ),
@@ -141,6 +149,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                   tema: tema,
                   controller: controllerBairro,
                   label: "Bairro",
+                  formatters: [LengthLimitingTextInputFormatter(119)],
                   tamanho: tema.tamanhoFonteM,
                   onChanged: (valor) {},
                 ),
@@ -163,6 +172,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                   tema: tema,
                   controller: controllerRua,
                   label: "Rua",
+                  formatters: [LengthLimitingTextInputFormatter(119)],
                   tamanho: tema.tamanhoFonteM,
                   onChanged: (valor) {},
                 ),
@@ -197,6 +207,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                   tema: tema,
                   controller: controllerComplemento,
                   label: "Complemento",
+                  formatters: [LengthLimitingTextInputFormatter(119)],
                   tamanho: tema.tamanhoFonteM,
                   onChanged: (valor) {},
                 ),
@@ -214,6 +225,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                       tema: tema,
                       controller: controllerNumero,
                       label: "Número",
+                      formatters: [LengthLimitingTextInputFormatter(10)],
                       tamanho: tema.tamanhoFonteM,
                       onChanged: (valor) {},
                     ),
@@ -224,7 +236,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
         ),
         if (botaoInferior != null) ...[
           SizedBox(height: tema.espacamento * 4),
-          Container( child: botaoInferior!),
+          Container(child: botaoInferior!),
         ],
       ],
     );

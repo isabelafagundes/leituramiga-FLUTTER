@@ -125,7 +125,7 @@ class _InputWidgetState extends State<InputWidget> {
                     hintText: widget.placeholder,
                     hintStyle: TextStyle(
                       fontFamily: widget.tema.familiaDeFontePrimaria,
-                      fontSize: widget.tema.tamanhoFonteM - 2,
+                      fontSize: widget.tema.tamanhoFonteM,
                       fontWeight: FontWeight.w400,
                       color: Color(widget.tema.baseContent).withOpacity(.5),
                     ),

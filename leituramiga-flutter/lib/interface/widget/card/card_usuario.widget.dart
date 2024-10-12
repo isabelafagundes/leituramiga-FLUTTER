@@ -79,7 +79,7 @@ class CardUsuarioWidget extends StatelessWidget {
           ),
           SizedBox(width: tema.espacamento * 2),
           Flexible(
-            flex: 2,
+            flex: 3,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +89,7 @@ class CardUsuarioWidget extends StatelessWidget {
                   texto: "@$nomeUsuario",
                   cor: Color(tema.baseContent),
                   weight: FontWeight.w500,
-                  tamanho: tema.tamanhoFonteG,
+                  tamanho: tema.tamanhoFonteXG,
                 ),
                 const Spacer(),
                 if (nomeInstituicao != null) ...[
@@ -97,6 +97,7 @@ class CardUsuarioWidget extends StatelessWidget {
                   TextoComIconeWidget(
                     tema: tema,
                     nomeSvg: 'academico/academic-cap',
+                    tamanhoFonte: tema.tamanhoFonteM,
                     texto: nomeInstituicao!,
                   ),
                 ],
@@ -104,6 +105,7 @@ class CardUsuarioWidget extends StatelessWidget {
                   SizedBox(height: tema.espacamento / 2),
                   TextoComIconeWidget(
                     tema: tema,
+                    tamanhoFonte: tema.tamanhoFonteM,
                     nomeSvg: 'menu/map-pin-fill',
                     texto: nomeCidade!,
                   ),

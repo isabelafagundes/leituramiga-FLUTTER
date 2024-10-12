@@ -8,12 +8,14 @@ class MenuLateralWidget extends StatefulWidget {
   final Tema tema;
   final Function() alterarTema;
   final Function() alterarFonte;
+  final Function() deslogar;
 
   const MenuLateralWidget({
     super.key,
     required this.tema,
     required this.alterarTema,
     required this.alterarFonte,
+    required this.deslogar,
   });
 
   @override
@@ -35,7 +37,7 @@ class _MenuLateralWidgetState extends State<MenuLateralWidget> {
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
-          margin: const EdgeInsets.only(right:10),
+          margin: const EdgeInsets.only(right: 10),
           width: _expandido ? _larguraExpandida : _larguraMinimizada,
           padding: EdgeInsets.symmetric(
             vertical: widget.tema.espacamento * 2,
@@ -60,6 +62,7 @@ class _MenuLateralWidgetState extends State<MenuLateralWidget> {
             exibindoMenu: _expandido,
             exibirSeta: _exibirSeta,
             itemSelecionado: _itemSelecionado,
+            deslogar: widget.deslogar,
             expandirMenu: _expandirMenu,
             alterarTema: widget.alterarTema,
             alterarFonte: widget.alterarFonte,
@@ -73,7 +76,7 @@ class _MenuLateralWidgetState extends State<MenuLateralWidget> {
             tema: widget.tema,
             aoClicar: _expandirMenu,
             padding: const EdgeInsets.all(6),
-            nomeSvg:_expandido? 'seta/chevron-left': 'seta/chevron-right',
+            nomeSvg: _expandido ? 'seta/chevron-left' : 'seta/chevron-right',
           ),
         ),
       ],

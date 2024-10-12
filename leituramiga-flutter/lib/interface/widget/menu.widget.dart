@@ -50,7 +50,7 @@ class _MenuWidgetState extends State<MenuWidget> {
         },
         child: Container(
           key: _key,
-          height: 40,
+          height: 50,
           decoration: BoxDecoration(
             color: Color(widget.tema.base200),
             border: Border.all(color: Color(widget.tema.neutral).withOpacity(.2)),
@@ -112,7 +112,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                   color: Colors.transparent,
                   child: Container(
                     width: render.size.width,
-                    constraints: const BoxConstraints(maxHeight: 200),
+                    constraints: const BoxConstraints(maxHeight: 350),
                     padding: EdgeInsets.symmetric(vertical: widget.tema.espacamento + 2),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
@@ -155,6 +155,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                             child: TextoWidget(
                               tema: widget.tema,
                               texto: widget.escolhas[index],
+                              tamanho: widget.tema.tamanhoFonteM + 2,
                             ),
                           );
                         }),

@@ -13,6 +13,11 @@ class UsuarioUseCase {
     _state.usuarioSelecionado = usuario;
   }
 
+  Future<void> obterPerfil() async {
+    Usuario usuario = await _repo.obterUsuarioPerfil();
+    _state.usuarioSelecionado = usuario;
+  }
+
   Future<void> obterUsuarioSolicitacao(String email) async {
     Usuario usuario = await _repo.obterUsuario(email);
     print(usuario.nomeUsuario);

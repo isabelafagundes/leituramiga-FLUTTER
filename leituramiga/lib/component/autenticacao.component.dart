@@ -69,4 +69,11 @@ class AutenticacaoComponent extends State {
       mensagemErro: "Não foi possível atualizar a confirmação da senha",
     );
   }
+
+  Future<void> carregarSessao() async {
+    executar(
+      rotina: () async => await _useCase.carregarSessao(),
+      mensagemErro: "Não foi possível carregar a sessão",
+    );
+  }
 }

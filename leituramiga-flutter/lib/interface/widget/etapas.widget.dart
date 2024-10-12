@@ -40,7 +40,8 @@ class EtapasWidget extends StatelessWidget {
                   child: TextoWidget(
                     texto: "1",
                     tema: tema,
-                    cor: const Color(0xff2b2b2b),
+                    weight: FontWeight.bold,
+                    cor: etapaSelecionada == 1 ? const Color(0xff2b2b2b) : Color(tema.baseContent),
                   ),
                 ),
               ),
@@ -57,7 +58,8 @@ class EtapasWidget extends StatelessWidget {
                   child: TextoWidget(
                     tema: tema,
                     texto: "2",
-                    cor: const Color(0xff2b2b2b),
+                    weight: FontWeight.bold,
+                    cor: etapaSelecionada == 2 ? const Color(0xff2b2b2b) : Color(tema.baseContent),
                   ),
                 ),
               ),
@@ -74,7 +76,8 @@ class EtapasWidget extends StatelessWidget {
                   child: TextoWidget(
                     tema: tema,
                     texto: "3",
-                    cor: const Color(0xff2b2b2b),
+                    weight: FontWeight.bold,
+                    cor: etapaSelecionada == 3 ? const Color(0xff2b2b2b) : Color(tema.baseContent),
                   ),
                 ),
               ),

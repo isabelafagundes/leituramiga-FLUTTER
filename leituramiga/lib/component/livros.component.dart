@@ -2,6 +2,7 @@ import 'package:leituramiga/domain/endereco/municipio.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
 import 'package:leituramiga/domain/livro/categoria.dart';
+import 'package:leituramiga/domain/livro/livro.dart';
 import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/repo/categoria.repo.dart';
@@ -72,10 +73,31 @@ class LivrosComponent extends State
     );
   }
 
-  void selecionarCategoria(Categoria categoria) {
+  void selecionarCategoriaFiltro(Categoria categoria) {
     executar(
       rotina: () => filtroState.selecionarCategoria(categoria),
       mensagemErro: "Erro ao selecionar o filtro de categoria",
+    );
+  }
+
+  void salvarLivroMemoria(Livro livro) {
+    executar(
+      rotina: () => _livroUseCase.salvarLivroMemoria(livro),
+      mensagemErro: "Erro ao salvar o livro na memória",
+    );
+  }
+
+  Future<void> atualizarLivro() async {
+    await executar(
+      rotina: () async => await _livroUseCase.atualizarLivro(),
+      mensagemErro: "Erro ao atualizar o livro",
+    );
+  }
+
+  void selecionarCategoria(Categoria categoria) {
+    executar(
+      rotina: () => _livroUseCase.selecionarCategoria(categoria),
+      mensagemErro: "Erro ao selecionar a categoria",
     );
   }
 

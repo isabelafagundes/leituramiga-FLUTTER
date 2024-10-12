@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/component/autenticacao.component.dart';
+import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/menu_lateral.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/botoes_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/menu_lateral.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/rodape_mobile.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
@@ -39,8 +43,26 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
   bool exibindoMenu = false;
   bool ativarAnimacao = false;
   MenuLateral _itemSelecionado = MenuLateral.PAGINA_PRINCIPAL;
+  AutenticacaoComponent _autenticacaoComponent = AutenticacaoComponent();
+
+  AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
   TemaState get _temaState => TemaState.instancia;
+
+  @override
+  void initState() {
+    _autenticacaoComponent.inicializar(
+      AppModule.autenticacaoService,
+      AppModule.sessaoService,
+      AppModule.usuarioRepo,
+      atualizar,
+    );
+    super.initState();
+  }
+
+  void atualizar() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +81,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
               if (!Responsive.larguraM(context)) ...[
                 MenuLateralWidget(
                   tema: widget.tema,
+                  deslogar: _deslogar,
                   alterarTema: _alterarTema,
                   alterarFonte: _alterarFonte,
                 ),
@@ -108,7 +131,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                     cor: Color(widget.tema.baseContent),
                                   ),
                                   TextoWidget(
-                                    texto: "Isabela!",
+                                    texto: "${_autenticacaoState.usuario?.nome.split(" ").first}!",
                                     tema: widget.tema,
                                     cor: Color(widget.tema.accent),
                                   ),
@@ -166,7 +189,12 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [CircularProgressIndicator()],
                               )
-                            : widget.child,
+                            : Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: widget.tema.espacamento * 2,
+                                ),
+                                child: widget.child,
+                              ),
                       ),
                     ),
                   ],
@@ -221,9 +249,10 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                   child: BotoesMenuLateralWidget(
                     tema: widget.tema,
                     aoEntrar: () {},
-                    aoSair: () {},
+                    aoSair: (){},
                     exibindoMenu: true,
                     exibirSeta: true,
+                    deslogar: _deslogar,
                     itemSelecionado: _itemSelecionado,
                     expandirMenu: () => setState(() {
                       exibindoMenu = false;
@@ -239,6 +268,13 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
           ),
       ],
     );
+  }
+
+  Future<void> _deslogar() async {
+    await notificarCasoErro(() async {
+      await _autenticacaoComponent.deslogar();
+      Rota.navegar(context, Rota.AUTENTICACAO);
+    });
   }
 
   void _alterarTema() async {

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/livros.component.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
@@ -19,7 +20,6 @@ import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto_com_icone.widget.dart';
-import 'package:auto_route/auto_route.dart';
 
 @RoutePage()
 class LivrosPage extends StatefulWidget {
@@ -82,7 +82,6 @@ class _LivrosPageState extends State<LivrosPage> {
                         crossAxisAlignment:
                             Responsive.larguraM(context) ? CrossAxisAlignment.center : CrossAxisAlignment.start,
                         children: [
-
                           Flexible(
                             child: Column(
                               children: [
@@ -99,13 +98,15 @@ class _LivrosPageState extends State<LivrosPage> {
                                     TextoWidget(
                                       texto: _livrosComponent.livroSelecionado?.nome ?? '',
                                       tema: tema,
-                                      tamanho: tema.tamanhoFonteG,
+                                      tamanho: tema.tamanhoFonteM * 2,
+                                      weight:   FontWeight.w500,
                                       cor: Color(tema.accent),
                                     ),
                                     SizedBox(height: tema.espacamento),
                                     TextoWidget(
                                       texto: _livrosComponent.livroSelecionado?.nomeAutor ?? '',
                                       tema: tema,
+                                      tamanho: tema.tamanhoFonteXG,
                                       cor: Color(tema.baseContent),
                                     ),
                                     SizedBox(height: tema.espacamento / 2),
@@ -131,24 +132,28 @@ class _LivrosPageState extends State<LivrosPage> {
                                 TextoWidget(
                                   texto: "Descrição: ",
                                   tema: tema,
+                                  tamanho: tema.tamanhoFonteM + 2,
                                   weight: FontWeight.w500,
                                   cor: Color(tema.accent),
                                 ),
                                 TextoWidget(
                                   texto: _livrosComponent.livroSelecionado?.descricao ?? '',
                                   tema: tema,
+                                  tamanho: tema.tamanhoFonteM + 2,
                                   cor: Color(tema.baseContent),
                                 ),
                                 SizedBox(height: tema.espacamento),
                                 TextoWidget(
                                   texto: "Estado do livro: ",
                                   tema: tema,
+                                  tamanho: tema.tamanhoFonteM + 2,
                                   weight: FontWeight.w500,
                                   cor: Color(tema.accent),
                                 ),
                                 TextoWidget(
                                   texto: _livrosComponent.livroSelecionado?.descricaoEstado ?? '',
                                   tema: tema,
+                                  tamanho: tema.tamanhoFonteM + 2,
                                   cor: Color(tema.baseContent),
                                 ),
                                 SizedBox(height: tema.espacamento),
@@ -164,21 +169,21 @@ class _LivrosPageState extends State<LivrosPage> {
                                           tema: tema,
                                           nomeSvg: 'usuario/user',
                                           texto: _livrosComponent.livroSelecionado?.nomeUsuario ?? '',
-                                          tamanhoFonte: tema.tamanhoFonteM,
+                                          tamanhoFonte: tema.tamanhoFonteM + 2,
                                         ),
                                         SizedBox(height: tema.espacamento / 2),
                                         TextoComIconeWidget(
                                           tema: tema,
                                           nomeSvg: 'academico/academic-cap',
                                           texto: _livrosComponent.livroSelecionado?.nomeInstituicao ?? '',
-                                          tamanhoFonte: tema.tamanhoFonteM,
+                                          tamanhoFonte: tema.tamanhoFonteM + 2,
                                         ),
                                         SizedBox(height: tema.espacamento / 2),
                                         TextoComIconeWidget(
                                           tema: tema,
                                           nomeSvg: 'menu/map-pin-fill',
                                           texto: _livrosComponent.livroSelecionado?.nomeMunicipio ?? '',
-                                          tamanhoFonte: tema.tamanhoFonteM,
+                                          tamanhoFonte: tema.tamanhoFonteM + 2,
                                         ),
                                       ],
                                     ),
@@ -269,5 +274,4 @@ class _LivrosPageState extends State<LivrosPage> {
       ),
     );
   }
-
 }

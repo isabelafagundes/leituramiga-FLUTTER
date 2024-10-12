@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/menu_lateral.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
@@ -10,12 +11,12 @@ import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto_com_switcher.widget.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 class BotoesMenuLateralWidget extends StatelessWidget {
   final Tema tema;
   final Function() aoEntrar;
   final Function() aoSair;
+  final Function() deslogar;
   final bool exibindoMenu;
   final bool exibirSeta;
   final MenuLateral itemSelecionado;
@@ -36,6 +37,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
     required this.alterarTema,
     required this.alterarFonte,
     required this.selecionarItem,
+    required this.deslogar,
   });
 
   @override
@@ -179,7 +181,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
           semLabel: !exibindoMenu,
           textoLabel: "Sair",
           nomeSvg: "logout",
-          executar: () => Rota.navegar(context, Rota.AUTENTICACAO),
+          executar: deslogar,
           ativado: false,
         ),
       ],
@@ -200,8 +202,8 @@ class BotoesMenuLateralWidget extends StatelessWidget {
         );
       },
     );
-    if(navegarParaSolicitacoes == null) return;
-    selecionarItem(navegarParaSolicitacoes  ? MenuLateral.SOLICITACOES : MenuLateral.PAGINA_PRINCIPAL);
-    Rota.navegar(context, navegarParaSolicitacoes  ? Rota.SUPORTE : Rota.HOME);
+    if (navegarParaSolicitacoes == null) return;
+    selecionarItem(navegarParaSolicitacoes ? MenuLateral.SOLICITACOES : MenuLateral.PAGINA_PRINCIPAL);
+    Rota.navegar(context, navegarParaSolicitacoes ? Rota.SUPORTE : Rota.HOME);
   }
 }

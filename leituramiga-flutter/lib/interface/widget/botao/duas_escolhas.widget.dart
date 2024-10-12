@@ -113,6 +113,7 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
                 child: TextoWidget(
                   tema: widget.tema,
                   cor: kCorFonte,
+                  weight: FontWeight.w600,
                   texto: widget.escolhas[chave],
                 ),
               ),

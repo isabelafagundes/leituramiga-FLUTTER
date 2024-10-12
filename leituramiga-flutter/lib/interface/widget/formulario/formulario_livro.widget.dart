@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:leituramiga/domain/livro/categoria.dart';
+import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
+import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/carrossel_categorias.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/chip/chip.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/dica.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/imagem.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class FormularioLivroWidget extends StatelessWidget {
@@ -19,8 +21,11 @@ class FormularioLivroWidget extends StatelessWidget {
   final TextEditingController controllerEstadoFisico;
   final Function(String) salvarImagem;
   final Function(Categoria) selecionarCategoria;
+  final Function() criarLivro;
   final Map<int, Categoria> categoriasPorId;
   final int? numeroCategoria;
+  final Function(TipoSolicitacao) selecionarTipoSolicitacao;
+  final List<TipoSolicitacao> tiposSolicitacao;
 
   const FormularioLivroWidget({
     super.key,
@@ -33,6 +38,9 @@ class FormularioLivroWidget extends StatelessWidget {
     required this.selecionarCategoria,
     required this.categoriasPorId,
     required this.numeroCategoria,
+    required this.criarLivro,
+    required this.selecionarTipoSolicitacao,
+    required this.tiposSolicitacao,
   });
 
   @override
@@ -50,7 +58,7 @@ class FormularioLivroWidget extends StatelessWidget {
                 tema: tema,
                 salvarImagem: (imagem64) => print(imagem64),
               ),
-              SizedBox(height: tema.espacamento*2),
+              SizedBox(height: tema.espacamento * 2),
               DicaWidget(
                 tema: tema,
                 texto: "Preencha com as informações do seu livro",
@@ -74,8 +82,9 @@ class FormularioLivroWidget extends StatelessWidget {
             children: [
               InputWidget(
                 tema: tema,
-                controller: TextEditingController(),
+                controller: controllerNome,
                 label: "Nome do livro",
+                formatters: [LengthLimitingTextInputFormatter(120)],
                 tamanho: tema.tamanhoFonteM,
                 onChanged: (valor) {},
               ),
@@ -84,6 +93,7 @@ class FormularioLivroWidget extends StatelessWidget {
                 tema: tema,
                 controller: controllerAutor,
                 label: "Autor",
+                formatters: [LengthLimitingTextInputFormatter(40)],
                 tamanho: tema.tamanhoFonteM,
                 onChanged: (valor) {},
               ),
@@ -93,6 +103,7 @@ class FormularioLivroWidget extends StatelessWidget {
                 controller: controllerDescricao,
                 label: "Descrição",
                 expandir: true,
+                formatters: [LengthLimitingTextInputFormatter(260)],
                 tamanho: tema.tamanhoFonteM,
                 onChanged: (valor) {},
                 alturaCampo: 90,
@@ -102,6 +113,7 @@ class FormularioLivroWidget extends StatelessWidget {
                 tema: tema,
                 controller: controllerEstadoFisico,
                 label: "Estado físico",
+                formatters: [LengthLimitingTextInputFormatter(160)],
                 tamanho: tema.tamanhoFonteM,
                 onChanged: (valor) {},
               ),
@@ -119,6 +131,46 @@ class FormularioLivroWidget extends StatelessWidget {
                 categoriasPorId: categoriasPorId,
                 categoriaSelecionada: numeroCategoria,
               ),
+              SizedBox(height: tema.espacamento * 3),
+              TextoWidget(
+                texto: "Tipo de solicitação",
+                tema: tema,
+                weight: FontWeight.w500,
+                cor: Color(tema.baseContent),
+              ),
+              SizedBox(height: tema.espacamento),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ChipWidget(
+                    tema: tema,
+                    cor: kCorPessego,
+                    texto: "Troca",
+                    corTexto: kCorFonte,
+                    ativado: tiposSolicitacao.contains(TipoSolicitacao.TROCA),
+                    aoClicar: () => selecionarTipoSolicitacao(TipoSolicitacao.TROCA),
+                  ),
+                  SizedBox(width: tema.espacamento * 2),
+                  ChipWidget(
+                    tema: tema,
+                    cor: kCorVerde,
+                    texto: "Empréstimo",
+                    ativado: tiposSolicitacao.contains(TipoSolicitacao.EMPRESTIMO),
+                    corTexto: kCorFonte,
+                    aoClicar: () => selecionarTipoSolicitacao(TipoSolicitacao.EMPRESTIMO),
+                  ),
+                  SizedBox(width: tema.espacamento * 2),
+                  ChipWidget(
+                    tema: tema,
+                    cor: kCorAzul,
+                    texto: "Doação",
+                    corTexto: kCorFonte,
+                    ativado: tiposSolicitacao.contains(TipoSolicitacao.DOACAO),
+                    aoClicar: () => selecionarTipoSolicitacao(TipoSolicitacao.DOACAO),
+                  ),
+                ],
+              ),
               SizedBox(height: tema.espacamento * 4),
               BotaoWidget(
                 tema: tema,
@@ -128,7 +180,7 @@ class FormularioLivroWidget extends StatelessWidget {
                   color: Color(tema.base200),
                   size: tema.espacamento + 10,
                 ),
-                aoClicar: () => Rota.navegar(context, Rota.PERFIL),
+                aoClicar: criarLivro,
               ),
             ],
           ),
