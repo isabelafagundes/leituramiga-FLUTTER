@@ -155,4 +155,11 @@ class UsuarioComponent extends State
       mensagemErro: "Não foi possível atualizar o endereço",
     );
   }
+
+  Future<void> obterEndereco() async {
+    await executar(
+      rotina: () async => _enderecoUseCase.obterEndereco(),
+      mensagemErro: "Não foi possível obter o endereço",
+    );
+  }
 }

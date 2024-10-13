@@ -1,7 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:leituramiga/component/usuario.component.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
@@ -9,7 +12,6 @@ import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_menu.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/formulario/formulario_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_endereco.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
@@ -22,6 +24,7 @@ class EditarPefilPage extends StatefulWidget {
 }
 
 class _EditarPefilPageState extends State<EditarPefilPage> {
+  UsuarioComponent _usuarioComponent = UsuarioComponent();
   final TextEditingController controllerRua = TextEditingController();
   final TextEditingController controllerBairro = TextEditingController();
   final TextEditingController controllerCep = TextEditingController();
@@ -41,6 +44,27 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
   TemaState get _temaState => TemaState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
+
+  @override
+  void initState() {
+    super.initState();
+    _usuarioComponent.inicializar(
+      AppModule.usuarioRepo,
+      AppModule.comentarioRepo,
+      AppModule.enderecoRepo,
+      AppModule.livroRepo,
+      atualizar,
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _usuarioComponent.obterPerfil();
+      await _usuarioComponent.obterEndereco();
+      _preencherControllers();
+    });
+  }
+
+  void atualizar() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,6 +182,21 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
         ),
       _ => const SizedBox(),
     };
+  }
+
+  void _preencherControllers() {
+    controllerNome.text = _usuarioComponent.usuarioSelecionado!.nome;
+    controllerNomeUsuario.text = _usuarioComponent.usuarioSelecionado!.nomeUsuario;
+    controllerEmail.text = _usuarioComponent.usuarioSelecionado!.email.endereco;
+    controllerTelefone.text = _usuarioComponent.usuarioSelecionado?.telefone?.telefoneFormatado ?? "";
+    controllerInstituicaoEnsino.text = _usuarioComponent.usuarioSelecionado!.nomeInstituicao;
+    controllerRua.text = _usuarioComponent.enderecoEdicao?.rua ?? "";
+    controllerBairro.text = _usuarioComponent.enderecoEdicao?.bairro ?? "";
+    controllerCep.text = _usuarioComponent.enderecoEdicao?.cep ?? "";
+    controllerNumero.text = _usuarioComponent.enderecoEdicao?.numero?.toString() ?? "";
+    controllerComplemento.text = _usuarioComponent.enderecoEdicao?.complemento ?? "";
+    controllerCidade.text = _usuarioComponent.enderecoEdicao?.municipio.nome ?? "";
+    controllerEstado.text = _usuarioComponent.enderecoEdicao?.municipio?.estado.descricao ?? "";
   }
 
   void atualizarPagina(EditarPerfil? etapa) {

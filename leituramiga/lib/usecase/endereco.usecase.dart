@@ -11,7 +11,7 @@ class EnderecoUseCase {
   const EnderecoUseCase(this._state, this._repo);
 
   Future<void> obterEndereco() async {
-    Endereco endereco = await _repo.obterEndereco();
+    Endereco? endereco = await _repo.obterEndereco();
     _state.enderecoEdicao = endereco;
   }
 

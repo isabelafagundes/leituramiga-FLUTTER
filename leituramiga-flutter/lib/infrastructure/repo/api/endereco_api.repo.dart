@@ -25,8 +25,9 @@ class EnderecoApiRepo extends EnderecoRepo with ConfiguracaoApiState {
   }
 
   @override
-  Future<Endereco> obterEndereco() async {
+  Future<Endereco?> obterEndereco() async {
     return await _client.get("$host/endereco").catchError((erro) {
+      if (erro.response?.statusCode == 404) return null;
       throw erro;
     }).then((response) => Endereco.carregarDeMapa(response.data));
   }
@@ -34,7 +35,7 @@ class EnderecoApiRepo extends EnderecoRepo with ConfiguracaoApiState {
   @override
   Future<List<Municipio>> obterMunicipios(UF uf, [String? pesquisa]) async {
     String url = "$host/cidades/${uf.name}";
-    if(pesquisa != null) url += "?pesquisa=$pesquisa";
+    if (pesquisa != null) url += "?pesquisa=$pesquisa";
     return await _client.get(url).catchError((erro) {
       throw erro;
     }).then((response) => (response.data as List).map((e) => Municipio.carregarDeMapa(e)).toList());
