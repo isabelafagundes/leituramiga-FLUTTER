@@ -42,9 +42,9 @@ class ChipWidget extends StatelessWidget {
               TextoWidget(
                 tema: tema,
                 texto: texto,
-                cor: ativado ? Color(tema.baseContent) : corTexto,
-                weight: FontWeight.w500,
-                tamanho: tema.tamanhoFonteP + 2,
+                cor: ativado ? Color(tema.baseContent) : corTexto ?? Color(tema.baseContent),
+                weight: FontWeight.w600,
+                tamanho: tema.tamanhoFonteM,
               ),
               if (ativado) ...[
                 SizedBox(width: tema.espacamento / 1.5),

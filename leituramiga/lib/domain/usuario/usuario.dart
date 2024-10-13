@@ -74,6 +74,7 @@ class Usuario extends Entidade {
       "endereco": endereco?.paraMapa(email.endereco),
       "senha": senha?.senha,
       "tipoUsuario": _tipoUsuario.id,
+      "quantidadeLivros": _numeroDeLivros,
     };
   }
 
@@ -115,7 +116,7 @@ class Usuario extends Entidade {
                 usuarioAsMap["celular"].substring(2, 11),
                 usuarioAsMap["celular"].substring(0, 2),
               ),
-        0,
+        usuarioAsMap["quantidadeLivros"],
         usuarioAsMap["descricao"],
         usuarioAsMap["codigoInstituicao"] == null
             ? null

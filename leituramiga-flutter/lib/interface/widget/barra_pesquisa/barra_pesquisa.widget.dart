@@ -29,11 +29,11 @@ class _BarraPesquisaWidgetState extends State<BarraPesquisaWidget> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      constraints: const BoxConstraints(maxWidth: 250),
+      constraints: const BoxConstraints(maxWidth: 350),
       child: Column(
         children: [
           InputWidget(
-            alturaCampo: 30,
+            alturaCampo: 35,
             tema: widget.tema,
             onChanged: (valor) => _debouncer.executar(() => widget.aoPesquisar(valor)),
             controller: widget.controller,

@@ -50,20 +50,17 @@ class UsuarioMockRepo extends UsuarioRepo {
     return Future.delayed(Duration(seconds: 1), () => usuario);
   }
 
-  @override
-  Future<List<ResumoUsuario>> obterUsuarios([
-    int numeroPagina = 0,
-    int limite = 18,
-    int? numeroMunicipio,
-    int? numeroInstituicao,
-    String? pesquisa,
-  ]) {
-    return Future.value(usuarios);
-  }
+
 
   @override
   Future<Usuario> obterUsuarioPerfil() {
     // TODO: implement obterUsuarioPerfil
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<ResumoUsuario>> obterUsuarios({int numeroPagina = 0, int limite = 18, int? numeroMunicipio, int? numeroInstituicao, String? pesquisa}) {
+    // TODO: implement obterUsuarios
     throw UnimplementedError();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base_com_sombra.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
@@ -8,6 +9,7 @@ import 'package:projeto_leituramiga/interface/widget/texto/texto_com_icone.widge
 class CardUsuarioWidget extends StatelessWidget {
   final Tema tema;
   final String nomeUsuario;
+  final String nome;
   final String? nomeInstituicao;
   final String? nomeCidade;
   final int quantidadeLivros;
@@ -19,6 +21,7 @@ class CardUsuarioWidget extends StatelessWidget {
     this.nomeInstituicao,
     this.nomeCidade,
     required this.quantidadeLivros,
+    required this.nome,
   });
 
   @override
@@ -43,8 +46,16 @@ class CardUsuarioWidget extends StatelessWidget {
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(tema.borderRadiusXG),
-                    color: Color(tema.neutral).withOpacity(.1),
+                    borderRadius: BorderRadius.circular(tema.borderRadiusXG * 2),
+                    color: [kCorAzul, kCorPessego, kCorVerde, Color(tema.accent)][quantidadeLivros % 4].withOpacity(.5),
+                  ),
+                  child: Center(
+                    child: TextoWidget(
+                      tamanho: tema.tamanhoFonteXG * 1.4,
+                      weight: FontWeight.w600,
+                      texto: "${nome.substring(0, 1)}",
+                      tema: tema,
+                    ),
                   ),
                 ),
                 SizedBox(height: tema.espacamento),
@@ -92,24 +103,20 @@ class CardUsuarioWidget extends StatelessWidget {
                   tamanho: tema.tamanhoFonteXG,
                 ),
                 const Spacer(),
-                if (nomeInstituicao != null) ...[
-                  SizedBox(height: tema.espacamento / 2),
-                  TextoComIconeWidget(
-                    tema: tema,
-                    nomeSvg: 'academico/academic-cap',
-                    tamanhoFonte: tema.tamanhoFonteM,
-                    texto: nomeInstituicao!,
-                  ),
-                ],
-                if (nomeCidade != null) ...[
-                  SizedBox(height: tema.espacamento / 2),
-                  TextoComIconeWidget(
-                    tema: tema,
-                    tamanhoFonte: tema.tamanhoFonteM,
-                    nomeSvg: 'menu/map-pin-fill',
-                    texto: nomeCidade!,
-                  ),
-                ],
+                SizedBox(height: tema.espacamento / 2),
+                TextoComIconeWidget(
+                  tema: tema,
+                  nomeSvg: 'academico/academic-cap',
+                  tamanhoFonte: tema.tamanhoFonteM,
+                  texto: nomeInstituicao ?? 'Não informado',
+                ),
+                SizedBox(height: tema.espacamento / 2),
+                TextoComIconeWidget(
+                  tema: tema,
+                  tamanhoFonte: tema.tamanhoFonteM,
+                  nomeSvg: 'menu/map-pin-fill',
+                  texto: nomeCidade ?? 'Não informado',
+                ),
               ],
             ),
           ),

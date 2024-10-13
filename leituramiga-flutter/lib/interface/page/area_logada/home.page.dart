@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:leituramiga/component/livros.component.dart';
 import 'package:leituramiga/component/usuarios.component.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
+import 'package:leituramiga/state/filtros.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
@@ -14,10 +15,12 @@ import 'package:projeto_leituramiga/interface/widget/background/background.widge
 import 'package:projeto_leituramiga/interface/widget/barra_pesquisa/barra_pesquisa.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/duas_escolhas.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/filtro/layout_filtro.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/grid/grid_livros.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/grid/grid_usuarios.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 @RoutePage()
@@ -36,6 +39,8 @@ class _HomePageState extends State<HomePage> {
 
   final LivrosComponent _livrosComponent = LivrosComponent();
   final UsuariosComponent _usuariosComponent = UsuariosComponent();
+
+  FiltroState get _filtroState => FiltroState.instancia;
 
   TemaState get _temaState => TemaState.instancia;
 
@@ -85,19 +90,36 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 50,
+                        height: 60,
                         child: BarraPesquisaWidget(
                           tema: tema,
-                          aoPesquisar: (valor) {},
+                          aoPesquisar: (valor) async {
+                            _exibindoLivros
+                                ? await _livrosComponent.realizarPesquisaLivros(valor)
+                                : await _usuariosComponent.realizarPesquisaDeUsuarios(valor);
+                          },
                           controller: _controllerPesquisa,
                         ),
                       ),
                       SizedBox(width: tema.espacamento),
-                      BotaoRedondoWidget(
+                      BotaoPequenoWidget(
                         tema: tema,
-                        nomeSvg: 'filtro',
+                        altura: 40,
+                        label: "Filtrar",
+                        corFonte: Color(tema.baseContent),
+                        corFundo: Color(tema.base200),
+                        icone: SvgWidget(nomeSvg: 'filtro', cor: Color(tema.baseContent), altura: 16),
                         aoClicar: () => SobreposicaoUtil.exibir(context, obterFiltros),
                       ),
+                      if (_livrosComponent.filtroState.temFiltros) ...[
+                        SizedBox(width: tema.espacamento),
+                        BotaoRedondoWidget(
+                          tema: tema,
+                          aoClicar: _limparFiltros,
+                          nomeSvg: "limpar_icon",
+                          tamanhoIcone: 22,
+                        ),
+                      ]
                     ],
                   )
                 : null,
@@ -184,19 +206,29 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Future<void> _limparFiltros() async {
+    _filtroState.limparFiltros();
+    _controllerPesquisa.clear();
+    _exibindoLivros ? await _livrosComponent.obterLivrosIniciais() : await _usuariosComponent.obterUsuariosIniciais();
+    setState(() {});
+  }
+
   Future<void> selecionarUsuarios() async {
     setState(() => _exibindoLivros = false);
-    await _usuariosComponent.obterUsuariosIniciais();
+    _controllerPesquisa.clear();
+    await _limparFiltros();
   }
 
   Future<void> selecionarLivros() async {
     setState(() => _exibindoLivros = true);
-    await _livrosComponent.obterLivrosIniciais();
+    _controllerPesquisa.clear();
+    await _limparFiltros();
   }
 
   Widget get obterFiltros {
     return LayoutFiltroWidget(
       tema: tema,
+      limparFiltros: _limparFiltros,
       selecionarEstado: _selecionarEstado,
       carrergando: _livrosComponent.carregando,
       categoriaSelecionada: _livrosComponent.filtroState.numeroCategoria,
@@ -207,13 +239,21 @@ class _HomePageState extends State<HomePage> {
       selecionarMunicipio: _livrosComponent.selecionarMunicipio,
       municipiosPorId: _livrosComponent.municipiosPorNumero,
       selecionarTipoSolicitacao: _livrosComponent.selecionarTipoSolicitacao,
-      aplicarFiltros: () => SobreposicaoUtil.fechar(context),
+      aplicarFiltros: _aplicarFiltros,
       usuario: !_exibindoLivros,
     );
+  }
+
+  Future<void> _aplicarFiltros() async {
+    _exibindoLivros
+        ? await _livrosComponent.obterLivrosPaginados(true)
+        : await _usuariosComponent.obterUsuariosPaginados(true);
+    return SobreposicaoUtil.fechar(context);
   }
 
   Future<void> _selecionarEstado(UF uf) async {
     _livrosComponent.selecionarEstado(uf);
     await _livrosComponent.obterMunicipios(uf);
+    setState(() {});
   }
 }

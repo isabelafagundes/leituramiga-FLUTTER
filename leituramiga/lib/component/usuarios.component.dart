@@ -1,12 +1,11 @@
 import 'package:leituramiga/domain/endereco/municipio.dart';
 import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
-import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/usuario/resumo_usuario.dart';
 import 'package:leituramiga/repo/usuario.repo.dart';
 import 'package:leituramiga/state/filtros.state.dart';
 import 'package:leituramiga/state/super/paginacao.state.dart';
-import 'package:leituramiga/state/usuario.state.dart';
 import 'package:leituramiga/state/super/state.dart';
+import 'package:leituramiga/state/usuario.state.dart';
 import 'package:leituramiga/usecase/usuario.usecase.dart';
 import 'package:leituramiga/usecase/usuario_paginacao.usecase.dart';
 
@@ -36,16 +35,15 @@ class UsuariosComponent extends State with UsuarioState, PaginacaoState<ResumoUs
     );
   }
 
-  Future<void> obterUsuariosPaginados() async {
-    executar(
-      rotina: () async {
-        _usuarioPaginacaoUseCase.obterUsuariosPaginados(
+  Future<void> obterUsuariosPaginados([bool reiniciar = false]) async {
+    await executar(
+      rotina: () async => await _usuarioPaginacaoUseCase.obterUsuariosPaginados(
           numeroMunicipio: filtroState.numeroMunicipio,
           numeroInstituicao: filtroState.numeroInstituicao,
           pesquisa: pesquisa,
           limite: limite,
-        );
-      },
+          reiniciar: reiniciar,
+        ),
       mensagemErro: "Não foi possível obter os usuários paginado",
     );
   }
@@ -61,6 +59,13 @@ class UsuariosComponent extends State with UsuarioState, PaginacaoState<ResumoUs
     executar(
       rotina: () => filtroState.selecionarInstituicao(instituicao),
       mensagemErro: "Erro ao selecionar o filtro de instituição",
+    );
+  }
+
+  Future<void> realizarPesquisaDeUsuarios(String pesquisa) async {
+    await executar(
+      rotina: () async => await _usuarioPaginacaoUseCase.obterUsuariosPorPesquisa(pesquisa),
+      mensagemErro: "Não foi possível obter os usuários",
     );
   }
 }

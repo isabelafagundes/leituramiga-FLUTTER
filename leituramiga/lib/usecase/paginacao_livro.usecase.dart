@@ -15,6 +15,14 @@ class PaginacaoLivroUseCase {
     _state.paginar(pagina);
   }
 
+  Future<void> obterLivrosPorPesquisa(String pesquisa) async {
+    _state.reiniciar();
+    _state.pesquisou = true;
+    _state.pesquisa = pesquisa;
+    List<ResumoLivro> pagina = await _repo.obterLivros(pesquisa: pesquisa);
+    _state.paginar(pagina);
+  }
+
   Future<void> obterLivrosPaginados({
     int limite = 18,
     int? numeroMunicipio,
@@ -23,7 +31,9 @@ class PaginacaoLivroUseCase {
     String? pesquisa,
     int? numeroCategoria,
     String? emailUsuario,
+    bool reiniciar = false,
   }) async {
+    if (reiniciar) _state.reiniciar();
     List<ResumoLivro> pagina = await _repo.obterLivros(
       numeroPagina: _state.pagina,
       limite: limite,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:leituramiga/component/autenticacao.component.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
+import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/menu_lateral.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
@@ -133,6 +134,8 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                   TextoWidget(
                                     texto: "${_autenticacaoState.usuario?.nome.split(" ").first}!",
                                     tema: widget.tema,
+                                    weight: FontWeight.w500,
+                                    tamanho: widget.tema.tamanhoFonteXG,
                                     cor: Color(widget.tema.accent),
                                   ),
                                 ],
@@ -144,11 +147,25 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                               child: GestureDetector(
                                 onTap: () => Rota.navegar(context, Rota.PERFIL),
                                 child: Container(
-                                  width: 60,
-                                  height: 60,
+                                  width: 70,
+                                  height: 70,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
-                                    color: Color(widget.tema.neutral).withOpacity(.1),
+                                    borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 2),
+                                    color: [
+                                      kCorAzul,
+                                      kCorPessego,
+                                      kCorVerde,
+                                      Color(widget.tema.accent)
+                                    ][_autenticacaoState.usuario?.numeroDeLivros ?? 0 % 4]
+                                        .withOpacity(.5),
+                                  ),
+                                  child: Center(
+                                    child: TextoWidget(
+                                      tamanho: widget.tema.tamanhoFonteXG * 1.5,
+                                      weight: FontWeight.w600,
+                                      texto: "${_autenticacaoState.usuario?.nome.substring(0, 1)}",
+                                      tema: widget.tema,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -249,7 +266,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                   child: BotoesMenuLateralWidget(
                     tema: widget.tema,
                     aoEntrar: () {},
-                    aoSair: (){},
+                    aoSair: () {},
                     exibindoMenu: true,
                     exibirSeta: true,
                     deslogar: _deslogar,

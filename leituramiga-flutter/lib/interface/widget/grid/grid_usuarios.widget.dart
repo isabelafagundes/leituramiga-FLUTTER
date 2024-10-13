@@ -35,7 +35,7 @@ class GridUsuariosWidget extends StatelessWidget {
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: _obterQuantidadePorLinha(context),
-              mainAxisExtent: 140,
+              mainAxisExtent: 130,
               mainAxisSpacing: tema.espacamento * 2,
               crossAxisSpacing: tema.espacamento * 2,
             ),
@@ -47,6 +47,7 @@ class GridUsuariosWidget extends StatelessWidget {
                   cursor: SystemMouseCursors.click,
                   child: CardUsuarioWidget(
                     tema: tema,
+                    nome: usuario.nome,
                     nomeUsuario: usuario.nomeUsuario,
                     nomeInstituicao: usuario.nomeInstituicao,
                     nomeCidade: usuario.nomeMunicipio,
@@ -61,7 +62,6 @@ class GridUsuariosWidget extends StatelessWidget {
 
   int _obterQuantidadePorLinha(BuildContext context) {
     double largura = MediaQuery.of(context).size.width;
-    if (largura > 1600) return 5;
     if (largura > 1400) return 4;
     if (largura > 800) return 3;
     return 1;

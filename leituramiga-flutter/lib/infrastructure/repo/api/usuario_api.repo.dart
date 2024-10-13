@@ -43,13 +43,13 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
   }
 
   @override
-  Future<List<ResumoUsuario>> obterUsuarios([
+  Future<List<ResumoUsuario>> obterUsuarios({
     int numeroPagina = 0,
     int limite = 18,
     int? numeroMunicipio,
     int? numeroInstituicao,
     String? pesquisa,
-  ]) async {
+  }) async {
     Map<String, dynamic> mapaFiltros = {
       "numeroPagina": numeroPagina,
       "tamanhoPagina": limite,
@@ -57,6 +57,8 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
       "numeroInstituicao": numeroInstituicao,
       "pesquisa": pesquisa,
     };
+
+    print(mapaFiltros);
 
     return await _client.post("$host/usuarios", data: mapaFiltros).catchError((erro) {
       throw erro;

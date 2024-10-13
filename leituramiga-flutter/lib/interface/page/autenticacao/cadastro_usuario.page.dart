@@ -225,12 +225,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                     _autenticacaoComponent.atualizarSenha(controllerSenha.text);
                     _autenticacaoComponent.atualizarConfirmacaoSenha(controllerConfirmacaoSenha.text);
                     _autenticacaoState.validarSenha();
-                    telefone = controllerTelefone.text.isNotEmpty
-                        ? Telefone.criar(
-                            controllerTelefone.text.trim().substring(2, 11),
-                            controllerTelefone.text.trim().substring(0, 2),
-                          )
-                        : null;
+                    telefone = _obterTelefone;
                     email = Email.criar(controllerEmail.text.trim());
                     bool camposValidos = _validarCamposDadosGerais();
                     if (!camposValidos) return Notificacoes.mostrar("Preencha todos os campos corretamente!");
@@ -361,8 +356,10 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   Future<void> _criarUsuario() async {
     notificarCasoErro(() async {
       _autenticacaoState.validarSenha();
-      bool camposValidos = _validarCamposEndereco();
-      if (!camposValidos) return Notificacoes.mostrar("Preencha todos os campos corretamente!");
+      if (!_todosOsCamposEnderecoVazios()) {
+        bool camposValidos = _validarCamposEndereco();
+        if (!camposValidos) return Notificacoes.mostrar("Preencha todos os campos corretamente!");
+      }
       _usuarioComponent.atualizarUsuarioMemoria(_obterUsuario());
       await _usuarioComponent.atualizarUsuario();
       atualizarPagina(EtapaCadastro.CODIGO);
@@ -394,6 +391,15 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
         controllerSenha.text == controllerConfirmacaoSenha.text;
   }
 
+  bool _todosOsCamposEnderecoVazios() {
+    return controllerRua.text.isEmpty &&
+        controllerBairro.text.isEmpty &&
+        controllerCep.text.isEmpty &&
+        controllerNumero.text.isEmpty &&
+        controllerCidade.text.isEmpty &&
+        controllerEstado.text.isEmpty;
+  }
+
   bool _validarCamposEndereco() {
     return controllerRua.text.isNotEmpty &&
         controllerBairro.text.isNotEmpty &&
@@ -403,10 +409,12 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
         controllerEstado.text.isNotEmpty;
   }
 
-  Endereco get endereco {
-    Municipio municipio = _usuarioComponent.municipiosPorNumero.values.firstWhere(
+  Endereco? get endereco {
+    Municipio? municipio = _usuarioComponent.municipiosPorNumero.values.where(
       (element) => element.nome == controllerCidade.text,
-    );
+    ).firstOrNull;
+
+    if(municipio == null) return null;
 
     return Endereco.criar(
       controllerNumero.text,
@@ -429,12 +437,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
       controllerNome.text.trim(),
       controllerNomeUsuario.text.trim(),
       Email.criar(controllerEmail.text.trim()),
-      controllerTelefone.text.isNotEmpty
-          ? Telefone.criar(
-              controllerTelefone.text.trim().substring(2, 11),
-              controllerTelefone.text.trim().substring(0, 2),
-            )
-          : null,
+      _obterTelefone,
       0,
       "",
       instituicao,
@@ -444,6 +447,18 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
       endereco,
       _autenticacaoState.senha,
     );
+  }
+
+  Telefone? get _obterTelefone {
+    String telefone = controllerTelefone.text.replaceAll("(", "").replaceAll(")", "");
+    telefone = telefone.replaceAll("-", "").replaceAll(" ", "");
+
+    return controllerTelefone.text.isNotEmpty
+        ? Telefone.criar(
+            telefone.trim().substring(2, 11),
+            telefone.trim().substring(0, 2),
+          )
+        : null;
   }
 }
 

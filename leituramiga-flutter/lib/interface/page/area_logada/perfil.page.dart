@@ -84,6 +84,7 @@ class _PerfilPageState extends State<PerfilPage> {
                                 Icons.edit,
                                 color: Color(tema.base200),
                               ),
+                              corFonte: Color(tema.base200),
                               padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 1.5),
                               aoClicar: () => Rota.navegar(context, Rota.EDITAR_PERFIL),
                               label: "Editar",
@@ -112,7 +113,8 @@ class _PerfilPageState extends State<PerfilPage> {
                               if (_exibindoLivros)
                                 BotaoPequenoWidget(
                                   tema: tema,
-                                  icone: Icon(Icons.add, color: kCorFonte),
+                                  corFonte: Color(tema.base200),
+                                  icone: Icon(Icons.add, color: Color(tema.base200)),
                                   padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
                                   aoClicar: _exibindoLivros ? () => Rota.navegar(context, Rota.CRIAR_LIVRO) : () {},
                                   label: _exibindoLivros ? "Adicionar livro" : "Criar comentário",

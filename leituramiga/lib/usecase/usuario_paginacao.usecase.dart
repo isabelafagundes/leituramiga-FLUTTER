@@ -14,18 +14,28 @@ class UsuarioPaginacaoUseCase {
     _state.paginar(pagina);
   }
 
+  Future<void> obterUsuariosPorPesquisa(String pesquisa) async {
+    _state.reiniciar();
+    _state.pesquisa = pesquisa;
+    _state.pesquisou = true;
+    List<ResumoUsuario> pagina = await _repo.obterUsuarios(pesquisa: pesquisa);
+    _state.paginar(pagina);
+  }
+
   Future<void> obterUsuariosPaginados({
     int limite = 18,
     String? pesquisa,
     int? numeroMunicipio,
     int? numeroInstituicao,
+    bool reiniciar = false,
   }) async {
+    if (reiniciar) _state.reiniciar();
     List<ResumoUsuario> pagina = await _repo.obterUsuarios(
-      _state.pagina,
-      _state.limite,
-      numeroMunicipio,
-      numeroInstituicao,
-      pesquisa,
+      numeroPagina: _state.pagina,
+      limite: _state.limite,
+      numeroMunicipio: numeroMunicipio,
+      numeroInstituicao: numeroInstituicao,
+      pesquisa: pesquisa,
     );
     _state.paginar(pagina, limite, pesquisa ?? "");
   }

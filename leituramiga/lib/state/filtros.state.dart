@@ -18,6 +18,7 @@ class FiltroState {
   int? numeroInstituicao;
   int? numeroCategoria;
   UF? estado;
+  List<Municipio> municipios = [];
   TipoSolicitacao? tipo;
 
   void selecionarEstado(UF uf) {
@@ -59,6 +60,8 @@ class FiltroState {
     }
     this.tipo = tipo;
   }
+
+  bool get temFiltros => numeroCategoria != null || numeroInstituicao != null || numeroMunicipio != null || tipo != null;
 
   void limparFiltros() {
     numeroCategoria = null;

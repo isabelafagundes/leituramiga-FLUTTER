@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leituramiga/domain/usuario/usuario.dart';
+import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
@@ -38,12 +39,20 @@ class ConteudoUsuarioWidget extends StatelessWidget {
                     height: 100,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(tema.borderRadiusXG * 2),
-                      color: Color(tema.neutral).withOpacity(.1),
+                      color: [kCorAzul, kCorPessego, kCorVerde, Color(tema.accent)][usuario.numeroDeLivros % 4]
+                          .withOpacity(.5),
+                    ),
+                    child: Center(
+                      child: TextoWidget(
+                        tamanho: tema.tamanhoFonteXG * 1.4,
+                        weight: FontWeight.w600,
+                        texto: "${usuario.nome.substring(0, 1)}",
+                        tema: tema,
+                      ),
                     ),
                   ),
                   SizedBox(height: tema.espacamento),
                   Container(
-                    width: 70,
                     padding: EdgeInsets.symmetric(vertical: tema.espacamento / 3),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(tema.borderRadiusXG),
@@ -55,15 +64,15 @@ class ConteudoUsuarioWidget extends StatelessWidget {
                       children: [
                         TextoWidget(
                           tema: tema,
-                          texto: "10",
-                          tamanho: tema.tamanhoFonteP + 2,
+                          texto: usuario.numeroDeLivros.toString(),
+                          tamanho: tema.tamanhoFonteM,
                           cor: Color(tema.baseContent),
                         ),
-                        SizedBox(width: tema.espacamento / 2),
+                        SizedBox(width: tema.espacamento),
                         SvgWidget(
                           nomeSvg: "menu/book-open",
                           cor: Color(tema.accent),
-                          altura: 14,
+                          altura: 16,
                         )
                       ],
                     ),
@@ -94,7 +103,7 @@ class ConteudoUsuarioWidget extends StatelessWidget {
                         weight: FontWeight.w500,
                         tamanho: tema.tamanhoFonteM * 2,
                       ),
-                      SizedBox(width: tema.espacamento*2),
+                      SizedBox(width: tema.espacamento * 2),
                       widgetInferior ?? Container(),
                     ],
                   ),
@@ -127,7 +136,6 @@ class ConteudoUsuarioWidget extends StatelessWidget {
                     tamanhoFonte: tema.tamanhoFonteM + 2,
                     texto: usuario.nomeMunicipio ?? "Não informado.",
                   ),
-
                 ],
               ),
             ),

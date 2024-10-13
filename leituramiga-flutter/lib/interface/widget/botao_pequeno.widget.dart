@@ -12,6 +12,7 @@ class BotaoPequenoWidget extends StatefulWidget {
   final String label;
   final Widget? icone;
   final EdgeInsets? padding;
+  final double altura;
 
   const BotaoPequenoWidget({
     super.key,
@@ -22,6 +23,7 @@ class BotaoPequenoWidget extends StatefulWidget {
     required this.label,
     this.icone,
     this.padding,
+    this.altura = 35,
   });
 
   @override
@@ -40,7 +42,7 @@ class _BotaoPequenoWidgetState extends State<BotaoPequenoWidget> {
       child: GestureDetector(
         onTap: widget.aoClicar,
         child: Container(
-          height: 35,
+          height: widget.altura,
           padding: widget.padding ?? EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 3),
           decoration: BoxDecoration(
             boxShadow: [
@@ -61,13 +63,13 @@ class _BotaoPequenoWidgetState extends State<BotaoPequenoWidget> {
               children: [
                 if (widget.icone != null) ...[
                   widget.icone ?? const SizedBox(),
-                  SizedBox(width: widget.tema.espacamento),
+                  SizedBox(width: widget.tema.espacamento+2),
                 ],
                 TextoWidget(
                   tema: widget.tema,
-                  weight: FontWeight.w500,
                   cor: widget.corFonte ?? kCorFonte,
                   texto: widget.label,
+                  weight: FontWeight.w500,
                   tamanho: widget.tema.tamanhoFonteM + 2,
                 ),
               ],

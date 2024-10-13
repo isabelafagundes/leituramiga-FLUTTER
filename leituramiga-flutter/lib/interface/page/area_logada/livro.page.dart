@@ -5,10 +5,7 @@ import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/categoria_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/instituicao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
+import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -42,10 +39,10 @@ class _LivrosPageState extends State<LivrosPage> {
   @override
   void initState() {
     _livrosComponent.inicializar(
-      LivroMockRepo(),
-      CategoriaMockRepo(),
-      InstituicaoMockRepo(),
-      EnderecoMockRepo(),
+      AppModule.livroRepo,
+      AppModule.categoriaRepo,
+      AppModule.instituicaoEnsinoRepo,
+      AppModule.enderecoRepo,
       atualizar,
     );
     super.initState();
@@ -99,7 +96,7 @@ class _LivrosPageState extends State<LivrosPage> {
                                       texto: _livrosComponent.livroSelecionado?.nome ?? '',
                                       tema: tema,
                                       tamanho: tema.tamanhoFonteM * 2,
-                                      weight:   FontWeight.w500,
+                                      weight: FontWeight.w500,
                                       cor: Color(tema.accent),
                                     ),
                                     SizedBox(height: tema.espacamento),
@@ -132,7 +129,7 @@ class _LivrosPageState extends State<LivrosPage> {
                                 TextoWidget(
                                   texto: "Descrição: ",
                                   tema: tema,
-                                  tamanho: tema.tamanhoFonteM + 2,
+                                  tamanho: tema.tamanhoFonteM + 4,
                                   weight: FontWeight.w500,
                                   cor: Color(tema.accent),
                                 ),
@@ -140,13 +137,14 @@ class _LivrosPageState extends State<LivrosPage> {
                                   texto: _livrosComponent.livroSelecionado?.descricao ?? '',
                                   tema: tema,
                                   tamanho: tema.tamanhoFonteM + 2,
+                                  maxLines: 10,
                                   cor: Color(tema.baseContent),
                                 ),
-                                SizedBox(height: tema.espacamento),
+                                SizedBox(height: tema.espacamento * 2),
                                 TextoWidget(
                                   texto: "Estado do livro: ",
                                   tema: tema,
-                                  tamanho: tema.tamanhoFonteM + 2,
+                                  tamanho: tema.tamanhoFonteM + 4,
                                   weight: FontWeight.w500,
                                   cor: Color(tema.accent),
                                 ),
@@ -155,6 +153,12 @@ class _LivrosPageState extends State<LivrosPage> {
                                   tema: tema,
                                   tamanho: tema.tamanhoFonteM + 2,
                                   cor: Color(tema.baseContent),
+                                ),
+                                SizedBox(height: tema.espacamento),
+                                SizedBox(
+                                  child: Divider(
+                                    color: Color(tema.accent),
+                                  ),
                                 ),
                                 SizedBox(height: tema.espacamento),
                                 Align(
@@ -175,14 +179,14 @@ class _LivrosPageState extends State<LivrosPage> {
                                         TextoComIconeWidget(
                                           tema: tema,
                                           nomeSvg: 'academico/academic-cap',
-                                          texto: _livrosComponent.livroSelecionado?.nomeInstituicao ?? '',
+                                          texto: _livrosComponent.livroSelecionado?.nomeInstituicao ?? 'Não informado',
                                           tamanhoFonte: tema.tamanhoFonteM + 2,
                                         ),
                                         SizedBox(height: tema.espacamento / 2),
                                         TextoComIconeWidget(
                                           tema: tema,
                                           nomeSvg: 'menu/map-pin-fill',
-                                          texto: _livrosComponent.livroSelecionado?.nomeMunicipio ?? '',
+                                          texto: _livrosComponent.livroSelecionado?.nomeMunicipio ?? 'Não informado',
                                           tamanhoFonte: tema.tamanhoFonteM + 2,
                                         ),
                                       ],
@@ -265,6 +269,7 @@ class _LivrosPageState extends State<LivrosPage> {
                               );
                             },
                           ),
+                          SizedBox(height: tema.espacamento * 4),
                         ],
                       ),
                     ],

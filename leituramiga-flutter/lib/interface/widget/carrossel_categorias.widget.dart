@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:leituramiga/domain/livro/categoria.dart';
+import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/chip/chip.widget.dart';
@@ -62,7 +63,7 @@ class _CarrosselCategoriaWidgetState extends State<CarrosselCategoriaWidget> {
                             cor: cores[indice],
                             aoClicar: () => widget.selecionarCategoria(categoria),
                             texto: categoria.descricao,
-                            corTexto: const Color(0xff464A52),
+                            corTexto: kCorFonte,
                             ativado: widget.categoriaSelecionada == categoria.numero,
                           ),
                           SizedBox(width: widget.tema.espacamento * 2),

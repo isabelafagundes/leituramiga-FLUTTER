@@ -39,8 +39,8 @@ class _BotaoWidgetState extends State<BotaoWidget> {
       child: GestureDetector(
         onTap: widget.aoClicar,
         child: Container(
-          width: 260,
-          height: 45,
+          width: 280,
+          height: 50,
           padding: EdgeInsets.symmetric(
             horizontal: widget.tema.espacamento,
             vertical: widget.tema.espacamento / 3,

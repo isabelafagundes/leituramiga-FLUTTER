@@ -4,8 +4,8 @@ class ResumoUsuario extends Entidade {
   final String _email;
   final String _nome;
   final String _nomeUsuario;
-  final String _nomeInstituicao;
-  final String _nomeMunicipio;
+  final String? _nomeInstituicao;
+  final String? _nomeMunicipio;
   final int _quantidadeLivros;
 
   ResumoUsuario.carregar(
@@ -22,7 +22,14 @@ class ResumoUsuario extends Entidade {
 
   @override
   Map<String, dynamic> paraMapa() {
-    return {};
+    return {
+      "email": _email,
+      "nome": _nome,
+      "nomeUsuario": _nomeUsuario,
+      "nomeInstituicao": _nomeInstituicao,
+      "nomeMunicipio": _nomeMunicipio,
+      "quantidadeLivros": _quantidadeLivros,
+    };
   }
 
   factory ResumoUsuario.carregarDeMapa(Map<String, dynamic> usuarioAsMap) {
@@ -31,19 +38,18 @@ class ResumoUsuario extends Entidade {
       usuarioAsMap["username"],
       usuarioAsMap["nomeInstituicao"],
       usuarioAsMap["nomeCidade"],
-      0,//todo: adicionar quantidade livros
+      usuarioAsMap["quantidadeLivros"],
       usuarioAsMap["email"],
     );
   }
 
   int get quantidadeLivros => _quantidadeLivros;
 
-  String get nomeMunicipio => _nomeMunicipio;
+  String? get nomeMunicipio => _nomeMunicipio;
 
-  String get nomeInstituicao => _nomeInstituicao;
+  String? get nomeInstituicao => _nomeInstituicao;
 
   String get nomeUsuario => _nomeUsuario;
 
   String get nome => _nome;
-
 }

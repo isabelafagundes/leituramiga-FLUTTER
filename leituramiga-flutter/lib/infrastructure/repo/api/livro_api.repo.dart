@@ -98,7 +98,7 @@ class LivroApiRepo extends LivroRepo with ConfiguracaoApiState {
     filtros["pesquisa"] = pesquisa;
     filtros["numeroCategoria"] = numeroCategoria;
     filtros["emailUsuario"] = emailUsuario == null || emailUsuario.isEmpty ? null : emailUsuario;
-    filtros["tipo"] = tipo?.id;
+    filtros["tipoSolicitacao"] = tipo?.id;
     return filtros;
   }
 }

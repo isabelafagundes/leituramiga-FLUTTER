@@ -11,8 +11,8 @@ class Livro extends Entidade {
   final String _descricaoEstado;
   final int _numeroCategoria;
   final String _nomeUsuario;
-  final String _nomeInstituicao;
-  final String _nomeMunicipio;
+  final String? _nomeInstituicao;
+  final String? _nomeMunicipio;
   final List<TipoSolicitacao> _tiposSolicitacao;
   final String _emailUsuario;
   final DataHora? _dataCriacao;
@@ -102,7 +102,7 @@ class Livro extends Entidade {
 
   String get nomeUsuario => _nomeUsuario;
 
-  String get nomeMunicipio => _nomeMunicipio;
+  String? get nomeMunicipio => _nomeMunicipio;
 
-  String get nomeInstituicao => _nomeInstituicao;
+  String? get nomeInstituicao => _nomeInstituicao;
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
@@ -32,8 +31,8 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
         alignment: Alignment.center,
         children: [
           Container(
-            width: 280,
-            height: 35,
+            width: 300,
+            height: 40,
             decoration: BoxDecoration(
               color: Color(widget.tema.base200),
               borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
@@ -58,11 +57,12 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
                       ),
-                      width: 133,
-                      height: 26,
+                      width: 143,
+                      height: 31,
                       child: Center(
                         child: TextoWidget(
                           tema: widget.tema,
+                          tamanho: widget.tema.tamanhoFonteM + 2,
                           texto: widget.escolhas[0],
                           cor: Color(widget.tema.baseContent),
                         ),
@@ -73,8 +73,8 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
                   GestureDetector(
                     onTap: () => _alterar(1),
                     child: Container(
-                      width: 133,
-                      height: 26,
+                      width: 143,
+                      height: 31,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
                       ),
@@ -82,6 +82,7 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
                         child: TextoWidget(
                           tema: widget.tema,
                           texto: widget.escolhas[1],
+                          tamanho: widget.tema.tamanhoFonteM + 2,
                           cor: Color(widget.tema.baseContent),
                         ),
                       ),
@@ -92,12 +93,12 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
             ),
           ),
           AnimatedPositioned(
-            left: chave == 0 ? 5 : 145,
+            left: chave == 0 ? 5 : 152,
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeOut,
             child: Container(
-              width: 130,
-              height: 26,
+              width: 143,
+              height: 31,
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
@@ -112,8 +113,9 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
               child: Center(
                 child: TextoWidget(
                   tema: widget.tema,
-                  cor: kCorFonte,
+                  cor: Color(widget.tema.base200),
                   weight: FontWeight.w600,
+                  tamanho: widget.tema.tamanhoFonteM + 2,
                   texto: widget.escolhas[chave],
                 ),
               ),

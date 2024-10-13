@@ -20,6 +20,7 @@ class LayoutFiltroWidget extends StatefulWidget {
   final Tema tema;
   final bool usuario;
   final Function() aplicarFiltros;
+  final Function() limparFiltros;
   final Map<int, Categoria> categoriasPorId;
   final Map<int, Municipio> municipiosPorId;
   final Map<int, InstituicaoDeEnsino> instituicoesPorId;
@@ -46,6 +47,7 @@ class LayoutFiltroWidget extends StatefulWidget {
     this.categoriaSelecionada,
     required this.carrergando,
     required this.selecionarEstado,
+    required this.limparFiltros,
   });
 
   @override
@@ -160,12 +162,16 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                       ),
                       SizedBox(height: widget.tema.espacamento),
                       Container(
-                        constraints: const BoxConstraints(maxWidth: 300),
+                        constraints: const BoxConstraints(maxWidth: 400),
                         child: MenuWidget(
                           tema: widget.tema,
                           valorSelecionado: FiltroState.instancia.estado?.descricao,
                           escolhas: UF.values.map((e) => e.descricao.toString()).toList(),
-                          aoClicar: (estado) => widget.selecionarEstado(UF.deDescricao(estado)),
+                          aoClicar: (estado) async {
+                            await widget.selecionarEstado(UF.deDescricao(estado));
+                            print('Estado selecionado: ${_filtroState.municipios.length}');
+                            setState(() {});
+                          },
                         ),
                       ),
                     ],
@@ -178,17 +184,17 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                   ),
                   SizedBox(height: widget.tema.espacamento),
                   Container(
-                    constraints: const BoxConstraints(maxWidth: 300),
+                    constraints: const BoxConstraints(maxWidth: 400),
                     child: MenuWidget(
                       tema: widget.tema,
-                      valorSelecionado: widget.municipiosPorId.values
+                      valorSelecionado: _filtroState.municipios
                           .where((element) => element.numero == FiltroState.instancia.numeroMunicipio)
                           .firstOrNull
                           ?.nome,
-                      escolhas: widget.municipiosPorId.values.map((e) => e.nome).toList(),
+                      escolhas: _filtroState.municipios.map((e) => e.nome).toList(),
                       aoClicar: (nomeCidade) => setState(() {
                         widget.selecionarMunicipio(
-                          widget.municipiosPorId.values.firstWhere((element) => element.nome == nomeCidade),
+                          _filtroState.municipios.firstWhere((element) => element.nome == nomeCidade),
                         );
                       }),
                     ),
@@ -201,7 +207,7 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                   ),
                   SizedBox(height: widget.tema.espacamento),
                   Container(
-                    constraints: const BoxConstraints(maxWidth: 300),
+                    constraints: const BoxConstraints(maxWidth: 400),
                     child: MenuWidget(
                       tema: widget.tema,
                       escolhas: widget.instituicoesPorId.values.map((e) => e.nome).toList(),
@@ -213,6 +219,22 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                     ),
                   ),
                   const Spacer(),
+                  if (_filtroState.temFiltros)
+                    BotaoWidget(
+                      tema: widget.tema,
+                      corFundo: Color(widget.tema.base200),
+                      corTexto: Color(widget.tema.baseContent),
+                      texto: 'Limpar filtros',
+                      icone: SvgWidget(
+                        nomeSvg: 'limpar_icon',
+                        cor: Color(widget.tema.baseContent),
+                      ),
+                      aoClicar: () {
+                        widget.limparFiltros();
+                        setState(() {});
+                      },
+                    ),
+                  SizedBox(height: widget.tema.espacamento * 2),
                   BotaoWidget(
                     tema: widget.tema,
                     texto: 'Aplicar filtros',

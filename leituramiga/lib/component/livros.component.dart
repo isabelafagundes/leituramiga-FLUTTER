@@ -57,7 +57,7 @@ class LivrosComponent extends State
     );
   }
 
-  Future<void> obterLivrosPaginados() async {
+  Future<void> obterLivrosPaginados([bool reiniciar = false]) async {
     await executar(
       rotina: () async {
         await _paginacaoUseCase.obterLivrosPaginados(
@@ -67,8 +67,16 @@ class LivrosComponent extends State
           tipo: filtroState.tipo,
           pesquisa: pesquisa,
           limite: limite,
+          reiniciar: reiniciar,
         );
       },
+      mensagemErro: "Não foi possível obter os livros",
+    );
+  }
+
+  Future<void> realizarPesquisaLivros(String pesquisa) async {
+    await executar(
+      rotina: () async => await _paginacaoUseCase.obterLivrosPorPesquisa(pesquisa),
       mensagemErro: "Não foi possível obter os livros",
     );
   }
@@ -145,7 +153,10 @@ class LivrosComponent extends State
 
   Future<void> obterMunicipios(UF uf, [String? pesquisa]) async {
     await executar(
-      rotina: () async => await _enderecoUseCase.obterMunicipios(uf, pesquisa),
+      rotina: () async {
+        await _enderecoUseCase.obterMunicipios(uf, pesquisa);
+        filtroState.municipios = municipiosPorNumero.values.toList();
+      },
       mensagemErro: "Não foi possível obter os municípios",
     );
   }

@@ -95,7 +95,7 @@ class CardLivroWidget extends StatelessWidget {
                                   texto: nomeLivro,
                                   cor: Color(tema.baseContent),
                                   weight: FontWeight.w500,
-                                  tamanho: tema.tamanhoFonteG,
+                                  tamanho: tema.tamanhoFonteXG,
                                 ),
                               ),
                               if (ativado)
@@ -107,7 +107,6 @@ class CardLivroWidget extends StatelessWidget {
                           ),
                           const Spacer(),
                           Container(
-                            constraints: const BoxConstraints(maxWidth: 200),
                             child: TextoWidget(
                               texto: descricao,
                               tema: tema,
@@ -123,23 +122,22 @@ class CardLivroWidget extends StatelessWidget {
                             tema: tema,
                             nomeSvg: 'usuario/user',
                             texto: nomeUsuario,
+                            tamanhoFonte: tema.tamanhoFonteM,
                           ),
-                          if (nomeInstituicao != null) ...[
-                            SizedBox(height: tema.espacamento / 2),
-                            TextoComIconeWidget(
-                              tema: tema,
-                              nomeSvg: 'academico/academic-cap',
-                              texto: nomeInstituicao!,
-                            ),
-                          ],
-                          if (nomeCidade != null) ...[
-                            SizedBox(height: tema.espacamento / 2),
-                            TextoComIconeWidget(
-                              tema: tema,
-                              nomeSvg: 'menu/map-pin-fill',
-                              texto: nomeCidade!,
-                            ),
-                          ]
+                          SizedBox(height: tema.espacamento / 2),
+                          TextoComIconeWidget(
+                            tema: tema,
+                            nomeSvg: 'academico/academic-cap',
+                            texto: nomeInstituicao ?? 'Não informado',
+                            tamanhoFonte: tema.tamanhoFonteM,
+                          ),
+                          SizedBox(height: tema.espacamento / 2),
+                          TextoComIconeWidget(
+                            tema: tema,
+                            nomeSvg: 'menu/map-pin-fill',
+                            tamanhoFonte: tema.tamanhoFonteM,
+                            texto: nomeCidade ?? 'Não informado',
+                          ),
                         ],
                       ),
                     ),
@@ -151,7 +149,7 @@ class CardLivroWidget extends StatelessWidget {
           if (selecao)
             Positioned(
               top: 0,
-              left:0,
+              left: 0,
               child: MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
