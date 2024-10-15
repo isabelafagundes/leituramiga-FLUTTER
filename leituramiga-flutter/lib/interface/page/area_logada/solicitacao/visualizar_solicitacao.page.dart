@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/solicitacao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
@@ -7,8 +8,8 @@ import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
-import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
+import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/comentario_mock.repo.dart';
@@ -16,8 +17,9 @@ import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.
 import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/service/mock/solicitacao_mock.service.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
+import 'package:projeto_leituramiga/infrastructure/service/mock/solicitacao_mock.service.dart';
+import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/sobreposicao.util.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
@@ -28,7 +30,6 @@ import 'package:projeto_leituramiga/interface/widget/layout_flexivel.widget.dart
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/conteudo_endereco_solicitacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_informacoes_adicionais.widget.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/time_picker.widget.dart';
@@ -77,16 +78,16 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
   void initState() {
     super.initState();
     _solicitacaoComponent.inicializar(
-      SolicitacaoMockRepo(),
-      SolicitacaoMockService(),
-      NotificacaoMockRepo(),
+      AppModule.solicitacaoRepo,
+      AppModule.solicitacaoService,
+      AppModule.notificacaoRepo,
       atualizar,
     );
     _usuarioComponent.inicializar(
-      UsuarioMockRepo(),
-      ComentarioMockRepo(),
-      EnderecoMockRepo(),
-      LivroMockRepo(),
+      AppModule.usuarioRepo,
+      AppModule.comentarioRepo,
+      AppModule.enderecoRepo,
+      AppModule.livroRepo,
       atualizar,
     );
 
@@ -173,6 +174,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
             controllerCidade: controllerCidade,
             usuarios: [_autenticacaoState.usuario!.nomeUsuario, _usuarioComponent.usuarioSolicitacao!.nomeUsuario],
             controllerEstado: controllerEstado,
+            utilizaEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoPerfil,
           ),
         ),
       CriarSolicitacao.CONCLUSAO => SingleChildScrollView(

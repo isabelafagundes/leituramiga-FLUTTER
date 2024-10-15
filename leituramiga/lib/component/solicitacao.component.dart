@@ -102,4 +102,11 @@ class SolicitacaoComponent extends State with SolicitacaoState, PaginacaoState<R
       mensagemErro: "Não foi possível remover o livro",
     );
   }
+
+  void utilizarEnderecoDoPerfil() async {
+    await executar(
+      rotina: () => _solicitacaoUseCase.utilizarEnderecoPerfil(),
+      mensagemErro: "Não foi possível utilizar o endereço do perfil",
+    );
+  }
 }

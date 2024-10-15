@@ -17,20 +17,16 @@ class LivrosSolicitacao {
     _livros.add(resumo);
   }
 
-  factory LivrosSolicitacao.carregarDeMapa(Map<String, dynamic> mapa) {
+  factory LivrosSolicitacao.carregarDeMapa(List<dynamic> livros, Map<String, dynamic> mapa, String email) {
     return LivrosSolicitacao.carregar(
-      mapa['numeroSolicitacao'],
-      mapa['emailUsuario'],
-      (mapa['livros'] as List).map((livro) => LivroSolicitacao.carregarDeMapa(livro)).toList(),
+      mapa['codigoSolicitacao'],
+      email,
+      livros.map((livro) => LivroSolicitacao.carregarDeMapa(livro as Map<String, dynamic>)).toList(),
     );
   }
 
-  Map<String, dynamic> paraMapa() {
-    return {
-      'numeroSolicitacao': _numeroSolicitacao,
-      'emailUsuario': _emailUsuario,
-      'livros': _livros.map((livro) => livro.paraMapa()).toList(),
-    };
+  List<Map<String, dynamic>> paraMapa() {
+    return _livros.map((livro) => livro.paraMapaLivro(emailUsuario)).toList();
   }
 
   List<LivroSolicitacao> get livros => _livros;

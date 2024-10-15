@@ -49,7 +49,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                         SizedBox(height: tema.espacamento),
                         TextoWidget(
                           tamanho: tema.tamanhoFonteG,
-                          texto: "@$usuarioSolicitante}",
+                          texto: "@$usuarioSolicitante",
                           tema: tema,
                           weight: FontWeight.w500,
                         ),

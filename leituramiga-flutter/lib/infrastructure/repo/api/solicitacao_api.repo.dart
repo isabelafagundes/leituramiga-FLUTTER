@@ -56,10 +56,18 @@ class SolicitacaoApiRepo extends SolicitacaoRepo with ConfiguracaoApiState {
       "numeroPagina": numeroPagina,
       "tamanhoPagina": limite,
       "emailUsuario": emailUsuario,
+      "numeroCidade": null,
+      "numeroInstituicao": null,
+      "pesquisa": null,
+      "tipoSolicitacao": null,
+      "numeroCategoria": null,
     };
 
-    return await _client.get("$host/solicitacoes", data: mapaFiltros).catchError((erro) {
+    return await _client.post("$host/solicitacoes", data: mapaFiltros).catchError((erro) {
       throw erro;
-    }).then((response) => (response.data as List).map((e) => ResumoSolicitacao.carregarDeMapa(e)).toList());
+    }).then((response) {
+      print(response.data);
+      return (response.data as List).map((e) => ResumoSolicitacao.carregarDeMapa(e)).toList();
+    });
   }
 }

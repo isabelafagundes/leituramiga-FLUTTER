@@ -31,6 +31,7 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
   final List<String> cidades;
   final List<String> estados;
   final List<String> usuarios;
+  final bool utilizaEnderecoPerfil;
 
   const ConteudoEnderecoSolicitacaoWidget({
     super.key,
@@ -55,6 +56,7 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
     required this.controllerFormaEntrega,
     required this.aoSelecionarFormaEntrega,
     required this.aoSelecionarFrete,
+    required this.utilizaEnderecoPerfil,
   });
 
   @override
@@ -76,26 +78,29 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
                   direction: Responsive.larguraPP(context) ? Axis.vertical : Axis.horizontal,
                   children: [
                     Flexible(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextoWidget(
-                            texto: "Forma de entrega",
-                            tema: tema,
-                            cor: Color(tema.baseContent),
-                          ),
-                          SizedBox(height: tema.espacamento),
-                          MenuWidget(
-                            tema: tema,
-                            valorSelecionado:
-                                controllerFormaEntrega.text.isNotEmpty ? controllerFormaEntrega.text : null,
-                            escolhas: const ["Correios", "Presencial"],
-                            aoClicar: (valor) => aoClicarFormaEntrega(
-                              FormaEntrega.values.firstWhere((e) => e.toString() == valor),
+                      child: SizedBox(
+                        height: 70,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextoWidget(
+                              texto: "Forma de entrega",
+                              tema: tema,
+                              cor: Color(tema.baseContent),
                             ),
-                          ),
-                        ],
+                            SizedBox(height: tema.espacamento),
+                            Expanded(
+                              child: MenuWidget(
+                                tema: tema,
+                                valorSelecionado:
+                                    controllerFormaEntrega.text.isNotEmpty ? controllerFormaEntrega.text : null,
+                                escolhas: const ["Correios", "Presencial"],
+                                aoClicar: (valor) => aoClicarFormaEntrega(FormaEntrega.deDescricao(valor)),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -114,12 +119,13 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
                           const Spacer(),
                           SwitcherWidget(
                             tema: tema,
+                            valor: utilizaEnderecoPerfil,
+                            valorInicial: utilizaEnderecoPerfil,
                             aoClicar: utilizarEnderecoPerfil,
                           ),
                         ],
                       ),
                     ),
-
                   ],
                 ),
               ),

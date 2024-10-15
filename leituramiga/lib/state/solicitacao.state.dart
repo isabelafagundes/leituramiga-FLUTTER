@@ -15,6 +15,7 @@ mixin class SolicitacaoState {
   InstituicaoDeEnsino? instituicaoSelecionada;
   List<LivroSolicitacao> livrosSelecionados = [];
   List<ResumoSolicitacao> solicitacoes = [];
+  bool utilizarEnderecoPerfil = false;
 
 
   bool verificarSelecao(ResumoLivro livro) {

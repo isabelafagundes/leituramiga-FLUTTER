@@ -27,7 +27,7 @@ class EnderecoApiRepo extends EnderecoRepo with ConfiguracaoApiState {
   @override
   Future<Endereco?> obterEndereco() async {
     return await _client.get("$host/endereco").catchError((erro) {
-      if (erro.response?.statusCode == 404) return null;
+      if (erro.response?.statusCode == 404) throw EnderecoNaoEncontrado();
       throw erro;
     }).then((response) => Endereco.carregarDeMapa(response.data));
   }

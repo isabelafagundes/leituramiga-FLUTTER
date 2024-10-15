@@ -1,23 +1,21 @@
-import 'package:flutter/cupertino.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/solicitacao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/domain/data_hora.dart';
 import 'package:leituramiga/domain/endereco/endereco.dart';
+import 'package:leituramiga/domain/endereco/municipio.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
+import 'package:leituramiga/domain/livro/resumo_livro.dart';
+import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
-import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
+import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/comentario_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/service/mock/solicitacao_mock.service.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
+import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/util/sobreposicao.util.dart';
@@ -27,9 +25,9 @@ import 'package:projeto_leituramiga/interface/widget/calendario.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/conteudo_selecao_livros.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/layout_flexivel.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/conteudo_endereco_solicitacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_informacoes_adicionais.widget.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/time_picker.widget.dart';
@@ -66,6 +64,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
   final TextEditingController controllerHoraDevolucao = TextEditingController();
   final TextEditingController controllerFrete = TextEditingController();
   final TextEditingController controllerFormaEntrega = TextEditingController();
+  FormaEntrega? formaEntregaSelecionada;
 
   CriarSolicitacao estagioPagina = CriarSolicitacao.INFORMACOES_ADICIONAIS;
 
@@ -80,24 +79,26 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
   void initState() {
     super.initState();
     _solicitacaoComponent.inicializar(
-      SolicitacaoMockRepo(),
-      SolicitacaoMockService(),
-      NotificacaoMockRepo(),
+      AppModule.solicitacaoRepo,
+      AppModule.solicitacaoService,
+      AppModule.notificacaoRepo,
       atualizar,
     );
     _usuarioComponent.inicializar(
-      UsuarioMockRepo(),
-      ComentarioMockRepo(),
-      EnderecoMockRepo(),
-      LivroMockRepo(),
+      AppModule.usuarioRepo,
+      AppModule.comentarioRepo,
+      AppModule.enderecoRepo,
+      AppModule.livroRepo,
       atualizar,
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _usuarioComponent.obterUsuario(_autenticacaoState.usuario!.email.endereco);
+      await _usuarioComponent.obterPerfil();
       if (widget.numeroLivro != null) await _usuarioComponent.obterLivro(widget.numeroLivro!);
       await _obterUsuarioSolicitacao();
-      await _usuarioComponent.obterLivrosUsuario();
+      ResumoLivro? livro = _usuarioComponent.livroSelecionado?.criarResumoLivro();
+      if (livro != null) _solicitacaoComponent.selecionarLivro(livro);
+      await _usuarioComponent.obterLivrosUsuarioSolicitacao();
       _tipoSolicitacao = TipoSolicitacao.deNumero(widget.tipoSolicitacao);
     });
   }
@@ -132,7 +133,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
     return switch (estagioPagina) {
       CriarSolicitacao.SELECIONAR_LIVROS => ConteudoSelecaoLivrosWidget(
           tema: tema,
-          aoClicarLivro: _solicitacaoComponent.selecionarLivro ,
+          aoClicarLivro: _solicitacaoComponent.selecionarLivro,
           aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
           verificarSelecao: _solicitacaoComponent.verificarSelecao,
           livros: _usuarioComponent.itensPaginados,
@@ -159,17 +160,24 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       CriarSolicitacao.ENDERECO => SingleChildScrollView(
           child: ConteudoEnderecoSolicitacaoWidget(
             tema: tema,
+            utilizaEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoPerfil,
             aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
             aoSelecionarFrete: (frete) => setState(() => controllerFrete.text = frete),
             estados: UF.values.map((e) => e.descricao).toList(),
-            cidades: [],
+            cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome).toList(),
             controllerFrete: controllerFrete,
             controllerFormaEntrega: controllerFormaEntrega,
-            aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
+            aoSelecionarEstado: _selecionarEstado,
             aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
-            aoClicarProximo: () => atualizarPagina(CriarSolicitacao.CONCLUSAO),
-            utilizarEnderecoPerfil: () {},
-            aoClicarFormaEntrega: (formaEntrega) {},
+            aoClicarProximo: salvarSolicitacao,
+            utilizarEnderecoPerfil: _utilizarEnderecoPerfil,
+            aoClicarFormaEntrega: (formaEntrega) {
+              formaEntrega;
+              setState(() {
+                formaEntregaSelecionada = formaEntrega;
+                controllerFormaEntrega.text = formaEntrega.descricao;
+              });
+            },
             aoClicarFrete: (frete) {},
             controllerRua: controllerRua,
             controllerBairro: controllerBairro,
@@ -223,38 +231,113 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
     };
   }
 
+  Future<void> salvarSolicitacao() async {
+    await notificarCasoErro(() async {
+      if (!validarCamposPreenchidos()) throw Exception("Preencha todos os campos");
+      _solicitacaoComponent.atualizarSolicitacaoMemoria(solicitacao);
+      await _solicitacaoComponent.atualizarSolicitacao();
+      atualizarPagina(CriarSolicitacao.CONCLUSAO);
+    });
+  }
+
+  bool validarCamposPreenchidos() {
+    return controllerRua.text.isNotEmpty &&
+        controllerBairro.text.isNotEmpty &&
+        controllerCep.text.isNotEmpty &&
+        controllerNumero.text.isNotEmpty &&
+        controllerCidade.text.isNotEmpty &&
+        controllerEstado.text.isNotEmpty &&
+        controllerDataEntrega.text.isNotEmpty &&
+        controllerHoraEntrega.text.isNotEmpty;
+  }
+
+  Future<void> _selecionarEstado(String estado) async {
+    UF uf = UF.deDescricao(estado);
+    await _usuarioComponent.obterCidades(uf);
+    setState(() => controllerEstado.text = estado);
+  }
+
+  Future<void> _utilizarEnderecoPerfil() async {
+    notificarCasoErro(() async {
+      await _usuarioComponent.obterEndereco();
+      if (_usuarioComponent.enderecoEdicao != null) _solicitacaoComponent.utilizarEnderecoDoPerfil();
+      if (_solicitacaoComponent.utilizarEnderecoPerfil) {
+        _preencherControllersEndereco(_usuarioComponent.enderecoEdicao!);
+      } else {
+        controllerRua.text = "";
+        controllerBairro.text = "";
+        controllerCep.text = "";
+        controllerNumero.text = "";
+        controllerComplemento.text = "";
+        controllerCidade.text = "";
+        controllerEstado.text = "";
+      }
+    });
+  }
+
+  Solicitacao get solicitacao {
+    try {
+      DataHora dataEntrega =
+          DataHora.deString("${controllerDataEntrega.text} ${controllerHoraEntrega.text}", "dd/MM/yyyy HH:mm");
+      DataHora? dataDevolucao = controllerDataDevolucao.text.isEmpty && controllerHoraDevolucao.text.isEmpty
+          ? null
+          : DataHora.deString("${controllerDataDevolucao.text} ${controllerHoraDevolucao.text}", "dd/MM/yyyy HH:mm");
+      formaEntregaSelecionada;
+
+      return Solicitacao.criar(
+        null,
+        _usuarioComponent.livroSelecionado!.emailUsuario,
+        _autenticacaoState.usuario!.email.endereco,
+        formaEntregaSelecionada ?? FormaEntrega.CORREIOS,
+        null,
+        dataEntrega,
+        dataDevolucao,
+        null,
+        controllerInformacoes.text,
+        _solicitacaoComponent.utilizarEnderecoPerfil ? null : endereco!,
+        TipoStatusSolicitacao.PENDENTE,
+        null,
+        null,
+        _tipoSolicitacao,
+        null,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Endereco? get endereco {
+    Municipio? municipio = _usuarioComponent.municipiosPorNumero.values
+        .where(
+          (element) => element.nome == controllerCidade.text,
+        )
+        .firstOrNull;
+
+    if (municipio == null) return null;
+
+    return Endereco.criar(
+      controllerNumero.text,
+      controllerComplemento.text,
+      controllerRua.text,
+      controllerCep.text,
+      controllerBairro.text,
+      municipio,
+    );
+  }
+
   Future<void> _obterUsuarioSolicitacao() async {
     String email = _usuarioComponent.livroSelecionado!.emailUsuario;
     await _usuarioComponent.obterUsuarioSolicitacao(email);
   }
 
-  void _criarSolicitacao() {
-    Solicitacao solicitacao = Solicitacao.criar(
-      null,
-      _autenticacaoState.usuario!.email.endereco,
-      _usuarioComponent.livroSelecionado!.emailUsuario,
-      _solicitacaoComponent.formaEntregaSelecionada!,
-      DataHora.deString(controllerDataEntrega.text),
-      DataHora.deString(controllerDataDevolucao.text),
-      DataHora.deString(controllerDataDevolucao.text),
-      DataHora.deString(controllerDataDevolucao.text),
-      controllerInformacoes.text,
-      Endereco.criar(
-        controllerRua.text,
-        controllerBairro.text,
-        controllerCep.text,
-        controllerNumero.text,
-        controllerComplemento.text,
-        _solicitacaoComponent.municipioSelecionado!,
-      ),
-      TipoStatusSolicitacao.PENDENTE,
-      null,
-      null,
-      _tipoSolicitacao,
-      null,
-    );
-
-    _solicitacaoComponent.atualizarSolicitacaoMemoria(solicitacao);
+  void _preencherControllersEndereco(Endereco endereco) {
+    controllerRua.text = endereco.rua;
+    controllerBairro.text = endereco.bairro;
+    controllerCep.text = endereco.cep;
+    controllerNumero.text = endereco.numeroResidencial?.toString() ?? "";
+    controllerComplemento.text = endereco.complemento?.toString() ?? "";
+    controllerCidade.text = endereco.municipio.nome ?? "";
+    controllerEstado.text = endereco.municipio.estado.descricao ?? "";
   }
 
   void abrirTimePicker(bool ehHoraDevolucao) {

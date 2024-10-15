@@ -5,6 +5,7 @@ class SwitcherWidget extends StatefulWidget {
   final Tema tema;
   final Function() aoClicar;
   final bool valorInicial;
+  final bool? valor;
   final Color? corFundo;
   final Color? corCirculo;
   final bool comInnerShadow;
@@ -25,6 +26,7 @@ class SwitcherWidget extends StatefulWidget {
     this.corBorda,
     this.iconeAtivado,
     this.iconeDesativado,
+    this.valor,
   });
 
   @override
@@ -33,6 +35,8 @@ class SwitcherWidget extends StatefulWidget {
 
 class _SwitcherWidgetState extends State<SwitcherWidget> {
   bool _ativado = false;
+
+  bool get ativado => widget.valor != null ? widget.valor! && _ativado : _ativado;
 
   @override
   void initState() {
@@ -70,7 +74,7 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
                         ),
                       )
                     : BoxDecoration(
-                        color: _ativado
+                        color: ativado
                             ? widget.corBorda ?? Color(widget.tema.accent)
                             : widget.corFundo ?? Color(widget.tema.base100),
                         borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
@@ -86,7 +90,7 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
                     borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
                     boxShadow: [
                       BoxShadow(
-                        color: _ativado
+                        color: ativado
                             ? widget.corBorda ?? Color(widget.tema.accent)
                             : widget.corFundo ?? Color(widget.tema.base100),
                         spreadRadius: 5,
@@ -100,7 +104,7 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
               ),
             ),
             AnimatedPositioned(
-              left: _ativado ? 32 : 4,
+              left: ativado ? 32 : 4,
               duration: const Duration(milliseconds: 200),
               curve: Curves.easeOut,
               child: AnimatedContainer(
@@ -108,7 +112,7 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
                 width: 20,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
-                  color: !_ativado
+                  color: !ativado
                       ? widget.corBorda ?? Color(widget.tema.accent)
                       : widget.corCirculo ?? Color(widget.tema.base100),
                   border: Border.all(
@@ -125,7 +129,7 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
                   ],
                 ),
                 duration: const Duration(milliseconds: 200),
-                child: _ativado ? widget.iconeAtivado ?? const SizedBox() : widget.iconeDesativado ?? const SizedBox(),
+                child: ativado ? widget.iconeAtivado ?? const SizedBox() : widget.iconeDesativado ?? const SizedBox(),
               ),
             ),
           ],

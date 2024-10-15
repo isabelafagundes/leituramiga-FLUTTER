@@ -89,7 +89,18 @@ class UsuarioComponent extends State
     await executar(
       rotina: () async {
         if (usuarioSelecionado == null) return;
-        String email = usuarioSelecionado!.email!.endereco;
+        String email = usuarioSelecionado!.email.endereco;
+        return _paginacaoLivroUseCase.obterLivrosIniciais(email);
+      },
+      mensagemErro: "Não foi possível obter os livros do usuário",
+    );
+  }
+
+  Future<void> obterLivrosUsuarioSolicitacao() async {
+    await executar(
+      rotina: () async {
+        if (usuarioSelecionado == null) return;
+        String email = usuarioSolicitacao!.email.endereco;
         return _paginacaoLivroUseCase.obterLivrosIniciais(email);
       },
       mensagemErro: "Não foi possível obter os livros do usuário",

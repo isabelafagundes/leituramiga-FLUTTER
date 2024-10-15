@@ -69,6 +69,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                   tema: tema,
                   controller: controllerCep,
                   label: "CEP",
+                  alturaCampo: 50,
                   formatters: [_mascaraCEP],
                   tamanho: tema.tamanhoFonteM,
                   onChanged: (valor) {},
@@ -80,7 +81,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
               ),
               Flexible(
                 child: SizedBox(
-                  height: 65,
+                  height: 70,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +118,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
             children: [
               Flexible(
                 child: SizedBox(
-                  height: 65,
+                  height: 70,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,6 +150,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                   tema: tema,
                   controller: controllerBairro,
                   label: "Bairro",
+                  alturaCampo: 50,
                   formatters: [LengthLimitingTextInputFormatter(119)],
                   tamanho: tema.tamanhoFonteM,
                   onChanged: (valor) {},
@@ -172,6 +174,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                   tema: tema,
                   controller: controllerRua,
                   label: "Rua",
+                  alturaCampo: 50,
                   formatters: [LengthLimitingTextInputFormatter(119)],
                   tamanho: tema.tamanhoFonteM,
                   onChanged: (valor) {},
@@ -186,6 +189,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                   tema: tema,
                   controller: controllerNumero,
                   label: "Número",
+                  alturaCampo: 50,
                   tamanho: tema.tamanhoFonteM,
                   onChanged: (valor) {},
                 ),
@@ -207,6 +211,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                   tema: tema,
                   controller: controllerComplemento,
                   label: "Complemento",
+                  alturaCampo: 50,
                   formatters: [LengthLimitingTextInputFormatter(119)],
                   tamanho: tema.tamanhoFonteM,
                   onChanged: (valor) {},
@@ -225,6 +230,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                       tema: tema,
                       controller: controllerNumero,
                       label: "Número",
+                      alturaCampo: 50,
                       formatters: [LengthLimitingTextInputFormatter(10)],
                       tamanho: tema.tamanhoFonteM,
                       onChanged: (valor) {},

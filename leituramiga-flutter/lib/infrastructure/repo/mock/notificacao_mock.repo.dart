@@ -6,19 +6,19 @@ class NotificacaoMockRepo extends NotificacaoRepo {
     Notificacao.carregar(
       1,
       'joao',
-      1,
+      '',
       1,
     ),
     Notificacao.carregar(
       2,
       'isabela',
-      2,
+      '',
       2,
     ),
     Notificacao.carregar(
       3,
       'kauaguedes',
-      3,
+      '',
       3,
     ),
   ];

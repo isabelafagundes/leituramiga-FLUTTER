@@ -9,5 +9,9 @@ enum FormaEntrega {
     return FormaEntrega.values.where((e) => e.id == numero).firstOrNull ?? FormaEntrega.CORREIOS;
   }
 
+  factory FormaEntrega.deDescricao(String descricao) {
+    return FormaEntrega.values.where((e) => e.descricao == descricao).firstOrNull ?? FormaEntrega.CORREIOS;
+  }
+
   const FormaEntrega({required this.id, required this.descricao});
 }

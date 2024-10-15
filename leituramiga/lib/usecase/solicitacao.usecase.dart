@@ -54,4 +54,8 @@ class SolicitacaoUseCase {
   void removerLivro(LivroSolicitacao livro) {
     _state.livrosSelecionados.removeWhere((element) => element.numero == livro.numero);
   }
+
+  void utilizarEnderecoPerfil() {
+    _state.utilizarEnderecoPerfil = !_state.utilizarEnderecoPerfil;
+  }
 }

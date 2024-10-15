@@ -128,6 +128,7 @@ class LivroMockRepo extends LivroRepo {
       "isabela",
       "FATEC Santana de Parnaíba",
       "Cajamar",
+      "",
     );
   }
 

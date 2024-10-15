@@ -1,15 +1,15 @@
 import 'package:leituramiga/domain/super/entidade.dart';
 
 class Notificacao extends Entidade {
-  final int _numero;
+  final int? _numero;
   final String _nomeUsuario;
-  final int _numeroUsuario;
+  final String _emailUsuario;
   final int _numeroSolicitacao;
 
   Notificacao.carregar(
     this._numero,
     this._nomeUsuario,
-    this._numeroUsuario,
+    this._emailUsuario,
     this._numeroSolicitacao,
   );
 
@@ -21,11 +21,19 @@ class Notificacao extends Entidade {
     return {};
   }
 
-  int get numeroUsuario => _numeroUsuario;
+  Notificacao.carregarDeMapa(Map<String, dynamic> mapa)
+      : this.carregar(
+          mapa['numero'],
+          mapa['nomeUsuarioSolicitante'],
+          mapa['emailUsuarioSolicitante'],
+          mapa['codigoSolicitacao'],
+        );
+
+  String get emailUsuario => _emailUsuario;
 
   String get nomeUsuario => _nomeUsuario;
 
   int get numeroSolicitacao => _numeroSolicitacao;
 
-  int get numero => _numero;
+  int? get numero => _numero;
 }

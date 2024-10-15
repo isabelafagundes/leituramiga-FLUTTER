@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/solicitacao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
@@ -8,13 +8,7 @@ import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/comentario_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/service/mock/solicitacao_mock.service.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
+import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -26,7 +20,7 @@ import 'package:projeto_leituramiga/interface/widget/conteudo_selecao_livros.wid
 import 'package:projeto_leituramiga/interface/widget/contudo_contato.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
-import 'package:auto_route/auto_route.dart';
+import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/tab.widget.dart';
@@ -74,19 +68,18 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
   void initState() {
     super.initState();
     _solicitacaoComponent.inicializar(
-      SolicitacaoMockRepo(),
-      SolicitacaoMockService(),
-      NotificacaoMockRepo(),
+      AppModule.solicitacaoRepo,
+      AppModule.solicitacaoService,
+      AppModule.notificacaoRepo,
       atualizar,
     );
     _usuarioComponent.inicializar(
-      UsuarioMockRepo(),
-      ComentarioMockRepo(),
-      EnderecoMockRepo(),
-      LivroMockRepo(),
+      AppModule.usuarioRepo,
+      AppModule.comentarioRepo,
+      AppModule.enderecoRepo,
+      AppModule.livroRepo,
       atualizar,
     );
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
       await _usuarioComponent.obterUsuario(_solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioCriador);
@@ -105,55 +98,59 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
       child: ConteudoMenuLateralWidget(
         tema: tema,
         atualizar: atualizar,
-        carregando: _solicitacaoComponent.carregando || _solicitacaoComponent.solicitacaoSelecionada == null,
+        carregando: _solicitacaoComponent.carregando ||
+            _solicitacaoComponent.solicitacaoSelecionada == null ||
+            _usuarioComponent.carregando,
         voltar: () => Rota.navegar(context, Rota.HOME),
         child: SingleChildScrollView(
           physics:
               _abaSelecionada == DetalhesSolicitacao.SELECAO_LIVROS || _abaSelecionada == DetalhesSolicitacao.LIVROS
                   ? const NeverScrollableScrollPhysics()
                   : const AlwaysScrollableScrollPhysics(),
-          child: SizedBox(
-            height: Responsive.altura(context) * .88,
-            child: _abaSelecionada == DetalhesSolicitacao.SELECAO_LIVROS
-                ? ConteudoSelecaoLivrosWidget(
-                    tema: tema,
-                    textoPopUp: "Deseja selecionar os livros e aceitar a solicitação?",
-                    aoClicarLivro: _solicitacaoComponent.selecionarLivro,
-                    aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
-                    verificarSelecao: _usuarioComponent.verificarSelecao,
-                    livros: _usuarioComponent.itensPaginados,
-                    navegarParaSolicitacao: () => _atualizarAbaSelecionada(DetalhesSolicitacao.LIVROS),
-                  )
-                : Flex(
-                    direction: Axis.vertical,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TabWidget(
-                        tema: tema,
-                        validarAtivo: (opcao) => _abaSelecionada.descricao != opcao,
-                        opcoes: _opcoes,
-                        aoSelecionar: (index) =>
-                            _atualizarAbaSelecionada(DetalhesSolicitacao.deDescricao(_opcoes[index])),
-                      ),
-                      if (_solicitacaoComponent.solicitacaoSelecionada != null) _obterAba,
-                      if (_abaSelecionada == DetalhesSolicitacao.INFORMACOES)
-                        Flexible(
-                          child: Flex(
-                            direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              _obterBotaoEsquerdo(context),
-                              SizedBox(height: tema.espacamento * 2, width: tema.espacamento * 2),
-                              _obterBotaoDireito,
-                            ],
-                          ),
+          child: _usuarioComponent.usuarioSelecionado == null || _solicitacaoComponent.solicitacaoSelecionada == null
+              ? SizedBox()
+              : SizedBox(
+                  height: Responsive.altura(context) * .88,
+                  child: _abaSelecionada == DetalhesSolicitacao.SELECAO_LIVROS
+                      ? ConteudoSelecaoLivrosWidget(
+                          tema: tema,
+                          textoPopUp: "Deseja selecionar os livros e aceitar a solicitação?",
+                          aoClicarLivro: _solicitacaoComponent.selecionarLivro,
+                          aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
+                          verificarSelecao: _usuarioComponent.verificarSelecao,
+                          livros: _usuarioComponent.itensPaginados,
+                          navegarParaSolicitacao: () => _atualizarAbaSelecionada(DetalhesSolicitacao.LIVROS),
                         )
-                    ],
-                  ),
-          ),
+                      : Flex(
+                          direction: Axis.vertical,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TabWidget(
+                              tema: tema,
+                              validarAtivo: (opcao) => _abaSelecionada.descricao != opcao,
+                              opcoes: _opcoes,
+                              aoSelecionar: (index) =>
+                                  _atualizarAbaSelecionada(DetalhesSolicitacao.deDescricao(_opcoes[index])),
+                            ),
+                            if (_solicitacaoComponent.solicitacaoSelecionada != null) _obterAba,
+                            if (_abaSelecionada == DetalhesSolicitacao.INFORMACOES)
+                              Flexible(
+                                child: Flex(
+                                  direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    _obterBotaoEsquerdo(context),
+                                    SizedBox(height: tema.espacamento * 2, width: tema.espacamento * 2),
+                                    _obterBotaoDireito,
+                                  ],
+                                ),
+                              )
+                          ],
+                        ),
+                ),
         ),
       ),
     );
@@ -222,7 +219,11 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
       tema: tema,
       corTexto: kCorFonte,
       texto: "Aceitar",
-      aoClicar: () {},
+      aoClicar: () {
+        notificarCasoErro(() async {
+          await _solicitacaoComponent.aceitarSolicitacao(_solicitacaoComponent.solicitacaoSelecionada!.numero!);
+        });
+      },
       icone: Icon(
         Icons.done,
         color: kCorFonte,

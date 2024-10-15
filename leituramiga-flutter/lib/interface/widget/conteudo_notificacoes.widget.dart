@@ -4,9 +4,7 @@ import 'package:leituramiga/domain/notificacao.dart';
 import 'package:leituramiga/domain/solicitacao/resumo_solicitacao.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/service/mock/solicitacao_mock.service.dart';
+import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -14,7 +12,6 @@ import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.
 import 'package:projeto_leituramiga/interface/widget/botao/duas_escolhas.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_solicitacao.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/conteudo_resumo_solicitacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class ConteudoNotificacoesWidget extends StatefulWidget {
@@ -33,7 +30,6 @@ class ConteudoNotificacoesWidget extends StatefulWidget {
 
 class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget> {
   bool _exibindoEmAndamento = false;
-  bool _visualizarSolicitacao = false;
   SolicitacaoComponent solicitacaoComponent = SolicitacaoComponent();
 
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
@@ -42,11 +38,12 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
   void initState() {
     super.initState();
     solicitacaoComponent.inicializar(
-      SolicitacaoMockRepo(),
-      SolicitacaoMockService(),
-      NotificacaoMockRepo(),
+      AppModule.solicitacaoRepo,
+      AppModule.solicitacaoService,
+      AppModule.notificacaoRepo,
       atualizar,
     );
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await solicitacaoComponent.obterNotificacoes(_autenticacaoState.usuario!.email!.endereco);
       await solicitacaoComponent.obterSolicitacoesIniciais(_autenticacaoState.usuario!.email.endereco);

@@ -42,12 +42,22 @@ class LivroSolicitacao extends Entidade {
 
   int get numero => _numero;
 
-  @override
-  Map<String, dynamic> paraMapa() {
-    return {};
+  Map<String, dynamic> paraMapaLivro(String email) {
+    return {
+      'codigoLivro': _numero,
+      'titulo': _nome,
+      'autor': _nomeAutor,
+      'emailUsuario': email,
+    };
   }
 
   String get nome => _nome;
 
   String get nomeAutor => _nomeAutor;
+
+  @override
+  Map<String, dynamic> paraMapa() {
+    // TODO: implement paraMapa
+    throw UnimplementedError();
+  }
 }

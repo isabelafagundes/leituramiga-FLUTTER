@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:leituramiga/domain/endereco/municipio.dart';
+import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/domain/super/erro_dominio.dart';
 import 'package:leituramiga/domain/super/objeto_de_valor.dart';
 
@@ -80,7 +79,9 @@ class Endereco extends ObjetoDeValor {
       Municipio.carregar(
         enderecoAsMap["codigoCidade"],
         enderecoAsMap["nomeCidade"],
-        enderecoAsMap["estado"],
+        UF.deSigla(
+          enderecoAsMap["estado"],
+        ),
       ),
     );
   }
@@ -94,4 +95,8 @@ class Endereco extends ObjetoDeValor {
 
 class EnderecoInvalido extends ErroDominio {
   EnderecoInvalido(String mensagem) : super("O endereço é inválido: $mensagem");
+}
+
+class EnderecoNaoEncontrado extends ErroDominio {
+  EnderecoNaoEncontrado() : super("Endereço não foi encontrado!");
 }

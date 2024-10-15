@@ -122,6 +122,7 @@ class _CriarLivroPageState extends State<CriarLivroPage> {
         "",
         "",
         "",
+        _livrosComponent.categoriaSelecionada!.descricao,
       );
 
   Future<void> _criarLivro() async {

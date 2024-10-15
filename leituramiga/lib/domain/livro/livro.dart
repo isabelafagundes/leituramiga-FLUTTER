@@ -1,7 +1,8 @@
 import 'package:leituramiga/domain/data_hora.dart';
-import 'package:leituramiga/domain/super/entidade.dart';
-import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
+import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:leituramiga/domain/livro/tipo_status_livro.dart';
+import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
+import 'package:leituramiga/domain/super/entidade.dart';
 
 class Livro extends Entidade {
   final int? _numero;
@@ -11,6 +12,7 @@ class Livro extends Entidade {
   final String _descricaoEstado;
   final int _numeroCategoria;
   final String _nomeUsuario;
+  final String _nomeCategoria;
   final String? _nomeInstituicao;
   final String? _nomeMunicipio;
   final List<TipoSolicitacao> _tiposSolicitacao;
@@ -34,6 +36,7 @@ class Livro extends Entidade {
     this._nomeUsuario,
     this._nomeInstituicao,
     this._nomeMunicipio,
+    this._nomeCategoria,
   );
 
   int? get numero => _numero;
@@ -60,7 +63,21 @@ class Livro extends Entidade {
       "nomeUsuario": _nomeUsuario,
       "nomeInstituicao": _nomeInstituicao,
       "nomeCidade": _nomeMunicipio,
+      "nomeCategoria": _nomeCategoria,
     };
+  }
+
+  ResumoLivro criarResumoLivro() {
+    return ResumoLivro.carregar(
+      _numero!,
+      _nomeCategoria,
+      _nomeUsuario,
+      _nomeInstituicao ?? '',
+      _nomeMunicipio ?? '',
+      _descricao,
+      _nome,
+      _nomeAutor,
+    );
   }
 
   factory Livro.carregarDeMapa(Map<String, dynamic> livroAsMap) {
@@ -79,6 +96,7 @@ class Livro extends Entidade {
       livroAsMap['nomeUsuario'],
       livroAsMap['nomeInstituicao'],
       livroAsMap['nomeCidade'],
+      livroAsMap['categoria'],
     );
   }
 

@@ -58,8 +58,6 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
       "pesquisa": pesquisa,
     };
 
-    print(mapaFiltros);
-
     return await _client.post("$host/usuarios", data: mapaFiltros).catchError((erro) {
       throw erro;
     }).then(

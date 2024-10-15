@@ -41,10 +41,10 @@ class ResumoSolicitacao extends Entidade {
     return ResumoSolicitacao.carregar(
       mapa['numero'],
       Endereco.carregarDeMapa(mapa['endereco']),
-      mapa['nomeUsuario'],
-      DataHora.deString(mapa['dataEntrega']),
-      DataHora.deString(mapa['dataDevolucao']),
-      TipoSolicitacao.values[mapa['tipo']],
+      mapa['emailUsuarioSolicitante'],
+      DataHora.deString("${mapa['dataEntrega']} 00:00:00"),
+      mapa['dataDevolucao'] == null ? null : DataHora.deString("${mapa['dataDevolucao']} 00:00:00"),
+      TipoSolicitacao.deNumero(mapa['codigoTipoSolicitacao']),
     );
   }
 

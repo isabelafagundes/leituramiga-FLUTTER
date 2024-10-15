@@ -1,10 +1,9 @@
 import 'package:leituramiga/domain/data_hora.dart';
 import 'package:leituramiga/domain/endereco/endereco.dart';
-import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
-import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
-import 'package:leituramiga/domain/livro/livro.dart';
-import 'package:leituramiga/domain/solicitacao/livros_solicitacao.dart';
 import 'package:leituramiga/domain/endereco/municipio.dart';
+import 'package:leituramiga/domain/livro/livro.dart';
+import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
+import 'package:leituramiga/domain/solicitacao/livros_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:leituramiga/domain/super/entidade.dart';
@@ -16,10 +15,10 @@ class Solicitacao extends Entidade {
   final LivrosSolicitacao _livrosCriador;
   LivrosSolicitacao? _livrosProprietario;
   final FormaEntrega _formaEntrega;
-  final DataHora _dataCriacao;
+  final DataHora? _dataCriacao;
   final DataHora _dataEntrega;
   final DataHora? _dataDevolucao;
-  final DataHora _dataAtualizacao;
+  final DataHora? _dataAtualizacao;
   final String _informacoesAdicionais;
   Endereco? _endereco;
   final bool _enderecoUsuarioCriador;
@@ -82,17 +81,22 @@ class Solicitacao extends Entidade {
       "emailUsuarioSolicitante": _emailUsuarioCriador,
       "livrosUsuarioSolicitante": _livrosCriador.paraMapa(),
       "livrosTroca": _livrosProprietario?.paraMapa(),
-      "formaEntrega": _formaEntrega.id,
-      "dataCriacao": _dataCriacao.toString(),
-      "dataEntrega": _dataEntrega.toString(),
-      "dataDevolucao": _dataDevolucao?.toString(),
-      "dataAtualizacao": _dataAtualizacao.toString(),
+      "codigoFormaEntrega": _formaEntrega.id,
+      "dataCriacao": _dataCriacao?.formatar("yyyy-MM-dd"),
+      "dataEntrega": _dataEntrega.formatar("yyyy-MM-dd"),
+      "horaEntrega": _dataEntrega.formatar("HH:mm:ss"),
+      "horaCriacao": _dataCriacao?.formatar("HH:mm:ss"),
+      "horaAtualizacao": _dataAtualizacao?.formatar("HH:mm:ss"),
+      "horaAceite": _dataAceite?.formatar("HH:mm:ss"),
+      "horaDevolucao": _dataDevolucao?.formatar("HH:mm:ss"),
+      "dataDevolucao": _dataDevolucao?.formatar("yyyy-MM-dd"),
+      "dataAceite": _dataAceite?.formatar("yyyy-MM-dd"),
+      "dataAtualizacao": _dataAtualizacao?.toString(),
       "informacoesAdicionais": _informacoesAdicionais,
       "endereco": _endereco?.paraMapa(),
       "enderecoUsuarioCriador": _enderecoUsuarioCriador,
       "codigoTipoSolicitacao": _tipoSolicitacao.id,
       "codigoStatusSolicitacao": _status.id,
-      "dataAceite": _dataAceite?.toString(),
       "motivoRecusa": _motivoRecusa,
       "codigoRastreioCorreio": _codigoRastreamento,
     };
@@ -132,22 +136,31 @@ class Solicitacao extends Entidade {
     String dataAtualizacao = "${solicitacaoAsMap["dataAtualizacao"]} ${solicitacaoAsMap["horaAtualizacao"]}";
     String dataAceite = "${solicitacaoAsMap["dataAceite"]} ${solicitacaoAsMap["horaAceite"]}";
     String dataDevolucao = "${solicitacaoAsMap["dataDevolucao"]} ${solicitacaoAsMap["horaDevolucao"]}";
+    print(solicitacaoAsMap);
     return Solicitacao.carregar(
       solicitacaoAsMap["codigoSolicitacao"],
       solicitacaoAsMap["emailUsuarioReceptor"],
       solicitacaoAsMap["emailUsuarioSolicitante"],
-      LivrosSolicitacao.carregarDeMapa(solicitacaoAsMap["livrosUsuarioSolicitante"]),
-      LivrosSolicitacao.carregarDeMapa(solicitacaoAsMap["livrosTroca"]),
-      FormaEntrega.deNumero(solicitacaoAsMap["formaEntrega"]),
-      DataHora.deString(dataCriacao),
+      LivrosSolicitacao.carregarDeMapa(
+        (solicitacaoAsMap["livrosUsuarioSolicitante"])?.toList() ?? [],
+        solicitacaoAsMap,
+        solicitacaoAsMap["emailUsuarioSolicitante"],
+      ),
+      LivrosSolicitacao.carregarDeMapa(
+        (solicitacaoAsMap["livrosTroca"])?.toList() ?? [],
+        solicitacaoAsMap,
+        solicitacaoAsMap["emailUsuarioReceptor"],
+      ),
+      FormaEntrega.deNumero(solicitacaoAsMap["codigoFormaEntrega"] as int),
+      solicitacaoAsMap['dataCriacao'] == null ? null : DataHora.deString(dataCriacao),
       DataHora.deString(dataEntrega),
       solicitacaoAsMap["dataDevolucao"] == null ? null : DataHora.deString(dataDevolucao),
-      DataHora.deString(dataAtualizacao),
+      solicitacaoAsMap['dataAtualizacao'] == null ? null : DataHora.deString(dataAtualizacao),
       solicitacaoAsMap["informacoesAdicionais"],
       solicitacaoAsMap["endereco"] == null ? null : Endereco.carregarDeMapa(solicitacaoAsMap["endereco"]),
-      solicitacaoAsMap["enderecoUsuarioCriador"],
-      TipoSolicitacao.deNumero(solicitacaoAsMap["codigoTipoSolicitacao"]),
-      TipoStatusSolicitacao.deNumero(solicitacaoAsMap["codigoStatusSolicitacao"]),
+      solicitacaoAsMap["enderecoUsuarioCriador"] == null ? false : solicitacaoAsMap["enderecoUsuarioCriador"] as bool,
+      TipoSolicitacao.deNumero(solicitacaoAsMap["codigoTipoSolicitacao"] as int? ?? 1),
+      TipoStatusSolicitacao.deNumero(int.tryParse(solicitacaoAsMap["codigoStatusSolicitacao"].toString()) ?? 1),
       solicitacaoAsMap["dataAceite"] == null ? null : DataHora.deString(dataAceite),
       solicitacaoAsMap["motivoRecusa"],
       solicitacaoAsMap["codigoRastreioCorreio"],
@@ -160,7 +173,7 @@ class Solicitacao extends Entidade {
 
   FormaEntrega get formaEntrega => _formaEntrega;
 
-  DataHora get dataCriacao => _dataCriacao;
+  DataHora? get dataCriacao => _dataCriacao;
 
   DataHora get dataEntrga => _dataEntrega;
 
@@ -168,7 +181,7 @@ class Solicitacao extends Entidade {
 
   DataHora? get dataDevolucao => _dataDevolucao;
 
-  DataHora get dataAtualizacao => _dataAtualizacao;
+  DataHora? get dataAtualizacao => _dataAtualizacao;
 
   String get informacoesAdicionais => _informacoesAdicionais;
 
