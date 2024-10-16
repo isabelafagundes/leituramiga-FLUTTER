@@ -70,4 +70,25 @@ class SolicitacaoApiRepo extends SolicitacaoRepo with ConfiguracaoApiState {
       return (response.data as List).map((e) => ResumoSolicitacao.carregarDeMapa(e)).toList();
     });
   }
+
+  @override
+  Future<List<ResumoSolicitacao>> obterHistorico(String emailUsuario, [int numeroPagina = 0, int limite = 50]) async {
+    Map<String, dynamic> mapaFiltros = {
+      "numeroPagina": numeroPagina,
+      "tamanhoPagina": limite,
+      "emailUsuario": emailUsuario,
+      "numeroCidade": null,
+      "numeroInstituicao": null,
+      "pesquisa": null,
+      "tipoSolicitacao": null,
+      "numeroCategoria": null,
+    };
+
+    return await _client.post("$host/solicitacoes/historico", data: mapaFiltros).catchError((erro) {
+      throw erro;
+    }).then((response) {
+      print(response.data);
+      return (response.data as List).map((e) => ResumoSolicitacao.carregarDeMapa(e)).toList();
+    });
+  }
 }

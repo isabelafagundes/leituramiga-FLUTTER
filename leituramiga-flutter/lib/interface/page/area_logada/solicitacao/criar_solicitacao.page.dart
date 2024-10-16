@@ -8,13 +8,13 @@ import 'package:leituramiga/domain/endereco/municipio.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
+import 'package:leituramiga/domain/solicitacao/livros_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.repo.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -153,8 +153,19 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
             removerLivro: _solicitacaoComponent.removerLivro,
             controllerDataDevolucao: controllerDataDevolucao,
             tipoSolicitacao: _tipoSolicitacao,
+            controllerFormaEntrega: controllerFormaEntrega,
+            aoClicarFormaEntrega: (formaEntrega) {
+              formaEntrega;
+              setState(() {
+                formaEntregaSelecionada = formaEntrega;
+                controllerFormaEntrega.text = formaEntrega.descricao;
+              });
+            },
             abrirDatePicker: ([bool ehDevolucao = false]) => abrirDatePicker(ehDevolucao),
-            aoClicarAdicionarLivro: () => atualizarPagina(CriarSolicitacao.SELECIONAR_LIVROS),
+            aoClicarAdicionarLivro: () {
+              _validarDatas();
+              atualizarPagina(CriarSolicitacao.SELECIONAR_LIVROS);
+            },
           ),
         ),
       CriarSolicitacao.ENDERECO => SingleChildScrollView(
@@ -166,18 +177,10 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
             estados: UF.values.map((e) => e.descricao).toList(),
             cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome).toList(),
             controllerFrete: controllerFrete,
-            controllerFormaEntrega: controllerFormaEntrega,
             aoSelecionarEstado: _selecionarEstado,
             aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
             aoClicarProximo: salvarSolicitacao,
             utilizarEnderecoPerfil: _utilizarEnderecoPerfil,
-            aoClicarFormaEntrega: (formaEntrega) {
-              formaEntrega;
-              setState(() {
-                formaEntregaSelecionada = formaEntrega;
-                controllerFormaEntrega.text = formaEntrega.descricao;
-              });
-            },
             aoClicarFrete: (frete) {},
             controllerRua: controllerRua,
             controllerBairro: controllerBairro,
@@ -207,7 +210,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
                   child: TextoWidget(
                     align: TextAlign.center,
                     texto:
-                        "Sua solicitação foi enviada! Quando @usuário respondê-la, você será notificado e receberá um e-mail.",
+                        "Sua solicitação foi enviada! Quando ${_usuarioComponent.usuarioSolicitacao?.nome} respondê-la, você será notificado e receberá um e-mail.",
                     tema: tema,
                     maxLines: 5,
                   ),
@@ -246,9 +249,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
         controllerCep.text.isNotEmpty &&
         controllerNumero.text.isNotEmpty &&
         controllerCidade.text.isNotEmpty &&
-        controllerEstado.text.isNotEmpty &&
-        controllerDataEntrega.text.isNotEmpty &&
-        controllerHoraEntrega.text.isNotEmpty;
+        controllerEstado.text.isNotEmpty;
   }
 
   Future<void> _selecionarEstado(String estado) async {
@@ -263,6 +264,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       if (_usuarioComponent.enderecoEdicao != null) _solicitacaoComponent.utilizarEnderecoDoPerfil();
       if (_solicitacaoComponent.utilizarEnderecoPerfil) {
         _preencherControllersEndereco(_usuarioComponent.enderecoEdicao!);
+        setState(() {});
       } else {
         controllerRua.text = "";
         controllerBairro.text = "";
@@ -300,6 +302,11 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
         null,
         _tipoSolicitacao,
         null,
+        LivrosSolicitacao.criar(
+          _autenticacaoState.usuario!.email.endereco,
+          _solicitacaoComponent.livrosSelecionados,
+        ),
+        null,
       );
     } catch (e) {
       rethrow;
@@ -316,11 +323,11 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
     if (municipio == null) return null;
 
     return Endereco.criar(
-      controllerNumero.text,
-      controllerComplemento.text,
-      controllerRua.text,
-      controllerCep.text,
-      controllerBairro.text,
+      controllerNumero.text.trim(),
+      controllerComplemento.text.trim(),
+      controllerRua.text.trim(),
+      controllerCep.text.replaceAll("-", "").replaceAll(" ", "").trim(),
+      controllerBairro.text.trim(),
       municipio,
     );
   }
@@ -384,6 +391,19 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
         await SobreposicaoUtil.fechar(context);
       },
     );
+  }
+
+  void _validarDatas() {
+    if (controllerDataEntrega.text.isNotEmpty &&
+        controllerDataDevolucao.text.isNotEmpty &&
+        formaEntregaSelecionada == FormaEntrega.PRESENCIAL) {
+      DataHora dataEntrega = DataHora.deString(controllerDataEntrega.text, "dd/MM/yyyy");
+      DataHora dataDevolucao = DataHora.deString(controllerDataDevolucao.text, "dd/MM/yyyy");
+      if (dataDevolucao.ehAntesDe(dataEntrega)) {
+        Notificacoes.mostrar("A data de devolução não pode ser anterior à data de entrega");
+        throw DataInvalida();
+      }
+    }
   }
 }
 

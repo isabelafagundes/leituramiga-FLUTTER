@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:leituramiga/domain/solicitacao/livro_solicitacao.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
-import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
@@ -34,10 +34,10 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
       tema: widget.tema,
       padding: EdgeInsets.symmetric(
         vertical: widget.tema.espacamento,
-        horizontal: widget.tema.espacamento,
+        horizontal: widget.tema.espacamento * 2,
       ),
       child: Container(
-        constraints: BoxConstraints(maxHeight: Responsive.larguraP(context) ? 250 : Responsive.altura(context)*.76),
+        constraints: BoxConstraints(maxHeight: Responsive.larguraP(context) ? 250 : Responsive.altura(context) * .66),
         child: Column(
           children: [
             SizedBox(height: widget.tema.espacamento / 2),
@@ -49,22 +49,23 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                   texto: "Livros da solicitação",
                   tema: widget.tema,
                   cor: Color(widget.tema.baseContent),
-                  tamanho: widget.tema.tamanhoFonteG,
+                  tamanho: widget.tema.tamanhoFonteXG + 4,
                   weight: FontWeight.w500,
                 ),
                 const Spacer(),
-                BotaoRedondoWidget(
+                BotaoPequenoWidget(
                   tema: widget.tema,
-                  nomeSvg: '',
+                  label: "Adicionar livro",
+                  padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 2),
                   icone: Icon(
                     Icons.add,
-                    color: Color(widget.tema.accent),
+                    color: Color(widget.tema.base200),
                   ),
                   aoClicar: widget.aoClicarAdicionarLivro,
                 ),
               ],
             ),
-            SizedBox(height: widget.tema.espacamento),
+            SizedBox(height: widget.tema.espacamento * 2),
             Expanded(
               child: widget.livrosSolicitacao.isEmpty
                   ? Opacity(
@@ -101,11 +102,11 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                           return Column(
                             children: [
                               Padding(
-                                padding: EdgeInsets.only(right: widget.tema.espacamento * 2),
+                                padding: EdgeInsets.only(right: widget.tema.espacamento),
                                 child: CardBaseWidget(
                                   tema: widget.tema,
                                   child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: EdgeInsets.all(widget.tema.espacamento * 1.5),
                                     child: Row(
                                       children: [
                                         IconButton(
@@ -123,14 +124,15 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                                           children: [
                                             TextoWidget(
                                               texto: livro.nome,
-                                              tamanho: widget.tema.tamanhoFonteM,
+                                              tamanho: widget.tema.tamanhoFonteXG,
                                               weight: FontWeight.w500,
                                               tema: widget.tema,
                                             ),
+                                            SizedBox(height: widget.tema.espacamento),
                                             TextoWidget(
                                               texto: livro.nomeAutor,
                                               tema: widget.tema,
-                                              tamanho: widget.tema.tamanhoFonteM - 2,
+                                              tamanho: widget.tema.tamanhoFonteM + 2,
                                             ),
                                           ],
                                         ),

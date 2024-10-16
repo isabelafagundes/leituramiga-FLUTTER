@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/livros.component.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
+import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
@@ -35,6 +36,8 @@ class _LivrosPageState extends State<LivrosPage> {
   TemaState get _temaState => TemaState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
+
+  AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
   @override
   void initState() {
@@ -199,6 +202,7 @@ class _LivrosPageState extends State<LivrosPage> {
                         ],
                       ),
                       SizedBox(height: tema.espacamento * 2),
+                      if(_livrosComponent.livroSelecionado?.emailUsuario != _autenticacaoState.usuario?.email.endereco)
                       Column(
                         children: [
                           TextoWidget(

@@ -5,6 +5,7 @@ import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/domain/data_hora.dart';
 import 'package:leituramiga/domain/endereco/endereco.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
+import 'package:leituramiga/domain/solicitacao/livros_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
@@ -12,13 +13,6 @@ import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/comentario_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/livro_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/usuario_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/service/mock/solicitacao_mock.service.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/sobreposicao.util.dart';
@@ -145,8 +139,10 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
             aoClicarProximo: () => atualizarPagina(CriarSolicitacao.ENDERECO),
             controllerDataEntrega: controllerDataEntrega,
             removerLivro: _solicitacaoComponent.removerLivro,
+            controllerFormaEntrega: controllerFormaEntrega,
             controllerDataDevolucao: controllerDataDevolucao,
             tipoSolicitacao: _tipoSolicitacao,
+            aoClicarFormaEntrega: (formaEntrega) {},
             abrirDatePicker: ([bool ehDevolucao = false]) => abrirDatePicker(ehDevolucao),
             aoClicarAdicionarLivro: () => atualizarPagina(CriarSolicitacao.SELECIONAR_LIVROS),
           ),
@@ -159,12 +155,10 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
             estados: UF.values.map((e) => e.descricao).toList(),
             cidades: [],
             controllerFrete: controllerFrete,
-            controllerFormaEntrega: controllerFormaEntrega,
             aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
             aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
             aoClicarProximo: () => atualizarPagina(CriarSolicitacao.CONCLUSAO),
             utilizarEnderecoPerfil: () {},
-            aoClicarFormaEntrega: (formaEntrega) {},
             aoClicarFrete: (frete) {},
             controllerRua: controllerRua,
             controllerBairro: controllerBairro,
@@ -227,10 +221,10 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
     controllerComplemento.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.complemento ?? '';
     controllerCidade.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.municipio.nome ?? '';
     controllerEstado.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.municipio.estado.descricao ?? '';
-    controllerDataEntrega.text = _solicitacaoComponent.solicitacaoSelecionada?.dataEntrega.formatar("dd/MM/yyyy") ?? '';
+    controllerDataEntrega.text = _solicitacaoComponent.solicitacaoSelecionada?.dataEntrega?.formatar("dd/MM/yyyy") ?? '';
     controllerDataDevolucao.text =
         _solicitacaoComponent.solicitacaoSelecionada?.dataDevolucao?.formatar("dd/MM/yyyy") ?? '';
-    controllerHoraEntrega.text = _solicitacaoComponent.solicitacaoSelecionada?.dataEntrega.formatar("HH:mm") ?? '';
+    controllerHoraEntrega.text = _solicitacaoComponent.solicitacaoSelecionada?.dataEntrega?.formatar("HH:mm") ?? '';
     controllerHoraDevolucao.text = _solicitacaoComponent.solicitacaoSelecionada?.dataDevolucao?.formatar("HH:mm") ?? '';
     controllerFormaEntrega.text = _solicitacaoComponent.solicitacaoSelecionada?.formaEntrega.descricao ?? "Selecione";
     controllerInformacoes.text = _solicitacaoComponent.solicitacaoSelecionada?.informacoesAdicionais ?? "";
@@ -270,6 +264,11 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
       null,
       null,
       _tipoSolicitacao,
+      null,
+      LivrosSolicitacao.criar(
+        _autenticacaoState.usuario!.email.endereco,
+        _solicitacaoComponent.livrosSelecionados,
+      ),
       null,
     );
 

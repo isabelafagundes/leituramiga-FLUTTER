@@ -56,7 +56,8 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: tema.espacamento / 2),
-                    Row(
+                    if (solicitacao.dataEntrega != null)
+                      Row(
                       children: [
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -72,7 +73,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                             ),
                             SizedBox(height: tema.espacamento),
                             TextoWidget(
-                              texto: solicitacao.dataEntrega.formatar("dd/MM/yyyy"),
+                              texto: solicitacao.dataEntrega?.formatar("dd/MM/yyyy HH:mm") ?? '',
                               tema: tema,
                             ),
                           ],
@@ -93,7 +94,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                               ),
                               SizedBox(height: tema.espacamento),
                               TextoWidget(
-                                texto: solicitacao.dataDevolucao?.formatar("dd/MM/yyyy") ?? '',
+                                texto: solicitacao.dataDevolucao?.formatar("dd/MM/yyyy HH:mm") ?? '',
                                 tema: tema,
                               ),
                             ],

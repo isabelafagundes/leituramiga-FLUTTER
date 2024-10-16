@@ -60,9 +60,7 @@ class ConteudoContatoWidget extends StatelessWidget {
           TextoWidget(texto: usuarioCriador.telefone?.telefoneFormatado ?? '', tema: tema),
         ],
         if (usuarioDoador != null) ...[
-          SizedBox(height: tema.espacamento),
-          Divider(color: Color(tema.accent)),
-          SizedBox(height: tema.espacamento),
+          SizedBox(height: tema.espacamento * 2),
           _obterTextoComIcone(
             "Contato do usuário: @${usuarioDoador?.nomeUsuario}",
             null,

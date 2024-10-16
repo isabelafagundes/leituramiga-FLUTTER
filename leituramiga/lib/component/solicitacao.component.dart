@@ -33,6 +33,20 @@ class SolicitacaoComponent extends State with SolicitacaoState, PaginacaoState<R
     );
   }
 
+  Future<void> obterHistoricoInicial(String emailUsuario) async {
+    await executar(
+      rotina: () => _paginacaoUseCase.obterHistoricoInicial(emailUsuario),
+      mensagemErro: "Não foi possível obter o histórico",
+    );
+  }
+
+  Future<void> obterHistoricoPaginadas(String emailUsuario) async {
+    await executar(
+      rotina: () => _paginacaoUseCase.obterHistoricoPaginadas(emailUsuario),
+      mensagemErro: "Não foi possível obter o histórico",
+    );
+  }
+
   Future<void> obterSolicitacoesPaginadas(String emailUsuario) async {
     await executar(
       rotina: () => _paginacaoUseCase.obterSolicitacoesPaginadas(emailUsuario),

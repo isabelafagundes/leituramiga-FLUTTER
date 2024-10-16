@@ -55,7 +55,7 @@ class Livro extends Entidade {
       "descricao": _descricao,
       "estadoFisico": _descricaoEstado,
       "codigoCategoria": _numeroCategoria,
-      "tipoSolicitacao": _tiposSolicitacao.join(","),
+      "tipoSolicitacao": _tiposSolicitacao.map((e) => e.id).toList().join(","),
       "emailUsuario": _emailUsuario,
       "dataCriacao": _dataCriacao?.formatar(),
       "dataUltimaSolicitacao": _dataUltimaSolicitacao?.formatar(),

@@ -29,14 +29,13 @@ enum MenuLateral {
     iconeDesativado: "usuario/user-outline",
     rota: Rota.PERFIL,
   ),
-  SUPORTE(
-    id:5,
-    descricao: "Suporte",
+  HISTORICO(
+    id: 5,
+    descricao: "Histórico",
     iconeAtivado: "menu/plus-circle-fill",
     iconeDesativado: "menu/plus-circle",
-    rota: Rota.SUPORTE,
+    rota: Rota.HISTORICO,
   );
-
 
   final int id;
   final String descricao;

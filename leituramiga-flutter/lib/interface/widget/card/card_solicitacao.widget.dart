@@ -12,12 +12,14 @@ class CardSolicitacaoWidget extends StatefulWidget {
   final Tema tema;
   final Function(int) aoVisualizar;
   final ResumoSolicitacao solicitacao;
+  final String usuarioPerfil;
 
   const CardSolicitacaoWidget({
     required this.tema,
     super.key,
     required this.aoVisualizar,
     required this.solicitacao,
+    required this.usuarioPerfil,
   });
 
   @override
@@ -84,11 +86,15 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextoWidget(
-                              texto: "Solicitação com ",
+                              texto: widget.solicitacao.nomeUsuario == widget.usuarioPerfil
+                                  ? "Criada por você "
+                                  : "Solicitação com ",
                               tema: widget.tema,
                             ),
                             TextoWidget(
-                              texto: widget.solicitacao.nomeUsuario,
+                              texto: widget.solicitacao.nomeUsuario == widget.usuarioPerfil
+                                  ? ""
+                                  : widget.solicitacao.nomeUsuario,
                               tema: widget.tema,
                               weight: FontWeight.w500,
                             ),
@@ -156,7 +162,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                             BotaoPequenoWidget(
                               tema: widget.tema,
                               corFonte: kCorFonte,
-                              aoClicar: ()=>widget.aoVisualizar(widget.solicitacao.numero!),
+                              aoClicar: () => widget.aoVisualizar(widget.solicitacao.numero!),
                               label: "Visualizar",
                             ),
                           ],

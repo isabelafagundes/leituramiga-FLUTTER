@@ -151,13 +151,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                   height: 70,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 2),
-                                    color: [
-                                      kCorAzul,
-                                      kCorPessego,
-                                      kCorVerde,
-                                      Color(widget.tema.accent)
-                                    ][_autenticacaoState.usuario?.numeroDeLivros ?? 0 % 4]
-                                        .withOpacity(.5),
+                                    color:kCorPessego.withOpacity(.5),
                                   ),
                                   child: Center(
                                     child: TextoWidget(

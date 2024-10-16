@@ -31,9 +31,9 @@ class LivroSolicitacao extends Entidade {
 
   factory LivroSolicitacao.carregarDeMapa(Map<String, dynamic> mapa) {
     return LivroSolicitacao.carregar(
-      mapa['numero'],
-      mapa['nome'],
-      mapa['nomeAutor'],
+      mapa['codigoLivro'],
+      mapa['titulo'],
+      mapa['autor'],
     );
   }
 

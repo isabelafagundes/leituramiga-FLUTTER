@@ -58,7 +58,10 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
                     tema: widget.tema,
                     textoLabel: "",
                     semLabel: true,
-                    executar: () => widget.selecionarItem(MenuLateral.PAGINA_PRINCIPAL),
+                    executar: () {
+                      widget.selecionarItem(MenuLateral.PAGINA_PRINCIPAL);
+                      Rota.navegar(context, MenuLateral.PAGINA_PRINCIPAL.rota);
+                    },
                     ativado: widget.itemSelecionado == MenuLateral.PAGINA_PRINCIPAL,
                     nomeSvg: widget.itemSelecionado == MenuLateral.PAGINA_PRINCIPAL
                         ? MenuLateral.PAGINA_PRINCIPAL.iconeAtivado
@@ -87,7 +90,10 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
                     tema: widget.tema,
                     textoLabel: "",
                     semLabel: true,
-                    executar: () => widget.selecionarItem(MenuLateral.SOLICITACOES),
+                    executar: () {
+                      widget.selecionarItem(MenuLateral.SOLICITACOES);
+                      Rota.navegar(context, MenuLateral.SOLICITACOES.rota);
+                    },
                     ativado: widget.itemSelecionado == MenuLateral.SOLICITACOES,
                     nomeSvg: widget.itemSelecionado == MenuLateral.SOLICITACOES
                         ? MenuLateral.SOLICITACOES.iconeAtivado
@@ -107,36 +113,36 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
             ),
           ),
           SizedBox(width: Responsive.larguraP(context) ? widget.tema.espacamento * 2 : widget.tema.espacamento * 4),
-          Flexible(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Spacer(),
-                FittedBox(
-                  child: BotaoMenuWidget(
-                    tema: widget.tema,
-                    textoLabel: "",
-                    semLabel: true,
-                    executar: () => widget.selecionarItem(MenuLateral.SUPORTE),
-                    ativado: widget.itemSelecionado == MenuLateral.SUPORTE,
-                    nomeSvg: widget.itemSelecionado == MenuLateral.SUPORTE
-                        ? MenuLateral.SUPORTE.iconeAtivado
-                        : MenuLateral.SUPORTE.iconeDesativado,
-                  ),
-                ),
-                SizedBox(height: widget.tema.espacamento / 2),
-                Expanded(
-                  child: TextoWidget(
-                    align: TextAlign.center,
-                    texto: MenuLateral.SUPORTE.descricao,
-                    tema: widget.tema,
-                  ),
-                ),
-                const Spacer(),
-              ],
-            ),
-          ),
+          // Flexible(
+          //   child: Column(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     crossAxisAlignment: CrossAxisAlignment.center,
+          //     children: [
+          //       const Spacer(),
+          //       FittedBox(
+          //         child: BotaoMenuWidget(
+          //           tema: widget.tema,
+          //           textoLabel: "",
+          //           semLabel: true,
+          //           executar: () => widget.selecionarItem(MenuLateral.SUPORTE),
+          //           ativado: widget.itemSelecionado == MenuLateral.SUPORTE,
+          //           nomeSvg: widget.itemSelecionado == MenuLateral.SUPORTE
+          //               ? MenuLateral.SUPORTE.iconeAtivado
+          //               : MenuLateral.SUPORTE.iconeDesativado,
+          //         ),
+          //       ),
+          //       SizedBox(height: widget.tema.espacamento / 2),
+          //       Expanded(
+          //         child: TextoWidget(
+          //           align: TextAlign.center,
+          //           texto: MenuLateral.SUPORTE.descricao,
+          //           tema: widget.tema,
+          //         ),
+          //       ),
+          //       const Spacer(),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

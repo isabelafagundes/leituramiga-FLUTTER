@@ -83,6 +83,8 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
       await _usuarioComponent.obterUsuario(_solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioCriador);
+      await _usuarioComponent
+          .obterUsuarioSolicitacao(_solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioProprietario);
       await _usuarioComponent.obterLivrosUsuario();
       UF? uf = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.municipio.estado;
       await _usuarioComponent.obterCidades(uf!);
@@ -135,7 +137,8 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
                                   _atualizarAbaSelecionada(DetalhesSolicitacao.deDescricao(_opcoes[index])),
                             ),
                             if (_solicitacaoComponent.solicitacaoSelecionada != null) _obterAba,
-                            if (_abaSelecionada == DetalhesSolicitacao.INFORMACOES)
+                            if (_abaSelecionada == DetalhesSolicitacao.INFORMACOES &&
+                                (_solicitacaoComponent.solicitacaoSelecionada?.status?.permiteEdicao ?? false))
                               Flexible(
                                 child: Flex(
                                   direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
@@ -170,12 +173,19 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
         ),
       DetalhesSolicitacao.LIVROS => ConteudoLivrosSolicitacaoWidget(
           tema: tema,
-          usuarioCriador: [],
+          nomeSolicitante: _usuarioComponent.usuarioSelecionado?.nome ?? "",
+          nomeReceptor: _usuarioComponent.usuarioSolicitacao?.nome ?? "",
+          usuarioCriador: _solicitacaoComponent.solicitacaoSelecionada?.livrosCriador.livros ?? [],
+          usuarioDoador: _solicitacaoComponent.solicitacaoSelecionada?.livrosProprietario?.livros ?? [],
         ),
-      DetalhesSolicitacao.CONTATO => ConteudoContatoWidget(
-          tema: tema,
-          usuarioCriador: _usuarioComponent.usuarioSelecionado!,
-          usuarioDoador: _usuarioComponent.usuarioSolicitacao,
+      DetalhesSolicitacao.CONTATO => Column(
+          children: [
+            ConteudoContatoWidget(
+              tema: tema,
+              usuarioCriador: _usuarioComponent.usuarioSelecionado!,
+              usuarioDoador: _usuarioComponent.usuarioSolicitacao,
+            ),
+          ],
         ),
       _ => Container(),
     };
@@ -244,9 +254,13 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
             "Caso deseje cancelar a solicitação, informe o motivo e selecione 'Cancelar'.",
             "Cancelar",
             context,
-            () => _solicitacaoComponent.cancelarSolicitacao(
-              _solicitacaoComponent.solicitacaoSelecionada!.numero!,
-            ),
+            () async {
+              await _solicitacaoComponent.cancelarSolicitacao(
+                _solicitacaoComponent.solicitacaoSelecionada!.numero!,
+              );
+              await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
+              Navigator.pop(context);
+            },
           ),
         ),
         icone: Icon(
@@ -287,7 +301,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
       tema: tema,
       conteudo: Container(
         padding: EdgeInsets.all(tema.espacamento * 2),
-        height: 350,
+        height: 380,
         width: 400,
         child: Column(
           children: [

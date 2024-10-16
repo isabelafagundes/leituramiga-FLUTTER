@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/solicitacao.component.dart';
 import 'package:leituramiga/domain/data_hora.dart';
@@ -10,12 +10,12 @@ import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/service/mock/solicitacao_mock.service.dart';
+import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_solicitacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -43,9 +43,9 @@ class _CalendarioPageState extends State<CalendarioPage> {
   void initState() {
     super.initState();
     solicitacaoComponent.inicializar(
-      SolicitacaoMockRepo(),
-      SolicitacaoMockService(),
-      NotificacaoMockRepo(),
+      AppModule.solicitacaoRepo,
+      AppModule.solicitacaoService,
+      AppModule.notificacaoRepo,
       atualizar,
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -123,7 +123,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                     weekendStyle: textStyleBold,
                   ),
                 ),
-                SizedBox(width: tema.espacamento * 4),
+                SizedBox(height: tema.espacamento * 4),
                 SizedBox(
                   height: 800,
                   child: Column(
@@ -159,6 +159,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                                       tema: tema,
                                       solicitacao: solicitacao,
                                       aoVisualizar: (int) {},
+                                      usuarioPerfil: '',
                                     ),
                                   );
                                 },
@@ -214,5 +215,4 @@ class _CalendarioPageState extends State<CalendarioPage> {
         fontWeight: FontWeight.w500,
         fontFamily: tema.familiaDeFontePrimaria,
       );
-
 }

@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                   tema: tema,
                   texto: "Encontre seu livro",
                   cor: Color(tema.baseContent),
-                  tamanho: tema.tamanhoFonteXG,
+                  tamanho: tema.tamanhoFonteXG + 4,
                   weight: FontWeight.w500,
                 ),
                 SizedBox(height: tema.espacamento * 2),

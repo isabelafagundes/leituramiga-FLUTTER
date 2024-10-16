@@ -12,4 +12,6 @@ enum TipoStatusSolicitacao {
   }
 
   const TipoStatusSolicitacao({required this.id, required this.descricao});
+
+  bool get permiteEdicao => this == TipoStatusSolicitacao.EM_ANDAMENTO || this == TipoStatusSolicitacao.PENDENTE;
 }

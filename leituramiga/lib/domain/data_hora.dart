@@ -36,6 +36,14 @@ class DataHora {
     return DataHora.criar(DateTime.now().subtract(Duration(days: 1)));
   }
 
+  bool ehAntesDe(DataHora data) {
+    return _valor.isBefore(data.valor);
+  }
+
+  bool ehDepoisDe(DataHora data) {
+    return _valor.isAfter(data.valor);
+  }
+
   void subtrair(int dias) {
     _valor = _valor.subtract(Duration(days: dias));
   }

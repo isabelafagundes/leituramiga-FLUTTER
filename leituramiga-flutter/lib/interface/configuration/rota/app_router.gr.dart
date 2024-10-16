@@ -86,6 +86,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const EsqueceSenhaPage(),
       );
     },
+    HistoricoRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const HistoricoPage(),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -327,6 +333,20 @@ class EsqueceSenhaRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'EsqueceSenhaRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [HistoricoPage]
+class HistoricoRoute extends PageRouteInfo<void> {
+  const HistoricoRoute({List<PageRouteInfo>? children})
+      : super(
+          HistoricoRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HistoricoRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

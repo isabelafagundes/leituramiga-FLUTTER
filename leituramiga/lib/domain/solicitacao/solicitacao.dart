@@ -12,11 +12,11 @@ class Solicitacao extends Entidade {
   final int? _numero;
   final String _emailUsuarioProprietario;
   final String _emailUsuarioCriador;
-  final LivrosSolicitacao _livrosCriador;
-  LivrosSolicitacao? _livrosProprietario;
+  final LivrosSolicitacao _livrosUsuarioSolicitante;
+  LivrosSolicitacao? _livrosUsuarioReceptor;
   final FormaEntrega _formaEntrega;
   final DataHora? _dataCriacao;
-  final DataHora _dataEntrega;
+  final DataHora? _dataEntrega;
   final DataHora? _dataDevolucao;
   final DataHora? _dataAtualizacao;
   final String _informacoesAdicionais;
@@ -29,44 +29,45 @@ class Solicitacao extends Entidade {
   final String? _codigoRastreamento;
 
   Solicitacao.criar(
-    this._numero,
-    this._emailUsuarioProprietario,
-    this._emailUsuarioCriador,
-    this._formaEntrega,
-    this._dataCriacao,
-    this._dataEntrega,
-    this._dataDevolucao,
-    this._dataAtualizacao,
-    this._informacoesAdicionais,
-    this._endereco,
-    this._status,
-    this._dataAceite,
-    this._motivoRecusa,
-    this._tipoSolicitacao,
-    this._codigoRastreamento,
-  )   : _livrosCriador = LivrosSolicitacao.carregar(_numero ?? 0, _emailUsuarioCriador, []),
-        _enderecoUsuarioCriador = _endereco == null;
+      this._numero,
+      this._emailUsuarioProprietario,
+      this._emailUsuarioCriador,
+      this._formaEntrega,
+      this._dataCriacao,
+      this._dataEntrega,
+      this._dataDevolucao,
+      this._dataAtualizacao,
+      this._informacoesAdicionais,
+      this._endereco,
+      this._status,
+      this._dataAceite,
+      this._motivoRecusa,
+      this._tipoSolicitacao,
+      this._codigoRastreamento,
+      this._livrosUsuarioSolicitante,
+      this._livrosUsuarioReceptor,
+      ) : _enderecoUsuarioCriador = false;
 
   Solicitacao.carregar(
-    this._numero,
-    this._emailUsuarioProprietario,
-    this._emailUsuarioCriador,
-    this._livrosCriador,
-    this._livrosProprietario,
-    this._formaEntrega,
-    this._dataCriacao,
-    this._dataEntrega,
-    this._dataDevolucao,
-    this._dataAtualizacao,
-    this._informacoesAdicionais,
-    this._endereco,
-    this._enderecoUsuarioCriador,
-    this._tipoSolicitacao,
-    this._status,
-    this._dataAceite,
-    this._motivoRecusa,
-    this._codigoRastreamento,
-  );
+      this._numero,
+      this._emailUsuarioProprietario,
+      this._emailUsuarioCriador,
+      this._livrosUsuarioSolicitante,
+      this._livrosUsuarioReceptor,
+      this._formaEntrega,
+      this._dataCriacao,
+      this._dataEntrega,
+      this._dataDevolucao,
+      this._dataAtualizacao,
+      this._informacoesAdicionais,
+      this._endereco,
+      this._enderecoUsuarioCriador,
+      this._tipoSolicitacao,
+      this._status,
+      this._dataAceite,
+      this._motivoRecusa,
+      this._codigoRastreamento,
+      );
 
   int? get numero => _numero;
 
@@ -79,12 +80,12 @@ class Solicitacao extends Entidade {
       "codigoSolicitacao": _numero,
       "emailUsuarioReceptor": _emailUsuarioProprietario,
       "emailUsuarioSolicitante": _emailUsuarioCriador,
-      "livrosUsuarioSolicitante": _livrosCriador.paraMapa(),
-      "livrosTroca": _livrosProprietario?.paraMapa(),
+      "livrosUsuarioSolicitante": _livrosUsuarioSolicitante.paraMapa(),
+      "livrosTroca": _livrosUsuarioReceptor?.paraMapa(),
       "codigoFormaEntrega": _formaEntrega.id,
       "dataCriacao": _dataCriacao?.formatar("yyyy-MM-dd"),
-      "dataEntrega": _dataEntrega.formatar("yyyy-MM-dd"),
-      "horaEntrega": _dataEntrega.formatar("HH:mm:ss"),
+      "dataEntrega": _dataEntrega?.formatar("yyyy-MM-dd"),
+      "horaEntrega": _dataEntrega?.formatar("HH:mm:ss"),
       "horaCriacao": _dataCriacao?.formatar("HH:mm:ss"),
       "horaAtualizacao": _dataAtualizacao?.formatar("HH:mm:ss"),
       "horaAceite": _dataAceite?.formatar("HH:mm:ss"),
@@ -103,13 +104,13 @@ class Solicitacao extends Entidade {
   }
 
   void adicionarEndereco(
-    String? numeroResidencial,
-    String? complemento,
-    String rua,
-    String cep,
-    String bairro,
-    Municipio municipio,
-  ) {
+      String? numeroResidencial,
+      String? complemento,
+      String rua,
+      String cep,
+      String bairro,
+      Municipio municipio,
+      ) {
     Endereco endereco = Endereco.criar(
       numeroResidencial,
       complemento,
@@ -123,10 +124,10 @@ class Solicitacao extends Entidade {
 
   void adicionar(Livro livro, String emailUsuario) {
     if (emailUsuario == _emailUsuarioCriador) {
-      _livrosCriador.adicionar(livro);
+      _livrosUsuarioSolicitante.adicionar(livro);
     } else {
-      _livrosProprietario ??= LivrosSolicitacao.carregar(_numero ?? 0, _emailUsuarioProprietario, []);
-      _livrosProprietario!.adicionar(livro);
+      _livrosUsuarioReceptor ??= LivrosSolicitacao.carregar(_numero ?? 0, _emailUsuarioProprietario, []);
+      _livrosUsuarioReceptor!.adicionar(livro);
     }
   }
 
@@ -169,13 +170,13 @@ class Solicitacao extends Entidade {
 
   String get emailUsuarioProprietario => _emailUsuarioProprietario;
 
-  LivrosSolicitacao get livrosCriador => _livrosCriador;
+  LivrosSolicitacao get livrosCriador => _livrosUsuarioSolicitante;
 
   FormaEntrega get formaEntrega => _formaEntrega;
 
   DataHora? get dataCriacao => _dataCriacao;
 
-  DataHora get dataEntrga => _dataEntrega;
+  DataHora? get dataEntrga => _dataEntrega;
 
   bool get enderecoUsuarioCriador => _enderecoUsuarioCriador;
 
@@ -189,13 +190,13 @@ class Solicitacao extends Entidade {
 
   TipoStatusSolicitacao get status => _status;
 
-  LivrosSolicitacao? get livrosProprietario => _livrosProprietario;
+  LivrosSolicitacao? get livrosProprietario => _livrosUsuarioReceptor;
 
   String? get motivoRecusa => _motivoRecusa;
 
   DataHora? get dataAceite => _dataAceite;
 
-  DataHora get dataEntrega => _dataEntrega;
+  DataHora? get dataEntrega => _dataEntrega;
 
   TipoSolicitacao get tipoSolicitacao => _tipoSolicitacao;
 

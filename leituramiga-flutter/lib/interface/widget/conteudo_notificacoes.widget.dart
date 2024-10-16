@@ -12,6 +12,7 @@ import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.
 import 'package:projeto_leituramiga/interface/widget/botao/duas_escolhas.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_solicitacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/empty_state.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class ConteudoNotificacoesWidget extends StatefulWidget {
@@ -63,7 +64,7 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
     }
 
     return Container(
-      width: Responsive.largura(context) <= 600 ? Responsive.largura(context) : 600,
+      width: Responsive.largura(context) <= 800 ? Responsive.largura(context) : 800,
       height: 800,
       padding: EdgeInsets.all(widget.tema.espacamento * 2),
       child: Column(
@@ -133,73 +134,75 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
           if (!_exibindoEmAndamento)
             Expanded(
               child: SizedBox(
-                width: 600,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: solicitacaoComponent.notificacoes.length,
-                  itemBuilder: (context, index) {
-                    Notificacao? notificacao = solicitacaoComponent.notificacoes[index];
-                    if (!_exibindoEmAndamento && notificacao != null) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          right: widget.tema.espacamento * 2,
-                          bottom: widget.tema.espacamento * 2,
-                        ),
-                        child: CardNotificacaoWidget(
-                          tema: widget.tema,
-                          aoRecusar: (numeroSolicitacao) =>
-                              solicitacaoComponent.recusarSolicitacao(numeroSolicitacao, "Motivo"),
-                          aoVisualizar: (numeroSolicitacao) async {
-                            Rota.navegarComArgumentos(
-                              context,
-                              DetalhesSolicitacaoRoute(
-                                numeroSolicitacao: numeroSolicitacao,
+                width: 800,
+                child: solicitacaoComponent.notificacoes.isEmpty
+                    ? EmptyStateWidget(tema: widget.tema)
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: solicitacaoComponent.notificacoes.length,
+                        itemBuilder: (context, index) {
+                          Notificacao? notificacao = solicitacaoComponent.notificacoes[index];
+                          if (!_exibindoEmAndamento && notificacao != null) {
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: widget.tema.espacamento * 2),
+                              child: CardNotificacaoWidget(
+                                tema: widget.tema,
+                                aoRecusar: (numeroSolicitacao) =>
+                                    solicitacaoComponent.recusarSolicitacao(numeroSolicitacao, "Motivo"),
+                                aoVisualizar: (numeroSolicitacao) async {
+                                  Rota.navegarComArgumentos(
+                                    context,
+                                    DetalhesSolicitacaoRoute(
+                                      numeroSolicitacao: numeroSolicitacao,
+                                    ),
+                                  );
+                                  Navigator.pop(context, true);
+                                },
+                                notificacao: notificacao,
                               ),
                             );
-                            Navigator.pop(context, true);
-                          },
-                          notificacao: notificacao,
-                        ),
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
+                          }
+                          return const SizedBox();
+                        },
+                      ),
               ),
             ),
           if (_exibindoEmAndamento)
             Expanded(
               child: SizedBox(
-                width: 600,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: solicitacaoComponent.itensPaginados.length,
-                  itemBuilder: (context, index) {
-                    ResumoSolicitacao? resumoSolicitacao = solicitacaoComponent.itensPaginados[index];
-                    if (_exibindoEmAndamento && resumoSolicitacao != null) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          right: widget.tema.espacamento * 2,
-                          bottom: widget.tema.espacamento * 2,
-                        ),
-                        child: CardSolicitacaoWidget(
-                          tema: widget.tema,
-                          solicitacao: resumoSolicitacao,
-                          aoVisualizar: (numero) async {
-                            Rota.navegarComArgumentos(
-                              context,
-                              DetalhesSolicitacaoRoute(
-                                numeroSolicitacao: numero,
+                width: 800,
+                child: solicitacaoComponent.itensPaginados.isEmpty
+                    ? EmptyStateWidget(tema: widget.tema)
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: solicitacaoComponent.itensPaginados.length,
+                        itemBuilder: (context, index) {
+                          ResumoSolicitacao? resumoSolicitacao = solicitacaoComponent.itensPaginados[index];
+                          if (_exibindoEmAndamento && resumoSolicitacao != null) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                right: widget.tema.espacamento * 2,
+                                bottom: widget.tema.espacamento * 2,
+                              ),
+                              child: CardSolicitacaoWidget(
+                                tema: widget.tema,
+                                solicitacao: resumoSolicitacao,
+                                aoVisualizar: (numero) async {
+                                  Rota.navegarComArgumentos(
+                                    context,
+                                    DetalhesSolicitacaoRoute(
+                                      numeroSolicitacao: numero,
+                                    ),
+                                  );
+                                  Navigator.pop(context, true);
+                                },
+                                usuarioPerfil: _autenticacaoState.usuario!.nome,
                               ),
                             );
-                            Navigator.pop(context, true);
-                          },
-                        ),
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
+                          }
+                          return const SizedBox();
+                        },
+                      ),
               ),
             )
         ],

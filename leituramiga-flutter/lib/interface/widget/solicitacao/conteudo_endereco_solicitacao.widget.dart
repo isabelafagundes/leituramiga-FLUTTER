@@ -13,7 +13,6 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
   final Tema tema;
   final Function() aoClicarProximo;
   final Function() utilizarEnderecoPerfil;
-  final Function(FormaEntrega) aoClicarFormaEntrega;
   final Function(String) aoClicarFrete;
   final TextEditingController controllerRua;
   final TextEditingController controllerBairro;
@@ -23,7 +22,6 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
   final TextEditingController controllerCidade;
   final TextEditingController controllerEstado;
   final TextEditingController controllerFrete;
-  final TextEditingController controllerFormaEntrega;
   final Function(String) aoSelecionarCidade;
   final Function(String) aoSelecionarEstado;
   final Function(String) aoSelecionarFormaEntrega;
@@ -38,7 +36,6 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
     required this.tema,
     required this.aoClicarProximo,
     required this.utilizarEnderecoPerfil,
-    required this.aoClicarFormaEntrega,
     required this.aoClicarFrete,
     required this.controllerRua,
     required this.controllerBairro,
@@ -53,7 +50,6 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
     required this.estados,
     required this.usuarios,
     required this.controllerFrete,
-    required this.controllerFormaEntrega,
     required this.aoSelecionarFormaEntrega,
     required this.aoSelecionarFrete,
     required this.utilizaEnderecoPerfil,
@@ -77,36 +73,6 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   direction: Responsive.larguraPP(context) ? Axis.vertical : Axis.horizontal,
                   children: [
-                    Flexible(
-                      child: SizedBox(
-                        height: 70,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextoWidget(
-                              texto: "Forma de entrega",
-                              tema: tema,
-                              cor: Color(tema.baseContent),
-                            ),
-                            SizedBox(height: tema.espacamento),
-                            Expanded(
-                              child: MenuWidget(
-                                tema: tema,
-                                valorSelecionado:
-                                    controllerFormaEntrega.text.isNotEmpty ? controllerFormaEntrega.text : null,
-                                escolhas: const ["Correios", "Presencial"],
-                                aoClicar: (valor) => aoClicarFormaEntrega(FormaEntrega.deDescricao(valor)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: tema.espacamento * 2,
-                      height: tema.espacamento * 2,
-                    ),
                     Flexible(
                       flex: 2,
                       child: Row(
@@ -135,19 +101,22 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
               ),
               SizedBox(height: tema.espacamento * 2),
               Flexible(
-                child: FormularioEnderecoWidget(
-                  tema: tema,
-                  aoSelecionarCidade: aoSelecionarCidade,
-                  aoSelecionarEstado: aoSelecionarEstado,
-                  cidades: cidades,
-                  estados: estados,
-                  controllerRua: controllerRua,
-                  controllerBairro: controllerBairro,
-                  controllerCep: controllerCep,
-                  controllerNumero: controllerNumero,
-                  controllerComplemento: controllerComplemento,
-                  controllerCidade: controllerCidade,
-                  controllerEstado: controllerEstado,
+                child: IgnorePointer(
+                  ignoring: utilizaEnderecoPerfil,
+                  child: FormularioEnderecoWidget(
+                    tema: tema,
+                    aoSelecionarCidade: aoSelecionarCidade,
+                    aoSelecionarEstado: aoSelecionarEstado,
+                    cidades: cidades,
+                    estados: estados,
+                    controllerRua: controllerRua,
+                    controllerBairro: controllerBairro,
+                    controllerCep: controllerCep,
+                    controllerNumero: controllerNumero,
+                    controllerComplemento: controllerComplemento,
+                    controllerCidade: controllerCidade,
+                    controllerEstado: controllerEstado,
+                  ),
                 ),
               ),
             ],

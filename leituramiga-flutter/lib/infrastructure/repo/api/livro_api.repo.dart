@@ -19,6 +19,7 @@ class LivroApiRepo extends LivroRepo with ConfiguracaoApiState {
 
   @override
   Future<void> atualizarLivro(Livro livro) async {
+    print(livro.paraMapa());
     if (livro.numero == null) {
       await _criarLivro(livro);
     } else {

@@ -20,6 +20,7 @@ enum Rota {
   CRIAR_LIVRO(url: "adicionar-livro", pageInfo: CriarLivroRoute.page),
   CALENDARIO(url: "calendario", pageInfo: CalendarioRoute.page),
   DETALHES_SOLICITACAO(url: "detalhes-solicitacao/:numeroSolicitacao", pageInfo: DetalhesSolicitacaoRoute.page),
+  HISTORICO(url: "historico", pageInfo: HistoricoRoute.page),
   SOLICITACAO(url: "solicitacao/:numeroSolicitacao", pageInfo: VisualizarSolicitacaoRoute.page);
 
   final PageInfo<dynamic> pageInfo;
@@ -51,6 +52,7 @@ enum Rota {
             adicionar(rota: SOLICITACAO, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: DETALHES_SOLICITACAO, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: CALENDARIO, guards: [UsuarioLogadoGuard()]),
+            adicionar(rota: HISTORICO, guards: [UsuarioLogadoGuard()]),
           ],
         ),
       ];
@@ -76,7 +78,7 @@ enum Rota {
   }
 
   static CustomRoute adicionar({
-    bool manterEstado = true,
+    bool manterEstado = false,
     List<AutoRouteGuard>? guards,
     List<AutoRoute>? subrotas,
     required Rota rota,

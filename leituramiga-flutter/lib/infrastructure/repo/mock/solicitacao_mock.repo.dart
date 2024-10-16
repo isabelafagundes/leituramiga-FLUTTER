@@ -36,24 +36,6 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
     ),
   ];
 
-  Solicitacao get solicitacao => Solicitacao.criar(
-        1,
-        "isabela@gmail.com",
-        "kaua@gmail.com",
-        FormaEntrega.PRESENCIAL,
-        DataHora.hoje(),
-        DataHora.hoje(),
-        null,
-        DataHora.hoje(),
-        "Vou esperar no refeitório da faculdade",
-        EnderecoMockRepo().endereco,
-        TipoStatusSolicitacao.PENDENTE,
-        null,
-        null,
-        TipoSolicitacao.TROCA,
-        null,
-      );
-
   @override
   Future<void> atualizarSolicitacao(Solicitacao solicitacao) {
     // TODO: implement atualizarSolicitacao
@@ -62,12 +44,19 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
 
   @override
   Future<Solicitacao> obterSolicitacao(int numero) async {
-    return solicitacao;
+    // TODO: implement atualizarSolicitacao
+    throw UnimplementedError();
   }
 
   @override
   Future<List<ResumoSolicitacao>> obterSolicitacoes(String numeroUsuario,
       [int numeroPagina = 0, int limite = 50]) async {
     return _solicitacoes;
+  }
+
+  @override
+  Future<List<ResumoSolicitacao>> obterHistorico(String emailUsuario, [int numeroPagina = 0, int limite = 50]) {
+    // TODO: implement obterHistorico
+    throw UnimplementedError();
   }
 }

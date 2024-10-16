@@ -2,7 +2,7 @@ import 'package:leituramiga/domain/livro/livro.dart';
 import 'package:leituramiga/domain/solicitacao/livro_solicitacao.dart';
 
 class LivrosSolicitacao {
-  final int _numeroSolicitacao;
+  final int? _numeroSolicitacao;
   final String _emailUsuario;
   List<LivroSolicitacao> _livros;
 
@@ -11,6 +11,11 @@ class LivrosSolicitacao {
     this._emailUsuario,
     this._livros,
   );
+
+  LivrosSolicitacao.criar(
+    this._emailUsuario,
+    this._livros,
+  ) : _numeroSolicitacao = null;
 
   void adicionar(Livro livro) {
     LivroSolicitacao resumo = LivroSolicitacao.criarDeLivro(livro);
@@ -33,5 +38,5 @@ class LivrosSolicitacao {
 
   String get emailUsuario => _emailUsuario;
 
-  int get numeroSolicitacao => _numeroSolicitacao;
+  int? get numeroSolicitacao => _numeroSolicitacao;
 }

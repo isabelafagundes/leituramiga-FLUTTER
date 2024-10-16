@@ -17,6 +17,7 @@ class InputWidget extends StatefulWidget {
   final TextInputType? tipoInput;
   final bool readOnly;
   final double alturaCampo;
+  final bool obrigatorio;
   final bool expandir;
 
   const InputWidget({
@@ -35,6 +36,7 @@ class InputWidget extends StatefulWidget {
     this.onTap,
     this.alturaCampo = 50,
     this.expandir = false,
+     this.obrigatorio = true,
   });
 
   @override
@@ -53,7 +55,7 @@ class _InputWidgetState extends State<InputWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: widget.alturaCampo+20,
+      height: widget.alturaCampo + 20,
       child: Flex(
         direction: Axis.vertical,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -62,7 +64,7 @@ class _InputWidgetState extends State<InputWidget> {
           if (widget.label != null)
             TextoWidget(
               tema: widget.tema,
-              texto: widget.label!,
+              texto:widget.obrigatorio ? "${widget.label} *": widget.label!,
               tamanho: widget.tamanho ?? 12,
               cor: Color(widget.tema.baseContent),
             ),
@@ -86,7 +88,7 @@ class _InputWidgetState extends State<InputWidget> {
                 ),
               ),
               child: Container(
-             height: widget.alturaCampo,
+                height: widget.alturaCampo,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(widget.tema.borderRadiusG),
                   boxShadow: [
