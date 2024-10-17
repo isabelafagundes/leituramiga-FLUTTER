@@ -35,6 +35,7 @@ class EnderecoMockRepo extends EnderecoRepo {
         "07700000",
         "Jardim das Rosas",
         municipios[0],
+        false,
       );
 
   @override
@@ -54,5 +55,4 @@ class EnderecoMockRepo extends EnderecoRepo {
     // TODO: implement obterMunicipios
     throw UnimplementedError();
   }
-
 }

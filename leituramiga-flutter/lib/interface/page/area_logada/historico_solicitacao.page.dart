@@ -67,11 +67,11 @@ class _HistoricoPageState extends State<HistoricoPage> {
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: Responsive.larguraP(context) ? 1 : 2,
+                  crossAxisCount: Responsive.larguraP(context) ? 1 :3,
                   crossAxisSpacing: tema.espacamento * 2,
                   mainAxisSpacing: tema.espacamento * 2,
                   childAspectRatio: 1.5,
-                  mainAxisExtent: 210,
+                  mainAxisExtent: 200,
                 ),
                 itemCount: solicitacaoComponent.itensPaginados.length,
                 itemBuilder: (context, index) {

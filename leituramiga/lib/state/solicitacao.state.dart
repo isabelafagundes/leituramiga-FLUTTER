@@ -17,7 +17,6 @@ mixin class SolicitacaoState {
   List<ResumoSolicitacao> solicitacoes = [];
   bool utilizarEnderecoPerfil = false;
 
-
   bool verificarSelecao(ResumoLivro livro) {
     return livrosSelecionados.any((element) => element.numero == livro.numero);
   }

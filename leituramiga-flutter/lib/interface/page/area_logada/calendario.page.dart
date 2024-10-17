@@ -178,12 +178,12 @@ class _CalendarioPageState extends State<CalendarioPage> {
 
   List<ResumoSolicitacao> obterEventos(DateTime data) => solicitacaoComponent.itensPaginados
       .where((solicitacao) =>
-          isSameDay(solicitacao.dataEntrega.valor, data) || isSameDay(solicitacao.dataDevolucao?.valor, data))
+          isSameDay(solicitacao.dataEntrega?.valor, data) || isSameDay(solicitacao.dataDevolucao?.valor, data))
       .toList();
 
   List<ResumoSolicitacao> get solicitacoesSelecionadas => solicitacaoComponent.itensPaginados
       .where((solicitacao) =>
-          isSameDay(solicitacao.dataEntrega.valor, dataSelecionada?.valor) ||
+          isSameDay(solicitacao.dataEntrega?.valor, dataSelecionada?.valor) ||
           isSameDay(solicitacao.dataDevolucao?.valor, dataSelecionada?.valor))
       .toList();
 

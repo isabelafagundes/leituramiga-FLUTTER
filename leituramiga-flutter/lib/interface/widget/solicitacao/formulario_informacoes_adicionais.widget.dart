@@ -27,6 +27,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
   final Function([bool devolucao]) abrirDatePicker;
   final Function([bool devolucao]) abrirTimePicker;
   final Function() aoClicarAdicionarLivro;
+  final bool semSelecaoLivros;
 
   const FormularioInformacoesAdicionaisWidget({
     super.key,
@@ -45,6 +46,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
     required this.controllerHoraEntrega,
     required this.controllerFormaEntrega,
     required this.aoClicarFormaEntrega,
+    this.semSelecaoLivros = false,
   });
 
   @override
@@ -55,27 +57,28 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Flexible(
-          child: Column(
-            children: [
-              TextoWidget(
-                texto: "Clique no '+' para selecionar os livros que deseja solicitar desse usuário:",
-                tema: tema,
-                align: TextAlign.center,
-                cor: Color(tema.baseContent),
-                tamanho: tema.tamanhoFonteM,
-              ),
-              SizedBox(height: tema.espacamento),
-              CardLivrosSolicitacaoWidget(
-                tema: tema,
-                removerLivro: removerLivro,
-                livrosSolicitacao: livrosSolicitacao,
-                aoClicarAdicionarLivro: aoClicarAdicionarLivro,
-              ),
-            ],
+        if (!semSelecaoLivros)
+          Flexible(
+            child: Column(
+              children: [
+                TextoWidget(
+                  texto: "Clique no '+' para selecionar os livros que deseja solicitar desse usuário:",
+                  tema: tema,
+                  align: TextAlign.center,
+                  cor: Color(tema.baseContent),
+                  tamanho: tema.tamanhoFonteM,
+                ),
+                SizedBox(height: tema.espacamento),
+                CardLivrosSolicitacaoWidget(
+                  tema: tema,
+                  removerLivro: removerLivro,
+                  livrosSolicitacao: livrosSolicitacao,
+                  aoClicarAdicionarLivro: aoClicarAdicionarLivro,
+                ),
+              ],
+            ),
           ),
-        ),
-        if (Responsive.larguraP(context)) ...[
+        if (Responsive.larguraP(context) &&        !semSelecaoLivros) ...[
           SizedBox(height: tema.espacamento * 2),
           Divider(
             color: Color(tema.accent),
@@ -121,6 +124,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                         ),
                       ),
                     ),
+                    if(!Responsive.larguraP(context))
                     Flexible(
                       child: IgnorePointer(
                         child: Opacity(
@@ -246,19 +250,48 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                     ),
                   ),
               ],
-              SizedBox(height: tema.espacamento * 3),
-              Flexible(
-                child: BotaoWidget(
-                  tema: tema,
-                  texto: 'Próximo',
-                  nomeIcone: "seta/arrow-long-right",
-                  aoClicar: aoClicarProximo,
+              if (!semSelecaoLivros) ...[
+                SizedBox(height: tema.espacamento * 3),
+                Flexible(
+                  child: BotaoWidget(
+                    tema: tema,
+                    texto: 'Próximo',
+                    nomeIcone: "seta/arrow-long-right",
+                    aoClicar: aoClicarProximo,
+                  ),
                 ),
-              ),
-              SizedBox(height: tema.espacamento * 4),
+                SizedBox(height: tema.espacamento * 4),
+              ]
             ],
           ),
         ),
+        if (semSelecaoLivros)
+          Flexible(
+            child: IgnorePointer(
+              ignoring: semSelecaoLivros,
+              child: Opacity(
+                opacity: 0,
+                child: Column(
+                  children: [
+                    TextoWidget(
+                      texto: "Clique no '+' para selecionar os livros que deseja solicitar desse usuário:",
+                      tema: tema,
+                      align: TextAlign.center,
+                      cor: Color(tema.baseContent),
+                      tamanho: tema.tamanhoFonteM,
+                    ),
+                    SizedBox(height: tema.espacamento),
+                    CardLivrosSolicitacaoWidget(
+                      tema: tema,
+                      removerLivro: removerLivro,
+                      livrosSolicitacao: livrosSolicitacao,
+                      aoClicarAdicionarLivro: aoClicarAdicionarLivro,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }

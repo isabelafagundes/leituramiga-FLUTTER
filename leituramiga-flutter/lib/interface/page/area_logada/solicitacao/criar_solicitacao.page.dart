@@ -188,7 +188,6 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
             controllerNumero: controllerNumero,
             controllerComplemento: controllerComplemento,
             controllerCidade: controllerCidade,
-            usuarios: [_autenticacaoState.usuario!.nomeUsuario, _usuarioComponent.usuarioSolicitacao!.nomeUsuario],
             controllerEstado: controllerEstado,
           ),
         ),
@@ -196,6 +195,8 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
           child: Flex(
             direction: Axis.vertical,
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Flexible(
                 child: SvgWidget(
@@ -279,8 +280,9 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
 
   Solicitacao get solicitacao {
     try {
-      DataHora dataEntrega =
-          DataHora.deString("${controllerDataEntrega.text} ${controllerHoraEntrega.text}", "dd/MM/yyyy HH:mm");
+      DataHora? dataEntrega = controllerDataEntrega.text.isEmpty && controllerHoraEntrega.text.isEmpty
+          ? null
+          : DataHora.deString("${controllerDataEntrega.text} ${controllerHoraEntrega.text}", "dd/MM/yyyy HH:mm");
       DataHora? dataDevolucao = controllerDataDevolucao.text.isEmpty && controllerHoraDevolucao.text.isEmpty
           ? null
           : DataHora.deString("${controllerDataDevolucao.text} ${controllerHoraDevolucao.text}", "dd/MM/yyyy HH:mm");
@@ -329,6 +331,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       controllerCep.text.replaceAll("-", "").replaceAll(" ", "").trim(),
       controllerBairro.text.trim(),
       municipio,
+      false,
     );
   }
 

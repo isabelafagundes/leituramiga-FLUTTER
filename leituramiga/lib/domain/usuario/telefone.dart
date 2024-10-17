@@ -14,7 +14,7 @@ class Telefone extends ObjetoDeValor {
 
   String get telefoneFormatado {
     RegExp regex = RegExp(r'^\(?\d{2}\)?[\s-]?\d{4,5}[\s-]?\d{4}$');
-    String? numeroFormatado = regex.stringMatch("$_prefixo$_numero");
+    String? numeroFormatado = regex.stringMatch("($_prefixo) $_numero");
     if (numeroFormatado == null) throw TelefoneInvalido("O formato é inválido");
     return numeroFormatado;
   }

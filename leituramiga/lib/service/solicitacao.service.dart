@@ -4,4 +4,6 @@ abstract class SolicitacaoService {
   Future<void> aceitarSolicitacao(int numero);
 
   Future<void> cancelarSolicitacao(int numero);
+
+  Future<void> finalizarSolicitacao(int numero);
 }

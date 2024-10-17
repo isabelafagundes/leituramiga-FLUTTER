@@ -5,7 +5,6 @@ import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/domain/data_hora.dart';
 import 'package:leituramiga/domain/endereco/endereco.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
-import 'package:leituramiga/domain/solicitacao/livros_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
@@ -14,18 +13,18 @@ import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
-import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
+import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/util/sobreposicao.util.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/calendario.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/conteudo_selecao_livros.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/conteudo_livros_solicitacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/layout_flexivel.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/conteudo_endereco_solicitacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_informacoes_adicionais.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/tab.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/time_picker.widget.dart';
 
 @RoutePage()
@@ -58,7 +57,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
   final TextEditingController controllerHoraDevolucao = TextEditingController();
   final TextEditingController controllerFrete = TextEditingController();
   final TextEditingController controllerFormaEntrega = TextEditingController();
-
+  EditarSolicitacao _abaSelecionada = EditarSolicitacao.INFORMACOES;
   CriarSolicitacao estagioPagina = CriarSolicitacao.INFORMACOES_ADICIONAIS;
 
   TemaState get _temaState => TemaState.instancia;
@@ -106,11 +105,64 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        voltar: () => Navigator.pop(context),
         atualizar: atualizar,
         carregando: _usuarioComponent.carregando ||
             _solicitacaoComponent.carregando ||
-            _usuarioComponent.usuarioSolicitacao == null,
-        child: paginaSelecionada,
+            _usuarioComponent.usuarioSolicitacao == null ||
+            _solicitacaoComponent.solicitacaoSelecionada == null,
+        child: Column(
+          children: [
+            SizedBox(
+              child: Flex(
+                direction: Responsive.larguraPP(context) ? Axis.vertical : Axis.horizontal,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  BotaoWidget(
+                    tema: tema,
+                    corTexto: kCorFonte,
+                    altura: 45,
+                    largura: 140,
+                    texto: "Salvar",
+                    aoClicar: () {},
+                    icone: Icon(
+                      Icons.check,
+                      color: kCorFonte,
+                    ),
+                    corFundo: Color(tema.accent),
+                  ),
+                  SizedBox(width: tema.espacamento * 2, height: tema.espacamento * 2),
+                  BotaoWidget(
+                    tema: tema,
+                    corTexto: Color(tema.baseContent),
+                    altura: 45,
+                    largura: 140,
+                    texto: "Cancelar",
+                    aoClicar: () {
+                      Navigator.pop(context);
+                    },
+                    icone: Icon(
+                      Icons.close,
+                      color: Color(tema.baseContent),
+                    ),
+                    corFundo: Color(tema.base200),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: tema.espacamento * 4, width: tema.espacamento * 2),
+            TabWidget(
+              tema: tema,
+              validarAtivo: (opcao) => _abaSelecionada.descricao != opcao,
+              opcoes: _opcoes,
+              aoSelecionar: (index) => _atualizarAbaSelecionada(EditarSolicitacao.deDescricao(_opcoes[index])),
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            Expanded(child: paginaSelecionada),
+          ],
+        ),
       ),
     );
   }
@@ -118,17 +170,8 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
   void atualizarPagina(CriarSolicitacao estagio) => setState(() => estagioPagina = estagio);
 
   Widget get paginaSelecionada {
-    return switch (estagioPagina) {
-      CriarSolicitacao.SELECIONAR_LIVROS => ConteudoSelecaoLivrosWidget(
-          tema: tema,
-          textoPopUp: "Deseja selecionar os livros e aceitar a solicitação?",
-          aoClicarLivro: _solicitacaoComponent.selecionarLivro,
-          aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
-          verificarSelecao: _solicitacaoComponent.verificarSelecao,
-          livros: _usuarioComponent.itensPaginados,
-          navegarParaSolicitacao: () => atualizarPagina(CriarSolicitacao.INFORMACOES_ADICIONAIS),
-        ),
-      CriarSolicitacao.INFORMACOES_ADICIONAIS => SingleChildScrollView(
+    return switch (_abaSelecionada) {
+      EditarSolicitacao.INFORMACOES => SingleChildScrollView(
           child: FormularioInformacoesAdicionaisWidget(
             tema: tema,
             controllerHoraDevolucao: controllerHoraDevolucao,
@@ -142,18 +185,20 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
             controllerFormaEntrega: controllerFormaEntrega,
             controllerDataDevolucao: controllerDataDevolucao,
             tipoSolicitacao: _tipoSolicitacao,
+            semSelecaoLivros: true,
             aoClicarFormaEntrega: (formaEntrega) {},
             abrirDatePicker: ([bool ehDevolucao = false]) => abrirDatePicker(ehDevolucao),
             aoClicarAdicionarLivro: () => atualizarPagina(CriarSolicitacao.SELECIONAR_LIVROS),
           ),
         ),
-      CriarSolicitacao.ENDERECO => SingleChildScrollView(
+      EditarSolicitacao.ENDERECO => SingleChildScrollView(
           child: ConteudoEnderecoSolicitacaoWidget(
             tema: tema,
+            semBotaoProximo: true,
             aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
             aoSelecionarFrete: (frete) => setState(() => controllerFrete.text = frete),
             estados: UF.values.map((e) => e.descricao).toList(),
-            cidades: [],
+            cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome).toList(),
             controllerFrete: controllerFrete,
             aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
             aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
@@ -166,51 +211,38 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
             controllerNumero: controllerNumero,
             controllerComplemento: controllerComplemento,
             controllerCidade: controllerCidade,
-            usuarios: [_autenticacaoState.usuario!.nomeUsuario, _usuarioComponent.usuarioSolicitacao!.nomeUsuario],
             controllerEstado: controllerEstado,
-            utilizaEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoPerfil,
+            permitirUsarEnderecoPerfil: false,
+            utilizaEnderecoPerfil: _solicitacaoComponent.solicitacaoSelecionada?.endereco?.principal ?? false,
           ),
         ),
-      CriarSolicitacao.CONCLUSAO => SingleChildScrollView(
-          child: Flex(
-            direction: Axis.vertical,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Flexible(
-                child: SvgWidget(
-                  altura: 350,
-                  nomeSvg: "solicitacao_fim",
-                ),
-              ),
-              SizedBox(height: tema.espacamento * 2),
-              Flexible(
-                child: SizedBox(
-                  width: 400,
-                  child: TextoWidget(
-                    align: TextAlign.center,
-                    texto:
-                        "Sua solicitação foi enviada! Quando @usuário respondê-la, você será notificado e receberá um e-mail.",
-                    tema: tema,
-                    maxLines: 5,
-                  ),
-                ),
-              ),
-              SizedBox(height: tema.espacamento * 4),
-              Flexible(
-                child: BotaoWidget(
-                  tema: tema,
-                  texto: 'Finalizar',
-                  nomeIcone: "seta/arrow-long-right",
-                  icone: Icon(Icons.check, color: kCorFonte),
-                  aoClicar: () => Rota.navegar(context, Rota.HOME),
-                ),
-              ),
-              SizedBox(height: tema.espacamento * 4),
-            ],
-          ),
+      EditarSolicitacao.LIVROS => ConteudoLivrosSolicitacaoWidget(
+          tema: tema,
+          nomeSolicitante: _usuarioComponent.usuarioSelecionado?.nome ?? "",
+          nomeReceptor: _usuarioComponent.usuarioSolicitacao?.nome ?? "",
+          usuarioCriador: _solicitacaoComponent.solicitacaoSelecionada?.livrosSolicitante.livros ?? [],
+          usuarioDoador: _solicitacaoComponent.solicitacaoSelecionada?.livrosReceptor?.livros ?? [],
         ),
       _ => const SizedBox(),
     };
+  }
+
+  Future<void> salvarSolicitacao() async {
+    await notificarCasoErro(() async {
+      if (!validarCamposPreenchidos()) throw Exception("Preencha todos os campos");
+      _solicitacaoComponent.atualizarSolicitacaoMemoria(_criarSolicitacao());
+      await _solicitacaoComponent.atualizarSolicitacao();
+      Navigator.pop(context);
+    });
+  }
+
+  bool validarCamposPreenchidos() {
+    return controllerRua.text.isNotEmpty &&
+        controllerBairro.text.isNotEmpty &&
+        controllerCep.text.isNotEmpty &&
+        controllerNumero.text.isNotEmpty &&
+        controllerCidade.text.isNotEmpty &&
+        controllerEstado.text.isNotEmpty;
   }
 
   void _preencherControllers() {
@@ -221,7 +253,8 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
     controllerComplemento.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.complemento ?? '';
     controllerCidade.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.municipio.nome ?? '';
     controllerEstado.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.municipio.estado.descricao ?? '';
-    controllerDataEntrega.text = _solicitacaoComponent.solicitacaoSelecionada?.dataEntrega?.formatar("dd/MM/yyyy") ?? '';
+    controllerDataEntrega.text =
+        _solicitacaoComponent.solicitacaoSelecionada?.dataEntrega?.formatar("dd/MM/yyyy") ?? '';
     controllerDataDevolucao.text =
         _solicitacaoComponent.solicitacaoSelecionada?.dataDevolucao?.formatar("dd/MM/yyyy") ?? '';
     controllerHoraEntrega.text = _solicitacaoComponent.solicitacaoSelecionada?.dataEntrega?.formatar("HH:mm") ?? '';
@@ -241,7 +274,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
     }
   }
 
-  void _criarSolicitacao() {
+  Solicitacao _criarSolicitacao() {
     Solicitacao solicitacao = Solicitacao.criar(
       null,
       _autenticacaoState.usuario!.email.endereco,
@@ -259,20 +292,18 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
         controllerNumero.text,
         controllerComplemento.text,
         _solicitacaoComponent.municipioSelecionado!,
+        false,
       ),
       TipoStatusSolicitacao.PENDENTE,
       null,
       null,
       _tipoSolicitacao,
       null,
-      LivrosSolicitacao.criar(
-        _autenticacaoState.usuario!.email.endereco,
-        _solicitacaoComponent.livrosSelecionados,
-      ),
-      null,
+      _solicitacaoComponent.solicitacaoSelecionada!.livrosSolicitante,
+      _solicitacaoComponent.solicitacaoSelecionada!.livrosReceptor,
     );
 
-    _solicitacaoComponent.atualizarSolicitacaoMemoria(solicitacao);
+    return solicitacao;
   }
 
   void abrirTimePicker(bool ehHoraDevolucao) {
@@ -320,6 +351,27 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
       },
     );
   }
+
+  void _atualizarAbaSelecionada(EditarSolicitacao aba) {
+    setState(() => _abaSelecionada = aba);
+  }
+
+  List<String> get _opcoes => EditarSolicitacao.values.where((e) => e.aba).map((e) => e.descricao).toList();
 }
 
 enum CriarSolicitacao { SELECIONAR_LIVROS, INFORMACOES_ADICIONAIS, ENDERECO, CONCLUSAO }
+
+enum EditarSolicitacao {
+  INFORMACOES("Informações", true),
+  ENDERECO("Endereço", true),
+  LIVROS("Livros", true);
+
+  final String descricao;
+  final bool aba;
+
+  const EditarSolicitacao(this.descricao, this.aba);
+
+  factory EditarSolicitacao.deDescricao(String descricao) {
+    return EditarSolicitacao.values.firstWhere((e) => e.descricao == descricao);
+  }
+}

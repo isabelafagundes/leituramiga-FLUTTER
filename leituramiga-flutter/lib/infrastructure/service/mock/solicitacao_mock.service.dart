@@ -19,4 +19,10 @@ class SolicitacaoMockService extends SolicitacaoService {
     throw UnimplementedError();
   }
 
+  @override
+  Future<void> finalizarSolicitacao(int numero) {
+    // TODO: implement finalizarSolicitacao
+    throw UnimplementedError();
+  }
+
 }

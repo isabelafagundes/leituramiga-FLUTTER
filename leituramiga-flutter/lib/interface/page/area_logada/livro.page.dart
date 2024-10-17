@@ -157,6 +157,25 @@ class _LivrosPageState extends State<LivrosPage> {
                                   tamanho: tema.tamanhoFonteM + 2,
                                   cor: Color(tema.baseContent),
                                 ),
+                                SizedBox(height: tema.espacamento * 2),
+                                Row(
+                                  children: [
+                                    TextoWidget(
+                                      texto: "Categoria: ",
+                                      tema: tema,
+                                      tamanho: tema.tamanhoFonteM + 4,
+                                      weight: FontWeight.w500,
+                                      cor: Color(tema.accent),
+                                    ),
+                                    SizedBox(width: tema.espacamento),
+                                    ChipWidget(
+                                      tema: tema,
+                                      texto: _livrosComponent.livroSelecionado?.nomeCategoria ?? '',
+                                      cor: kCorPessego,
+                                      corTexto: const Color(0xff464A52),
+                                    ),
+                                  ],
+                                ),
                                 SizedBox(height: tema.espacamento),
                                 SizedBox(
                                   child: Divider(
@@ -172,6 +191,7 @@ class _LivrosPageState extends State<LivrosPage> {
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
+                                        SizedBox(height: tema.espacamento / 2),
                                         TextoComIconeWidget(
                                           tema: tema,
                                           nomeSvg: 'usuario/user',
@@ -202,80 +222,83 @@ class _LivrosPageState extends State<LivrosPage> {
                         ],
                       ),
                       SizedBox(height: tema.espacamento * 2),
-                      if(_livrosComponent.livroSelecionado?.emailUsuario != _autenticacaoState.usuario?.email.endereco)
-                      Column(
-                        children: [
-                          TextoWidget(
-                            texto: "Selecione o tipo de solicitação que deseja efetuar",
-                            tema: tema,
-                            cor: Color(tema.baseContent),
-                          ),
-                          SizedBox(height: tema.espacamento),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              if (_livrosComponent.livroSelecionado?.tiposSolicitacao.contains(TipoSolicitacao.TROCA) ??
-                                  false) ...[
-                                ChipWidget(
-                                  tema: tema,
-                                  cor: kCorPessego,
-                                  texto: "Troca",
-                                  corTexto: kCorFonte,
-                                  ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.TROCA,
-                                  aoClicar: () => setState(() => _tipoSolicitacaoSelecionado = TipoSolicitacao.TROCA),
-                                ),
-                                SizedBox(width: tema.espacamento * 2),
-                              ],
-                              if (_livrosComponent.livroSelecionado!.tiposSolicitacao
-                                  .contains(TipoSolicitacao.EMPRESTIMO)) ...[
-                                ChipWidget(
-                                  tema: tema,
-                                  cor: kCorVerde,
-                                  texto: "Empréstimo",
-                                  ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.EMPRESTIMO,
-                                  corTexto: kCorFonte,
-                                  aoClicar: () =>
-                                      setState(() => _tipoSolicitacaoSelecionado = TipoSolicitacao.EMPRESTIMO),
-                                ),
-                                SizedBox(width: tema.espacamento * 2),
-                              ],
-                              if (_livrosComponent.livroSelecionado!.tiposSolicitacao.contains(TipoSolicitacao.DOACAO))
-                                ChipWidget(
-                                  tema: tema,
-                                  cor: kCorAzul,
-                                  texto: "Doação",
-                                  corTexto: kCorFonte,
-                                  ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.DOACAO,
-                                  aoClicar: () => setState(() => _tipoSolicitacaoSelecionado = TipoSolicitacao.DOACAO),
-                                ),
-                            ],
-                          ),
-                          SizedBox(height: tema.espacamento * 2),
-                          BotaoWidget(
-                            tema: tema,
-                            texto: 'Criar solicitação',
-                            icone: Icon(
-                              Icons.chevron_right,
-                              color: Color(tema.base200),
+                      if (_livrosComponent.livroSelecionado?.emailUsuario != _autenticacaoState.usuario?.email.endereco)
+                        Column(
+                          children: [
+                            TextoWidget(
+                              texto: "Selecione o tipo de solicitação que deseja efetuar",
+                              tema: tema,
+                              cor: Color(tema.baseContent),
                             ),
-                            aoClicar: () {
-                              if (_tipoSolicitacaoSelecionado == null) {
-                                Notificacoes.mostrar("Selecione um tipo de solicitação", Emoji.ALERTA);
-                                return;
-                              }
-                              Rota.navegarComArgumentos(
-                                context,
-                                CriarSolicitacaoRoute(
-                                  numeroLivro: _livrosComponent.livroSelecionado!.numero,
-                                  tipoSolicitacao: _tipoSolicitacaoSelecionado!.id,
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(height: tema.espacamento * 4),
-                        ],
-                      ),
+                            SizedBox(height: tema.espacamento),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                if (_livrosComponent.livroSelecionado?.tiposSolicitacao
+                                        .contains(TipoSolicitacao.TROCA) ??
+                                    false) ...[
+                                  ChipWidget(
+                                    tema: tema,
+                                    cor: kCorPessego,
+                                    texto: "Troca",
+                                    corTexto: kCorFonte,
+                                    ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.TROCA,
+                                    aoClicar: () => setState(() => _tipoSolicitacaoSelecionado = TipoSolicitacao.TROCA),
+                                  ),
+                                  SizedBox(width: tema.espacamento * 2),
+                                ],
+                                if (_livrosComponent.livroSelecionado!.tiposSolicitacao
+                                    .contains(TipoSolicitacao.EMPRESTIMO)) ...[
+                                  ChipWidget(
+                                    tema: tema,
+                                    cor: kCorVerde,
+                                    texto: "Empréstimo",
+                                    ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.EMPRESTIMO,
+                                    corTexto: kCorFonte,
+                                    aoClicar: () =>
+                                        setState(() => _tipoSolicitacaoSelecionado = TipoSolicitacao.EMPRESTIMO),
+                                  ),
+                                  SizedBox(width: tema.espacamento * 2),
+                                ],
+                                if (_livrosComponent.livroSelecionado!.tiposSolicitacao
+                                    .contains(TipoSolicitacao.DOACAO))
+                                  ChipWidget(
+                                    tema: tema,
+                                    cor: kCorAzul,
+                                    texto: "Doação",
+                                    corTexto: kCorFonte,
+                                    ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.DOACAO,
+                                    aoClicar: () =>
+                                        setState(() => _tipoSolicitacaoSelecionado = TipoSolicitacao.DOACAO),
+                                  ),
+                              ],
+                            ),
+                            SizedBox(height: tema.espacamento * 2),
+                            BotaoWidget(
+                              tema: tema,
+                              texto: 'Criar solicitação',
+                              icone: Icon(
+                                Icons.chevron_right,
+                                color: Color(tema.base200),
+                              ),
+                              aoClicar: () {
+                                if (_tipoSolicitacaoSelecionado == null) {
+                                  Notificacoes.mostrar("Selecione um tipo de solicitação", Emoji.ALERTA);
+                                  return;
+                                }
+                                Rota.navegarComArgumentos(
+                                  context,
+                                  CriarSolicitacaoRoute(
+                                    numeroLivro: _livrosComponent.livroSelecionado!.numero,
+                                    tipoSolicitacao: _tipoSolicitacaoSelecionado!.id,
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(height: tema.espacamento * 4),
+                          ],
+                        ),
                     ],
                   ),
           ),

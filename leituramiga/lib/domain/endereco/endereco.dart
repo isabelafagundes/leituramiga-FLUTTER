@@ -11,6 +11,7 @@ class Endereco extends ObjetoDeValor {
   final String _cep;
   final String _bairro;
   final Municipio _municipio;
+  final bool _principal;
 
   Endereco.criar(
     this._numeroResidencial,
@@ -19,6 +20,7 @@ class Endereco extends ObjetoDeValor {
     this._cep,
     this._bairro,
     this._municipio,
+    this._principal,
   ) : _numero = null;
 
   Endereco.carregar(
@@ -29,6 +31,7 @@ class Endereco extends ObjetoDeValor {
     this._cep,
     this._bairro,
     this._municipio,
+    this._principal,
   );
 
   void validarCEP() {
@@ -65,6 +68,7 @@ class Endereco extends ObjetoDeValor {
       "codigoCidade": municipio.numero,
       "emailUsuario": emailUsuario,
       "numero": numeroResidencial,
+      "endereco_principal": _principal,
     };
   }
 
@@ -83,13 +87,20 @@ class Endereco extends ObjetoDeValor {
           enderecoAsMap["estado"],
         ),
       ),
+      enderecoAsMap["enderecoPrincipal"],
     );
   }
+
+  bool get principal => _principal;
 
   String get enderecoFormatado {
     String numeroCompleto = _numeroResidencial != null ? "$_numeroResidencial" : "";
     String complementoFormatado = _complemento != null ? ", $_complemento" : "";
     return "$_rua, $numeroCompleto$complementoFormatado, $_bairro, ${_municipio.nome} - ${_municipio.estado.descricao}, $_cepFormatado";
+  }
+
+  String get enderecoFormatadoCensurado {
+    return "$_bairro, ${_municipio.nome} - ${_municipio.estado.descricao}";
   }
 }
 

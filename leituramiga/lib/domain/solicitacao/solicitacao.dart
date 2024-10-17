@@ -29,45 +29,45 @@ class Solicitacao extends Entidade {
   final String? _codigoRastreamento;
 
   Solicitacao.criar(
-      this._numero,
-      this._emailUsuarioProprietario,
-      this._emailUsuarioCriador,
-      this._formaEntrega,
-      this._dataCriacao,
-      this._dataEntrega,
-      this._dataDevolucao,
-      this._dataAtualizacao,
-      this._informacoesAdicionais,
-      this._endereco,
-      this._status,
-      this._dataAceite,
-      this._motivoRecusa,
-      this._tipoSolicitacao,
-      this._codigoRastreamento,
-      this._livrosUsuarioSolicitante,
-      this._livrosUsuarioReceptor,
-      ) : _enderecoUsuarioCriador = false;
+    this._numero,
+    this._emailUsuarioProprietario,
+    this._emailUsuarioCriador,
+    this._formaEntrega,
+    this._dataCriacao,
+    this._dataEntrega,
+    this._dataDevolucao,
+    this._dataAtualizacao,
+    this._informacoesAdicionais,
+    this._endereco,
+    this._status,
+    this._dataAceite,
+    this._motivoRecusa,
+    this._tipoSolicitacao,
+    this._codigoRastreamento,
+    this._livrosUsuarioSolicitante,
+    this._livrosUsuarioReceptor,
+  ) : _enderecoUsuarioCriador = false;
 
   Solicitacao.carregar(
-      this._numero,
-      this._emailUsuarioProprietario,
-      this._emailUsuarioCriador,
-      this._livrosUsuarioSolicitante,
-      this._livrosUsuarioReceptor,
-      this._formaEntrega,
-      this._dataCriacao,
-      this._dataEntrega,
-      this._dataDevolucao,
-      this._dataAtualizacao,
-      this._informacoesAdicionais,
-      this._endereco,
-      this._enderecoUsuarioCriador,
-      this._tipoSolicitacao,
-      this._status,
-      this._dataAceite,
-      this._motivoRecusa,
-      this._codigoRastreamento,
-      );
+    this._numero,
+    this._emailUsuarioProprietario,
+    this._emailUsuarioCriador,
+    this._livrosUsuarioSolicitante,
+    this._livrosUsuarioReceptor,
+    this._formaEntrega,
+    this._dataCriacao,
+    this._dataEntrega,
+    this._dataDevolucao,
+    this._dataAtualizacao,
+    this._informacoesAdicionais,
+    this._endereco,
+    this._enderecoUsuarioCriador,
+    this._tipoSolicitacao,
+    this._status,
+    this._dataAceite,
+    this._motivoRecusa,
+    this._codigoRastreamento,
+  );
 
   int? get numero => _numero;
 
@@ -103,14 +103,23 @@ class Solicitacao extends Entidade {
     };
   }
 
+  bool get validarPodeFinalizar {
+    if (_dataDevolucao != null && _dataDevolucao!.ehAntesDe(DataHora.hoje())) {
+      return true;
+    } else if (_dataEntrega != null && _dataEntrega!.ehAntesDe(DataHora.hoje())) {
+      return true;
+    }
+    return _dataEntrega == null && _dataDevolucao == null;
+  }
+
   void adicionarEndereco(
-      String? numeroResidencial,
-      String? complemento,
-      String rua,
-      String cep,
-      String bairro,
-      Municipio municipio,
-      ) {
+    String? numeroResidencial,
+    String? complemento,
+    String rua,
+    String cep,
+    String bairro,
+    Municipio municipio,
+  ) {
     Endereco endereco = Endereco.criar(
       numeroResidencial,
       complemento,
@@ -118,6 +127,7 @@ class Solicitacao extends Entidade {
       cep,
       bairro,
       municipio,
+      false,
     );
     _endereco = endereco;
   }
@@ -154,7 +164,7 @@ class Solicitacao extends Entidade {
       ),
       FormaEntrega.deNumero(solicitacaoAsMap["codigoFormaEntrega"] as int),
       solicitacaoAsMap['dataCriacao'] == null ? null : DataHora.deString(dataCriacao),
-      DataHora.deString(dataEntrega),
+      solicitacaoAsMap['dataEntrega'] == null ? null : DataHora.deString(dataEntrega),
       solicitacaoAsMap["dataDevolucao"] == null ? null : DataHora.deString(dataDevolucao),
       solicitacaoAsMap['dataAtualizacao'] == null ? null : DataHora.deString(dataAtualizacao),
       solicitacaoAsMap["informacoesAdicionais"],
@@ -170,7 +180,7 @@ class Solicitacao extends Entidade {
 
   String get emailUsuarioProprietario => _emailUsuarioProprietario;
 
-  LivrosSolicitacao get livrosCriador => _livrosUsuarioSolicitante;
+  LivrosSolicitacao get livrosSolicitante => _livrosUsuarioSolicitante;
 
   FormaEntrega get formaEntrega => _formaEntrega;
 
@@ -190,7 +200,7 @@ class Solicitacao extends Entidade {
 
   TipoStatusSolicitacao get status => _status;
 
-  LivrosSolicitacao? get livrosProprietario => _livrosUsuarioReceptor;
+  LivrosSolicitacao? get livrosReceptor => _livrosUsuarioReceptor;
 
   String? get motivoRecusa => _motivoRecusa;
 

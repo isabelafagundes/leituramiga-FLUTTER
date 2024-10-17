@@ -46,6 +46,9 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
         child: Stack(
           children: [
             CardBaseWidget(
+              padding: EdgeInsets.symmetric(
+                horizontal: widget.tema.espacamento * 2,
+              ),
               tema: widget.tema,
               child: Flex(
                 mainAxisSize: MainAxisSize.min,
@@ -55,69 +58,72 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                     child: Row(
                       children: [
                         Container(
-                          height: 5,
-                          width: 5,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(widget.tema.borderRadiusM),
-                            color: Color(widget.tema.accent),
-                          ),
-                        ),
-                        SizedBox(width: widget.tema.espacamento * 2),
-                        Container(
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
-                            color: Color(widget.tema.neutral).withOpacity(.1),
+                            borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 2),
+                            color: kCorPessego,
+                          ),
+                          child: Center(
+                            child: TextoWidget(
+                              tamanho: widget.tema.tamanhoFonteXG * 1.4,
+                              weight: FontWeight.w600,
+                              texto: "${widget.solicitacao.nomeUsuario.substring(0, 1)}",
+                              tema: widget.tema,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(width: widget.tema.espacamento * 2),
+                  SizedBox(width: widget.tema.espacamento),
                   Flexible(
                     flex: Responsive.larguraM(context) ? 3 : 5,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextoWidget(
-                              texto: widget.solicitacao.nomeUsuario == widget.usuarioPerfil
-                                  ? "Criada por você "
-                                  : "Solicitação com ",
-                              tema: widget.tema,
-                            ),
-                            TextoWidget(
-                              texto: widget.solicitacao.nomeUsuario == widget.usuarioPerfil
-                                  ? ""
-                                  : widget.solicitacao.nomeUsuario,
-                              tema: widget.tema,
-                              weight: FontWeight.w500,
-                            ),
-                          ],
+                        SizedBox(height: widget.tema.espacamento * 3),
+                        Container(
+                          child: Wrap(
+                            alignment: WrapAlignment.start,
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            children: [
+                              TextoWidget(
+                                texto: widget.solicitacao.nomeUsuario == widget.usuarioPerfil
+                                    ? "Criada por você "
+                                    : "Solicitação com ",
+                                tema: widget.tema,
+                              ),
+                              TextoWidget(
+                                texto: widget.solicitacao.nomeUsuario == widget.usuarioPerfil
+                                    ? ""
+                                    : widget.solicitacao.nomeUsuario,
+                                tema: widget.tema,
+                                weight: FontWeight.w500,
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(height: widget.tema.espacamento / 2),
                         Row(
                           children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextoWidget(
-                                  texto: "Data entrega ",
-                                  weight: FontWeight.w500,
-                                  tema: widget.tema,
-                                ),
-                                TextoWidget(
-                                  texto: widget.solicitacao.dataEntrega.formatar("dd/MM/yyyy"),
-                                  tema: widget.tema,
-                                ),
-                              ],
-                            ),
+                            if (widget.solicitacao.dataEntrega != null)
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextoWidget(
+                                    texto: "Data entrega ",
+                                    weight: FontWeight.w500,
+                                    tema: widget.tema,
+                                  ),
+                                  TextoWidget(
+                                    texto: widget.solicitacao.dataEntrega!.formatar("dd/MM/yyyy"),
+                                    tema: widget.tema,
+                                  ),
+                                ],
+                              ),
                             if (widget.solicitacao.dataDevolucao != null) ...[
                               const Spacer(),
                               Column(
@@ -149,7 +155,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                               tema: widget.tema,
                             ),
                             TextoWidget(
-                              texto: widget.solicitacao.endereco.enderecoFormatado,
+                              texto: widget.solicitacao.endereco.enderecoFormatadoCensurado,
                               tema: widget.tema,
                             ),
                           ],

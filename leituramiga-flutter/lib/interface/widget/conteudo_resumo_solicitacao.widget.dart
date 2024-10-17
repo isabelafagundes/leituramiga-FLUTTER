@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
+import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -37,55 +38,37 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextoWidget(
-                          texto: "Solicitação em andamento com ",
-                          tema: tema,
-                          tamanho: tema.tamanhoFonteG,
-                        ),
-                        SizedBox(height: tema.espacamento),
-                        TextoWidget(
-                          tamanho: tema.tamanhoFonteG,
-                          texto: "@$usuarioSolicitante",
-                          tema: tema,
-                          weight: FontWeight.w500,
-                        ),
-                      ],
+                    Align(
+                      alignment: Alignment.center,
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          TextoWidget(
+                            texto: "Solicitação em andamento com ",
+                            tema: tema,
+                            tamanho: tema.tamanhoFonteG,
+                          ),
+                          SizedBox(height: tema.espacamento),
+                          TextoWidget(
+                            tamanho: tema.tamanhoFonteG,
+                            texto: "@$usuarioSolicitante",
+                            tema: tema,
+                            weight: FontWeight.w500,
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: tema.espacamento / 2),
                     if (solicitacao.dataEntrega != null)
                       Row(
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _obterTextoComIcone(
-                              "Data entrega",
-                              Icon(
-                                Icons.calendar_today,
-                                size: 18,
-                                color: Color(tema.baseContent),
-                              ),
-                            ),
-                            SizedBox(height: tema.espacamento),
-                            TextoWidget(
-                              texto: solicitacao.dataEntrega?.formatar("dd/MM/yyyy HH:mm") ?? '',
-                              tema: tema,
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        if (solicitacao.dataDevolucao != null)
+                        children: [
                           Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _obterTextoComIcone(
-                                "Data devolução",
+                                "Data entrega",
                                 Icon(
                                   Icons.calendar_today,
                                   size: 18,
@@ -94,13 +77,34 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                               ),
                               SizedBox(height: tema.espacamento),
                               TextoWidget(
-                                texto: solicitacao.dataDevolucao?.formatar("dd/MM/yyyy HH:mm") ?? '',
+                                texto: solicitacao.dataEntrega?.formatar("dd/MM/yyyy HH:mm") ?? '',
                                 tema: tema,
                               ),
                             ],
                           ),
-                      ],
-                    ),
+                          const Spacer(),
+                          if (solicitacao.dataDevolucao != null)
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                _obterTextoComIcone(
+                                  "Data devolução",
+                                  Icon(
+                                    Icons.calendar_today,
+                                    size: 18,
+                                    color: Color(tema.baseContent),
+                                  ),
+                                ),
+                                SizedBox(height: tema.espacamento),
+                                TextoWidget(
+                                  texto: solicitacao.dataDevolucao?.formatar("dd/MM/yyyy HH:mm") ?? '',
+                                  tema: tema,
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
                     SizedBox(height: tema.espacamento * 2),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -116,7 +120,9 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                         ),
                         SizedBox(height: tema.espacamento),
                         TextoWidget(
-                          texto: solicitacao.endereco!.enderecoFormatado,
+                          texto: solicitacao.status == TipoStatusSolicitacao.EM_ANDAMENTO
+                              ? solicitacao.endereco!.enderecoFormatado
+                              : solicitacao.endereco!.enderecoFormatadoCensurado,
                           tema: tema,
                         ),
                         SizedBox(height: tema.espacamento * 2),

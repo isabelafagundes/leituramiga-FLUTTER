@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/menu.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_endereco.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/switcher/switcher.widget.dart';
@@ -28,8 +26,9 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
   final Function(String) aoSelecionarFrete;
   final List<String> cidades;
   final List<String> estados;
-  final List<String> usuarios;
   final bool utilizaEnderecoPerfil;
+  final bool semBotaoProximo;
+  final bool permitirUsarEnderecoPerfil;
 
   const ConteudoEnderecoSolicitacaoWidget({
     super.key,
@@ -48,11 +47,12 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
     required this.aoSelecionarEstado,
     required this.cidades,
     required this.estados,
-    required this.usuarios,
     required this.controllerFrete,
     required this.aoSelecionarFormaEntrega,
     required this.aoSelecionarFrete,
     required this.utilizaEnderecoPerfil,
+    this.semBotaoProximo = false,
+    this.permitirUsarEnderecoPerfil = true,
   });
 
   @override
@@ -61,45 +61,47 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
       direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Flexible(
           child: Flex(
             direction: Axis.vertical,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(
-                child: Flex(
-                  mainAxisSize: MainAxisSize.min,
-                  direction: Responsive.larguraPP(context) ? Axis.vertical : Axis.horizontal,
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: Row(
-                        children: [
-                          TextoWidget(
-                            texto: "Usar endereço do seu perfil?",
-                            tema: tema,
-                            cor: Color(tema.baseContent),
-                          ),
-                          const Spacer(),
-                          SwitcherWidget(
-                            tema: tema,
-                            valor: utilizaEnderecoPerfil,
-                            valorInicial: utilizaEnderecoPerfil,
-                            aoClicar: utilizarEnderecoPerfil,
-                          ),
-                        ],
+              if (permitirUsarEnderecoPerfil) ...[
+                Flexible(
+                  child: Flex(
+                    mainAxisSize: MainAxisSize.min,
+                    direction: Responsive.larguraPP(context) ? Axis.vertical : Axis.horizontal,
+                    children: [
+                      Flexible(
+                        flex: 2,
+                        child: Row(
+                          children: [
+                            TextoWidget(
+                              texto: "Usar endereço do seu perfil?",
+                              tema: tema,
+                              cor: Color(tema.baseContent),
+                            ),
+                            const Spacer(),
+                            SwitcherWidget(
+                              tema: tema,
+                              valor: utilizaEnderecoPerfil,
+                              valorInicial: utilizaEnderecoPerfil,
+                              aoClicar: utilizarEnderecoPerfil,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: tema.espacamento * 2),
-              Divider(
-                color: Color(tema.accent),
-              ),
-              SizedBox(height: tema.espacamento * 2),
+                SizedBox(height: tema.espacamento * 2),
+                Divider(
+                  color: Color(tema.accent),
+                ),
+                SizedBox(height: tema.espacamento * 2),
+              ],
               Flexible(
                 child: IgnorePointer(
                   ignoring: utilizaEnderecoPerfil,
@@ -138,14 +140,16 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-              SizedBox(height: tema.espacamento * 4),
-              BotaoWidget(
-                tema: tema,
-                texto: 'Próximo',
-                nomeIcone: "seta/arrow-long-right",
-                aoClicar: aoClicarProximo,
-              ),
-              SizedBox(height: tema.espacamento * 4),
+              if (!semBotaoProximo) ...[
+                SizedBox(height: tema.espacamento * 4),
+                BotaoWidget(
+                  tema: tema,
+                  texto: 'Próximo',
+                  nomeIcone: "seta/arrow-long-right",
+                  aoClicar: aoClicarProximo,
+                ),
+                SizedBox(height: tema.espacamento * 4),
+              ]
             ],
           ),
         ),

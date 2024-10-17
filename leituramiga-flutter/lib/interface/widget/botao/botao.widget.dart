@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 class BotaoWidget extends StatefulWidget {
   final Tema tema;
@@ -12,16 +12,21 @@ class BotaoWidget extends StatefulWidget {
   final Function() aoClicar;
   final Color? corFundo;
   final Color? corTexto;
+  final double? largura;
+  final double? altura;
 
-  const BotaoWidget(
-      {super.key,
-      required this.tema,
-      required this.texto,
-      this.nomeIcone,
-      this.icone,
-      required this.aoClicar,
-      this.corFundo,
-      this.corTexto});
+  const BotaoWidget({
+    super.key,
+    required this.tema,
+    required this.texto,
+    this.nomeIcone,
+    this.icone,
+    required this.aoClicar,
+    this.corFundo,
+    this.corTexto,
+    this.largura,
+    this.altura,
+  });
 
   @override
   State<BotaoWidget> createState() => _BotaoWidgetState();
@@ -39,8 +44,8 @@ class _BotaoWidgetState extends State<BotaoWidget> {
       child: GestureDetector(
         onTap: widget.aoClicar,
         child: Container(
-          width: 280,
-          height: 50,
+          width: widget.largura ?? 280,
+          height: widget.altura ?? 50,
           padding: EdgeInsets.symmetric(
             horizontal: widget.tema.espacamento,
             vertical: widget.tema.espacamento / 3,

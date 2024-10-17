@@ -7,7 +7,7 @@ class ResumoSolicitacao extends Entidade {
   final int? _numero;
   final Endereco _endereco;
   final String _nomeUsuario;
-  final DataHora _dataEntrega;
+  final DataHora? _dataEntrega;
   final DataHora? _dataDevolucao;
   final TipoSolicitacao _tipo;
 
@@ -42,7 +42,7 @@ class ResumoSolicitacao extends Entidade {
       mapa['codigoSolicitacao'],
       Endereco.carregarDeMapa(mapa['endereco']),
       mapa['nomeUsuarioSolicitante'],
-      DataHora.deString("${mapa['dataEntrega']} 00:00:00"),
+        mapa['dataEntrega']==null?null:  DataHora.deString("${mapa['dataEntrega']} 00:00:00"),
       mapa['dataDevolucao'] == null ? null : DataHora.deString("${mapa['dataDevolucao']} 00:00:00"),
       TipoSolicitacao.deNumero(mapa['codigoTipoSolicitacao']),
     );
@@ -52,7 +52,7 @@ class ResumoSolicitacao extends Entidade {
 
   String get nomeUsuario => _nomeUsuario;
 
-  DataHora get dataEntrega => _dataEntrega;
+  DataHora? get dataEntrega => _dataEntrega;
 
   DataHora? get dataDevolucao => _dataDevolucao;
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:leituramiga/component/solicitacao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
+import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
@@ -58,6 +59,8 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
   final TextEditingController controllerFormaEntrega = TextEditingController();
   final TextEditingController controllerMotivo = TextEditingController();
 
+  Solicitacao? get solicitacao => _solicitacaoComponent.solicitacaoSelecionada;
+
   DetalhesSolicitacao _abaSelecionada = DetalhesSolicitacao.INFORMACOES;
 
   TemaState get _temaState => TemaState.instancia;
@@ -82,11 +85,10 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
-      await _usuarioComponent.obterUsuario(_solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioCriador);
-      await _usuarioComponent
-          .obterUsuarioSolicitacao(_solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioProprietario);
+      await _usuarioComponent.obterUsuario(solicitacao!.emailUsuarioCriador);
+      await _usuarioComponent.obterUsuarioSolicitacao(solicitacao!.emailUsuarioProprietario);
       await _usuarioComponent.obterLivrosUsuario();
-      UF? uf = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.municipio.estado;
+      UF? uf = solicitacao?.endereco?.municipio.estado;
       await _usuarioComponent.obterCidades(uf!);
     });
   }
@@ -100,22 +102,21 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
       child: ConteudoMenuLateralWidget(
         tema: tema,
         atualizar: atualizar,
-        carregando: _solicitacaoComponent.carregando ||
-            _solicitacaoComponent.solicitacaoSelecionada == null ||
-            _usuarioComponent.carregando,
+        carregando: _solicitacaoComponent.carregando || solicitacao == null || _usuarioComponent.carregando,
         voltar: () => Rota.navegar(context, Rota.HOME),
         child: SingleChildScrollView(
           physics:
               _abaSelecionada == DetalhesSolicitacao.SELECAO_LIVROS || _abaSelecionada == DetalhesSolicitacao.LIVROS
                   ? const NeverScrollableScrollPhysics()
                   : const AlwaysScrollableScrollPhysics(),
-          child: _usuarioComponent.usuarioSelecionado == null || _solicitacaoComponent.solicitacaoSelecionada == null
+          child: _usuarioComponent.usuarioSelecionado == null || solicitacao == null
               ? SizedBox()
               : SizedBox(
                   height: Responsive.altura(context) * .88,
                   child: _abaSelecionada == DetalhesSolicitacao.SELECAO_LIVROS
                       ? ConteudoSelecaoLivrosWidget(
                           tema: tema,
+                          aceitarSolicitacao: _aceitarSolicitacao,
                           textoPopUp: "Deseja selecionar os livros e aceitar a solicitação?",
                           aoClicarLivro: _solicitacaoComponent.selecionarLivro,
                           aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
@@ -129,6 +130,29 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            if (solicitacao?.status == TipoStatusSolicitacao.EM_ANDAMENTO) ...[
+                              SizedBox(
+                                child: BotaoWidget(
+                                  tema: tema,
+                                  corTexto: kCorFonte,
+                                  altura: 45,
+                                  largura: 140,
+                                  texto: "Editar",
+                                  aoClicar: () => Rota.navegarComArgumentos(
+                                    context,
+                                    VisualizarSolicitacaoRoute(
+                                      numeroSolicitacao: widget.numeroSolicitacao,
+                                    ),
+                                  ),
+                                  icone: Icon(
+                                    Icons.edit,
+                                    color: kCorFonte,
+                                  ),
+                                  corFundo: Color(tema.accent),
+                                ),
+                              ),
+                              SizedBox(height: tema.espacamento * 4, width: tema.espacamento * 2),
+                            ],
                             TabWidget(
                               tema: tema,
                               validarAtivo: (opcao) => _abaSelecionada.descricao != opcao,
@@ -136,9 +160,9 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
                               aoSelecionar: (index) =>
                                   _atualizarAbaSelecionada(DetalhesSolicitacao.deDescricao(_opcoes[index])),
                             ),
-                            if (_solicitacaoComponent.solicitacaoSelecionada != null) _obterAba,
+                            if (solicitacao != null) Flexible(flex: 3, child: _obterAba),
                             if (_abaSelecionada == DetalhesSolicitacao.INFORMACOES &&
-                                (_solicitacaoComponent.solicitacaoSelecionada?.status?.permiteEdicao ?? false))
+                                (solicitacao?.status.permiteEdicao ?? false))
                               Flexible(
                                 child: Flex(
                                   direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
@@ -167,7 +191,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
           child: ConteudoResumoSolicitacaoWidget(
             tema: tema,
             usuarioSolicitante: _usuarioComponent.usuarioSelecionado!.nome,
-            solicitacao: _solicitacaoComponent.solicitacaoSelecionada!,
+            solicitacao: solicitacao!,
             edicao: true,
           ),
         ),
@@ -175,16 +199,25 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
           tema: tema,
           nomeSolicitante: _usuarioComponent.usuarioSelecionado?.nome ?? "",
           nomeReceptor: _usuarioComponent.usuarioSolicitacao?.nome ?? "",
-          usuarioCriador: _solicitacaoComponent.solicitacaoSelecionada?.livrosCriador.livros ?? [],
-          usuarioDoador: _solicitacaoComponent.solicitacaoSelecionada?.livrosProprietario?.livros ?? [],
+          usuarioCriador: solicitacao?.livrosSolicitante.livros ?? [],
+          usuarioDoador: solicitacao?.livrosReceptor?.livros ?? [],
         ),
       DetalhesSolicitacao.CONTATO => Column(
           children: [
-            ConteudoContatoWidget(
-              tema: tema,
-              usuarioCriador: _usuarioComponent.usuarioSelecionado!,
-              usuarioDoador: _usuarioComponent.usuarioSolicitacao,
-            ),
+            !(solicitacao?.status.permiteEdicao ?? false)
+                ? Column(
+                    children: [
+                      TextoWidget(
+                        texto: "O status dessa solicitação não permite a exibição do contato",
+                        tema: tema,
+                      ),
+                    ],
+                  )
+                : ConteudoContatoWidget(
+                    tema: tema,
+                    usuarioCriador: _usuarioComponent.usuarioSelecionado!,
+                    usuarioDoador: _usuarioComponent.usuarioSolicitacao,
+                  ),
           ],
         ),
       _ => Container(),
@@ -192,26 +225,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
   }
 
   Widget _obterBotaoEsquerdo(BuildContext context) {
-    if (_solicitacaoComponent.solicitacaoSelecionada?.status == TipoStatusSolicitacao.EM_ANDAMENTO) {
-      return BotaoWidget(
-        tema: tema,
-        corTexto: kCorFonte,
-        texto: "Editar",
-        aoClicar: () => Rota.navegarComArgumentos(
-          context,
-          VisualizarSolicitacaoRoute(
-            numeroSolicitacao: widget.numeroSolicitacao,
-          ),
-        ),
-        icone: Icon(
-          Icons.edit,
-          color: kCorFonte,
-        ),
-        corFundo: Color(tema.accent),
-      );
-    }
-
-    if (_solicitacaoComponent.solicitacaoSelecionada?.tipoSolicitacao == TipoSolicitacao.TROCA) {
+    if (solicitacao?.tipoSolicitacao == TipoSolicitacao.TROCA) {
       return BotaoWidget(
         tema: tema,
         corTexto: kCorFonte,
@@ -224,26 +238,37 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
         corFundo: Color(tema.accent),
       );
     }
+    if (solicitacao?.status == TipoStatusSolicitacao.EM_ANDAMENTO && solicitacao!.validarPodeFinalizar) {
+      return BotaoWidget(
+        tema: tema,
+        corTexto: kCorFonte,
+        texto: "Finalizar",
+        aoClicar: _finalizarSolicitacao,
+        icone: Icon(
+          Icons.done_all,
+          color: kCorFonte,
+        ),
+        corFundo: Color(tema.success),
+      );
+    }
+    if (solicitacao?.status == TipoStatusSolicitacao.PENDENTE)
+      return BotaoWidget(
+        tema: tema,
+        corTexto: kCorFonte,
+        texto: "Aceitar",
+        aoClicar: _aceitarSolicitacao,
+        icone: Icon(
+          Icons.done,
+          color: kCorFonte,
+        ),
+        corFundo: Color(tema.success),
+      );
 
-    return BotaoWidget(
-      tema: tema,
-      corTexto: kCorFonte,
-      texto: "Aceitar",
-      aoClicar: () {
-        notificarCasoErro(() async {
-          await _solicitacaoComponent.aceitarSolicitacao(_solicitacaoComponent.solicitacaoSelecionada!.numero!);
-        });
-      },
-      icone: Icon(
-        Icons.done,
-        color: kCorFonte,
-      ),
-      corFundo: Color(tema.success),
-    );
+    return SizedBox();
   }
 
   Widget get _obterBotaoDireito {
-    if (_solicitacaoComponent.solicitacaoSelecionada?.status == TipoStatusSolicitacao.EM_ANDAMENTO) {
+    if (solicitacao?.status == TipoStatusSolicitacao.EM_ANDAMENTO) {
       return BotaoWidget(
         tema: tema,
         corTexto: kCorFonte,
@@ -256,7 +281,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
             context,
             () async {
               await _solicitacaoComponent.cancelarSolicitacao(
-                _solicitacaoComponent.solicitacaoSelecionada!.numero!,
+                solicitacao!.numero!,
               );
               await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
               Navigator.pop(context);
@@ -282,7 +307,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
             "Recusar",
             context,
             () => _solicitacaoComponent.recusarSolicitacao(
-              _solicitacaoComponent.solicitacaoSelecionada!.numero!,
+              solicitacao!.numero!,
               controllerMotivo.text,
             ),
           ),
@@ -357,6 +382,31 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
 
   void _atualizarAbaSelecionada(DetalhesSolicitacao aba) {
     setState(() => _abaSelecionada = aba);
+  }
+
+  Future<void> _finalizarSolicitacao() async {
+    notificarCasoErro(() async => await _solicitacaoComponent.finalizarSolicitacao(widget.numeroSolicitacao));
+  }
+
+  Future<void> _recusarSolicitacao() async {
+    notificarCasoErro(() async {
+      await _solicitacaoComponent.recusarSolicitacao(
+        widget.numeroSolicitacao,
+        controllerMotivo.text,
+      );
+    });
+  }
+
+  Future<void> _aceitarSolicitacao() async {
+    notificarCasoErro(() async {
+      await _solicitacaoComponent.aceitarSolicitacao(widget.numeroSolicitacao);
+    });
+  }
+
+  Future<void> _cancelarSolicitacao() async {
+    notificarCasoErro(() async {
+      await _solicitacaoComponent.cancelarSolicitacao(widget.numeroSolicitacao);
+    });
   }
 }
 

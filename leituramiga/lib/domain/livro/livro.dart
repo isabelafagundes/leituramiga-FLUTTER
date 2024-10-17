@@ -110,6 +110,8 @@ class Livro extends Entidade {
 
   int get numeroCategoria => _numeroCategoria;
 
+  String get nomeCategoria => _nomeCategoria;
+
   List<TipoSolicitacao> get tiposSolicitacao => _tiposSolicitacao;
 
   String get emailUsuario => _emailUsuario;

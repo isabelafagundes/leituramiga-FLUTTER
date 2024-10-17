@@ -14,6 +14,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
   final Function(ResumoLivro) aoSelecionarLivro;
   final bool Function(ResumoLivro) verificarSelecao;
   final Function(ResumoLivro) aoClicarLivro;
+  final Function()? aceitarSolicitacao;
   final List<ResumoLivro> livros;
   final Function() navegarParaSolicitacao;
   final String textoPopUp;
@@ -27,6 +28,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
     required this.navegarParaSolicitacao,
     required this.aoClicarLivro,
     required this.textoPopUp,
+    this.aceitarSolicitacao,
   });
 
   @override
@@ -137,7 +139,10 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
                     color: kCorFonte,
                   ),
                   texto: "Adicionar",
-                  aoClicar: () => Navigator.of(context).pop(true),
+                  aoClicar: () {
+                    if (aceitarSolicitacao != null) aceitarSolicitacao!();
+                    Navigator.of(context).pop(true);
+                  },
                 ),
               ],
             ),

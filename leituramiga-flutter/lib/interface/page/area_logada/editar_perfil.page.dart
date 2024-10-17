@@ -1,6 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:leituramiga/component/instituicao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
+import 'package:leituramiga/domain/endereco/endereco.dart';
+import 'package:leituramiga/domain/endereco/municipio.dart';
+import 'package:leituramiga/domain/endereco/uf.dart';
+import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
+import 'package:leituramiga/domain/usuario/telefone.dart';
+import 'package:leituramiga/domain/usuario/usuario.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
@@ -10,8 +17,9 @@ import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_menu.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/formulario/formulario_usuario.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/formulario/formulario_edicao_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_endereco.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
@@ -25,6 +33,7 @@ class EditarPefilPage extends StatefulWidget {
 
 class _EditarPefilPageState extends State<EditarPefilPage> {
   UsuarioComponent _usuarioComponent = UsuarioComponent();
+  InstituicaoComponent _instituicaoComponent = InstituicaoComponent();
   final TextEditingController controllerRua = TextEditingController();
   final TextEditingController controllerBairro = TextEditingController();
   final TextEditingController controllerCep = TextEditingController();
@@ -39,6 +48,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
   final TextEditingController controllerConfirmacaoSenha = TextEditingController();
   final TextEditingController controllerTelefone = TextEditingController();
   final TextEditingController controllerInstituicaoEnsino = TextEditingController();
+  final TextEditingController controllerDescricao = TextEditingController();
   EditarPerfil? _estagioAtual = EditarPerfil.DADOS_GERAIS;
 
   TemaState get _temaState => TemaState.instancia;
@@ -55,9 +65,14 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       AppModule.livroRepo,
       atualizar,
     );
+    _instituicaoComponent.inicializar(
+      AppModule.instituicaoEnsinoRepo,
+      atualizar,
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _usuarioComponent.obterPerfil();
-      await _usuarioComponent.obterEndereco();
+      await _instituicaoComponent.obterInstituicoes();
+      await notificarCasoErro(() async => await _usuarioComponent.obterEndereco());
       _preencherControllers();
     });
   }
@@ -138,8 +153,9 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
 
   Widget get _obterPagina {
     return switch (_estagioAtual) {
-      EditarPerfil.DADOS_GERAIS => FormularioUsuarioWidget(
+      EditarPerfil.DADOS_GERAIS => FormularioEdicaoUsuarioWidget(
           tema: tema,
+          controllerDescricao: controllerDescricao,
           controllerConfirmacaoSenha: controllerConfirmacaoSenha,
           controllerEmail: controllerEmail,
           controllerNome: controllerNome,
@@ -161,9 +177,9 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       EditarPerfil.ENDERECO => FormularioEnderecoWidget(
           tema: tema,
           aoSalvar: () {},
-          estados: [],
-          cidades: [],
-          aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
+          estados: UF.values.map((e) => e.descricao).toList(),
+          cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome.toString()).toList(),
+          aoSelecionarEstado: _selecionarEstado,
           aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
           controllerRua: controllerRua,
           controllerBairro: controllerBairro,
@@ -177,11 +193,106 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
             texto: 'Salvar',
             nomeIcone: "seta/arrow-long-right",
             icone: Icon(Icons.check, color: kCorFonte),
-            aoClicar: () {},
+            aoClicar: _salvarEndereco,
           ),
         ),
       _ => const SizedBox(),
     };
+  }
+
+  Future<void> _salvarEndereco() async {
+    if (!_validarCamposEndereco() || endereco == null) {
+      return Notificacoes.mostrar("Preencha todos os campos do endereço");
+    }
+    _usuarioComponent.atualizarEnderecoMemoria(endereco!);
+    await notificarCasoErro(() async => await _usuarioComponent.atualizarEndereco());
+  }
+
+  Future<void> _selecionarEstado(String estado) async {
+    setState(() => controllerEstado.text = estado);
+    await _usuarioComponent.obterCidades(UF.deDescricao(estado));
+  }
+
+  bool _validarCamposDadosGerais() {
+    return controllerNome.text.isNotEmpty &&
+        controllerNomeUsuario.text.isNotEmpty &&
+        controllerEmail.text.isNotEmpty &&
+        controllerSenha.text.isNotEmpty &&
+        controllerConfirmacaoSenha.text.isNotEmpty &&
+        controllerSenha.text == controllerConfirmacaoSenha.text;
+  }
+
+  bool _todosOsCamposEnderecoVazios() {
+    return controllerRua.text.isEmpty &&
+        controllerBairro.text.isEmpty &&
+        controllerCep.text.isEmpty &&
+        controllerNumero.text.isEmpty &&
+        controllerCidade.text.isEmpty &&
+        controllerEstado.text.isEmpty;
+  }
+
+  bool _validarCamposEndereco() {
+    return controllerRua.text.isNotEmpty &&
+        controllerBairro.text.isNotEmpty &&
+        controllerCep.text.isNotEmpty &&
+        controllerNumero.text.isNotEmpty &&
+        controllerCidade.text.isNotEmpty &&
+        controllerEstado.text.isNotEmpty;
+  }
+
+  Endereco? get endereco {
+    Municipio? municipio = _usuarioComponent.municipiosPorNumero.values
+        .where(
+          (element) => element.nome == controllerCidade.text,
+        )
+        .firstOrNull;
+
+    if (municipio == null) return null;
+
+    return Endereco.criar(
+      controllerNumero.text,
+      controllerComplemento.text,
+      controllerRua.text,
+      controllerCep.text,
+      controllerBairro.text,
+      municipio,
+      true,
+    );
+  }
+
+  Usuario get usuario {
+    InstituicaoDeEnsino? instituicao = _instituicaoComponent.instituicoesPorNumero.values
+        .where(
+          (element) => element.nome == controllerInstituicaoEnsino.text,
+        )
+        .firstOrNull;
+
+    return Usuario.criar(
+      controllerNome.text,
+      _usuarioComponent.usuarioSelecionado!.nomeUsuario,
+      _usuarioComponent.usuarioSelecionado!.email,
+      _obterTelefone,
+      0,
+      "",
+      instituicao,
+      null,
+      "",
+      "",
+      endereco,
+      null,
+    );
+  }
+
+  Telefone? get _obterTelefone {
+    String telefone = controllerTelefone.text.replaceAll("(", "").replaceAll(")", "");
+    telefone = telefone.replaceAll("-", "").replaceAll(" ", "");
+
+    return controllerTelefone.text.isNotEmpty
+        ? Telefone.criar(
+            telefone.trim().substring(2, 11),
+            telefone.trim().substring(0, 2),
+          )
+        : null;
   }
 
   void _preencherControllers() {
@@ -196,7 +307,10 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
     controllerNumero.text = _usuarioComponent.enderecoEdicao?.numero?.toString() ?? "";
     controllerComplemento.text = _usuarioComponent.enderecoEdicao?.complemento ?? "";
     controllerCidade.text = _usuarioComponent.enderecoEdicao?.municipio.nome ?? "";
-    controllerEstado.text = _usuarioComponent.enderecoEdicao?.municipio?.estado.descricao ?? "";
+    controllerEstado.text = _usuarioComponent.enderecoEdicao?.municipio.estado.descricao ?? "";
+    String descricao = _usuarioComponent.usuarioSelecionado?.descricao ?? "";
+    controllerDescricao.text = descricao.isEmpty ? "Olá! Estou usando o LeiturAmiga!" : descricao;
+    setState(() {});
   }
 
   void atualizarPagina(EditarPerfil? etapa) {

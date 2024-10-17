@@ -68,6 +68,13 @@ class SolicitacaoComponent extends State with SolicitacaoState, PaginacaoState<R
     );
   }
 
+  Future<void> finalizarSolicitacao(int numeroSolicitacao) async {
+    await executar(
+      rotina: () => _solicitacaoUseCase.finalizarSolicitacao(numeroSolicitacao),
+      mensagemErro: "Não foi possível finalizar a solicitação",
+    );
+  }
+
   Future<void> atualizarSolicitacao() async {
     await executar(
       rotina: () => _solicitacaoUseCase.atualizarSolicitacao(),

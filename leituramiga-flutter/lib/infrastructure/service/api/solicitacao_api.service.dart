@@ -36,4 +36,11 @@ class SolicitacaoApiService extends SolicitacaoService with ConfiguracaoApiState
     });
   }
 
+  @override
+  Future<void> finalizarSolicitacao(int numero) async {
+    await _client.post("$host/solicitacao/$numero/finalizar").catchError((erro) {
+      throw erro;
+    });
+  }
+
 }

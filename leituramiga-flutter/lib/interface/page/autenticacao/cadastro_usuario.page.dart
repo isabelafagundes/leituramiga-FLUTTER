@@ -423,6 +423,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
       controllerCep.text,
       controllerBairro.text,
       municipio,
+      true,
     );
   }
 
