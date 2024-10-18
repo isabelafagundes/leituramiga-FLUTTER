@@ -11,6 +11,12 @@ class Telefone extends ObjetoDeValor {
     if (_numero.length != 9 && _numero.length != 8) throw TelefoneInvalido("O número de caracteres incorreto!");
     if (_prefixo.length != 2) throw TelefoneInvalido("O número de caracteres incorreto!");
   }
+  String get telefone {
+    RegExp regex = RegExp(r'^\(?\d{2}\)?[\s-]?\d{4,5}[\s-]?\d{4}$');
+    String? numeroFormatado = regex.stringMatch("$_prefixo$_numero");
+    if (numeroFormatado == null) throw TelefoneInvalido("O formato é inválido");
+    return numeroFormatado;
+  }
 
   String get telefoneFormatado {
     RegExp regex = RegExp(r'^\(?\d{2}\)?[\s-]?\d{4,5}[\s-]?\d{4}$');

@@ -67,7 +67,7 @@ class Usuario extends Entidade {
       "nome": nome,
       "username": nomeUsuario,
       "email": email.endereco,
-      "celular": telefone?.telefoneFormatado,
+      "celular": telefone?.telefone,
       "descricao": descricao,
       "imagem": imagem,
       "codigoInstituicao": instituicaoDeEnsino?.numero,

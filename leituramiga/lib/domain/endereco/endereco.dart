@@ -62,7 +62,7 @@ class Endereco extends ObjetoDeValor {
       "logradouro": rua,
       "complemento": complemento,
       "bairro": bairro,
-      "cep": cep,
+      "cep": cep.replaceAll("-", "").trim(),
       "nomeCidade": municipio.nome,
       "estado": municipio.estado.name,
       "codigoCidade": municipio.numero,

@@ -161,7 +161,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
           controllerNome: controllerNome,
           controllerInstituicao: controllerInstituicaoEnsino,
           controllerTelefone: controllerTelefone,
-          instituicoes: [],
+          instituicoes: _instituicaoComponent.instituicoesPorNumero.values.map((e) => e.nome.toString()).toList(),
           controllerSenha: controllerSenha,
           controllerUsuario: controllerNomeUsuario,
           aoCadastrar: () {},
@@ -170,7 +170,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
             texto: 'Salvar',
             nomeIcone: "seta/arrow-long-right",
             icone: Icon(Icons.check, color: kCorFonte),
-            aoClicar: () {},
+            aoClicar: _salvarUsuario,
           ),
           aoSelecionarInstituicao: (instituicao) => setState(() => controllerInstituicaoEnsino.text = instituicao),
         ),
@@ -200,12 +200,19 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
     };
   }
 
+  Future<void> _salvarUsuario() async {
+    _usuarioComponent.atualizarUsuarioMemoria(usuario);
+    await notificarCasoErro(() async => await _usuarioComponent.atualizarUsuario());
+    Notificacoes.mostrar("Usuário atualizado com sucesso", Emoji.SUCESSO);
+  }
+
   Future<void> _salvarEndereco() async {
     if (!_validarCamposEndereco() || endereco == null) {
       return Notificacoes.mostrar("Preencha todos os campos do endereço");
     }
     _usuarioComponent.atualizarEnderecoMemoria(endereco!);
     await notificarCasoErro(() async => await _usuarioComponent.atualizarEndereco());
+    Notificacoes.mostrar("Endereço atualizado com sucesso", Emoji.SUCESSO);
   }
 
   Future<void> _selecionarEstado(String estado) async {
@@ -220,15 +227,6 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
         controllerSenha.text.isNotEmpty &&
         controllerConfirmacaoSenha.text.isNotEmpty &&
         controllerSenha.text == controllerConfirmacaoSenha.text;
-  }
-
-  bool _todosOsCamposEnderecoVazios() {
-    return controllerRua.text.isEmpty &&
-        controllerBairro.text.isEmpty &&
-        controllerCep.text.isEmpty &&
-        controllerNumero.text.isEmpty &&
-        controllerCidade.text.isEmpty &&
-        controllerEstado.text.isEmpty;
   }
 
   bool _validarCamposEndereco() {
@@ -273,7 +271,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       _usuarioComponent.usuarioSelecionado!.email,
       _obterTelefone,
       0,
-      "",
+      controllerDescricao.text,
       instituicao,
       null,
       "",

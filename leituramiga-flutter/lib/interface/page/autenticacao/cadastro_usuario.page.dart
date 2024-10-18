@@ -142,7 +142,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                       padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
                       child: CardBaseWidget(
                         largura: 850,
-                        altura: 740,
+                        altura: 750,
                         cursorDeClick: false,
                         padding: EdgeInsets.symmetric(
                           horizontal: tema.espacamento * 2,
@@ -196,7 +196,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   Widget _obterPaginaAtual() {
     return switch (_etapaCadastro) {
       EtapaCadastro.DADOS_GERAIS => SizedBox(
-          height: 800,
+          height: 810,
           child: Column(
             children: [
               SizedBox(

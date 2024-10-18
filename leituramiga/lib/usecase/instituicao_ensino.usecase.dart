@@ -10,7 +10,6 @@ class InstituicaoEnsinoUseCase {
 
   Future<void> obterInstituicoes() async {
     List<InstituicaoDeEnsino> instituicoes = await _repo.obterInstituicoes();
-    instituicoes;
     _state.instituicoesPorNumero.clear();
     for (InstituicaoDeEnsino instituicao in instituicoes) {
       _state.instituicoesPorNumero[instituicao.numero] = instituicao;

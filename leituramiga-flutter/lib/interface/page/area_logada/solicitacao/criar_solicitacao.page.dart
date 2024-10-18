@@ -241,6 +241,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       _solicitacaoComponent.atualizarSolicitacaoMemoria(solicitacao);
       await _solicitacaoComponent.atualizarSolicitacao();
       atualizarPagina(CriarSolicitacao.CONCLUSAO);
+      Notificacoes.mostrar("Solicitação criada com sucesso", Emoji.SUCESSO);
     });
   }
 

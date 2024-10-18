@@ -210,6 +210,7 @@ class _HomePageState extends State<HomePage> {
     _filtroState.limparFiltros();
     _controllerPesquisa.clear();
     _exibindoLivros ? await _livrosComponent.obterLivrosIniciais() : await _usuariosComponent.obterUsuariosIniciais();
+    _controllerPesquisa.clear();
     setState(() {});
   }
 

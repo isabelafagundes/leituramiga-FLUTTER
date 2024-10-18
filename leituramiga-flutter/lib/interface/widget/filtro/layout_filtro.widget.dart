@@ -231,6 +231,7 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                       ),
                       aoClicar: () {
                         widget.limparFiltros();
+
                         setState(() {});
                       },
                     ),
