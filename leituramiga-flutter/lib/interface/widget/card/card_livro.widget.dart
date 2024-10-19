@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
@@ -18,6 +20,7 @@ class CardLivroWidget extends StatelessWidget {
   final Function()? aoClicarSelecao;
   final bool ativado;
   final bool selecao;
+  final String? imagem;
 
   const CardLivroWidget({
     super.key,
@@ -32,6 +35,7 @@ class CardLivroWidget extends StatelessWidget {
     this.ativado = false,
     this.selecao = false,
     this.aoClicarSelecao,
+    required this.imagem,
   });
 
   @override
@@ -62,10 +66,7 @@ class CardLivroWidget extends StatelessWidget {
                       child: Stack(
                         children: [
                           Container(
-                            decoration: BoxDecoration(
-                              color: Color(tema.neutral).withOpacity(.1),
-                              borderRadius: BorderRadius.circular(tema.tamanhoFonteP),
-                            ),
+                            child: _obterImagem,
                           ),
                           Positioned(
                             bottom: 4,
@@ -170,6 +171,24 @@ class CardLivroWidget extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+
+  Widget get _obterImagem {
+    if (imagem == null) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Color(tema.neutral).withOpacity(.1),
+          borderRadius: BorderRadius.circular(tema.tamanhoFonteP),
+        ),
+      );
+    }
+
+    final decodedBytes = base64Decode(imagem!);
+
+    return Image.memory(
+      decodedBytes,
+      fit: BoxFit.fitHeight,
     );
   }
 }

@@ -32,6 +32,7 @@ class LivrosPage extends StatefulWidget {
 class _LivrosPageState extends State<LivrosPage> {
   TipoSolicitacao? _tipoSolicitacaoSelecionado;
   final LivrosComponent _livrosComponent = LivrosComponent();
+  String? imagemLivro;
 
   TemaState get _temaState => TemaState.instancia;
 
@@ -88,7 +89,7 @@ class _LivrosPageState extends State<LivrosPage> {
                                 ImagemWidget(
                                   tema: tema,
                                   visualizacao: true,
-                                  salvarImagem: (imagem64) => print(imagem64),
+                                  salvarImagem: (imagem64) => setState(() => imagemLivro = imagem64),
                                 ),
                                 SizedBox(height: tema.espacamento * 2),
                                 Column(

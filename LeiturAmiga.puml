@@ -1,0 +1,96 @@
+@startuml
+
+class Livro {
+  - int? _numero
+  - String _nome
+  - String _nomeAutor
+  - String _descricao
+  - String _descricaoEstado
+  - int _numeroCategoria
+  - String _nomeUsuario
+  - String _nomeCategoria
+  - String? _nomeInstituicao
+  - String? _nomeMunicipio
+  - List<TipoSolicitacao> _tiposSolicitacao
+  - String _emailUsuario
+  - DataHora? _dataCriacao
+  - DataHora? _dataUltimaSolicitacao
+  - TipoStatusLivro _status
+  - String? _imagemLivro
+  + Livro.carregar(...)
+  + ResumoLivro criarResumoLivro()
+}
+
+class Solicitacao {
+  - int? _numero
+  - String _emailUsuarioProprietario
+  - String _emailUsuarioCriador
+  - LivrosSolicitacao _livrosUsuarioSolicitante
+  - LivrosSolicitacao? _livrosUsuarioReceptor
+  - FormaEntrega _formaEntrega
+  - DataHora? _dataCriacao
+  - DataHora? _dataEntrega
+  - DataHora? _dataDevolucao
+  - DataHora? _dataAtualizacao
+  - String _informacoesAdicionais
+  - Endereco? _endereco
+  - bool _enderecoUsuarioCriador
+  - TipoSolicitacao _tipoSolicitacao
+  - TipoStatusSolicitacao _status
+  - DataHora? _dataAceite
+  - String? _motivoRecusa
+  - String? _codigoRastreamento
+  + Solicitacao.carregar(...)
+}
+
+class InstituicaoDeEnsino {
+  - int _numero
+  - String _sigla
+  - String _nome
+  + InstituicaoDeEnsino.carregar(int, String, String)
+}
+
+class Endereco {
+  - int? _numero
+  - String? _numeroResidencial
+  - String? _complemento
+  - String _rua
+  - String _cep
+  - String _bairro
+  - Municipio _municipio
+  - bool _principal
+  + Endereco.criar(String?, String?, String, String, String, Municipio, bool)
+  + Endereco.carregar(int?, String?, String?, String, String, String, Municipio, bool)
+  + String _obterCepFormatado()
+}
+
+class Municipio {
+  - int _numero
+  - String _nome
+  - UF _estado
+  + Municipio.carregar(int, String, UF)
+}
+
+class Usuario {
+  - String _nome
+  - String _nomeUsuario
+  - Email _email
+  - Telefone? _telefone
+  - int _numeroDeLivros
+  - String? _descricao
+  - String? _nomeMunicipio
+  - InstituicaoDeEnsino? _instituicaoDeEnsino
+  - int? _numeroEndereco
+  - String _imagem
+  - Endereco? _endereco
+  - Senha? _senha
+  - TipoUsuario _tipoUsuario
+  + Usuario.carregar(...)
+}
+
+Municipio *-- Endereco
+Livro *-- Solicitacao
+Usuario *-- Endereco
+Usuario *-- InstituicaoDeEnsino
+
+@enduml

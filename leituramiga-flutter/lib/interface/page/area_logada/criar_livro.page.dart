@@ -32,6 +32,7 @@ class _CriarLivroPageState extends State<CriarLivroPage> {
   TextEditingController controllerDescricao = TextEditingController();
   TextEditingController controllerEstadoFisico = TextEditingController();
   List<TipoSolicitacao> tiposSolicitacao = [];
+  String? imagemLivro;
 
   TemaState get _temaState => TemaState.instancia;
 
@@ -84,7 +85,7 @@ class _CriarLivroPageState extends State<CriarLivroPage> {
                   controllerDescricao: controllerDescricao,
                   controllerEstadoFisico: controllerEstadoFisico,
                   categoriasPorId: _livrosComponent.categoriasPorNumero,
-                  salvarImagem: (imagem64) => print(imagem64),
+                  salvarImagem: (imagem64) => setState(() => imagemLivro = imagem64),
                   selecionarCategoria: (categoria) => setState(() => _livrosComponent.selecionarCategoria(categoria)),
                   numeroCategoria: _livrosComponent.categoriaSelecionada?.numero,
                   controllerAutor: controllerAutor,
@@ -123,6 +124,7 @@ class _CriarLivroPageState extends State<CriarLivroPage> {
         "",
         "",
         _livrosComponent.categoriaSelecionada!.descricao,
+        imagemLivro,
       );
 
   Future<void> _criarLivro() async {

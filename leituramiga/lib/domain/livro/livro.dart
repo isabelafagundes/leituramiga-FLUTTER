@@ -20,6 +20,7 @@ class Livro extends Entidade {
   final DataHora? _dataCriacao;
   final DataHora? _dataUltimaSolicitacao;
   final TipoStatusLivro _status;
+  final String? _imagemLivro;
 
   Livro.carregar(
     this._numero,
@@ -37,6 +38,7 @@ class Livro extends Entidade {
     this._nomeInstituicao,
     this._nomeMunicipio,
     this._nomeCategoria,
+    this._imagemLivro,
   );
 
   int? get numero => _numero;
@@ -64,6 +66,7 @@ class Livro extends Entidade {
       "nomeInstituicao": _nomeInstituicao,
       "nomeCidade": _nomeMunicipio,
       "nomeCategoria": _nomeCategoria,
+      "imagem" :_imagemLivro
     };
   }
 
@@ -77,6 +80,7 @@ class Livro extends Entidade {
       _descricao,
       _nome,
       _nomeAutor,
+      _imagemLivro,
     );
   }
 
@@ -97,6 +101,7 @@ class Livro extends Entidade {
       livroAsMap['nomeInstituicao'],
       livroAsMap['nomeCidade'],
       livroAsMap['categoria'],
+      livroAsMap['imagem']
     );
   }
 

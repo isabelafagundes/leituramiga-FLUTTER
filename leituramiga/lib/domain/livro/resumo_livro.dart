@@ -9,6 +9,7 @@ class ResumoLivro extends Entidade {
   final String _nomeCategoria;
   final String _descricao;
   final String _nomeLivro;
+  final String? _imagem;
 
   ResumoLivro.carregar(
     this._numero,
@@ -18,8 +19,9 @@ class ResumoLivro extends Entidade {
     this._nomeMunicipio,
     this._descricao,
     this._nomeLivro,
-    this._nomeAutor,
-  );
+    this._nomeAutor, [
+    this._imagem,
+  ]);
 
   int get numero => _numero;
 
@@ -41,8 +43,11 @@ class ResumoLivro extends Entidade {
       resumoLivroAsMap['descricao'],
       resumoLivroAsMap['titulo'],
       resumoLivroAsMap['autor'],
+      resumoLivroAsMap['imagem'],
     );
   }
+
+  String? get imagem => _imagem;
 
   String get nomeUsuario => _nomeUsuario;
 

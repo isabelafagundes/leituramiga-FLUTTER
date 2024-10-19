@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:leituramiga/domain/super/erro_dominio.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -51,8 +51,8 @@ class _ImagemWidgetState extends State<ImagemWidget> {
       alignment: Alignment.center,
       children: [
         Container(
-          width: Responsive.largura(context)<=1000 ? Responsive.largura(context) : Responsive.largura(context) * .4,
-          height: Responsive.largura(context)<=1000 ?250 :Responsive.altura(context) * .4,
+          width: Responsive.largura(context) <= 1000 ? Responsive.largura(context) : Responsive.largura(context) * .4,
+          height: Responsive.largura(context) <= 1000 ? 250 : Responsive.altura(context) * .4,
           decoration: BoxDecoration(
             color: Color(widget.tema.neutral).withOpacity(.2),
             border: Border.all(color: Color(widget.tema.neutral).withOpacity(.1)),

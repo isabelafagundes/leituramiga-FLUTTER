@@ -56,7 +56,7 @@ class FormularioLivroWidget extends StatelessWidget {
             children: [
               ImagemWidget(
                 tema: tema,
-                salvarImagem: (imagem64) => print(imagem64),
+                salvarImagem: salvarImagem,
               ),
               SizedBox(height: tema.espacamento * 2),
               DicaWidget(

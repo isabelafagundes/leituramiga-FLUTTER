@@ -52,6 +52,7 @@ class GridLivroWidget extends StatelessWidget {
               ResumoLivro livro = livros[indice];
               return CardLivroWidget(
                 tema: tema,
+                imagem: livro.imagem,
                 aoClicar: () => aoClicarLivro(livro),
                 aoClicarSelecao: aoSelecionarLivro == null ? null : () => aoSelecionarLivro!(livro),
                 nomeCategoria: livro.nomeCategoria,
