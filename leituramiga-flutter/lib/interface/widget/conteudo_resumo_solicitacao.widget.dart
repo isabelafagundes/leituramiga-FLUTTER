@@ -13,6 +13,8 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
   final Solicitacao solicitacao;
   final bool edicao;
   final String usuarioSolicitante;
+  final String nomeUsuario;
+  final String nomeUsuarioReceptor;
 
   const ConteudoResumoSolicitacaoWidget({
     super.key,
@@ -20,6 +22,8 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
     required this.solicitacao,
     required this.edicao,
     required this.usuarioSolicitante,
+    required this.nomeUsuario,
+    required this.nomeUsuarioReceptor,
   });
 
   @override
@@ -50,12 +54,20 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                             tamanho: tema.tamanhoFonteG,
                           ),
                           SizedBox(height: tema.espacamento),
-                          TextoWidget(
-                            tamanho: tema.tamanhoFonteG,
-                            texto: "@$usuarioSolicitante",
-                            tema: tema,
-                            weight: FontWeight.w500,
-                          ),
+                          if (nomeUsuario != usuarioSolicitante)
+                            TextoWidget(
+                              tamanho: tema.tamanhoFonteG,
+                              texto: "$usuarioSolicitante",
+                              tema: tema,
+                              weight: FontWeight.w500,
+                            ),
+                          if (nomeUsuario == usuarioSolicitante)
+                            TextoWidget(
+                              tamanho: tema.tamanhoFonteG,
+                              texto: "$nomeUsuarioReceptor",
+                              tema: tema,
+                              weight: FontWeight.w500,
+                            ),
                         ],
                       ),
                     ),

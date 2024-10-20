@@ -39,8 +39,9 @@ class SolicitacaoUseCase {
     await obterSolicitacao(numero);
   }
 
-  Future<void> cancelarSolicitacao(int numero) async {
-    await _service.cancelarSolicitacao(numero);
+  Future<void> cancelarSolicitacao(int numero, String motivo) async {
+    await _service.cancelarSolicitacao(numero,motivo);
+    await obterSolicitacao(numero);
   }
 
   Future<void> atualizarSolicitacao() async {

@@ -82,6 +82,7 @@ class Livro extends Entidade {
       _nome,
       _nomeAutor,
       Email.criar(_emailUsuario),
+      _tiposSolicitacao,
       _imagemLivro,
     );
   }

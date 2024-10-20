@@ -176,7 +176,6 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(height: tema.espacamento * 2),
-              if (controllerFormaEntrega.text != "Correios") ...[
                 Flexible(
                   child: Flex(
                     mainAxisSize: MainAxisSize.min,
@@ -249,7 +248,6 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-              ],
               if (!semSelecaoLivros) ...[
                 SizedBox(height: tema.espacamento * 3),
                 Flexible(

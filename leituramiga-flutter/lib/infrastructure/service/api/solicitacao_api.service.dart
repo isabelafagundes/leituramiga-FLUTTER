@@ -26,15 +26,21 @@ class SolicitacaoApiService extends SolicitacaoService with ConfiguracaoApiState
   }
 
   @override
-  Future<void> cancelarSolicitacao(int numero) async {
-    await _client.post("$host/solicitacao/$numero/cancelar").catchError((erro) {
+  Future<void> cancelarSolicitacao(int numero, String motivo) async {
+    await _client.post("$host/solicitacao/$numero/cancelar", data: {
+      "motivo": motivo,
+      "codigoSolicitacao": numero,
+    }).catchError((erro) {
       throw erro;
     });
   }
 
   @override
   Future<void> recusarSolicitacao(int numero, String motivo) async {
-    await _client.post("$host/solicitacao/$numero/recusar", data: {"motivo": motivo}).catchError((erro) {
+    await _client.post("$host/solicitacao/$numero/recusar", data: {
+      "motivo": motivo,
+      "codigoSolicitacao": numero,
+    }).catchError((erro) {
       throw erro;
     });
   }

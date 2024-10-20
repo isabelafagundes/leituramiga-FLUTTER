@@ -5,7 +5,7 @@ class SolicitacaoMockService extends SolicitacaoService {
 
 
   @override
-  Future<void> cancelarSolicitacao(int numero) {
+  Future<void> cancelarSolicitacao(int numero,String motivo) {
     // TODO: implement cancelarSolicitacao
     throw UnimplementedError();
   }

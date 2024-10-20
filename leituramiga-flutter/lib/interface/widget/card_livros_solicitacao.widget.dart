@@ -141,7 +141,7 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                                   ),
                                 ),
                               ),
-                              SizedBox(height: widget.tema.espacamento),
+                              SizedBox(height: widget.tema.espacamento*2),
                             ],
                           );
                         },

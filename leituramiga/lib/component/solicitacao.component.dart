@@ -89,9 +89,9 @@ class SolicitacaoComponent extends State with SolicitacaoState, PaginacaoState<R
     );
   }
 
-  Future<void> cancelarSolicitacao(int numeroSolicitacao) async {
+  Future<void> cancelarSolicitacao(int numeroSolicitacao, String motivo) async {
     await executar(
-      rotina: () => _solicitacaoUseCase.cancelarSolicitacao(numeroSolicitacao),
+      rotina: () => _solicitacaoUseCase.cancelarSolicitacao(numeroSolicitacao, motivo),
       mensagemErro: "Não foi possível cancelar a solicitação",
     );
   }

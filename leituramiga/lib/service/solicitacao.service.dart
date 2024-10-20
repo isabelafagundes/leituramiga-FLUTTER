@@ -5,7 +5,7 @@ abstract class SolicitacaoService {
 
   Future<void> aceitarSolicitacao(int numero, LivrosSolicitacao? livrosTroca);
 
-  Future<void> cancelarSolicitacao(int numero);
+  Future<void> cancelarSolicitacao(int numero, String motivo);
 
   Future<void> finalizarSolicitacao(int numero);
 }

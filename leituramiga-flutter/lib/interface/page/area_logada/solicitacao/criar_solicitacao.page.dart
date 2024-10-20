@@ -115,9 +115,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
         tema: tema,
         atualizar: atualizar,
         voltar: () => Rota.navegar(context, Rota.HOME),
-        carregando: _usuarioComponent.carregando ||
-            _solicitacaoComponent.carregando ||
-            _usuarioComponent.usuarioSolicitacao == null,
+        carregando: _usuarioComponent.carregando || _solicitacaoComponent.carregando,
         child: SizedBox(
           width: Responsive.largura(context),
           height: Responsive.altura(context),
@@ -136,7 +134,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
           aoClicarLivro: _solicitacaoComponent.selecionarLivro,
           aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
           verificarSelecao: _solicitacaoComponent.verificarSelecao,
-          livros: _usuarioComponent.itensPaginados,
+          livros: _usuarioComponent.itensPaginados.where((e) => e.tiposSolicitacao.contains(_tipoSolicitacao)).toList(),
           textoPopUp: "Deseja adicionar os livros selecionados na solicitação?",
           navegarParaSolicitacao: () => atualizarPagina(CriarSolicitacao.INFORMACOES_ADICIONAIS),
         ),

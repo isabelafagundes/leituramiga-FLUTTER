@@ -6,6 +6,7 @@ import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
+import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
@@ -66,6 +67,8 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
   TemaState get _temaState => TemaState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
+
+  AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
   @override
   void initState() {
@@ -195,16 +198,20 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
             tema: tema,
             usuarioSolicitante: _usuarioComponent.usuarioSelecionado!.nome,
             solicitacao: solicitacao!,
+            nomeUsuarioReceptor: _usuarioComponent.usuarioSolicitacao?.nome ?? "",
             edicao: true,
+            nomeUsuario: _autenticacaoState.usuario!.nome,
           ),
         ),
-      DetalhesSolicitacao.LIVROS => ConteudoLivrosSolicitacaoWidget(
-          tema: tema,
-          nomeSolicitante: _usuarioComponent.usuarioSelecionado?.nome ?? "",
-          nomeReceptor: _usuarioComponent.usuarioSolicitacao?.nome ?? "",
-          usuarioCriador: solicitacao?.livrosSolicitante.livros ?? [],
-          usuarioDoador: solicitacao?.livrosReceptor?.livros ?? [],
-        ),
+      DetalhesSolicitacao.LIVROS => Expanded(
+        child: ConteudoLivrosSolicitacaoWidget(
+            tema: tema,
+            nomeSolicitante: _usuarioComponent.usuarioSelecionado?.nome ?? "",
+            nomeReceptor: _usuarioComponent.usuarioSolicitacao?.nome ?? "",
+            usuarioCriador: solicitacao?.livrosSolicitante.livros ?? [],
+            usuarioDoador: solicitacao?.livrosReceptor?.livros ?? [],
+          ),
+      ),
       DetalhesSolicitacao.CONTATO => Column(
           children: [
             !(solicitacao?.status.permiteEdicao ?? false)
@@ -286,10 +293,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
             "Cancelar",
             context,
             () async {
-              await _solicitacaoComponent.cancelarSolicitacao(
-                solicitacao!.numero!,
-              );
-              await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
+              await _cancelarSolicitacao();
               Navigator.pop(context);
             },
           ),
@@ -312,10 +316,10 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
             "Caso deseje recusar a solicitação, informe o motivo e selecione 'Recusar'.",
             "Recusar",
             context,
-            () => _solicitacaoComponent.recusarSolicitacao(
-              solicitacao!.numero!,
-              controllerMotivo.text,
-            ),
+            () async {
+              await _recusarSolicitacao();
+              Navigator.pop(context);
+            },
           ),
         );
       },
@@ -411,7 +415,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
 
   Future<void> _cancelarSolicitacao() async {
     notificarCasoErro(() async {
-      await _solicitacaoComponent.cancelarSolicitacao(widget.numeroSolicitacao);
+      await _solicitacaoComponent.cancelarSolicitacao(widget.numeroSolicitacao, controllerMotivo.text);
     });
   }
 }

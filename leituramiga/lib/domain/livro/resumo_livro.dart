@@ -1,3 +1,4 @@
+import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/super/entidade.dart';
 import 'package:leituramiga/domain/usuario/email.dart';
 
@@ -12,6 +13,7 @@ class ResumoLivro extends Entidade {
   final String _nomeLivro;
   final String? _imagem;
   final Email _emailUsuario;
+  final List<TipoSolicitacao> _tiposSolicitacao;
 
   ResumoLivro.carregar(
     this._numero,
@@ -22,7 +24,8 @@ class ResumoLivro extends Entidade {
     this._descricao,
     this._nomeLivro,
     this._nomeAutor,
-    this._emailUsuario, [
+    this._emailUsuario,
+    this._tiposSolicitacao, [
     this._imagem,
   ]);
 
@@ -33,7 +36,19 @@ class ResumoLivro extends Entidade {
 
   @override
   Map<String, dynamic> paraMapa() {
-    return {};
+    return {
+      "codigoLivro": _numero,
+      "categoria": _nomeCategoria,
+      "nomeUsuario": _nomeUsuario,
+      "nomeInstituicao": _nomeInstituicao,
+      "nomeCidade": _nomeMunicipio,
+      "descricao": _descricao,
+      "titulo": _nomeLivro,
+      "autor": _nomeAutor,
+      "emailUsuario": _emailUsuario.endereco,
+      "tipoSolicitacao": _tiposSolicitacao.map((e) => e.id).toList(),
+      "imagem": _imagem,
+    };
   }
 
   factory ResumoLivro.carregarDeMapa(Map<String, dynamic> resumoLivroAsMap) {
@@ -47,6 +62,7 @@ class ResumoLivro extends Entidade {
       resumoLivroAsMap['titulo'],
       resumoLivroAsMap['autor'],
       Email.criar(resumoLivroAsMap['emailUsuario']),
+      resumoLivroAsMap['tipoSolicitacao'].toString().split(",").map((e) => TipoSolicitacao.deNumero(int.parse(e))).toList(),
       resumoLivroAsMap['imagem'],
     );
   }
@@ -58,6 +74,8 @@ class ResumoLivro extends Entidade {
   String get nomeUsuario => _nomeUsuario;
 
   String? get nomeInstituicao => _nomeInstituicao;
+
+  List<TipoSolicitacao> get tiposSolicitacao => _tiposSolicitacao;
 
   String get nomeCategoria => _nomeCategoria;
 
