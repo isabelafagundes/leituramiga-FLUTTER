@@ -120,7 +120,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
                           textoPopUp: "Deseja selecionar os livros e aceitar a solicitação?",
                           aoClicarLivro: _solicitacaoComponent.selecionarLivro,
                           aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
-                          verificarSelecao: _usuarioComponent.verificarSelecao,
+                          verificarSelecao: _solicitacaoComponent.verificarSelecao,
                           livros: _usuarioComponent.itensPaginados,
                           navegarParaSolicitacao: () => _atualizarAbaSelecionada(DetalhesSolicitacao.LIVROS),
                         )
@@ -160,20 +160,18 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
                               aoSelecionar: (index) =>
                                   _atualizarAbaSelecionada(DetalhesSolicitacao.deDescricao(_opcoes[index])),
                             ),
-                            if (solicitacao != null) Flexible(flex: 3, child: _obterAba),
+                            if (solicitacao != null) _obterAba,
                             if (_abaSelecionada == DetalhesSolicitacao.INFORMACOES &&
                                 (solicitacao?.status.permiteEdicao ?? false))
-                              Flexible(
-                                child: Flex(
-                                  direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    _obterBotaoEsquerdo(context),
-                                    SizedBox(height: tema.espacamento * 2, width: tema.espacamento * 2),
-                                    _obterBotaoDireito,
-                                  ],
-                                ),
+                              Flex(
+                                direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  _obterBotaoEsquerdo(context),
+                                  SizedBox(height: tema.espacamento * 2, width: tema.espacamento * 2),
+                                  _obterBotaoDireito,
+                                ],
                               )
                           ],
                         ),
@@ -183,7 +181,12 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
     );
   }
 
-  List<String> get _opcoes => DetalhesSolicitacao.values.where((e) => e.aba).map((e) => e.descricao).toList();
+  List<String> get _opcoes {
+    return DetalhesSolicitacao.values.where((e) => e.aba).map((e) {
+      if (solicitacao!.status != TipoStatusSolicitacao.EM_ANDAMENTO && e == DetalhesSolicitacao.CONTATO) return "";
+      return e.descricao;
+    }).toList();
+  }
 
   Widget get _obterAba {
     return switch (_abaSelecionada) {
@@ -225,19 +228,6 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
   }
 
   Widget _obterBotaoEsquerdo(BuildContext context) {
-    if (solicitacao?.tipoSolicitacao == TipoSolicitacao.TROCA) {
-      return BotaoWidget(
-        tema: tema,
-        corTexto: kCorFonte,
-        texto: "Escolher livros",
-        aoClicar: () => _atualizarAbaSelecionada(DetalhesSolicitacao.SELECAO_LIVROS),
-        icone: Icon(
-          Icons.bookmark_add_outlined,
-          color: kCorFonte,
-        ),
-        corFundo: Color(tema.accent),
-      );
-    }
     if (solicitacao?.status == TipoStatusSolicitacao.EM_ANDAMENTO && solicitacao!.validarPodeFinalizar) {
       return BotaoWidget(
         tema: tema,
@@ -251,6 +241,22 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
         corFundo: Color(tema.success),
       );
     }
+
+    if (solicitacao?.tipoSolicitacao == TipoSolicitacao.TROCA &&
+        solicitacao?.status == TipoStatusSolicitacao.PENDENTE) {
+      return BotaoWidget(
+        tema: tema,
+        corTexto: kCorFonte,
+        texto: "Escolher livros",
+        aoClicar: () => _atualizarAbaSelecionada(DetalhesSolicitacao.SELECAO_LIVROS),
+        icone: Icon(
+          Icons.bookmark_add_outlined,
+          color: kCorFonte,
+        ),
+        corFundo: Color(tema.accent),
+      );
+    }
+
     if (solicitacao?.status == TipoStatusSolicitacao.PENDENTE)
       return BotaoWidget(
         tema: tema,

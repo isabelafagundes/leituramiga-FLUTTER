@@ -1,4 +1,5 @@
 import 'package:leituramiga/domain/super/entidade.dart';
+import 'package:leituramiga/domain/usuario/email.dart';
 
 class ResumoLivro extends Entidade {
   final int _numero;
@@ -10,6 +11,7 @@ class ResumoLivro extends Entidade {
   final String _descricao;
   final String _nomeLivro;
   final String? _imagem;
+  final Email _emailUsuario;
 
   ResumoLivro.carregar(
     this._numero,
@@ -19,7 +21,8 @@ class ResumoLivro extends Entidade {
     this._nomeMunicipio,
     this._descricao,
     this._nomeLivro,
-    this._nomeAutor, [
+    this._nomeAutor,
+    this._emailUsuario, [
     this._imagem,
   ]);
 
@@ -43,9 +46,12 @@ class ResumoLivro extends Entidade {
       resumoLivroAsMap['descricao'],
       resumoLivroAsMap['titulo'],
       resumoLivroAsMap['autor'],
+      Email.criar(resumoLivroAsMap['emailUsuario']),
       resumoLivroAsMap['imagem'],
     );
   }
+
+  Email get emailUsuario => _emailUsuario;
 
   String? get imagem => _imagem;
 

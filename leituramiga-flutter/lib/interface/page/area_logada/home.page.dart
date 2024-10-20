@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:leituramiga/component/livros.component.dart';
 import 'package:leituramiga/component/usuarios.component.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
+import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:leituramiga/state/filtros.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
@@ -39,6 +40,8 @@ class _HomePageState extends State<HomePage> {
 
   final LivrosComponent _livrosComponent = LivrosComponent();
   final UsuariosComponent _usuariosComponent = UsuariosComponent();
+
+  AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
   FiltroState get _filtroState => FiltroState.instancia;
 
@@ -85,13 +88,13 @@ class _HomePageState extends State<HomePage> {
                 child: CircularProgressIndicator(),
               )
             : !Responsive.larguraM(context)
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 60,
-                        child: BarraPesquisaWidget(
+                ? SizedBox(
+                    height: 55,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        BarraPesquisaWidget(
                           tema: tema,
                           aoPesquisar: (valor) async {
                             _exibindoLivros
@@ -100,27 +103,27 @@ class _HomePageState extends State<HomePage> {
                           },
                           controller: _controllerPesquisa,
                         ),
-                      ),
-                      SizedBox(width: tema.espacamento),
-                      BotaoPequenoWidget(
-                        tema: tema,
-                        altura: 40,
-                        label: "Filtrar",
-                        corFonte: Color(tema.baseContent),
-                        corFundo: Color(tema.base200),
-                        icone: SvgWidget(nomeSvg: 'filtro', cor: Color(tema.baseContent), altura: 16),
-                        aoClicar: () => SobreposicaoUtil.exibir(context, obterFiltros),
-                      ),
-                      if (_livrosComponent.filtroState.temFiltros) ...[
                         SizedBox(width: tema.espacamento),
-                        BotaoRedondoWidget(
+                        BotaoPequenoWidget(
                           tema: tema,
-                          aoClicar: _limparFiltros,
-                          nomeSvg: "limpar_icon",
-                          tamanhoIcone: 22,
+                          altura: 40,
+                          label: "Filtrar",
+                          corFonte: Color(tema.baseContent),
+                          corFundo: Color(tema.base200),
+                          icone: SvgWidget(nomeSvg: 'filtro', cor: Color(tema.baseContent), altura: 16),
+                          aoClicar: () => SobreposicaoUtil.exibir(context, obterFiltros),
                         ),
-                      ]
-                    ],
+                        if (_livrosComponent.filtroState.temFiltros) ...[
+                          SizedBox(width: tema.espacamento),
+                          BotaoRedondoWidget(
+                            tema: tema,
+                            aoClicar: _limparFiltros,
+                            nomeSvg: "limpar_icon",
+                            tamanhoIcone: 22,
+                          ),
+                        ]
+                      ],
+                    ),
                   )
                 : null,
         child: SizedBox(
@@ -174,6 +177,14 @@ class _HomePageState extends State<HomePage> {
                       tema: tema,
                       aoClicarLivro: (livro) async {
                         await _livrosComponent.obterLivro(livro.numero);
+                        if (livro.emailUsuario.endereco == _autenticacaoState.usuario!.email.endereco) {
+                          return Rota.navegarComArgumentos(
+                            context,
+                            EditarLivroRoute(
+                              codigoLivro: _livrosComponent.livroSelecionado!.numero!,
+                            ),
+                          );
+                        }
                         Rota.navegarComArgumentos(
                           context,
                           LivrosRoute(
@@ -190,10 +201,15 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.only(right: tema.espacamento + 4),
                     child: GridUsuariosWidget(
                       tema: tema,
-                      aoClicarUsuario: (username) => Rota.navegarComArgumentos(
-                        context,
-                        UsuarioRoute(identificador: username),
-                      ),
+                      aoClicarUsuario: (username) {
+                        if (username == _autenticacaoState.usuario!.nomeUsuario) {
+                          return Rota.navegar(context, Rota.PERFIL);
+                        }
+                        Rota.navegarComArgumentos(
+                          context,
+                          UsuarioRoute(identificador: username),
+                        );
+                      },
                       usuarios: _usuariosComponent.itensPaginados,
                     ),
                   ),

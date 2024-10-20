@@ -1,96 +1,213 @@
 @startuml
 
+class Usuario {
+    -tentativas: int
+    -senha: String
+    -bloqueado: Boolean
+    -imagem: String
+    -email: String
+    -ativo: Boolean
+    -descricao: String
+    -quantidadeLivros: int
+    -endereco: Endereco
+    -nomeCidade: String
+    -celular: String
+    -username: String
+    -tipoUsuario: TipoUsuario
+    -codigoAlteracao: String
+    -codigoInstituicao: int
+    -nomeInstituicao: String
+    -nome: String
+    +obterUsuario(String login)()
+    +atualizarUsuario(UsuarioDto usuario)()
+    +desativarUsuario(String email)()
+    +validarExistencia(String email, String username)()
+    +atualizarSenha(String senha, String email)()
+    +verificarCodigoSeguranca(String identificador, String codigo)()
+    +ativarUsuario(String email)()
+    +atualizarTentativas(String login, boolean resetarTentativas)()
+    +validarUsername(String username)()
+    +obterUsuariosPaginados(int cidade, int instituicao, String pesquisa, int pagina, int tamanhoPagina)()
+}
+
+class Solicitação {
+    -horaAceite: String
+    -horaAtualizacao: String
+    -codigoStatusSolicitacao: int
+    -dataCriacao: String
+    -horaDevolucao: String
+    -informacoesAdicionais: String
+    -emailUsuarioReceptor: String
+    -horaCriacao: String
+    -livrosUsuarioCriados: List<LivroSolicitacao>
+    -livrosTroca: List<LivroSolicitacao>
+    -dataDevolucao: String
+    -motivoRecusa: String
+    -horaEntrega: String
+    -dataAtualizacao: String
+    -codigoTipoSolicitacao: int
+    -emailUsuarioSolicitante: String
+    -nomeUsuarioSolicitante: String
+    -dataEntrega: String
+    -dataAceite: String
+    -endereco: Endereco
+    -codigoSolicitacao: int
+    -codigoRastreioCorreio: String
+    +obterSolicitacaoPendentes()()
+    +recusarSolicitacoesComLivroIndisponivel(List<LivroSolicitacaoDto> livrosIndisponiveis, int codigo)()
+    +obterHistoricoSolicitacoesPaginadas(int pagina, int quantidade, String email)()
+    +concatenarCodigosLivros(List<LivroSolicitacaoDto> livros)()
+    +obterSolicitacoesPaginadas(int pagina, int quantidade, String email)()
+    +obterSolicitacaoPorCodigo(int codigo)()
+    +obterNotificacoesUsuario(String email)()
+    +atualizarSolicitacao(SolicitacaoDto solicitacao)()
+    +obterSolicitacaoComLivros(Solicitacao solicitacao)()
+    +recusarSolicitacao(int codigo, String motivoRecusa)()
+    +cancelarSolicitacao(int codigo, String motivoRecusa)()
+}
+
 class Livro {
-  - int? _numero
-  - String _nome
-  - String _nomeAutor
-  - String _descricao
-  - String _descricaoEstado
-  - int _numeroCategoria
-  - String _nomeUsuario
-  - String _nomeCategoria
-  - String? _nomeInstituicao
-  - String? _nomeMunicipio
-  - List<TipoSolicitacao> _tiposSolicitacao
-  - String _emailUsuario
-  - DataHora? _dataCriacao
-  - DataHora? _dataUltimaSolicitacao
-  - TipoStatusLivro _status
-  - String? _imagemLivro
-  + Livro.carregar(...)
-  + ResumoLivro criarResumoLivro()
+    -tipoSolicitacao: String
+    -imagem: String
+    -descricao: String
+    -categoria: String
+    -codigoInstituicao: int
+    -codigoCidade: int
+    -nomeInstituicao: String
+    -nomeUsuario: String
+    -codigoCategoria: int
+    -titulo: String
+    -nomeCidade: String
+    -codigoLivro: int
+    -emailUsuario: String
+    -dataUltimaSolicitacao: String
+    -estadoFisico: String
+    -codigoUltimaSolicitacao: int
+    -autor: String
+    -codigoStatusLivro: int
+    +obterLivroPorNumero(int livroId)()
+    +verificarExistenciaLivro(int livroId)()
+    +obterLivroPorUsuario(String emailUsuario)()
+    +salvarLivro(LivroDto livro)()
+    +atualizarLivro(LivroDto livro, String email)()
+    +deletarLivro(int numeroLivro, String email)()
+    +validarExistenciaLivro(int numeroLivro)()
+    +obterLivrosPaginados(int pagina, int tamanhoPagina, String pesquisa, int categoria, int instituicao, int cidade, int solicitacao, String emailUsuario)()
+    +verificarStatusDisponivel(int numeroLivro)()
+    +verificarStatusEmprestado(int numeroLivro)()
+    +verificarStatusDesativado(int numeroLivro)()
+    +verificarStatusIndisponivel(int numeroLivro)()
+    +salvarImagemLivro(String caminhoImagem, int codigoLivro)()
 }
 
-class Solicitacao {
-  - int? _numero
-  - String _emailUsuarioProprietario
-  - String _emailUsuarioCriador
-  - LivrosSolicitacao _livrosUsuarioSolicitante
-  - LivrosSolicitacao? _livrosUsuarioReceptor
-  - FormaEntrega _formaEntrega
-  - DataHora? _dataCriacao
-  - DataHora? _dataEntrega
-  - DataHora? _dataDevolucao
-  - DataHora? _dataAtualizacao
-  - String _informacoesAdicionais
-  - Endereco? _endereco
-  - bool _enderecoUsuarioCriador
-  - TipoSolicitacao _tipoSolicitacao
-  - TipoStatusSolicitacao _status
-  - DataHora? _dataAceite
-  - String? _motivoRecusa
-  - String? _codigoRastreamento
-  + Solicitacao.carregar(...)
-}
-
-class InstituicaoDeEnsino {
-  - int _numero
-  - String _sigla
-  - String _nome
-  + InstituicaoDeEnsino.carregar(int, String, String)
+class LivroSolicitacao {
+    -titulo: String
+    -autor: String
+    -codigoLivro: int
+    -emailUsuario: String
 }
 
 class Endereco {
-  - int? _numero
-  - String? _numeroResidencial
-  - String? _complemento
-  - String _rua
-  - String _cep
-  - String _bairro
-  - Municipio _municipio
-  - bool _principal
-  + Endereco.criar(String?, String?, String, String, String, Municipio, bool)
-  + Endereco.carregar(int?, String?, String?, String, String, String, Municipio, bool)
-  + String _obterCepFormatado()
+    -logradouro: String
+    -codigoCidade: int
+    -enderecoPrincipal: Boolean
+    -cep: String
+    -complemento: String
+    -emailUsuario: String
+    -estado: String
+    -nomeCidade: String
+    -bairro: String
+    -codigoEndereco: int
+    -numero: String
+    +obterEnderecoUsuario(String email)()
+    +salvarEndereco(EnderecoDto endereco, Connection conexao, String email, Boolean emailPrincipal)()
+    +deletarEndereco(int numeroEndereco)()
+    +validarExistencia(String email)()
+    +obterCidades(String uf, String pesquisa)()
 }
 
-class Municipio {
-  - int _numero
-  - String _nome
-  - UF _estado
-  + Municipio.carregar(int, String, UF)
+class Categoria {
+    -id: int
+    -descricao: String
+    +obterCategoria()()
+    +validarExistencia(String categoria)()
+    +salvarCategoria(CategoriaDto categoria)()
+    +deletarCategoria(int numeroCategoria)()
 }
 
-class Usuario {
-  - String _nome
-  - String _nomeUsuario
-  - Email _email
-  - Telefone? _telefone
-  - int _numeroDeLivros
-  - String? _descricao
-  - String? _nomeMunicipio
-  - InstituicaoDeEnsino? _instituicaoDeEnsino
-  - int? _numeroEndereco
-  - String _imagem
-  - Endereco? _endereco
-  - Senha? _senha
-  - TipoUsuario _tipoUsuario
-  + Usuario.carregar(...)
+class Instituicao {
+    -id: int
+    -sigla: String
+    -nome: String
+    +obterInstituicaoPorEstado(String uf)()
+    +obterTodasInstituicoes(String pesquisa)()
+    +validarExistencia(String instituicao)()
+    +salvarInstituicao(InstituicaoDto instituicao)()
+    +deletarInstituicao(int numeroInstituicao)()
+    +salvarInstituicoesDeMapa(Map<String, List<String>> instituicoes)()
+    +executarUpdate(String query)()
 }
 
-Municipio *-- Endereco
-Livro *-- Solicitacao
-Usuario *-- Endereco
-Usuario *-- InstituicaoDeEnsino
+class Comentario {
+    -dataCriacao: String
+    -id: int
+    -descricao: String
+    -emailUsuarioPerfil: String
+    -horaCriacao: String
+    -nomeUsuarioCriador: String
+    -emailUsuarioCriador: String
+    +obterComentarioPorPerfilUsuario(String comentarioPerfil)()
+    +deletarComentario(int comentario)()
+    +salvarComentario(ComentarioDto comentario)()
+    +obterComentariosFeitos(String emailUsuarioPerfil)()
+}
+
+class TipoSolicitacao {
+    +EMPRESTIMO: String
+    +DOACAO: String
+    +TROCA: String
+}
+
+class TipoUsuario {
+    +USUARIO: String
+    +ADMINISTRADOR: String
+}
+
+class TipoStatusLivro {
+    +DESATIVADO: String
+    +DISPONIVEL: String
+    +INDISPONIVEL: String
+    +EMPRESTADO: String
+}
+
+class TipoStatusSolicitacao {
+    +RECUSADA: String
+    +CANCELADA: String
+    +FINALIZADA: String
+    +ACEITA: String
+    +PENDENTE: String
+}
+
+class NotificacaoSolicitacao {
+    -codigoSolicitacao: int
+    -codigoStatusSolicitacao: int
+    -emailUsuarioSolicitante: String
+}
+
+
+Usuario --> Endereco
+Solicitação --> LivroSolicitacao
+LivroSolicitacao --> Livro
+Solicitação --> Endereco
+Livro --> Categoria
+Livro --> Instituicao
+Usuario --> Comentario
+Solicitação --> TipoSolicitacao
+Usuario --> TipoUsuario
+Livro --> TipoStatusLivro
+Solicitação --> TipoStatusSolicitacao
+Solicitação --> NotificacaoSolicitacao
+NotificacaoSolicitacao --> TipoStatusSolicitacao
+
 
 @enduml

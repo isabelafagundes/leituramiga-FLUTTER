@@ -24,8 +24,10 @@ class FormularioLivroWidget extends StatelessWidget {
   final Function() criarLivro;
   final Map<int, Categoria> categoriasPorId;
   final int? numeroCategoria;
+  final String? imagem;
   final Function(TipoSolicitacao) selecionarTipoSolicitacao;
   final List<TipoSolicitacao> tiposSolicitacao;
+  final bool edicao;
 
   const FormularioLivroWidget({
     super.key,
@@ -41,6 +43,8 @@ class FormularioLivroWidget extends StatelessWidget {
     required this.criarLivro,
     required this.selecionarTipoSolicitacao,
     required this.tiposSolicitacao,
+    this.imagem,
+    this.edicao = false,
   });
 
   @override
@@ -56,6 +60,7 @@ class FormularioLivroWidget extends StatelessWidget {
             children: [
               ImagemWidget(
                 tema: tema,
+                imagemBase64: imagem,
                 salvarImagem: salvarImagem,
               ),
               SizedBox(height: tema.espacamento * 2),
@@ -174,7 +179,7 @@ class FormularioLivroWidget extends StatelessWidget {
               SizedBox(height: tema.espacamento * 4),
               BotaoWidget(
                 tema: tema,
-                texto: 'Criar livro',
+                texto: edicao ? "Salvar livro" : 'Criar livro',
                 icone: Icon(
                   Icons.check,
                   color: Color(tema.base200),

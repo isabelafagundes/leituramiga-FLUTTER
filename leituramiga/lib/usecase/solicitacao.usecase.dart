@@ -1,16 +1,18 @@
-import 'package:leituramiga/domain/livro/livro.dart';
 import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:leituramiga/domain/solicitacao/livro_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/livros_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/repo/solicitacao.repo.dart';
 import 'package:leituramiga/service/solicitacao.service.dart';
+import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:leituramiga/state/solicitacao.state.dart';
 
 class SolicitacaoUseCase {
   final SolicitacaoState _state;
   final SolicitacaoRepo _repo;
   final SolicitacaoService _service;
+
+  AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
   const SolicitacaoUseCase(this._state, this._repo, this._service);
 
@@ -20,7 +22,10 @@ class SolicitacaoUseCase {
   }
 
   Future<void> aceitarSolicitacao(int numero) async {
-    await _service.aceitarSolicitacao(numero);
+    LivrosSolicitacao? livrosTroca = _state.livrosSelecionados.isEmpty
+        ? null
+        : LivrosSolicitacao.criar(_autenticacaoState.emailUsuario, _state.livrosSelecionados);
+    await _service.aceitarSolicitacao(numero, livrosTroca);
     await obterSolicitacao(numero);
   }
 
@@ -50,10 +55,13 @@ class SolicitacaoUseCase {
   void selecionarLivro(ResumoLivro livro) {
     LivroSolicitacao livroSolicitacao = LivroSolicitacao.criarDeResumoLivro(livro);
     if (_state.verificarSelecao(livro)) {
+      print("Removendo livro da seleção... ${livro.numero}");
       _state.livrosSelecionados.removeWhere((element) => element.numero == livro.numero);
     } else {
+      print("Adicionando livro à seleção... ${livro.numero}");
       _state.livrosSelecionados.add(livroSolicitacao);
     }
+    print("Livro selecionado: ${_state.verificarSelecao(livro)}");
   }
 
   void removerLivro(LivroSolicitacao livro) {

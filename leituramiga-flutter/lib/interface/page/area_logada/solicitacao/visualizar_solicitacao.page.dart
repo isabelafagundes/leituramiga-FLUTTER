@@ -4,7 +4,9 @@ import 'package:leituramiga/component/solicitacao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/domain/data_hora.dart';
 import 'package:leituramiga/domain/endereco/endereco.dart';
+import 'package:leituramiga/domain/endereco/municipio.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
+import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
@@ -66,6 +68,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
 
   Tema get tema => _temaState.temaSelecionado!;
   final TipoSolicitacao _tipoSolicitacao = TipoSolicitacao.TROCA;
+  FormaEntrega? formaEntregaSelecionada;
 
   @override
   void initState() {
@@ -126,7 +129,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
                     altura: 45,
                     largura: 140,
                     texto: "Salvar",
-                    aoClicar: () {},
+                    aoClicar: salvarSolicitacao,
                     icone: Icon(
                       Icons.check,
                       color: kCorFonte,
@@ -140,9 +143,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
                     altura: 45,
                     largura: 140,
                     texto: "Cancelar",
-                    aoClicar: () {
-                      Navigator.pop(context);
-                    },
+                    aoClicar: () => Navigator.pop(context),
                     icone: Icon(
                       Icons.close,
                       color: Color(tema.baseContent),
@@ -230,7 +231,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
   Future<void> salvarSolicitacao() async {
     await notificarCasoErro(() async {
       if (!validarCamposPreenchidos()) throw Exception("Preencha todos os campos");
-      _solicitacaoComponent.atualizarSolicitacaoMemoria(_criarSolicitacao());
+      _solicitacaoComponent.atualizarSolicitacaoMemoria(solicitacao);
       await _solicitacaoComponent.atualizarSolicitacao();
       Navigator.pop(context);
     });
@@ -274,36 +275,57 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
     }
   }
 
-  Solicitacao _criarSolicitacao() {
-    Solicitacao solicitacao = Solicitacao.criar(
-      null,
-      _autenticacaoState.usuario!.email.endereco,
-      _usuarioComponent.livroSelecionado!.emailUsuario,
-      _solicitacaoComponent.formaEntregaSelecionada!,
-      DataHora.deString(controllerDataEntrega.text),
-      DataHora.deString(controllerDataDevolucao.text),
-      DataHora.deString(controllerDataDevolucao.text),
-      DataHora.deString(controllerDataDevolucao.text),
-      controllerInformacoes.text,
-      Endereco.criar(
-        controllerRua.text,
-        controllerBairro.text,
-        controllerCep.text,
-        controllerNumero.text,
-        controllerComplemento.text,
-        _solicitacaoComponent.municipioSelecionado!,
-        false,
-      ),
-      TipoStatusSolicitacao.PENDENTE,
-      null,
-      null,
-      _tipoSolicitacao,
-      null,
-      _solicitacaoComponent.solicitacaoSelecionada!.livrosSolicitante,
-      _solicitacaoComponent.solicitacaoSelecionada!.livrosReceptor,
-    );
+  Solicitacao get solicitacao {
+    try {
+      DataHora? dataEntrega = controllerDataEntrega.text.isEmpty && controllerHoraEntrega.text.isEmpty
+          ? null
+          : DataHora.deString("${controllerDataEntrega.text} ${controllerHoraEntrega.text}", "dd/MM/yyyy HH:mm");
+      DataHora? dataDevolucao = controllerDataDevolucao.text.isEmpty && controllerHoraDevolucao.text.isEmpty
+          ? null
+          : DataHora.deString("${controllerDataDevolucao.text} ${controllerHoraDevolucao.text}", "dd/MM/yyyy HH:mm");
 
-    return solicitacao;
+      return Solicitacao.criar(
+        _solicitacaoComponent.solicitacaoSelecionada!.numero,
+        _usuarioComponent.livroSelecionado!.emailUsuario,
+        _autenticacaoState.usuario!.email.endereco,
+        formaEntregaSelecionada ?? FormaEntrega.CORREIOS,
+        _solicitacaoComponent.solicitacaoSelecionada!.dataCriacao,
+        dataEntrega,
+        dataDevolucao,
+        _solicitacaoComponent.solicitacaoSelecionada!.dataAtualizacao,
+        controllerInformacoes.text,
+        _solicitacaoComponent.utilizarEnderecoPerfil ? null : endereco!,
+        _solicitacaoComponent.solicitacaoSelecionada!.status,
+        _solicitacaoComponent.solicitacaoSelecionada!.dataAceite,
+        "",
+        _tipoSolicitacao,
+        null,
+        _solicitacaoComponent.solicitacaoSelecionada!.livrosSolicitante,
+        _solicitacaoComponent.solicitacaoSelecionada!.livrosReceptor,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Endereco? get endereco {
+    Municipio? municipio = _usuarioComponent.municipiosPorNumero.values
+        .where(
+          (element) => element.nome == controllerCidade.text,
+    )
+        .firstOrNull;
+
+    if (municipio == null) return null;
+
+    return Endereco.criar(
+      controllerNumero.text.trim(),
+      controllerComplemento.text.trim(),
+      controllerRua.text.trim(),
+      controllerCep.text.replaceAll("-", "").replaceAll(" ", "").trim(),
+      controllerBairro.text.trim(),
+      municipio,
+      false,
+    );
   }
 
   void abrirTimePicker(bool ehHoraDevolucao) {

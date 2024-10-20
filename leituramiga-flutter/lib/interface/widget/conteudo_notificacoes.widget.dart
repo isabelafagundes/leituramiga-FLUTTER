@@ -180,10 +180,7 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
                           ResumoSolicitacao? resumoSolicitacao = solicitacaoComponent.itensPaginados[index];
                           if (_exibindoEmAndamento && resumoSolicitacao != null) {
                             return Padding(
-                              padding: EdgeInsets.only(
-                                right: widget.tema.espacamento * 2,
-                                bottom: widget.tema.espacamento * 2,
-                              ),
+                              padding: EdgeInsets.only(bottom: widget.tema.espacamento * 2),
                               child: CardSolicitacaoWidget(
                                 tema: widget.tema,
                                 solicitacao: resumoSolicitacao,

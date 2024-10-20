@@ -26,6 +26,7 @@ class TabWidget extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           String opcao = opcoes[index];
+          if(opcao.isEmpty) return SizedBox.shrink();
           return MouseRegion(
             cursor: SystemMouseCursors.click,
             child: GestureDetector(

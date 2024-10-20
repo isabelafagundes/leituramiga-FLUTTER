@@ -64,7 +64,7 @@ class _ImagemWidgetState extends State<ImagemWidget> {
                   borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
                   child: Image.memory(
                     _imagemBytes!,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
         ),
@@ -109,6 +109,13 @@ class _ImagemWidgetState extends State<ImagemWidget> {
 
       final imagemTemporaria = input.files!.first;
 
+      String nomeArquivo = imagemTemporaria.name;
+      String extensao = nomeArquivo.split('.').last.toLowerCase();
+
+      if (!['png', 'jpeg', 'jpg', 'gif'].contains(extensao)) {
+        throw Exception("Formato de arquivo não suportado: $extensao");
+      }
+
       final reader = FileReader();
       reader.readAsArrayBuffer(imagemTemporaria);
 
@@ -122,7 +129,7 @@ class _ImagemWidgetState extends State<ImagemWidget> {
         _imagemBytes = bytes;
       });
 
-      String base64 = await converterParaBase64(imagem!);
+      String base64 = 'data:image/$extensao;base64,' + base64Encode(bytes);
       widget.salvarImagem(base64);
     } catch (e) {
       print("Erro ao carregar imagem: $e");
@@ -130,6 +137,7 @@ class _ImagemWidgetState extends State<ImagemWidget> {
       rethrow;
     }
   }
+
 
   Future<String> converterParaBase64(File file) async {
     final reader = FileReader();

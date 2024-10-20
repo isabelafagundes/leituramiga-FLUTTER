@@ -158,12 +158,14 @@ class CardLivroWidget extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Color(tema.accent),
+                      color: !ativado ? Color(tema.accent) : Color(tema.base200),
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    child: Icon(
-                      Icons.add,
-                      color: kCorFonte,
+                    child: Center(
+                      child: Icon(
+                        ativado ? Icons.close : Icons.add,
+                        color: ativado ? Color(tema.accent) : kCorFonte,
+                      ),
                     ),
                   ),
                 ),
@@ -178,17 +180,40 @@ class CardLivroWidget extends StatelessWidget {
     if (imagem == null) {
       return Container(
         decoration: BoxDecoration(
-          color: Color(tema.neutral).withOpacity(.1),
+          color: Color(tema.neutral).withOpacity(.3),
           borderRadius: BorderRadius.circular(tema.tamanhoFonteP),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.image_not_supported,
+                  color: Color(tema.base200),
+                  size: tema.tamanhoFonteXG * 2,
+                ),
+              ],
+            ),
+          ],
         ),
       );
     }
 
     final decodedBytes = base64Decode(imagem!);
 
-    return Image.memory(
-      decodedBytes,
-      fit: BoxFit.fitHeight,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(tema.tamanhoFonteM),
+        color: Color(tema.neutral).withOpacity(.3),
+        image: DecorationImage(
+          image: MemoryImage(decodedBytes),
+          fit: BoxFit.fitHeight,
+        ),
+      ),
     );
   }
 }

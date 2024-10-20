@@ -89,6 +89,7 @@ class _LivrosPageState extends State<LivrosPage> {
                                 ImagemWidget(
                                   tema: tema,
                                   visualizacao: true,
+                                  imagemBase64: _livrosComponent.livroSelecionado!.imagemLivro,
                                   salvarImagem: (imagem64) => setState(() => imagemLivro = imagem64),
                                 ),
                                 SizedBox(height: tema.espacamento * 2),

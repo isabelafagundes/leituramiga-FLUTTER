@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
-import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
@@ -128,9 +127,9 @@ class _PerfilPageState extends State<PerfilPage> {
                         GridLivroWidget(
                           tema: tema,
                           livros: _usuarioComponent.itensPaginados,
-                          aoClicarLivro: (numeroLivro) async => Rota.navegarComArgumentos(
+                          aoClicarLivro: (livro) async => Rota.navegarComArgumentos(
                             context,
-                            LivrosRoute(numeroLivro: numeroLivro.numero),
+                            EditarLivroRoute(codigoLivro: livro.numero),
                           ),
                         ),
                       ],

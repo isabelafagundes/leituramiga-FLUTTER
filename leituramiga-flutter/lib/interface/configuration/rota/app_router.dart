@@ -17,6 +17,7 @@ import 'package:projeto_leituramiga/interface/page/autenticacao/cadastro_usuario
 import 'package:projeto_leituramiga/interface/page/area_logada/home.page.dart';
 import 'package:projeto_leituramiga/interface/page/autenticacao/esqueceu_senha.page.dart';
 import 'package:projeto_leituramiga/interface/page/autenticacao/login.page.dart';
+import 'package:projeto_leituramiga/interface/page/editar_livro.page.dart';
 part 'app_router.gr.dart';
 
 @AutoRouterConfig()

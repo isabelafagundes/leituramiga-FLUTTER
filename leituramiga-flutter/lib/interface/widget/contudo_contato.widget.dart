@@ -25,7 +25,7 @@ class ConteudoContatoWidget extends StatelessWidget {
           "Contato do usuário: @${usuarioCriador.nomeUsuario}",
           null,
         ),
-        SizedBox(height: tema.espacamento * 2),
+        SizedBox(height: tema.espacamento),
         _obterTextoComIcone(
           "Nome",
           Icon(
@@ -58,14 +58,16 @@ class ConteudoContatoWidget extends StatelessWidget {
             ),
           ),
           TextoWidget(texto: usuarioCriador.telefone?.telefoneFormatado ?? '', tema: tema),
+          SizedBox(height: tema.espacamento * 2),
         ],
+        Divider(color: Color(tema.accent), thickness: 1),
         if (usuarioDoador != null) ...[
           SizedBox(height: tema.espacamento * 2),
           _obterTextoComIcone(
             "Contato do usuário: @${usuarioDoador?.nomeUsuario}",
             null,
           ),
-          SizedBox(height: tema.espacamento * 2),
+          SizedBox(height: tema.espacamento),
           _obterTextoComIcone(
             "Nome",
             Icon(

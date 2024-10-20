@@ -92,7 +92,7 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
                     semLabel: true,
                     executar: () {
                       widget.selecionarItem(MenuLateral.SOLICITACOES);
-                      Rota.navegar(context, MenuLateral.SOLICITACOES.rota);
+                      _exibirPopUp(context);
                     },
                     ativado: widget.itemSelecionado == MenuLateral.SOLICITACOES,
                     nomeSvg: widget.itemSelecionado == MenuLateral.SOLICITACOES

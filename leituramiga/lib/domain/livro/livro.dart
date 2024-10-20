@@ -3,6 +3,7 @@ import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:leituramiga/domain/livro/tipo_status_livro.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/super/entidade.dart';
+import 'package:leituramiga/domain/usuario/email.dart';
 
 class Livro extends Entidade {
   final int? _numero;
@@ -66,7 +67,7 @@ class Livro extends Entidade {
       "nomeInstituicao": _nomeInstituicao,
       "nomeCidade": _nomeMunicipio,
       "nomeCategoria": _nomeCategoria,
-      "imagem" :_imagemLivro
+      "imagem": _imagemLivro
     };
   }
 
@@ -80,29 +81,29 @@ class Livro extends Entidade {
       _descricao,
       _nome,
       _nomeAutor,
+      Email.criar(_emailUsuario),
       _imagemLivro,
     );
   }
 
   factory Livro.carregarDeMapa(Map<String, dynamic> livroAsMap) {
     return Livro.carregar(
-      livroAsMap['codigoLivro'],
-      livroAsMap['titulo'],
-      livroAsMap['autor'],
-      livroAsMap['descricao'],
-      livroAsMap['estadoFisico'],
-      livroAsMap['codigoCategoria'],
-      livroAsMap['tipoSolicitacao'].toString().split(",").map((e) => TipoSolicitacao.deNumero(int.parse(e))).toList(),
-      livroAsMap['emailUsuario'],
-      livroAsMap['dataCriacao'] == null ? null : DataHora.criar(livroAsMap['dataCriacao']),
-      livroAsMap['dataUltimaSolicitacao'] == null ? null : DataHora.criar(livroAsMap['dataUltimaSolicitacao']),
-      TipoStatusLivro.obterDeNumero(livroAsMap['codigoStatusLivro']),
-      livroAsMap['nomeUsuario'],
-      livroAsMap['nomeInstituicao'],
-      livroAsMap['nomeCidade'],
-      livroAsMap['categoria'],
-      livroAsMap['imagem']
-    );
+        livroAsMap['codigoLivro'],
+        livroAsMap['titulo'],
+        livroAsMap['autor'],
+        livroAsMap['descricao'],
+        livroAsMap['estadoFisico'],
+        livroAsMap['codigoCategoria'],
+        livroAsMap['tipoSolicitacao'].toString().split(",").map((e) => TipoSolicitacao.deNumero(int.parse(e))).toList(),
+        livroAsMap['emailUsuario'],
+        livroAsMap['dataCriacao'] == null ? null : DataHora.criar(livroAsMap['dataCriacao']),
+        livroAsMap['dataUltimaSolicitacao'] == null ? null : DataHora.criar(livroAsMap['dataUltimaSolicitacao']),
+        TipoStatusLivro.obterDeNumero(livroAsMap['codigoStatusLivro']),
+        livroAsMap['nomeUsuario'],
+        livroAsMap['nomeInstituicao'],
+        livroAsMap['nomeCidade'],
+        livroAsMap['categoria'],
+        livroAsMap['imagem']);
   }
 
   String get nome => _nome;
@@ -130,4 +131,6 @@ class Livro extends Entidade {
   String? get nomeMunicipio => _nomeMunicipio;
 
   String? get nomeInstituicao => _nomeInstituicao;
+
+  String? get imagemLivro => _imagemLivro;
 }
