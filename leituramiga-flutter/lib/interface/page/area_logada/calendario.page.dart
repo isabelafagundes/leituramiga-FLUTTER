@@ -7,9 +7,6 @@ import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/notificacao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/solicitacao_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/service/mock/solicitacao_mock.service.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -66,7 +63,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
         tema: tema,
         voltar: () => Rota.navegar(context, Rota.HOME),
         atualizar: atualizar,
-        carregando: solicitacaoComponent.carregando || solicitacaoComponent.itensPaginados.isEmpty || !mounted,
+        carregando: solicitacaoComponent.carregando || !mounted,
         child: SizedBox(
           width: Responsive.largura(context),
           height: Responsive.altura(context),

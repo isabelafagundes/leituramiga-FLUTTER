@@ -8,4 +8,6 @@ abstract class EnderecoRepo {
   Future<void> atualizarEndereco(Endereco endereco);
 
   Future<List<Municipio>> obterMunicipios(UF uf, [String? pesquisa]);
+
+  Future<void> desativarEndereco(int codigoEndereco);
 }

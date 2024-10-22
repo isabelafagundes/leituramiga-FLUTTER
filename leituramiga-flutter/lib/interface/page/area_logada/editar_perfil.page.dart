@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:leituramiga/component/autenticacao.component.dart';
 import 'package:leituramiga/component/instituicao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/domain/endereco/endereco.dart';
@@ -20,7 +21,9 @@ import 'package:projeto_leituramiga/interface/widget/botao/botao_menu.widget.dar
 import 'package:projeto_leituramiga/interface/widget/formulario/formulario_edicao_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_endereco.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 @RoutePage()
@@ -34,6 +37,7 @@ class EditarPefilPage extends StatefulWidget {
 class _EditarPefilPageState extends State<EditarPefilPage> {
   UsuarioComponent _usuarioComponent = UsuarioComponent();
   InstituicaoComponent _instituicaoComponent = InstituicaoComponent();
+  AutenticacaoComponent _autenticacaoComponent = AutenticacaoComponent();
   final TextEditingController controllerRua = TextEditingController();
   final TextEditingController controllerBairro = TextEditingController();
   final TextEditingController controllerCep = TextEditingController();
@@ -69,10 +73,18 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       AppModule.instituicaoEnsinoRepo,
       atualizar,
     );
+    _autenticacaoComponent.inicializar(
+      AppModule.autenticacaoService,
+      AppModule.sessaoService,
+      AppModule.usuarioRepo,
+      atualizar,
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _usuarioComponent.obterPerfil();
       await _instituicaoComponent.obterInstituicoes();
       await notificarCasoErro(() async => await _usuarioComponent.obterEndereco());
+      if (_usuarioComponent.enderecoEdicao != null)
+        await _usuarioComponent.obterCidades(_usuarioComponent.enderecoEdicao!.municipio.estado);
       _preencherControllers();
     });
   }
@@ -188,15 +200,64 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
           controllerComplemento: controllerComplemento,
           controllerCidade: controllerCidade,
           controllerEstado: controllerEstado,
-          botaoInferior: BotaoWidget(
-            tema: tema,
-            texto: 'Salvar',
-            nomeIcone: "seta/arrow-long-right",
-            icone: Icon(Icons.check, color: kCorFonte),
-            aoClicar: _salvarEndereco,
+          botaoInferior: Column(
+            children: [
+              BotaoWidget(
+                tema: tema,
+                texto: 'Salvar',
+                nomeIcone: "seta/arrow-long-right",
+                icone: Icon(Icons.check, color: kCorFonte),
+                aoClicar: _salvarEndereco,
+              ),
+              SizedBox(height: tema.espacamento * 2),
+              BotaoWidget(
+                tema: tema,
+                texto: 'Excluir endereço',
+                nomeIcone: "seta/arrow-long-right",
+                corFundo: Color(tema.error),
+                icone: Icon(Icons.restore_from_trash_sharp, color: kCorFonte),
+                aoClicar: _excluirEndereco,
+              ),
+            ],
           ),
         ),
-      _ => const SizedBox(),
+      EditarPerfil.EXCLUIR => Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TextoWidget(
+              texto: "Excluir usuário",
+              tema: tema,
+              tamanho: tema.tamanhoFonteXG,
+              weight: FontWeight.w500,
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            SvgWidget(
+              nomeSvg: "",
+              caminhoCompleto: Emoji.ERRO.icone,
+              altura: 90,
+              cor: Color(tema.baseContent),
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            TextoWidget(
+              texto:
+                  "Ao selecionar \"excluir\", sua conta será desativada e você não poderá mais usar o LeiturAmiga :(\nTem certeza que deseja continuar? ",
+              tema: tema,
+              tamanho: tema.tamanhoFonteG,
+              align: TextAlign.center,
+            ),
+            SizedBox(height: tema.espacamento * 4),
+            SizedBox(height: tema.espacamento * 2),
+            BotaoWidget(
+              tema: tema,
+              texto: 'Sim, excluir',
+              nomeIcone: "seta/arrow-long-right",
+              corFundo: Color(tema.error),
+              icone: Icon(Icons.restore_from_trash_sharp, color: kCorFonte),
+              aoClicar: _excluirUsuario,
+            ),
+          ],
+        ),
+      _ => SizedBox(),
     };
   }
 
@@ -213,6 +274,33 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
     _usuarioComponent.atualizarEnderecoMemoria(endereco!);
     await notificarCasoErro(() async => await _usuarioComponent.atualizarEndereco());
     Notificacoes.mostrar("Endereço atualizado com sucesso", Emoji.SUCESSO);
+  }
+
+  Future<void> _excluirEndereco() async {
+    bool? excluir = await showDialog(
+        context: context, builder: (context) => _obterPopUpPadrao(context, "Deseja realmente excluir o endereço?"));
+    if (excluir == null) return;
+    if (excluir)
+      await notificarCasoErro(() async {
+        await _usuarioComponent.desativarEndereco(_usuarioComponent.enderecoEdicao!.numero!);
+        Notificacoes.mostrar("Endereço excluído com sucesso!", Emoji.SUCESSO);
+        Rota.navegar(context, Rota.PERFIL);
+      });
+  }
+
+  Future<void> _excluirUsuario() async {
+    bool? excluir = await showDialog(
+        context: context,
+        builder: (context) {
+          return _obterPopUpPadrao(context, "Deseja realmente excluir sua conta?");
+        });
+    if (excluir == null) return;
+    if (excluir)
+      await notificarCasoErro(() async {
+        await _usuarioComponent.desativarUsuario();
+        await _autenticacaoComponent.deslogar();
+        Rota.navegar(context, Rota.AUTENTICACAO);
+      });
   }
 
   Future<void> _selecionarEstado(String estado) async {
@@ -247,7 +335,8 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
 
     if (municipio == null) return null;
 
-    return Endereco.criar(
+    return Endereco.carregar(
+      _usuarioComponent.enderecoEdicao?.numero,
       controllerNumero.text,
       controllerComplemento.text,
       controllerRua.text,
@@ -302,7 +391,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
     controllerRua.text = _usuarioComponent.enderecoEdicao?.rua ?? "";
     controllerBairro.text = _usuarioComponent.enderecoEdicao?.bairro ?? "";
     controllerCep.text = _usuarioComponent.enderecoEdicao?.cep ?? "";
-    controllerNumero.text = _usuarioComponent.enderecoEdicao?.numero?.toString() ?? "";
+    controllerNumero.text = _usuarioComponent.enderecoEdicao?.numeroResidencial?.toString() ?? "";
     controllerComplemento.text = _usuarioComponent.enderecoEdicao?.complemento ?? "";
     controllerCidade.text = _usuarioComponent.enderecoEdicao?.municipio.nome ?? "";
     controllerEstado.text = _usuarioComponent.enderecoEdicao?.municipio.estado.descricao ?? "";
@@ -313,6 +402,64 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
 
   void atualizarPagina(EditarPerfil? etapa) {
     setState(() => _estagioAtual = etapa);
+  }
+
+  Widget _obterPopUpPadrao(BuildContext context, String texto) {
+    return PopUpPadraoWidget(
+      tema: tema,
+      naoRedimensionar: true,
+      conteudo: Container(
+        height: 320,
+        width: 320,
+        child: Column(
+          children: [
+            SizedBox(height: tema.espacamento * 4),
+            Icon(
+              Icons.warning_rounded,
+              color: Color(tema.baseContent),
+              size: 80,
+            ),
+            SizedBox(height: tema.espacamento * 3),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
+              child: TextoWidget(
+                tema: tema,
+                texto: texto,
+                weight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(height: tema.espacamento * 4),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                BotaoWidget(
+                  tema: tema,
+                  icone: Icon(
+                    Icons.close,
+                    color: Color(tema.baseContent),
+                  ),
+                  texto: "Fechar",
+                  corFundo: Color(tema.base200),
+                  corTexto: Color(tema.baseContent),
+                  aoClicar: () => Navigator.of(context).pop(false),
+                ),
+                SizedBox(height: tema.espacamento * 2),
+                BotaoWidget(
+                  tema: tema,
+                  icone: Icon(
+                    Icons.restore_from_trash,
+                    color: kCorFonte,
+                  ),
+                  corFundo: Color(tema.error),
+                  texto: "Excluir",
+                  aoClicar: () => Navigator.of(context).pop(true),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

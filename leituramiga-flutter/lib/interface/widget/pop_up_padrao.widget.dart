@@ -7,6 +7,7 @@ class PopUpPadraoWidget extends StatelessWidget {
   final double? largura;
   final double? altura;
   final Widget conteudo;
+  final bool naoRedimensionar;
 
   const PopUpPadraoWidget({
     super.key,
@@ -14,11 +15,12 @@ class PopUpPadraoWidget extends StatelessWidget {
     this.largura,
     this.altura,
     required this.conteudo,
+    this.naoRedimensionar = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Responsive.larguraM(context)
+    return Responsive.larguraM(context) && !naoRedimensionar
         ? Scaffold(
             backgroundColor: Color(tema.base100),
             body: conteudo,

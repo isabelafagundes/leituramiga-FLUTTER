@@ -24,6 +24,7 @@ class FormularioLivroWidget extends StatelessWidget {
   final Function() criarLivro;
   final Map<int, Categoria> categoriasPorId;
   final int? numeroCategoria;
+  final Widget? widgetInferior;
   final String? imagem;
   final Function(TipoSolicitacao) selecionarTipoSolicitacao;
   final List<TipoSolicitacao> tiposSolicitacao;
@@ -44,7 +45,7 @@ class FormularioLivroWidget extends StatelessWidget {
     required this.selecionarTipoSolicitacao,
     required this.tiposSolicitacao,
     this.imagem,
-    this.edicao = false,
+    this.edicao = false, this.widgetInferior,
   });
 
   @override
@@ -187,6 +188,9 @@ class FormularioLivroWidget extends StatelessWidget {
                 ),
                 aoClicar: criarLivro,
               ),
+              SizedBox(height: tema.espacamento * 2),
+              widgetInferior ?? SizedBox(),
+              SizedBox(height: tema.espacamento * 4),
             ],
           ),
         ),

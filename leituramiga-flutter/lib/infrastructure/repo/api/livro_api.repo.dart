@@ -40,7 +40,7 @@ class LivroApiRepo extends LivroRepo with ConfiguracaoApiState {
   }
 
   @override
-  Future<void> deletarLivro(int numero) async {
+  Future<void> desativarLivro(int numero) async {
     await _client.delete("$host/livro/$numero").catchError((erro) {
       throw erro;
     });

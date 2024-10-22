@@ -173,4 +173,11 @@ class UsuarioComponent extends State
       mensagemErro: "Não foi possível obter o endereço",
     );
   }
+
+  Future<void> desativarEndereco(int endereco) async {
+    await executar(
+      rotina: () => _enderecoUseCase.desativarEndereco(endereco),
+      mensagemErro: "Não foi possível desativar o endereço",
+    );
+  }
 }

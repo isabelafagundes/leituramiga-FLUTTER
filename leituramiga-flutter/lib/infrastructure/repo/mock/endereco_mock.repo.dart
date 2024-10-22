@@ -55,4 +55,10 @@ class EnderecoMockRepo extends EnderecoRepo {
     // TODO: implement obterMunicipios
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> desativarEndereco(int codigoEndereco) {
+    // TODO: implement desativarEndereco
+    throw UnimplementedError();
+  }
 }

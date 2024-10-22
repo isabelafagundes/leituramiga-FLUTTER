@@ -20,6 +20,11 @@ class EnderecoUseCase {
     await _repo.atualizarEndereco(_state.enderecoEdicao!);
   }
 
+  Future<void> desativarEndereco(int endereco) async {
+    await _repo.desativarEndereco(endereco);
+    _state.enderecoEdicao = null;
+  }
+
   void atualizarEnderecoEmMemoria(Endereco endereco) {
     _state.enderecoEdicao = endereco;
   }

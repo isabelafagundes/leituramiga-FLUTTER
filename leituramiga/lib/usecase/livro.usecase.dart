@@ -13,13 +13,15 @@ class LivroUseCase {
     if (_state.livroEdicao == null) return;
     await _repo.atualizarLivro(_state.livroEdicao!);
   }
-  
+
   void salvarLivroMemoria(Livro livro) {
     _state.livroEdicao = livro;
   }
 
   Future<void> excluirLivro(int numero) async {
-    await _repo.deletarLivro(numero);
+    await _repo.desativarLivro(numero);
+    _state.livroSelecionado = null;
+    _state.livroEdicao = null;
   }
 
   Future<void> obterLivro(int numero) async {

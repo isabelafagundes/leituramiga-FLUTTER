@@ -19,7 +19,22 @@ class EnderecoApiRepo extends EnderecoRepo with ConfiguracaoApiState {
 
   @override
   Future<void> atualizarEndereco(Endereco endereco) async {
-    await _client.post("$host/endereco", data: endereco.paraMapa()).catchError((erro) {
+    print(endereco.paraMapa());
+    if (endereco.numero == null) {
+      await _salvarEndereco(endereco);
+    } else {
+      await _atualizarEndereco(endereco);
+    }
+  }
+
+  Future<void> _salvarEndereco(Endereco endereco) async {
+    await _client.post("$host/salvar-endereco", data: endereco.paraMapa()).catchError((erro) {
+      throw erro;
+    });
+  }
+
+  Future<void> _atualizarEndereco(Endereco endereco) async {
+    await _client.post("$host/atualizar-endereco", data: endereco.paraMapa()).catchError((erro) {
       throw erro;
     });
   }
@@ -39,5 +54,12 @@ class EnderecoApiRepo extends EnderecoRepo with ConfiguracaoApiState {
     return await _client.get(url).catchError((erro) {
       throw erro;
     }).then((response) => (response.data as List).map((e) => Municipio.carregarDeMapa(e)).toList());
+  }
+
+  @override
+  Future<void> desativarEndereco(int codigoEndereco)async {
+    await _client.delete("$host/endereco/$codigoEndereco").catchError((erro) {
+      throw erro;
+    });
   }
 }

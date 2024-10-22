@@ -15,7 +15,7 @@ class LivroMockRepo extends LivroRepo {
   }
 
   @override
-  Future<void> deletarLivro(int numero) {
+  Future<void> desativarLivro(int numero) {
     // TODO: implement excluirLivro
     throw UnimplementedError();
   }

@@ -7,14 +7,18 @@ import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:leituramiga/state/filtros.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
+import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/formulario/formulario_livro.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 @RoutePage()
 class EditarLivroPage extends StatefulWidget {
@@ -98,6 +102,14 @@ class _EditarLivroPageState extends State<EditarLivroPage> {
                   numeroCategoria: _livrosComponent.categoriaSelecionada?.numero,
                   controllerAutor: controllerAutor,
                   tiposSolicitacao: tiposSolicitacao,
+                  widgetInferior: BotaoWidget(
+                    tema: tema,
+                    texto: 'Excluir livro',
+                    nomeIcone: "seta/arrow-long-right",
+                    corFundo: Color(tema.error),
+                    icone: Icon(Icons.restore_from_trash_sharp, color: kCorFonte),
+                    aoClicar: _excluirLivro,
+                  ),
                   selecionarTipoSolicitacao: (tipo) => setState(
                     () => tiposSolicitacao.contains(tipo) ? tiposSolicitacao.remove(tipo) : tiposSolicitacao.add(tipo),
                   ),
@@ -105,6 +117,76 @@ class _EditarLivroPageState extends State<EditarLivroPage> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _excluirLivro() async {
+    bool? excluir = await showDialog(
+        context: context, builder: (context) => _obterPopUpPadrao(context, "Deseja realmente excluir o livro?"));
+    if (excluir == null) return;
+    if (excluir)
+      await notificarCasoErro(() async {
+        await _livrosComponent.excluirLivro(_livrosComponent.livroSelecionado!.numero!);
+        Notificacoes.mostrar("Livro excluído com sucesso!", Emoji.SUCESSO);
+        Rota.navegar(context, Rota.HOME);
+      });
+  }
+
+  Widget _obterPopUpPadrao(BuildContext context, String texto) {
+    return PopUpPadraoWidget(
+      tema: tema,
+      naoRedimensionar: true,
+      conteudo: Container(
+        height: 320,
+        width: 320,
+        child: Column(
+          children: [
+            SizedBox(height: tema.espacamento * 4),
+            Icon(
+              Icons.warning_rounded,
+              color: Color(tema.baseContent),
+              size: 80,
+            ),
+            SizedBox(height: tema.espacamento * 3),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
+              child: TextoWidget(
+                tema: tema,
+                texto: texto,
+                weight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(height: tema.espacamento * 4),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                BotaoWidget(
+                  tema: tema,
+                  icone: Icon(
+                    Icons.close,
+                    color: Color(tema.baseContent),
+                  ),
+                  texto: "Fechar",
+                  corFundo: Color(tema.base200),
+                  corTexto: Color(tema.baseContent),
+                  aoClicar: () => Navigator.of(context).pop(false),
+                ),
+                SizedBox(height: tema.espacamento * 2),
+                BotaoWidget(
+                  tema: tema,
+                  icone: Icon(
+                    Icons.restore_from_trash,
+                    color: kCorFonte,
+                  ),
+                  corFundo: Color(tema.error),
+                  texto: "Excluir",
+                  aoClicar: () => Navigator.of(context).pop(true),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

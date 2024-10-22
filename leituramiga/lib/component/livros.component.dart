@@ -160,4 +160,11 @@ class LivrosComponent extends State
       mensagemErro: "Não foi possível obter os municípios",
     );
   }
+
+  Future<void> excluirLivro(int codigoLivro) async {
+    await executar(
+      rotina: () async => await _livroUseCase.excluirLivro(codigoLivro),
+      mensagemErro: "Não foi possível excluir o livro",
+    );
+  }
 }

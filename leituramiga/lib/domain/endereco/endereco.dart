@@ -59,6 +59,7 @@ class Endereco extends ObjetoDeValor {
 
   Map<String, dynamic> paraMapa([String? emailUsuario]) {
     return {
+      "codigoEndereco": _numero,
       "logradouro": rua,
       "complemento": complemento,
       "bairro": bairro,
@@ -68,11 +69,12 @@ class Endereco extends ObjetoDeValor {
       "codigoCidade": municipio.numero,
       "emailUsuario": emailUsuario,
       "numero": numeroResidencial,
-      "endereco_principal": _principal,
+      "enderecoPrincipal": _principal,
     };
   }
 
   factory Endereco.carregarDeMapa(Map<String, dynamic> enderecoAsMap) {
+    print(enderecoAsMap);
     return Endereco.carregar(
       enderecoAsMap["codigoEndereco"],
       enderecoAsMap["numero"],
