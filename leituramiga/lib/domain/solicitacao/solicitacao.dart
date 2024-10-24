@@ -106,7 +106,7 @@ class Solicitacao extends Entidade {
   bool get validarPodeFinalizar {
     if (_dataDevolucao != null && _dataDevolucao!.ehAntesDe(DataHora.hoje())) {
       return true;
-    } else if (_dataEntrega != null && _dataEntrega!.ehAntesDe(DataHora.hoje())) {
+    } else if (_dataEntrega != null && _dataEntrega!.ehDepoisDe(DataHora.hoje())) {
       return true;
     }
     return _dataEntrega == null && _dataDevolucao == null;

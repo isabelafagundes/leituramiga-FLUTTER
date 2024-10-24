@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/autenticacao.component.dart';
+import 'package:leituramiga/component/solicitacao.component.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
@@ -45,6 +46,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
   bool ativarAnimacao = false;
   MenuLateral _itemSelecionado = MenuLateral.PAGINA_PRINCIPAL;
   AutenticacaoComponent _autenticacaoComponent = AutenticacaoComponent();
+  SolicitacaoComponent _solicitacaoComponent = SolicitacaoComponent();
 
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
@@ -58,7 +60,18 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
       AppModule.usuarioRepo,
       atualizar,
     );
+    _solicitacaoComponent.inicializar(
+      AppModule.solicitacaoRepo,
+      AppModule.solicitacaoService,
+      AppModule.notificacaoRepo,
+      atualizar,
+    );
+
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _solicitacaoComponent.obterNotificacoes(_autenticacaoState.usuario!.email!.endereco);
+    });
   }
 
   void atualizar() {
@@ -82,6 +95,8 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
               if (!Responsive.larguraM(context)) ...[
                 MenuLateralWidget(
                   tema: widget.tema,
+                  aoClicarNotificacoes: () {},
+                  numeroNotificacoes: _solicitacaoComponent.notificacoes.length,
                   deslogar: _deslogar,
                   alterarTema: _alterarTema,
                   alterarFonte: _alterarFonte,
@@ -151,7 +166,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                   height: 70,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 2),
-                                    color:kCorPessego.withOpacity(.5),
+                                    color: kCorPessego.withOpacity(.5),
                                   ),
                                   child: Center(
                                     child: TextoWidget(
@@ -202,7 +217,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                               )
                             : Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: widget.tema.espacamento * 2,
+                                  horizontal: Responsive.larguraPP(context) ? 0 : widget.tema.espacamento * 2,
                                 ),
                                 child: widget.child,
                               ),
@@ -234,6 +249,8 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
             child: RodapeMobileWidget(
               tema: widget.tema,
               itemSelecionado: _itemSelecionado,
+              aoClicarNotificacoes: () {},
+              numeroNotificacoes: _solicitacaoComponent.notificacoes.length,
               selecionarItem: (item) => setState(() => _itemSelecionado = item),
             ),
           ),
@@ -264,6 +281,8 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                     exibindoMenu: true,
                     exibirSeta: true,
                     deslogar: _deslogar,
+                    aoClicarNotificacoes: () {},
+                    numeroNotificacoes: _solicitacaoComponent.notificacoes.length,
                     itemSelecionado: _itemSelecionado,
                     expandirMenu: () => setState(() {
                       exibindoMenu = false;

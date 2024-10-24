@@ -6,7 +6,9 @@ import 'package:projeto_leituramiga/domain/menu_lateral.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_menu.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/botao_notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/conteudo_notificacoes.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/conteudo_solicitacoes.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
@@ -24,6 +26,8 @@ class BotoesMenuLateralWidget extends StatelessWidget {
   final Function() expandirMenu;
   final Function() alterarTema;
   final Function() alterarFonte;
+  final Function() aoClicarNotificacoes;
+  final int numeroNotificacoes;
 
   const BotoesMenuLateralWidget({
     super.key,
@@ -38,6 +42,8 @@ class BotoesMenuLateralWidget extends StatelessWidget {
     required this.alterarFonte,
     required this.selecionarItem,
     required this.deslogar,
+    required this.aoClicarNotificacoes,
+    required this.numeroNotificacoes,
   });
 
   @override
@@ -65,7 +71,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
                       cor: Color(tema.accent),
                       fontFamily: tema.familiaDeFonteSecundaria,
                       weight: FontWeight.w500,
-                      tamanho: tema.tamanhoFonteG,
+                      tamanho: tema.tamanhoFonteXG,
                     ).animate(onComplete: (controller) => controller.repeat()).shimmer(
                           duration: const Duration(seconds: 1),
                           delay: const Duration(seconds: 1),
@@ -119,7 +125,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
                   if (item.descricao != "Solicitações") {
                     Rota.navegar(context, item.rota);
                   } else {
-                    _exibirPopUp(context);
+                    _exibirPopUpSolicitacoes(context);
                   }
                 },
                 ativado: ativado,
@@ -128,6 +134,19 @@ class BotoesMenuLateralWidget extends StatelessWidget {
           },
         ),
         const Spacer(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            BotaoNotificacaoWidget(
+              aoClicar: () => _exibirPopUpNotificacoes(context),
+              numeroNotificacoes: numeroNotificacoes,
+              tema: tema,
+              modoMinimizado: !exibindoMenu,
+            ),
+          ],
+        ),
+        SizedBox(height: tema.espacamento * 4),
         TextoComSwitcherWidget(
           tema: tema,
           exibirLabel: exibindoMenu,
@@ -188,7 +207,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
     );
   }
 
-  void _exibirPopUp(BuildContext context) async {
+  void _exibirPopUpNotificacoes(BuildContext context) async {
     Rota.navegar(context, Rota.HOME);
     bool? navegarParaSolicitacoes = await showDialog(
       context: context,
@@ -196,6 +215,25 @@ class BotoesMenuLateralWidget extends StatelessWidget {
         return PopUpPadraoWidget(
           tema: tema,
           conteudo: ConteudoNotificacoesWidget(
+            tema: tema,
+            aoVisualizarSolicitacao: () => Navigator.pop(context, true),
+          ),
+        );
+      },
+    );
+    if (navegarParaSolicitacoes == null) return;
+    selecionarItem(navegarParaSolicitacoes ? MenuLateral.SOLICITACOES : MenuLateral.PAGINA_PRINCIPAL);
+    Rota.navegar(context, navegarParaSolicitacoes ? Rota.SUPORTE : Rota.HOME);
+  }
+
+  void _exibirPopUpSolicitacoes(BuildContext context) async {
+    Rota.navegar(context, Rota.HOME);
+    bool? navegarParaSolicitacoes = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return PopUpPadraoWidget(
+          tema: tema,
+          conteudo: ConteudoSolicitacoesWidget(
             tema: tema,
             aoVisualizarSolicitacao: () => Navigator.pop(context, true),
           ),

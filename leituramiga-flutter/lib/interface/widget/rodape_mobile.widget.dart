@@ -4,7 +4,9 @@ import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_menu.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/botao_notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/conteudo_notificacoes.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/conteudo_solicitacoes.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
@@ -12,9 +14,17 @@ class RodapeMobileWidget extends StatefulWidget {
   final Tema tema;
   final MenuLateral itemSelecionado;
   final Function(MenuLateral) selecionarItem;
+  final Function() aoClicarNotificacoes;
+  final int numeroNotificacoes;
 
-  const RodapeMobileWidget(
-      {super.key, required this.tema, required this.itemSelecionado, required this.selecionarItem});
+  const RodapeMobileWidget({
+    super.key,
+    required this.tema,
+    required this.itemSelecionado,
+    required this.selecionarItem,
+    required this.aoClicarNotificacoes,
+    required this.numeroNotificacoes,
+  });
 
   @override
   State<RodapeMobileWidget> createState() => _RodapeMobileWidgetState();
@@ -78,7 +88,15 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
               ],
             ),
           ),
-          SizedBox(width: Responsive.larguraP(context) ? widget.tema.espacamento * 2 : widget.tema.espacamento * 4),
+          SizedBox(width: widget.tema.espacamento * 5),
+          BotaoNotificacaoWidget(
+            tema: widget.tema,
+            modoMobile: true,
+            aoClicar: () => _exibirPopUp(context),
+            numeroNotificacoes: widget.numeroNotificacoes,
+            modoMinimizado: true,
+          ),
+          SizedBox(width: widget.tema.espacamento * 5),
           Flexible(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -92,7 +110,7 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
                     semLabel: true,
                     executar: () {
                       widget.selecionarItem(MenuLateral.SOLICITACOES);
-                      _exibirPopUp(context);
+                      _exibirPopUpSolicitacoes(context);
                     },
                     ativado: widget.itemSelecionado == MenuLateral.SOLICITACOES,
                     nomeSvg: widget.itemSelecionado == MenuLateral.SOLICITACOES
@@ -113,36 +131,6 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
             ),
           ),
           SizedBox(width: Responsive.larguraP(context) ? widget.tema.espacamento * 2 : widget.tema.espacamento * 4),
-          // Flexible(
-          //   child: Column(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     crossAxisAlignment: CrossAxisAlignment.center,
-          //     children: [
-          //       const Spacer(),
-          //       FittedBox(
-          //         child: BotaoMenuWidget(
-          //           tema: widget.tema,
-          //           textoLabel: "",
-          //           semLabel: true,
-          //           executar: () => widget.selecionarItem(MenuLateral.SUPORTE),
-          //           ativado: widget.itemSelecionado == MenuLateral.SUPORTE,
-          //           nomeSvg: widget.itemSelecionado == MenuLateral.SUPORTE
-          //               ? MenuLateral.SUPORTE.iconeAtivado
-          //               : MenuLateral.SUPORTE.iconeDesativado,
-          //         ),
-          //       ),
-          //       SizedBox(height: widget.tema.espacamento / 2),
-          //       Expanded(
-          //         child: TextoWidget(
-          //           align: TextAlign.center,
-          //           texto: MenuLateral.SUPORTE.descricao,
-          //           tema: widget.tema,
-          //         ),
-          //       ),
-          //       const Spacer(),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );
@@ -156,6 +144,26 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
         return PopUpPadraoWidget(
           tema: widget.tema,
           conteudo: ConteudoNotificacoesWidget(
+            tema: widget.tema,
+            aoVisualizarSolicitacao: () {
+              Navigator.pop(context, true);
+            },
+          ),
+        );
+      },
+    );
+    widget.selecionarItem(navegarParaSolicitacoes ? MenuLateral.SOLICITACOES : MenuLateral.PAGINA_PRINCIPAL);
+    Rota.navegar(context, navegarParaSolicitacoes ? Rota.SUPORTE : Rota.HOME);
+  }
+
+  void _exibirPopUpSolicitacoes(BuildContext context) async {
+    Rota.navegar(context, Rota.HOME);
+    bool navegarParaSolicitacoes = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return PopUpPadraoWidget(
+          tema: widget.tema,
+          conteudo: ConteudoSolicitacoesWidget(
             tema: widget.tema,
             aoVisualizarSolicitacao: () {
               Navigator.pop(context, true);

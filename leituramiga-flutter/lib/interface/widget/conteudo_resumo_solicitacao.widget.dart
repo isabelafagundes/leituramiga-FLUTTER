@@ -94,11 +94,11 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const Spacer(),
+                          SizedBox(width: tema.espacamento * 2),
                           if (solicitacao.dataDevolucao != null)
                             Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _obterTextoComIcone(
                                   "Data devolução",

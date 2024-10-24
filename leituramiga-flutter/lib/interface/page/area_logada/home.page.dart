@@ -147,6 +147,7 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(width: tema.espacamento),
                       BotaoRedondoWidget(
                         tema: tema,
+                        tamanhoIcone: 22,
                         nomeSvg: 'filtro',
                         aoClicar: () => SobreposicaoUtil.exibir(context, obterFiltros),
                       ),
@@ -171,29 +172,26 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(height: tema.espacamento * 2),
                 if (_exibindoLivros) ...[
-                  Padding(
-                    padding: EdgeInsets.only(right: tema.espacamento + 4),
-                    child: GridLivroWidget(
-                      tema: tema,
-                      aoClicarLivro: (livro) async {
-                        await _livrosComponent.obterLivro(livro.numero);
-                        if (livro.emailUsuario.endereco == _autenticacaoState.usuario!.email.endereco) {
-                          return Rota.navegarComArgumentos(
-                            context,
-                            EditarLivroRoute(
-                              codigoLivro: _livrosComponent.livroSelecionado!.numero!,
-                            ),
-                          );
-                        }
-                        Rota.navegarComArgumentos(
+                  GridLivroWidget(
+                    tema: tema,
+                    aoClicarLivro: (livro) async {
+                      await _livrosComponent.obterLivro(livro.numero);
+                      if (livro.emailUsuario.endereco == _autenticacaoState.usuario!.email.endereco) {
+                        return Rota.navegarComArgumentos(
                           context,
-                          LivrosRoute(
-                            numeroLivro: _livrosComponent.livroSelecionado!.numero!,
+                          EditarLivroRoute(
+                            codigoLivro: _livrosComponent.livroSelecionado!.numero!,
                           ),
                         );
-                      },
-                      livros: _livrosComponent.itensPaginados,
-                    ),
+                      }
+                      Rota.navegarComArgumentos(
+                        context,
+                        LivrosRoute(
+                          numeroLivro: _livrosComponent.livroSelecionado!.numero!,
+                        ),
+                      );
+                    },
+                    livros: _livrosComponent.itensPaginados,
                   ),
                 ],
                 if (!_exibindoLivros)

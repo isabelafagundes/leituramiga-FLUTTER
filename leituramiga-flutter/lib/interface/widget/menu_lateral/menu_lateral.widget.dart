@@ -9,6 +9,8 @@ class MenuLateralWidget extends StatefulWidget {
   final Function() alterarTema;
   final Function() alterarFonte;
   final Function() deslogar;
+  final Function() aoClicarNotificacoes;
+  final int numeroNotificacoes;
 
   const MenuLateralWidget({
     super.key,
@@ -16,6 +18,8 @@ class MenuLateralWidget extends StatefulWidget {
     required this.alterarTema,
     required this.alterarFonte,
     required this.deslogar,
+    required this.aoClicarNotificacoes,
+    required this.numeroNotificacoes,
   });
 
   @override
@@ -23,7 +27,7 @@ class MenuLateralWidget extends StatefulWidget {
 }
 
 class _MenuLateralWidgetState extends State<MenuLateralWidget> {
-  double _larguraExpandida = 240;
+  double _larguraExpandida = 250;
   double _larguraMinimizada = 100;
   bool _expandido = true;
   MenuLateral _itemSelecionado = MenuLateral.PAGINA_PRINCIPAL;
@@ -66,6 +70,8 @@ class _MenuLateralWidgetState extends State<MenuLateralWidget> {
             expandirMenu: _expandirMenu,
             alterarTema: widget.alterarTema,
             alterarFonte: widget.alterarFonte,
+            aoClicarNotificacoes: widget.aoClicarNotificacoes,
+            numeroNotificacoes: widget.numeroNotificacoes,
             selecionarItem: (item) => setState(() => _itemSelecionado = item),
           ),
         ),

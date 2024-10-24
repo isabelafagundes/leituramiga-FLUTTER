@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:leituramiga/domain/notificacao.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
@@ -53,20 +54,23 @@ class _CardNotificacaoWidgetState extends State<CardNotificacaoWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextoWidget(
-                    texto: "Você recebeu uma solicitação de ",
-                    tema: widget.tema,
-                  ),
-                  TextoWidget(
-                    texto: widget.notificacao.nomeUsuario,
-                    tema: widget.tema,
-                    weight: FontWeight.w500,
-                  ),
-                ],
+              Container(
+                constraints: BoxConstraints(maxWidth: Responsive.largura(context)-200),
+                child: Wrap(
+                  alignment: WrapAlignment.start,
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  children: [
+                    TextoWidget(
+                      texto: "Você recebeu uma solicitação de ",
+                      tema: widget.tema,
+                    ),
+                    TextoWidget(
+                      texto: widget.notificacao.nomeUsuario,
+                      tema: widget.tema,
+                      weight: FontWeight.w500,
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: widget.tema.espacamento),
               Row(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/debouncer.dart';
+import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 
@@ -29,7 +30,7 @@ class _BarraPesquisaWidgetState extends State<BarraPesquisaWidget> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      constraints: const BoxConstraints(maxWidth: 350),
+      constraints:  BoxConstraints(maxWidth: Responsive.largura(context) < 500 ? 300: 350),
       child: Column(
         children: [
           InputWidget(

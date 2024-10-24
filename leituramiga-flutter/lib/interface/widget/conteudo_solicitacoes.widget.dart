@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/solicitacao.component.dart';
-import 'package:leituramiga/domain/notificacao.dart';
+import 'package:leituramiga/domain/solicitacao/resumo_solicitacao.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
@@ -8,25 +8,25 @@ import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/card/card_notificacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/card/card_solicitacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/empty_state.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
-class ConteudoNotificacoesWidget extends StatefulWidget {
+class ConteudoSolicitacoesWidget extends StatefulWidget {
   final Tema tema;
   final Function() aoVisualizarSolicitacao;
 
-  const ConteudoNotificacoesWidget({
+  const ConteudoSolicitacoesWidget({
     super.key,
     required this.tema,
     required this.aoVisualizarSolicitacao,
   });
 
   @override
-  State<ConteudoNotificacoesWidget> createState() => _ConteudoNotificacoesWidgetState();
+  State<ConteudoSolicitacoesWidget> createState() => _ConteudoSolicitacoesWidgetState();
 }
 
-class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget> {
+class _ConteudoSolicitacoesWidgetState extends State<ConteudoSolicitacoesWidget> {
   bool _exibindoEmAndamento = false;
   SolicitacaoComponent solicitacaoComponent = SolicitacaoComponent();
 
@@ -43,7 +43,7 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await solicitacaoComponent.obterNotificacoes(_autenticacaoState.usuario!.email.endereco);
+      await solicitacaoComponent.obterSolicitacoesIniciais(_autenticacaoState.usuario!.email.endereco);
     });
   }
 
@@ -84,7 +84,7 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
                               ),
                               const Spacer(),
                               TextoWidget(
-                                texto: "Notificações",
+                                texto: "Solicitações",
                                 tamanho: widget.tema.tamanhoFonteXG,
                                 weight: FontWeight.w500,
                                 tema: widget.tema,
@@ -107,44 +107,44 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
                             ],
                           )
                         : TextoWidget(
-                            texto: "Notificações",
+                            texto: "Solicitações",
                             tamanho: widget.tema.tamanhoFonteXG + 4,
                             weight: FontWeight.w500,
                             tema: widget.tema,
                           ),
+                    SizedBox(height: widget.tema.espacamento * 4),
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: widget.tema.espacamento * 4),
+          SizedBox(height: widget.tema.espacamento * 2),
           Expanded(
             child: SizedBox(
               width: 800,
-              child: solicitacaoComponent.notificacoes.isEmpty
+              child: solicitacaoComponent.itensPaginados.isEmpty
                   ? EmptyStateWidget(tema: widget.tema)
                   : ListView.builder(
                       shrinkWrap: true,
-                      itemCount: solicitacaoComponent.notificacoes.length,
+                      itemCount: solicitacaoComponent.itensPaginados.length,
                       itemBuilder: (context, index) {
-                        Notificacao? notificacao = solicitacaoComponent.notificacoes[index];
-                        if (!_exibindoEmAndamento && notificacao != null) {
+                        ResumoSolicitacao? resumoSolicitacao = solicitacaoComponent.itensPaginados[index];
+                        if (resumoSolicitacao != null) {
                           return Padding(
                             padding: EdgeInsets.only(bottom: widget.tema.espacamento * 2),
-                            child: CardNotificacaoWidget(
+                            child: CardSolicitacaoWidget(
                               tema: widget.tema,
-                              aoRecusar: (numeroSolicitacao) =>
-                                  solicitacaoComponent.recusarSolicitacao(numeroSolicitacao, "Motivo"),
-                              aoVisualizar: (numeroSolicitacao) async {
+                              solicitacao: resumoSolicitacao,
+                              aoVisualizar: (numero) async {
                                 Rota.navegarComArgumentos(
                                   context,
                                   DetalhesSolicitacaoRoute(
-                                    numeroSolicitacao: numeroSolicitacao,
+                                    numeroSolicitacao: numero,
                                   ),
                                 );
                                 Navigator.pop(context, true);
                               },
-                              notificacao: notificacao,
+                              usuarioPerfil: _autenticacaoState.usuario!.nome,
                             ),
                           );
                         }
@@ -152,17 +152,9 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
                       },
                     ),
             ),
-          ),
+          )
         ],
       ),
-    );
-  }
-
-  void _escolherLivros() {
-    Navigator.pop(context);
-    Rota.navegarComArgumentos(
-      context,
-      VisualizarSolicitacaoRoute(numeroSolicitacao: solicitacaoComponent.solicitacaoSelecionada!.numero!),
     );
   }
 }

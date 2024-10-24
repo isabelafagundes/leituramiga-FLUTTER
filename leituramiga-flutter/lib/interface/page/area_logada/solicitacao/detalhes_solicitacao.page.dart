@@ -59,6 +59,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
   final TextEditingController controllerFrete = TextEditingController();
   final TextEditingController controllerFormaEntrega = TextEditingController();
   final TextEditingController controllerMotivo = TextEditingController();
+  bool _carregando = false;
 
   Solicitacao? get solicitacao => _solicitacaoComponent.solicitacaoSelecionada;
 
@@ -105,14 +106,15 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
       child: ConteudoMenuLateralWidget(
         tema: tema,
         atualizar: atualizar,
-        carregando: _solicitacaoComponent.carregando || solicitacao == null || _usuarioComponent.carregando,
+        carregando:
+            _solicitacaoComponent.carregando || solicitacao == null || _usuarioComponent.carregando || _carregando,
         voltar: () => Rota.navegar(context, Rota.HOME),
         child: SingleChildScrollView(
           physics:
               _abaSelecionada == DetalhesSolicitacao.SELECAO_LIVROS || _abaSelecionada == DetalhesSolicitacao.LIVROS
                   ? const NeverScrollableScrollPhysics()
                   : const AlwaysScrollableScrollPhysics(),
-          child: _usuarioComponent.usuarioSelecionado == null || solicitacao == null
+          child: _usuarioComponent.usuarioSelecionado == null || solicitacao == null || _carregando
               ? SizedBox()
               : SizedBox(
                   height: Responsive.altura(context) * .88,
@@ -204,14 +206,14 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
           ),
         ),
       DetalhesSolicitacao.LIVROS => Expanded(
-        child: ConteudoLivrosSolicitacaoWidget(
+          child: ConteudoLivrosSolicitacaoWidget(
             tema: tema,
             nomeSolicitante: _usuarioComponent.usuarioSelecionado?.nome ?? "",
             nomeReceptor: _usuarioComponent.usuarioSolicitacao?.nome ?? "",
             usuarioCriador: solicitacao?.livrosSolicitante.livros ?? [],
             usuarioDoador: solicitacao?.livrosReceptor?.livros ?? [],
           ),
-      ),
+        ),
       DetalhesSolicitacao.CONTATO => Column(
           children: [
             !(solicitacao?.status.permiteEdicao ?? false)
@@ -292,10 +294,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
             "Caso deseje cancelar a solicitação, informe o motivo e selecione 'Cancelar'.",
             "Cancelar",
             context,
-            () async {
-              await _cancelarSolicitacao();
-              Navigator.pop(context);
-            },
+            () async => await _cancelarSolicitacao(context),
           ),
         ),
         icone: Icon(
@@ -316,10 +315,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
             "Caso deseje recusar a solicitação, informe o motivo e selecione 'Recusar'.",
             "Recusar",
             context,
-            () async {
-              await _recusarSolicitacao();
-              Navigator.pop(context);
-            },
+            () async => await _recusarSolicitacao(context),
           ),
         );
       },
@@ -395,28 +391,40 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
   }
 
   Future<void> _finalizarSolicitacao() async {
-    notificarCasoErro(() async => await _solicitacaoComponent.finalizarSolicitacao(widget.numeroSolicitacao));
+    _atualizarCarregamento();
+    await notificarCasoErro(() async => await _solicitacaoComponent.finalizarSolicitacao(widget.numeroSolicitacao));
+    _atualizarCarregamento();
   }
 
-  Future<void> _recusarSolicitacao() async {
-    notificarCasoErro(() async {
-      await _solicitacaoComponent.recusarSolicitacao(
-        widget.numeroSolicitacao,
-        controllerMotivo.text,
-      );
+  Future<void> _recusarSolicitacao(BuildContext context) async {
+    await notificarCasoErro(() async {
+      _atualizarCarregamento();
+      Navigator.pop(context);
+      await _solicitacaoComponent.recusarSolicitacao(widget.numeroSolicitacao, controllerMotivo.text);
     });
+    _atualizarCarregamento();
   }
 
   Future<void> _aceitarSolicitacao() async {
-    notificarCasoErro(() async {
+    _atualizarCarregamento();
+    await notificarCasoErro(() async {
+      setState(() => _carregando = true);
       await _solicitacaoComponent.aceitarSolicitacao(widget.numeroSolicitacao);
     });
+    _atualizarCarregamento();
   }
 
-  Future<void> _cancelarSolicitacao() async {
-    notificarCasoErro(() async {
+  Future<void> _cancelarSolicitacao(BuildContext context) async {
+    await notificarCasoErro(() async {
+      _atualizarCarregamento();
+      Navigator.pop(context);
       await _solicitacaoComponent.cancelarSolicitacao(widget.numeroSolicitacao, controllerMotivo.text);
     });
+    _atualizarCarregamento();
+  }
+
+  void _atualizarCarregamento() {
+    setState(() => _carregando = !_carregando);
   }
 }
 

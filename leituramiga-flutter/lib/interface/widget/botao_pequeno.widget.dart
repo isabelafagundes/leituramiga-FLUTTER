@@ -63,15 +63,16 @@ class _BotaoPequenoWidgetState extends State<BotaoPequenoWidget> {
               children: [
                 if (widget.icone != null) ...[
                   widget.icone ?? const SizedBox(),
-                  SizedBox(width: widget.tema.espacamento+2),
+                  if (widget.label.isNotEmpty) SizedBox(width: widget.tema.espacamento + 2),
                 ],
-                TextoWidget(
-                  tema: widget.tema,
-                  cor: widget.corFonte ?? kCorFonte,
-                  texto: widget.label,
-                  weight: FontWeight.w500,
-                  tamanho: widget.tema.tamanhoFonteM + 2,
-                ),
+                if (widget.label.isNotEmpty)
+                  TextoWidget(
+                    tema: widget.tema,
+                    cor: widget.corFonte ?? kCorFonte,
+                    texto: widget.label,
+                    weight: FontWeight.w500,
+                    tamanho: widget.tema.tamanhoFonteM + 2,
+                  ),
               ],
             ),
           ),

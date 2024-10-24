@@ -65,6 +65,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
   final TextEditingController controllerFrete = TextEditingController();
   final TextEditingController controllerFormaEntrega = TextEditingController();
   FormaEntrega? formaEntregaSelecionada;
+  bool _carregando = false;
 
   CriarSolicitacao estagioPagina = CriarSolicitacao.INFORMACOES_ADICIONAIS;
 
@@ -115,7 +116,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
         tema: tema,
         atualizar: atualizar,
         voltar: () => Rota.navegar(context, Rota.HOME),
-        carregando: _usuarioComponent.carregando || _solicitacaoComponent.carregando,
+        carregando: _usuarioComponent.carregando || _solicitacaoComponent.carregando || _carregando,
         child: SizedBox(
           width: Responsive.largura(context),
           height: Responsive.altura(context),
@@ -235,12 +236,14 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
 
   Future<void> salvarSolicitacao() async {
     await notificarCasoErro(() async {
+      setState(() => _carregando = true);
       if (!validarCamposPreenchidos()) throw Exception("Preencha todos os campos");
       _solicitacaoComponent.atualizarSolicitacaoMemoria(solicitacao);
       await _solicitacaoComponent.atualizarSolicitacao();
       atualizarPagina(CriarSolicitacao.CONCLUSAO);
       Notificacoes.mostrar("Solicitação criada com sucesso", Emoji.SUCESSO);
     });
+    setState(() => _carregando = false);
   }
 
   bool validarCamposPreenchidos() {

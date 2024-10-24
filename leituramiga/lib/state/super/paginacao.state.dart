@@ -14,12 +14,16 @@ mixin PaginacaoState<T> {
   }
 
   void paginar(List<T> itens, [int limite = 18, String pesquisa = ""]) {
+    print("paginou");
+
     this.limite = limite;
     this.pesquisa = pesquisa;
     possuiProximaPagina = itens.length == limite;
     itensPaginados.addAll(itens);
     if (possuiProximaPagina) return;
     pagina++;
+
+    print("Fim da paginação ${itensPaginados.length}  ");
   }
 
   void limparPesquisa() {
