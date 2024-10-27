@@ -158,11 +158,4 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
     );
   }
 
-  void _escolherLivros() {
-    Navigator.pop(context);
-    Rota.navegarComArgumentos(
-      context,
-      VisualizarSolicitacaoRoute(numeroSolicitacao: solicitacaoComponent.solicitacaoSelecionada!.numero!),
-    );
-  }
 }

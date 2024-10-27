@@ -186,6 +186,41 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                             ),
                           ],
                         ),
+                        if (solicitacao.codigoRastreamento != null && solicitacao.codigoRastreamento!.isNotEmpty) ...[
+                          SizedBox(height: tema.espacamento * 2),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _obterTextoComIcone(
+                                "Código de rastreio",
+                                Icon(
+                                  Icons.qr_code,
+                                  size: 18,
+                                  color: Color(tema.baseContent),
+                                ),
+                              ),
+                              SizedBox(height: tema.espacamento),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: tema.espacamento,
+                                  vertical: tema.espacamento / 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Color(tema.accent),
+                                  borderRadius: BorderRadius.circular(tema.borderRadiusM),
+                                  border: Border.all(color: Color(tema.neutral).withOpacity(.2)),
+                                ),
+                                child: TextoWidget(
+                                  texto: solicitacao.codigoRastreamento!,
+                                  tema: tema,
+                                  weight: FontWeight.w500,
+                                  cor: kCorFonte,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                         SizedBox(height: tema.espacamento * 2),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,

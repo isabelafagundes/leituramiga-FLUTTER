@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Rota.navegar(context, Rota.AUTENTICACAO);
+      Rota.navegar(context, Rota.AREA_LOGADA);
       TemaState.instancia.definirAtualizar(atualizar);
       TemaState.instancia.atualizarTemaSelecionado(atualizar);
     });

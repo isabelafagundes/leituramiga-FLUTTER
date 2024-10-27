@@ -11,6 +11,7 @@ class MenuLateralWidget extends StatefulWidget {
   final Function() deslogar;
   final Function() aoClicarNotificacoes;
   final int numeroNotificacoes;
+  final bool usuarioLogado;
 
   const MenuLateralWidget({
     super.key,
@@ -19,7 +20,7 @@ class MenuLateralWidget extends StatefulWidget {
     required this.alterarFonte,
     required this.deslogar,
     required this.aoClicarNotificacoes,
-    required this.numeroNotificacoes,
+    required this.numeroNotificacoes, required this.usuarioLogado,
   });
 
   @override
@@ -61,6 +62,7 @@ class _MenuLateralWidgetState extends State<MenuLateralWidget> {
           ),
           child: BotoesMenuLateralWidget(
             tema: widget.tema,
+            usuarioLogado: widget.usuarioLogado,
             aoEntrar: () => setState(() => _exibirSeta = false),
             aoSair: () => setState(() => _exibirSeta = false),
             exibindoMenu: _expandido,

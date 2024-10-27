@@ -16,6 +16,7 @@ class RodapeMobileWidget extends StatefulWidget {
   final Function(MenuLateral) selecionarItem;
   final Function() aoClicarNotificacoes;
   final int numeroNotificacoes;
+  final bool usuarioLogado;
 
   const RodapeMobileWidget({
     super.key,
@@ -24,6 +25,7 @@ class RodapeMobileWidget extends StatefulWidget {
     required this.selecionarItem,
     required this.aoClicarNotificacoes,
     required this.numeroNotificacoes,
+    required this.usuarioLogado,
   });
 
   @override
@@ -88,49 +90,51 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
               ],
             ),
           ),
-          SizedBox(width: widget.tema.espacamento * 5),
-          BotaoNotificacaoWidget(
-            tema: widget.tema,
-            modoMobile: true,
-            aoClicar: () => _exibirPopUp(context),
-            numeroNotificacoes: widget.numeroNotificacoes,
-            modoMinimizado: true,
-          ),
-          SizedBox(width: widget.tema.espacamento * 5),
-          Flexible(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Spacer(),
-                FittedBox(
-                  child: BotaoMenuWidget(
-                    tema: widget.tema,
-                    textoLabel: "",
-                    semLabel: true,
-                    executar: () {
-                      widget.selecionarItem(MenuLateral.SOLICITACOES);
-                      _exibirPopUpSolicitacoes(context);
-                    },
-                    ativado: widget.itemSelecionado == MenuLateral.SOLICITACOES,
-                    nomeSvg: widget.itemSelecionado == MenuLateral.SOLICITACOES
-                        ? MenuLateral.SOLICITACOES.iconeAtivado
-                        : MenuLateral.SOLICITACOES.iconeDesativado,
-                  ),
-                ),
-                SizedBox(height: widget.tema.espacamento / 2),
-                Expanded(
-                  child: TextoWidget(
-                    texto: MenuLateral.SOLICITACOES.descricao,
-                    align: TextAlign.center,
-                    tema: widget.tema,
-                  ),
-                ),
-                const Spacer(),
-              ],
+          if (widget.usuarioLogado) ...[
+            SizedBox(width: widget.tema.espacamento * 5),
+            BotaoNotificacaoWidget(
+              tema: widget.tema,
+              modoMobile: true,
+              aoClicar: () => _exibirPopUp(context),
+              numeroNotificacoes: widget.numeroNotificacoes,
+              modoMinimizado: true,
             ),
-          ),
-          SizedBox(width: Responsive.larguraP(context) ? widget.tema.espacamento * 2 : widget.tema.espacamento * 4),
+            SizedBox(width: widget.tema.espacamento * 5),
+            Flexible(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Spacer(),
+                  FittedBox(
+                    child: BotaoMenuWidget(
+                      tema: widget.tema,
+                      textoLabel: "",
+                      semLabel: true,
+                      executar: () {
+                        widget.selecionarItem(MenuLateral.SOLICITACOES);
+                        _exibirPopUpSolicitacoes(context);
+                      },
+                      ativado: widget.itemSelecionado == MenuLateral.SOLICITACOES,
+                      nomeSvg: widget.itemSelecionado == MenuLateral.SOLICITACOES
+                          ? MenuLateral.SOLICITACOES.iconeAtivado
+                          : MenuLateral.SOLICITACOES.iconeDesativado,
+                    ),
+                  ),
+                  SizedBox(height: widget.tema.espacamento / 2),
+                  Expanded(
+                    child: TextoWidget(
+                      texto: MenuLateral.SOLICITACOES.descricao,
+                      align: TextAlign.center,
+                      tema: widget.tema,
+                    ),
+                  ),
+                  const Spacer(),
+                ],
+              ),
+            ),
+            SizedBox(width: Responsive.larguraP(context) ? widget.tema.espacamento * 2 : widget.tema.espacamento * 4),
+          ]
         ],
       ),
     );
@@ -153,7 +157,7 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
       },
     );
     widget.selecionarItem(navegarParaSolicitacoes ? MenuLateral.SOLICITACOES : MenuLateral.PAGINA_PRINCIPAL);
-    Rota.navegar(context, navegarParaSolicitacoes ? Rota.SUPORTE : Rota.HOME);
+    Rota.navegar(context, navegarParaSolicitacoes ? Rota.CRIAR_SOLICITACAO : Rota.HOME);
   }
 
   void _exibirPopUpSolicitacoes(BuildContext context) async {
@@ -173,6 +177,6 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
       },
     );
     widget.selecionarItem(navegarParaSolicitacoes ? MenuLateral.SOLICITACOES : MenuLateral.PAGINA_PRINCIPAL);
-    Rota.navegar(context, navegarParaSolicitacoes ? Rota.SUPORTE : Rota.HOME);
+    Rota.navegar(context, navegarParaSolicitacoes ? Rota.CRIAR_SOLICITACAO : Rota.HOME);
   }
 }

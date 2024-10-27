@@ -13,6 +13,7 @@ import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart'
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/logo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 @RoutePage()
@@ -76,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Image.asset('assets/png/login.png'),
+                            SvgWidget(nomeSvg: "garota_login",altura: 350,),
                             SizedBox(height: tema.espacamento * 2),
                             SizedBox(
                               child: TextoWidget(

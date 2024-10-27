@@ -368,7 +368,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
               ),
               corFundo: Color(tema.error),
             ),
-            SizedBox(height: tema.espacamento),
+            SizedBox(height: tema.espacamento * 2),
             BotaoWidget(
               tema: tema,
               corTexto: Color(tema.baseContent),

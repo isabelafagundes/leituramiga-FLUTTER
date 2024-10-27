@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
@@ -29,17 +30,20 @@ class CardComentarioWidget extends StatelessWidget {
             Column(
               children: [
                 Container(
-                  width: 50,
-                  height: 50,
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(tema.borderRadiusXG),
-                    color: Color(tema.accent),
+                    borderRadius: BorderRadius.circular(tema.borderRadiusXG * 2),
+                    color: kCorPessego.withOpacity(.5),
                   ),
-                ),
-                TextoWidget(
-                  texto: "@$nomeUsuario",
-                  tema: tema,
-                  tamanho: tema.tamanhoFonteP + 2,
+                  child: Center(
+                    child: TextoWidget(
+                      tamanho: tema.tamanhoFonteXG * 1.4,
+                      weight: FontWeight.w600,
+                      texto: "${nomeUsuario.substring(0, 1)}",
+                      tema: tema,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -51,10 +55,23 @@ class CardComentarioWidget extends StatelessWidget {
             ),
             SizedBox(width: tema.espacamento * 2),
             Expanded(
-              child: TextoWidget(
-                texto: comentario,
-                tema: tema,
-                maxLines: 6,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextoWidget(
+                    texto: nomeUsuario,
+                    tema: tema,
+                    weight: FontWeight.w500,
+                    tamanho: tema.tamanhoFonteM,
+                  ),
+                  SizedBox(height: tema.espacamento),
+                  TextoWidget(
+                    texto: comentario,
+                    tema: tema,
+                    maxLines: 6,
+                  ),
+                ],
               ),
             ),
           ],

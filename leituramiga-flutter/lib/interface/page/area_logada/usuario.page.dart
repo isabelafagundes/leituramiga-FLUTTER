@@ -1,21 +1,30 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/usuario.component.dart';
+import 'package:leituramiga/domain/usuario/comentario_perfil.dart';
 import 'package:leituramiga/domain/usuario/usuario.dart';
+import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
+import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/duas_escolhas.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/conteudo_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/grid/grid_comentarios.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/grid/grid_livros.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 @RoutePage()
 class UsuarioPage extends StatefulWidget {
@@ -29,6 +38,9 @@ class UsuarioPage extends StatefulWidget {
 
 class _UsuarioPageState extends State<UsuarioPage> {
   final UsuarioComponent _usuarioComponent = UsuarioComponent();
+  TextEditingController controllerComentario = TextEditingController();
+
+  AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
   TemaState get _temaState => TemaState.instancia;
 
@@ -49,7 +61,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _usuarioComponent.obterUsuario(widget.identificador);
-      await _usuarioComponent.obterComentarios(widget.identificador);
+      await _usuarioComponent.obterComentarios(_usuarioComponent.usuarioSelecionado!.email.endereco);
       await _usuarioComponent.obterLivrosUsuario();
     });
   }
@@ -89,34 +101,29 @@ class _UsuarioPageState extends State<UsuarioPage> {
                         ),
                       ),
                       SizedBox(height: tema.espacamento * 2),
-                      MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              BotaoPequenoWidget(
-                                tema: tema,
-                                aoClicar: () {},
-                                icone: _exibindoLivros
-                                    ? SvgWidget(
-                                        nomeSvg: "compartilhar_fill",
-                                        altura: 20,
-                                        cor: Color(tema.base200),
-                                      )
-                                    : Icon(
-                                        Icons.add,
-                                        color: Color(tema.base200),
-                                        size: 20,
-                                      ),
-                                label: _exibindoLivros ? "Criar solicitação" : "Criar comentário",
-                              )
-                            ],
+                      if (!_exibindoLivros)
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                BotaoPequenoWidget(
+                                  tema: tema,
+                                  aoClicar: _exibirPopUpComentario,
+                                  icone: Icon(
+                                    Icons.add,
+                                    color: Color(tema.base200),
+                                    size: 20,
+                                  ),
+                                  label: "Criar comentário",
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
                       SizedBox(height: tema.espacamento * 2),
                       if (_exibindoLivros) ...[
                         GridLivroWidget(
@@ -146,6 +153,133 @@ class _UsuarioPageState extends State<UsuarioPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget obterPopUp(BuildContext context, Function() aoClicar) {
+    return PopUpPadraoWidget(
+      tema: tema,
+      conteudo: Container(
+        padding: EdgeInsets.all(tema.espacamento * 2),
+        height: Responsive.larguraM(context) ? Responsive.altura(context) : 690,
+        width: 450,
+        child: Column(
+          children: [
+            Responsive.larguraM(context)
+                ? Row(
+                    children: [
+                      BotaoRedondoWidget(
+                        tema: tema,
+                        nomeSvg: 'seta/chevron-left',
+                        aoClicar: () => Navigator.pop(context),
+                      ),
+                      const Spacer(),
+                      TextoWidget(
+                        texto: "Comentário",
+                        tamanho: tema.tamanhoFonteXG,
+                        weight: FontWeight.w500,
+                        tema: tema,
+                      ),
+                      const Spacer(),
+                      Opacity(
+                        opacity: 0,
+                        child: IgnorePointer(
+                          child: BotaoRedondoWidget(
+                            tema: tema,
+                            nomeSvg: 'filtro',
+                            icone: Icon(
+                              Icons.edit,
+                              color: Color(tema.baseContent),
+                            ),
+                            aoClicar: () {},
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : TextoWidget(
+                    texto: "Comentário",
+                    tamanho: tema.tamanhoFonteXG + 4,
+                    weight: FontWeight.w500,
+                    tema: tema,
+                  ),
+            SvgWidget(
+              nomeSvg: "garota_comentando",
+              altura: 300,
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            TextoWidget(
+              texto: "Que tal compartilhar sua opinião sobre esse usuário?",
+              tema: tema,
+              align: TextAlign.center,
+              tamanho: tema.tamanhoFonteM,
+              weight: FontWeight.w500,
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            InputWidget(
+              tema: tema,
+              label: "Comentário",
+              controller: controllerComentario,
+              onChanged: (valor) {},
+            ),
+            SizedBox(height: tema.espacamento * 4),
+            BotaoWidget(
+              tema: tema,
+              corTexto: Color(tema.baseContent),
+              texto: "Fechar",
+              aoClicar: () => Navigator.pop(context),
+              icone: Icon(
+                Icons.close,
+                color: Color(tema.baseContent),
+              ),
+              corFundo: Color(tema.base200),
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            BotaoWidget(
+              tema: tema,
+              corTexto: kCorFonte,
+              texto: "Enviar",
+              aoClicar: aoClicar,
+              icone: Icon(
+                Icons.send,
+                color: kCorFonte,
+              ),
+              corFundo: Color(tema.accent),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _exibirPopUpComentario() async {
+    await showDialog(
+      context: context,
+      builder: (context) => obterPopUp(
+        context,
+        () async {
+          await _enviarComentario();
+          await _usuarioComponent.obterComentarios(_usuarioComponent.usuarioSelecionado!.email.endereco);
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
+  Future<void> _enviarComentario() async {
+    await notificarCasoErro(() async {
+      _usuarioComponent.cadastrarComentarioMemoria(_obterComentario);
+      await _usuarioComponent.cadastrarComentario();
+      controllerComentario.clear();
+      atualizar();
+    });
+  }
+
+  ComentarioPerfil get _obterComentario {
+    return ComentarioPerfil.criar(
+      _autenticacaoState.usuario!.email.endereco,
+      _usuarioComponent.usuarioSelecionado!.email.endereco,
+      controllerComentario.text,
     );
   }
 }

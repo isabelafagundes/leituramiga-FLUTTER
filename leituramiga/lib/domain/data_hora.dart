@@ -40,6 +40,10 @@ class DataHora {
     return _valor.isBefore(data.valor);
   }
 
+  bool ehIgualA(DataHora data) {
+    return _valor.isAtSameMomentAs(data.valor);
+  }
+
   bool ehDepoisDe(DataHora data) {
     return _valor.isAfter(data.valor);
   }

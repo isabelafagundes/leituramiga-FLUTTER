@@ -28,6 +28,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
   final Function() alterarFonte;
   final Function() aoClicarNotificacoes;
   final int numeroNotificacoes;
+  final bool usuarioLogado;
 
   const BotoesMenuLateralWidget({
     super.key,
@@ -44,6 +45,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
     required this.deslogar,
     required this.aoClicarNotificacoes,
     required this.numeroNotificacoes,
+    required this.usuarioLogado,
   });
 
   @override
@@ -113,6 +115,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
           itemBuilder: (context, indice) {
             MenuLateral item = MenuLateral.values[indice];
             bool ativado = AutoRouter.of(context).current.path == item.rota.url;
+            if (!usuarioLogado && item.usuarioLogado) return Container();
             return Padding(
               padding: EdgeInsets.only(bottom: tema.espacamento),
               child: BotaoMenuWidget(
@@ -134,19 +137,21 @@ class BotoesMenuLateralWidget extends StatelessWidget {
           },
         ),
         const Spacer(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            BotaoNotificacaoWidget(
-              aoClicar: () => _exibirPopUpNotificacoes(context),
-              numeroNotificacoes: numeroNotificacoes,
-              tema: tema,
-              modoMinimizado: !exibindoMenu,
-            ),
-          ],
-        ),
-        SizedBox(height: tema.espacamento * 4),
+        if (usuarioLogado) ...[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              BotaoNotificacaoWidget(
+                aoClicar: () => _exibirPopUpNotificacoes(context),
+                numeroNotificacoes: numeroNotificacoes,
+                tema: tema,
+                modoMinimizado: !exibindoMenu,
+              ),
+            ],
+          ),
+          SizedBox(height: tema.espacamento * 4),
+        ],
         TextoComSwitcherWidget(
           tema: tema,
           exibirLabel: exibindoMenu,
@@ -193,16 +198,18 @@ class BotoesMenuLateralWidget extends StatelessWidget {
           ),
           aoAlterar: alterarTema,
         ),
-        SizedBox(height: tema.espacamento * 2),
-        BotaoMenuWidget(
-          tema: tema,
-          iconeAEsquerda: false,
-          semLabel: !exibindoMenu,
-          textoLabel: "Sair",
-          nomeSvg: "logout",
-          executar: deslogar,
-          ativado: false,
-        ),
+        if (usuarioLogado) ...[
+          SizedBox(height: tema.espacamento * 2),
+          BotaoMenuWidget(
+            tema: tema,
+            iconeAEsquerda: false,
+            semLabel: !exibindoMenu,
+            textoLabel: "Sair",
+            nomeSvg: "logout",
+            executar: deslogar,
+            ativado: false,
+          ),
+        ]
       ],
     );
   }
@@ -223,7 +230,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
     );
     if (navegarParaSolicitacoes == null) return;
     selecionarItem(navegarParaSolicitacoes ? MenuLateral.SOLICITACOES : MenuLateral.PAGINA_PRINCIPAL);
-    Rota.navegar(context, navegarParaSolicitacoes ? Rota.SUPORTE : Rota.HOME);
+    Rota.navegar(context, navegarParaSolicitacoes ? Rota.CRIAR_SOLICITACAO : Rota.HOME);
   }
 
   void _exibirPopUpSolicitacoes(BuildContext context) async {
@@ -242,6 +249,6 @@ class BotoesMenuLateralWidget extends StatelessWidget {
     );
     if (navegarParaSolicitacoes == null) return;
     selecionarItem(navegarParaSolicitacoes ? MenuLateral.SOLICITACOES : MenuLateral.PAGINA_PRINCIPAL);
-    Rota.navegar(context, navegarParaSolicitacoes ? Rota.SUPORTE : Rota.HOME);
+    Rota.navegar(context, navegarParaSolicitacoes ? Rota.CRIAR_SOLICITACAO : Rota.HOME);
   }
 }

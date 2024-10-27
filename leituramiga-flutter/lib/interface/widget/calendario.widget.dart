@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:date_picker_plus/date_picker_plus.dart';
+import 'package:flutter/material.dart';
 import 'package:leituramiga/domain/data_hora.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
@@ -41,6 +41,7 @@ class _CalendarioWidgetState extends State<CalendarioWidget> {
           enabledCellsTextStyle: textStyle,
           selectedCellTextStyle: textStyleSelected,
           leadingDateTextStyle: textStyle,
+          selectedDate: dataSelecionada,
           slidersColor: Color(widget.tema.accent),
           highlightColor: Color(widget.tema.accent),
           splashColor: Color(widget.tema.accent),

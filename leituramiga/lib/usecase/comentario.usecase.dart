@@ -12,7 +12,7 @@ class ComentarioUseCase {
     List<ComentarioPerfil> comentarios = await _repo.obterComentarios(usuario);
     _state.comentariosPorNumero.clear();
    for(ComentarioPerfil comentario in comentarios) {
-     _state.comentariosPorNumero[comentario.numero] = comentario;
+     _state.comentariosPorNumero[comentario.numero!] = comentario;
    }
   }
 

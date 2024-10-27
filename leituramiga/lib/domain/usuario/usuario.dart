@@ -151,3 +151,7 @@ class UsuarioNaoAtivo extends ErroDominio {
 class CredenciaisExistentes extends ErroDominio {
   CredenciaisExistentes() : super("O email ou o usuário já existe!");
 }
+
+class UsuarioJaExiste extends ErroDominio {
+  UsuarioJaExiste() : super("O usuário já existe! Altere o email ou o seu nome de usuário");
+}

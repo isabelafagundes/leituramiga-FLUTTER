@@ -6,15 +6,15 @@ import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 
 enum Rota {
-  AUTENTICACAO(url: "/", pageInfo: AutenticacaoRoute.page),
+  AUTENTICACAO(url: "/login", pageInfo: AutenticacaoRoute.page),
   AREA_LOGADA(url: "/leituramiga/", pageInfo: AreaLogadaRoute.page),
-  LOGIN(url: "login", pageInfo: LoginRoute.page),
+  LOGIN(url: "", pageInfo: LoginRoute.page),
   CADASTRO_USUARIO(url: "cadastro-usuario", pageInfo: CadastroUsuarioRoute.page),
   SENHA(url: "esqueceu-senha", pageInfo: EsqueceSenhaRoute.page),
   HOME(url: "home", pageInfo: HomeRoute.page),
   LIVRO(url: "livro/:numeroLivro", pageInfo: LivrosRoute.page),
   USUARIO(url: "usuario/:numeroUsuario", pageInfo: UsuarioRoute.page),
-  SUPORTE(url: "criar-solicitacao/:numeroLivro/:tipoSolicitacao", pageInfo: CriarSolicitacaoRoute.page),
+  CRIAR_SOLICITACAO(url: "criar-solicitacao/:numeroLivro/:tipoSolicitacao", pageInfo: CriarSolicitacaoRoute.page),
   PERFIL(url: "perfil", pageInfo: PerfilRoute.page),
   EDITAR_PERFIL(url: "editar-perfil", pageInfo: EditarPefilRoute.page),
   CRIAR_LIVRO(url: "adicionar-livro", pageInfo: CriarLivroRoute.page),
@@ -32,20 +32,12 @@ enum Rota {
 
   static List<AutoRoute> get rotasAuto => [
         adicionar(
-          rota: AUTENTICACAO,
+          rota: AREA_LOGADA,
           inicial: true,
           subrotas: [
-            adicionar(rota: LOGIN, inicial: true, guards: [UsuarioNaoLogadoGuard()]),
-            adicionar(rota: CADASTRO_USUARIO, guards: [UsuarioNaoLogadoGuard()]),
-            adicionar(rota: SENHA, guards: [UsuarioNaoLogadoGuard()]),
-          ],
-        ),
-        adicionar(
-          rota: AREA_LOGADA,
-          subrotas: [
-            adicionar(rota: HOME, inicial: true, guards: [UsuarioLogadoGuard()]),
+            adicionar(rota: HOME, inicial: true),
             adicionar(rota: LIVRO, guards: [UsuarioLogadoGuard()]),
-            adicionar(rota: SUPORTE, guards: [UsuarioLogadoGuard()]),
+            adicionar(rota: CRIAR_SOLICITACAO, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: USUARIO, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: PERFIL, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: CRIAR_LIVRO, guards: [UsuarioLogadoGuard()]),
@@ -55,6 +47,14 @@ enum Rota {
             adicionar(rota: DETALHES_SOLICITACAO, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: CALENDARIO, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: HISTORICO, guards: [UsuarioLogadoGuard()]),
+          ],
+        ),
+        adicionar(
+          rota: AUTENTICACAO,
+          subrotas: [
+            adicionar(rota: LOGIN, inicial: true, guards: [UsuarioNaoLogadoGuard()]),
+            adicionar(rota: CADASTRO_USUARIO, guards: [UsuarioNaoLogadoGuard()]),
+            adicionar(rota: SENHA, guards: [UsuarioNaoLogadoGuard()]),
           ],
         ),
       ];

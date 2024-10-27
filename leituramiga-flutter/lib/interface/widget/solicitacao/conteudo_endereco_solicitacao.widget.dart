@@ -61,7 +61,7 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
       direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Flexible(
           child: Flex(

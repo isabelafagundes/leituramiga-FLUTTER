@@ -30,9 +30,6 @@ class _AreaLogadaPageState extends State<AreaLogadaPage> {
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await autenticacaoComponent.carregarSessao();
-      if (autenticacaoState.usuario == null) {
-        Rota.navegar(context, Rota.AUTENTICACAO);
-      }
     });
   }
 

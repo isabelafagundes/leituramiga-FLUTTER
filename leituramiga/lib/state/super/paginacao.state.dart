@@ -1,5 +1,5 @@
 mixin PaginacaoState<T> {
-  List<T> itensPaginados = [];
+  Set<T> itensPaginadosSet = {};
   String pesquisa = "";
   int limite = 18;
   int pagina = 0;
@@ -7,23 +7,21 @@ mixin PaginacaoState<T> {
   bool possuiProximaPagina = false;
 
   void reiniciar() {
-    itensPaginados = [];
+    itensPaginadosSet = {};
     pagina = 0;
     possuiProximaPagina = false;
     limparPesquisa();
   }
 
-  void paginar(List<T> itens, [int limite = 18, String pesquisa = ""]) {
-    print("paginou");
+  List<T> get itensPaginados => itensPaginadosSet.toList();
 
+  void paginar(List<T> itens, [int limite = 18, String pesquisa = ""]) {
     this.limite = limite;
     this.pesquisa = pesquisa;
-    possuiProximaPagina = itens.length == limite;
-    itensPaginados.addAll(itens);
-    if (possuiProximaPagina) return;
+    possuiProximaPagina = itens.length < limite;
+    itensPaginadosSet.addAll(itens);
+    // if (possuiProximaPagina) return;
     pagina++;
-
-    print("Fim da paginação ${itensPaginados.length}  ");
   }
 
   void limparPesquisa() {

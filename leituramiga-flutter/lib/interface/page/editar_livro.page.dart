@@ -178,7 +178,7 @@ class _EditarLivroPageState extends State<EditarLivroPage> {
                   tema: tema,
                   icone: Icon(
                     Icons.restore_from_trash,
-                    color: kCorFonte,
+                    color: Color(tema.base200),
                   ),
                   corFundo: Color(tema.error),
                   texto: "Excluir",

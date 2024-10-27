@@ -96,7 +96,8 @@ mixin class TemaState {
 
   final Tema _temaClaro = Tema.criar(
     id: 2,
-    corAccent: "79b791",
+    // corAccent: "79b791",
+    corAccent: "2A9777",
     corPrimary: "A5FFE5",
     corSecondary: "3FDFAF",
     corNeutral: "2a2f2c",

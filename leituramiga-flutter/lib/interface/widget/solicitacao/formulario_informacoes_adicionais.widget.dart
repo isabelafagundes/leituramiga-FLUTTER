@@ -18,6 +18,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
   final TextEditingController controllerDataDevolucao;
   final TextEditingController controllerHoraDevolucao;
   final TextEditingController controllerHoraEntrega;
+  final TextEditingController controllerCodigoRastreio;
   final TipoSolicitacao tipoSolicitacao;
   final TextEditingController controllerFormaEntrega;
   final List<LivroSolicitacao> livrosSolicitacao;
@@ -47,6 +48,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
     required this.controllerFormaEntrega,
     required this.aoClicarFormaEntrega,
     this.semSelecaoLivros = false,
+    required this.controllerCodigoRastreio,
   });
 
   @override
@@ -78,7 +80,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
               ],
             ),
           ),
-        if (Responsive.larguraP(context) &&        !semSelecaoLivros) ...[
+        if (Responsive.larguraP(context) && !semSelecaoLivros) ...[
           SizedBox(height: tema.espacamento * 2),
           Divider(
             color: Color(tema.accent),
@@ -101,64 +103,83 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                     Flexible(
                       child: SizedBox(
                         height: 70,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextoWidget(
-                              texto: "Forma de entrega *",
-                              tema: tema,
-                              cor: Color(tema.baseContent),
-                            ),
-                            SizedBox(height: tema.espacamento),
-                            Expanded(
-                              child: MenuWidget(
+                        child: IgnorePointer(
+                          ignoring: controllerCodigoRastreio.text.isNotEmpty,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextoWidget(
+                                texto: "Forma de entrega *",
                                 tema: tema,
-                                valorSelecionado:
-                                    controllerFormaEntrega.text.isNotEmpty ? controllerFormaEntrega.text : null,
-                                escolhas: const ["Correios", "Presencial"],
-                                aoClicar: (valor) => aoClicarFormaEntrega(FormaEntrega.deDescricao(valor)),
+                                cor: Color(tema.baseContent),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    if(!Responsive.larguraP(context))
-                    Flexible(
-                      child: IgnorePointer(
-                        child: Opacity(
-                          opacity: 0,
-                          child: SizedBox(
-                            height: 70,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextoWidget(
-                                  texto: "Forma de entrega",
+                              SizedBox(height: tema.espacamento),
+                              Expanded(
+                                child: MenuWidget(
                                   tema: tema,
-                                  cor: Color(tema.baseContent),
+                                  valorSelecionado:
+                                      controllerFormaEntrega.text.isNotEmpty ? controllerFormaEntrega.text : null,
+                                  escolhas: const ["Correios", "Presencial"],
+                                  aoClicar: (valor) => aoClicarFormaEntrega(FormaEntrega.deDescricao(valor)),
                                 ),
-                                SizedBox(height: tema.espacamento),
-                                Expanded(
-                                  child: MenuWidget(
-                                    tema: tema,
-                                    valorSelecionado:
-                                        controllerFormaEntrega.text.isNotEmpty ? controllerFormaEntrega.text : null,
-                                    escolhas: const ["Correios", "Presencial"],
-                                    aoClicar: (valor) => aoClicarFormaEntrega(FormaEntrega.deDescricao(valor)),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
+                    if (!Responsive.larguraP(context))
+                      Flexible(
+                        child: IgnorePointer(
+                          child: Opacity(
+                            opacity: 0,
+                            child: SizedBox(
+                              height: 70,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextoWidget(
+                                    texto: "Forma de entrega",
+                                    tema: tema,
+                                    cor: Color(tema.baseContent),
+                                  ),
+                                  SizedBox(height: tema.espacamento),
+                                  Expanded(
+                                    child: MenuWidget(
+                                      tema: tema,
+                                      valorSelecionado:
+                                          controllerFormaEntrega.text.isNotEmpty ? controllerFormaEntrega.text : null,
+                                      escolhas: const ["Correios", "Presencial"],
+                                      aoClicar: (valor) => aoClicarFormaEntrega(FormaEntrega.deDescricao(valor)),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
+              if (semSelecaoLivros && controllerFormaEntrega.text == "Correios") ...[
+                  SizedBox(
+                    width: tema.espacamento * 2,
+                    height: tema.espacamento * 2,
+                  ),
+                Flexible(
+                  child: InputWidget(
+                    tema: tema,
+                    controller: controllerCodigoRastreio,
+                    label: "Código rastreio",
+                    tamanho: tema.tamanhoFonteM,
+                    formatters: [LengthLimitingTextInputFormatter(119)],
+                    onChanged: (valor) {},
+                  ),
+                ),
+              ],
               SizedBox(
                 width: tema.espacamento * 2,
                 height: tema.espacamento * 2,
@@ -176,6 +197,42 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(height: tema.espacamento * 2),
+              Flexible(
+                child: Flex(
+                  mainAxisSize: MainAxisSize.min,
+                  direction: Responsive.larguraPP(context) ? Axis.vertical : Axis.horizontal,
+                  children: [
+                    Flexible(
+                      child: InputWidget(
+                        tema: tema,
+                        onTap: abrirDatePicker,
+                        readOnly: true,
+                        controller: controllerDataEntrega,
+                        label: "Data entrega",
+                        tamanho: tema.tamanhoFonteM,
+                        onChanged: (valor) {},
+                      ),
+                    ),
+                    SizedBox(
+                      width: tema.espacamento * 2,
+                      height: tema.espacamento * 2,
+                    ),
+                    Flexible(
+                      child: InputWidget(
+                        tema: tema,
+                        onTap: () => abrirTimePicker(),
+                        readOnly: true,
+                        controller: controllerHoraEntrega,
+                        label: "Hora entrega",
+                        tamanho: tema.tamanhoFonteM,
+                        onChanged: (valor) {},
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: tema.espacamento * 2),
+              if (tipoSolicitacao == TipoSolicitacao.EMPRESTIMO)
                 Flexible(
                   child: Flex(
                     mainAxisSize: MainAxisSize.min,
@@ -184,70 +241,34 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                       Flexible(
                         child: InputWidget(
                           tema: tema,
-                          onTap: abrirDatePicker,
+                          onTap: () => abrirDatePicker(true),
                           readOnly: true,
-                          controller: controllerDataEntrega,
-                          label: "Data entrega",
+                          controller: controllerDataDevolucao,
+                          label: "Data devolução",
                           tamanho: tema.tamanhoFonteM,
                           onChanged: (valor) {},
                         ),
                       ),
-                      SizedBox(
-                        width: tema.espacamento * 2,
-                        height: tema.espacamento * 2,
-                      ),
-                      Flexible(
-                        child: InputWidget(
-                          tema: tema,
-                          onTap: () => abrirTimePicker(),
-                          readOnly: true,
-                          controller: controllerHoraEntrega,
-                          label: "Hora entrega",
-                          tamanho: tema.tamanhoFonteM,
-                          onChanged: (valor) {},
+                      if (tipoSolicitacao == TipoSolicitacao.EMPRESTIMO) ...[
+                        SizedBox(
+                          width: tema.espacamento * 2,
+                          height: tema.espacamento * 2,
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: tema.espacamento * 2),
-                if (tipoSolicitacao == TipoSolicitacao.EMPRESTIMO)
-                  Flexible(
-                    child: Flex(
-                      mainAxisSize: MainAxisSize.min,
-                      direction: Responsive.larguraPP(context) ? Axis.vertical : Axis.horizontal,
-                      children: [
                         Flexible(
                           child: InputWidget(
                             tema: tema,
-                            onTap: () => abrirDatePicker(true),
+                            onTap: () => abrirTimePicker(true),
                             readOnly: true,
-                            controller: controllerDataDevolucao,
-                            label: "Data devolução",
+                            controller: controllerHoraDevolucao,
+                            label: "Hora devolução",
                             tamanho: tema.tamanhoFonteM,
                             onChanged: (valor) {},
                           ),
                         ),
-                        if (tipoSolicitacao == TipoSolicitacao.EMPRESTIMO) ...[
-                          SizedBox(
-                            width: tema.espacamento * 2,
-                            height: tema.espacamento * 2,
-                          ),
-                          Flexible(
-                            child: InputWidget(
-                              tema: tema,
-                              onTap: () => abrirTimePicker(true),
-                              readOnly: true,
-                              controller: controllerHoraDevolucao,
-                              label: "Hora devolução",
-                              tamanho: tema.tamanhoFonteM,
-                              onChanged: (valor) {},
-                            ),
-                          ),
-                        ]
-                      ],
-                    ),
+                      ]
+                    ],
                   ),
+                ),
               if (!semSelecaoLivros) ...[
                 SizedBox(height: tema.espacamento * 3),
                 Flexible(

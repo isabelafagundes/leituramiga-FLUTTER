@@ -21,6 +21,7 @@ import 'package:projeto_leituramiga/interface/widget/filtro/layout_filtro.widget
 import 'package:projeto_leituramiga/interface/widget/grid/grid_livros.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/grid/grid_usuarios.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
@@ -63,6 +64,7 @@ class _HomePageState extends State<HomePage> {
       atualizar,
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      print("HomePage");
       await _livrosComponent.obterLivrosIniciais();
       await _livrosComponent.obterCategorias();
       await _livrosComponent.obterInstituicoes();
@@ -175,6 +177,10 @@ class _HomePageState extends State<HomePage> {
                   GridLivroWidget(
                     tema: tema,
                     aoClicarLivro: (livro) async {
+                      if (_autenticacaoState.usuario == null) {
+                        return Notificacoes.mostrar("Efetue o login para acessar o livro.");
+                      }
+
                       await _livrosComponent.obterLivro(livro.numero);
                       if (livro.emailUsuario.endereco == _autenticacaoState.usuario!.email.endereco) {
                         return Rota.navegarComArgumentos(
@@ -200,6 +206,10 @@ class _HomePageState extends State<HomePage> {
                     child: GridUsuariosWidget(
                       tema: tema,
                       aoClicarUsuario: (username) {
+                        if (_autenticacaoState.usuario == null) {
+                          return Notificacoes.mostrar("Efetue o login para acessar o perfil do usuário.");
+                        }
+
                         if (username == _autenticacaoState.usuario!.nomeUsuario) {
                           return Rota.navegar(context, Rota.PERFIL);
                         }
@@ -223,7 +233,12 @@ class _HomePageState extends State<HomePage> {
   Future<void> _limparFiltros() async {
     _filtroState.limparFiltros();
     _controllerPesquisa.clear();
-    _exibindoLivros ? await _livrosComponent.obterLivrosIniciais() : await _usuariosComponent.obterUsuariosIniciais();
+    setState(() {
+      _usuariosComponent.reiniciar();
+      _livrosComponent.reiniciar();
+    });
+    await _livrosComponent.obterLivrosIniciais();
+    await _usuariosComponent.obterUsuariosIniciais();
     _controllerPesquisa.clear();
     setState(() {});
   }

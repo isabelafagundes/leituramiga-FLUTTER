@@ -95,6 +95,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
               if (!Responsive.larguraM(context)) ...[
                 MenuLateralWidget(
                   tema: widget.tema,
+                  usuarioLogado: _autenticacaoState.usuario != null,
                   aoClicarNotificacoes: () {},
                   numeroNotificacoes: _solicitacaoComponent.notificacoes.length,
                   deslogar: _deslogar,
@@ -133,7 +134,16 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                             ),
                           ],
                           widget.widgetNoCabecalho ?? const SizedBox(),
-                          if (widget.exibirPerfil) ...[
+                          if (widget.exibirPerfil && _autenticacaoState.usuario == null) ...[
+                            Spacer(),
+                            BotaoPequenoWidget(
+                              tema: widget.tema,
+                              aoClicar: () => Rota.navegar(context, Rota.AUTENTICACAO),
+                              label: "Login",
+                              icone: Icon(Icons.login, color: Color(widget.tema.base200)),
+                            ),
+                          ],
+                          if (widget.exibirPerfil && _autenticacaoState.usuario != null) ...[
                             const Spacer(),
                             SizedBox(
                               height: 60,
@@ -252,6 +262,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
               aoClicarNotificacoes: () {},
               numeroNotificacoes: _solicitacaoComponent.notificacoes.length,
               selecionarItem: (item) => setState(() => _itemSelecionado = item),
+              usuarioLogado: _autenticacaoState.usuario != null,
             ),
           ),
         if (exibindoMenu)
@@ -278,6 +289,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                     tema: widget.tema,
                     aoEntrar: () {},
                     aoSair: () {},
+                    usuarioLogado: _autenticacaoState.usuario != null,
                     exibindoMenu: true,
                     exibirSeta: true,
                     deslogar: _deslogar,

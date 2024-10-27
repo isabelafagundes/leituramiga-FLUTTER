@@ -77,17 +77,18 @@ class _CardNotificacaoWidgetState extends State<CardNotificacaoWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BotaoPequenoWidget(
-                    tema: widget.tema,
-                    corFundo: Color(widget.tema.base100),
-                    corFonte: Color(widget.tema.baseContent),
-                    aoClicar: () => widget.aoRecusar(widget.notificacao.numeroSolicitacao),
-                    label: "Recusar",
-                  ),
-                  SizedBox(width: widget.tema.espacamento),
+                  // BotaoPequenoWidget(
+                  //   tema: widget.tema,
+                  //   corFundo: Color(widget.tema.base100),
+                  //   corFonte: Color(widget.tema.baseContent),
+                  //   aoClicar: () => widget.aoRecusar(widget.notificacao.numeroSolicitacao),
+                  //   label: "Recusar",
+                  // ),
+                  // SizedBox(width: widget.tema.espacamento),
                   BotaoPequenoWidget(
                     tema: widget.tema,
                     corFonte: kCorFonte,
+                    icone: Icon(Icons.remove_red_eye, color: kCorFonte),
                     aoClicar: ()=>widget.aoVisualizar(widget.notificacao.numeroSolicitacao),
                     label: "Visualizar",
                   ),

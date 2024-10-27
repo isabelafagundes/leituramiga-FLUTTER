@@ -6,6 +6,7 @@ enum MenuLateral {
     descricao: "Início",
     iconeAtivado: "menu/home-fill",
     iconeDesativado: "menu/home",
+    usuarioLogado: false,
     rota: Rota.HOME,
   ),
   SOLICITACOES(
@@ -42,6 +43,7 @@ enum MenuLateral {
   final String iconeAtivado;
   final String iconeDesativado;
   final Rota rota;
+  final bool usuarioLogado;
 
   const MenuLateral({
     required this.id,
@@ -49,5 +51,6 @@ enum MenuLateral {
     required this.iconeAtivado,
     required this.iconeDesativado,
     required this.rota,
+    this.usuarioLogado = true,
   });
 }

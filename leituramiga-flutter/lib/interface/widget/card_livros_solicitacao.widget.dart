@@ -49,13 +49,14 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                   texto: "Livros da solicitação",
                   tema: widget.tema,
                   cor: Color(widget.tema.baseContent),
-                  tamanho: widget.tema.tamanhoFonteXG + 4,
+                  tamanho: Responsive.larguraP(context)?widget.tema.tamanhoFonteM :widget.tema.tamanhoFonteXG + 4,
                   weight: FontWeight.w500,
                 ),
                 const Spacer(),
                 BotaoPequenoWidget(
                   tema: widget.tema,
                   label: "Adicionar livro",
+                  tamanhoFonte: widget.tema.tamanhoFonteM,
                   padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 2),
                   icone: Icon(
                     Icons.add,

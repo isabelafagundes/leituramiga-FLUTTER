@@ -9,7 +9,6 @@ import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
-import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
@@ -57,7 +56,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
   final TextEditingController controllerDataDevolucao = TextEditingController();
   final TextEditingController controllerHoraEntrega = TextEditingController();
   final TextEditingController controllerHoraDevolucao = TextEditingController();
-  final TextEditingController controllerFrete = TextEditingController();
+  final TextEditingController controllerCodigoRastreio = TextEditingController();
   final TextEditingController controllerFormaEntrega = TextEditingController();
   EditarSolicitacao _abaSelecionada = EditarSolicitacao.INFORMACOES;
   CriarSolicitacao estagioPagina = CriarSolicitacao.INFORMACOES_ADICIONAIS;
@@ -67,7 +66,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
-  final TipoSolicitacao _tipoSolicitacao = TipoSolicitacao.TROCA;
+  TipoSolicitacao _tipoSolicitacao = TipoSolicitacao.DOACAO;
   FormaEntrega? formaEntregaSelecionada;
 
   @override
@@ -92,9 +91,10 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
       await _obterUsuarioSolicitacao();
       await _usuarioComponent.obterUsuario(_autenticacaoState.usuario!.email.endereco);
       await _usuarioComponent.obterLivrosUsuario();
+      _preencherControllers();
       UF? uf = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.municipio.estado;
       await _usuarioComponent.obterCidades(uf!);
-      _preencherControllers();
+      setState(() => _tipoSolicitacao = _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao);
     });
   }
 
@@ -175,6 +175,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
       EditarSolicitacao.INFORMACOES => SingleChildScrollView(
           child: FormularioInformacoesAdicionaisWidget(
             tema: tema,
+            controllerCodigoRastreio: controllerCodigoRastreio,
             controllerHoraDevolucao: controllerHoraDevolucao,
             controllerHoraEntrega: controllerHoraEntrega,
             abrirTimePicker: ([bool ehDevolucao = false]) => abrirTimePicker(ehDevolucao),
@@ -197,10 +198,10 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
             tema: tema,
             semBotaoProximo: true,
             aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
-            aoSelecionarFrete: (frete) => setState(() => controllerFrete.text = frete),
+            aoSelecionarFrete: (frete) => setState(() => controllerCodigoRastreio.text = frete),
             estados: UF.values.map((e) => e.descricao).toList(),
             cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome).toList(),
-            controllerFrete: controllerFrete,
+            controllerFrete: controllerCodigoRastreio,
             aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
             aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
             aoClicarProximo: () => atualizarPagina(CriarSolicitacao.CONCLUSAO),
@@ -262,6 +263,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
     controllerHoraDevolucao.text = _solicitacaoComponent.solicitacaoSelecionada?.dataDevolucao?.formatar("HH:mm") ?? '';
     controllerFormaEntrega.text = _solicitacaoComponent.solicitacaoSelecionada?.formaEntrega.descricao ?? "Selecione";
     controllerInformacoes.text = _solicitacaoComponent.solicitacaoSelecionada?.informacoesAdicionais ?? "";
+    controllerCodigoRastreio.text = _solicitacaoComponent.solicitacaoSelecionada?.codigoRastreamento ?? "";
     setState(() {});
   }
 
@@ -286,20 +288,22 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
 
       return Solicitacao.criar(
         _solicitacaoComponent.solicitacaoSelecionada!.numero,
-        _usuarioComponent.livroSelecionado!.emailUsuario,
-        _autenticacaoState.usuario!.email.endereco,
+        _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioCriador,
+        _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioProprietario,
         formaEntregaSelecionada ?? FormaEntrega.CORREIOS,
         _solicitacaoComponent.solicitacaoSelecionada!.dataCriacao,
         dataEntrega,
         dataDevolucao,
         _solicitacaoComponent.solicitacaoSelecionada!.dataAtualizacao,
         controllerInformacoes.text,
-        _solicitacaoComponent.utilizarEnderecoPerfil ? null : endereco!,
+        _solicitacaoComponent.solicitacaoSelecionada!.endereco!.principal
+            ? _solicitacaoComponent.solicitacaoSelecionada!.endereco
+            : endereco,
         _solicitacaoComponent.solicitacaoSelecionada!.status,
         _solicitacaoComponent.solicitacaoSelecionada!.dataAceite,
         "",
         _tipoSolicitacao,
-        null,
+        controllerCodigoRastreio.text,
         _solicitacaoComponent.solicitacaoSelecionada!.livrosSolicitante,
         _solicitacaoComponent.solicitacaoSelecionada!.livrosReceptor,
       );
@@ -312,8 +316,12 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
     Municipio? municipio = _usuarioComponent.municipiosPorNumero.values
         .where(
           (element) => element.nome == controllerCidade.text,
-    )
+        )
         .firstOrNull;
+
+    Solicitacao solicitacaoEdicao = _solicitacaoComponent.solicitacaoSelecionada!;
+
+    if (solicitacaoEdicao.endereco != null && municipio == null) return solicitacaoEdicao.endereco;
 
     if (municipio == null) return null;
 
@@ -363,6 +371,9 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
   Widget _obterCalendario(bool ehDataDevolucao) {
     return CalendarioWidget(
       tema: tema,
+      dataInicial: ehDataDevolucao
+          ? _solicitacaoComponent.solicitacaoSelecionada?.dataDevolucao?.valor ?? DataHora.hoje().valor
+          : _solicitacaoComponent.solicitacaoSelecionada?.dataEntrega?.valor ?? DataHora.hoje().valor,
       aoSelecionarData: (data) async {
         if (ehDataDevolucao) {
           setState(() => controllerDataDevolucao.text = DataHora.criar(data).formatar("dd/MM/yyyy"));

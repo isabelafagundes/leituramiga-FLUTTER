@@ -2,7 +2,7 @@ import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/super/entidade.dart';
 import 'package:leituramiga/domain/usuario/email.dart';
 
-class ResumoLivro extends Entidade {
+class ResumoLivro extends Entidade implements Comparable {
   final int _numero;
   final String _nomeUsuario;
   final String _nomeAutor;
@@ -86,4 +86,20 @@ class ResumoLivro extends Entidade {
   String get descricao => _descricao;
 
   String get nomeAutor => _nomeAutor;
+
+  @override
+  int compareTo(other) {
+    if (other is ResumoLivro) {
+      return _nomeLivro.compareTo(other.nomeLivro);
+    }
+    return 0;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is ResumoLivro) {
+      return _numero == other.numero;
+    }
+    return false;
+  }
 }

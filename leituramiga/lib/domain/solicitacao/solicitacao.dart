@@ -105,11 +105,12 @@ class Solicitacao extends Entidade {
 
   bool get validarPodeFinalizar {
     if (_dataDevolucao != null && _dataDevolucao!.ehAntesDe(DataHora.hoje())) {
-      return true;
+      return false;
     } else if (_dataEntrega != null && _dataEntrega!.ehDepoisDe(DataHora.hoje())) {
-      return true;
+      return false;
     }
-    return _dataEntrega == null && _dataDevolucao == null;
+    return  _dataEntrega == null || _dataDevolucao == null ||
+        (_dataEntrega != null || _dataDevolucao != null);
   }
 
   void adicionarEndereco(
@@ -178,6 +179,8 @@ class Solicitacao extends Entidade {
     );
   }
 
+  LivrosSolicitacao get livrosUsuarioSolicitante => _livrosUsuarioSolicitante;
+
   String get emailUsuarioProprietario => _emailUsuarioProprietario;
 
   LivrosSolicitacao get livrosSolicitante => _livrosUsuarioSolicitante;
@@ -211,4 +214,8 @@ class Solicitacao extends Entidade {
   TipoSolicitacao get tipoSolicitacao => _tipoSolicitacao;
 
   String get emailUsuarioCriador => _emailUsuarioCriador;
+
+  LivrosSolicitacao? get livrosUsuarioReceptor => _livrosUsuarioReceptor;
+
+  String? get codigoRastreamento => _codigoRastreamento;
 }

@@ -35,12 +35,14 @@ import 'package:projeto_leituramiga/interface/widget/time_picker.widget.dart';
 @RoutePage()
 class CriarSolicitacaoPage extends StatefulWidget {
   final int? numeroLivro;
+  final String? nomeUsuario;
   final int tipoSolicitacao;
 
   const CriarSolicitacaoPage({
     super.key,
     @PathParam('numeroLivro') required this.numeroLivro,
     @PathParam('tipoSolicitacao') required this.tipoSolicitacao,
+    @PathParam('nomeUsuario') this.nomeUsuario,
   });
 
   @override
@@ -95,10 +97,13 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _usuarioComponent.obterPerfil();
-      if (widget.numeroLivro != null) await _usuarioComponent.obterLivro(widget.numeroLivro!);
-      await _obterUsuarioSolicitacao();
-      ResumoLivro? livro = _usuarioComponent.livroSelecionado?.criarResumoLivro();
-      if (livro != null) _solicitacaoComponent.selecionarLivro(livro);
+      if (widget.numeroLivro != null) {
+        await _usuarioComponent.obterLivro(widget.numeroLivro!);
+        ResumoLivro? livro = _usuarioComponent.livroSelecionado?.criarResumoLivro();
+        if (livro != null) _solicitacaoComponent.selecionarLivro(livro);
+        await _obterUsuarioSolicitacao();
+      } else {}
+
       await _usuarioComponent.obterLivrosUsuarioSolicitacao();
       _tipoSolicitacao = TipoSolicitacao.deNumero(widget.tipoSolicitacao);
     });
@@ -142,6 +147,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       CriarSolicitacao.INFORMACOES_ADICIONAIS => SingleChildScrollView(
           child: FormularioInformacoesAdicionaisWidget(
             tema: tema,
+            controllerCodigoRastreio: TextEditingController(),
             controllerHoraDevolucao: controllerHoraDevolucao,
             controllerHoraEntrega: controllerHoraEntrega,
             abrirTimePicker: ([bool ehDevolucao = false]) => abrirTimePicker(ehDevolucao),
@@ -191,43 +197,47 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
           ),
         ),
       CriarSolicitacao.CONCLUSAO => SingleChildScrollView(
-          child: Flex(
-            direction: Axis.vertical,
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Flexible(
-                child: SvgWidget(
-                  altura: 350,
-                  nomeSvg: "solicitacao_fim",
-                ),
-              ),
-              SizedBox(height: tema.espacamento * 2),
-              Flexible(
-                child: SizedBox(
-                  width: 400,
-                  child: TextoWidget(
-                    align: TextAlign.center,
-                    texto:
-                        "Sua solicitação foi enviada! Quando ${_usuarioComponent.usuarioSolicitacao?.nome} respondê-la, você será notificado e receberá um e-mail.",
-                    tema: tema,
-                    maxLines: 5,
+          child: SizedBox(
+            height: Responsive.altura(context)*.8,
+            child: Flex(
+              direction: Axis.vertical,
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Flexible(
+                  child: SvgWidget(
+                    altura: 350,
+                    nomeSvg: "solicitacao_fim",
                   ),
                 ),
-              ),
-              SizedBox(height: tema.espacamento * 4),
-              Flexible(
-                child: BotaoWidget(
-                  tema: tema,
-                  texto: 'Finalizar',
-                  nomeIcone: "seta/arrow-long-right",
-                  icone: Icon(Icons.check, color: Color(tema.base200)),
-                  aoClicar: () => Rota.navegar(context, Rota.HOME),
+                SizedBox(height: tema.espacamento * 2),
+                Flexible(
+                  child: SizedBox(
+                    width: 400,
+                    child: TextoWidget(
+                      align: TextAlign.center,
+                      texto:
+                          "Sua solicitação foi enviada! Quando ${_usuarioComponent.usuarioSolicitacao?.nome} respondê-la, você será notificado e receberá um e-mail.",
+                      tema: tema,
+                      maxLines: 5,
+                      tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteM : tema.tamanhoFonteXG,
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(height: tema.espacamento * 4),
-            ],
+                SizedBox(height: tema.espacamento * 4),
+                Flexible(
+                  child: BotaoWidget(
+                    tema: tema,
+                    texto: 'Finalizar',
+                    nomeIcone: "seta/arrow-long-right",
+                    icone: Icon(Icons.check, color: Color(tema.base200)),
+                    aoClicar: () => Rota.navegar(context, Rota.HOME),
+                  ),
+                ),
+                SizedBox(height: tema.espacamento * 4),
+              ],
+            ),
           ),
         ),
       _ => const SizedBox(),
@@ -378,6 +388,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       context,
       LayoutFlexivelWidget(
         tema: tema,
+        alturaOverlay: 700,
         overlayChild: _obterCalendario(ehDataDevolucao),
         drawerChild: _obterCalendario(ehDataDevolucao),
       ),

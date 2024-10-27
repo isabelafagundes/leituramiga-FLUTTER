@@ -51,6 +51,7 @@ class AutenticacaoApiService extends AutenticacaoService with ConfiguracaoApiSta
       "$host/verificar-codigo-seguranca",
       data: {"codigo": codigo, "email": email},
     ).catchError((erro) {
+      if(erro.response.statusCode == 404) throw UsuarioJaExiste();
       throw erro;
     });
   }

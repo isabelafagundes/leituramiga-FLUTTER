@@ -12,6 +12,7 @@ import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/chip/chip.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/imagem.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
@@ -52,6 +53,10 @@ class _LivrosPageState extends State<LivrosPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _livrosComponent.obterLivro(widget.numeroLivro);
+      List<TipoSolicitacao>? tiposSolicitacao = _livrosComponent.livroSelecionado?.tiposSolicitacao;
+      if (_livrosComponent.livroSelecionado != null && tiposSolicitacao?.length == 1) {
+        _tipoSolicitacaoSelecionado = _livrosComponent.livroSelecionado!.tiposSolicitacao.first;
+      }
     });
   }
 
@@ -188,17 +193,56 @@ class _LivrosPageState extends State<LivrosPage> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: SizedBox(
-                                    width: 300,
+                                    width: Responsive.largura(context),
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(height: tema.espacamento / 2),
-                                        TextoComIconeWidget(
-                                          tema: tema,
-                                          nomeSvg: 'usuario/user',
-                                          texto: _livrosComponent.livroSelecionado?.nomeUsuario ?? '',
-                                          tamanhoFonte: tema.tamanhoFonteM + 2,
+                                        Flex(
+                                          direction: Axis.horizontal,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Flexible(
+                                              child: SizedBox(
+                                                height: 30,
+                                                child: TextoComIconeWidget(
+                                                  tema: tema,
+                                                  nomeSvg: 'usuario/user',
+                                                  texto: _livrosComponent.livroSelecionado?.nomeUsuario ?? '',
+                                                  tamanhoFonte: tema.tamanhoFonteM + 2,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: tema.espacamento / 2),
+                                            Flexible(
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  BotaoPequenoWidget(
+                                                    tema: tema,
+                                                    icone: Icon(
+                                                      Icons.logout,
+                                                      color: Color(tema.base200),
+                                                      size: 16,
+                                                    ),
+                                                    corFonte: Color(tema.base200),
+                                                    padding: EdgeInsets.symmetric(horizontal: tema.espacamento),
+                                                    tamanhoFonte: tema.tamanhoFonteM,
+                                                    aoClicar: () => Rota.navegarComArgumentos(
+                                                      context,
+                                                      UsuarioRoute(
+                                                        identificador: _livrosComponent.livroSelecionado?.emailUsuario ?? '',
+                                                      ),
+                                                    ),
+                                                    label: "Ver perfil",
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         SizedBox(height: tema.espacamento / 2),
                                         TextoComIconeWidget(
@@ -246,7 +290,7 @@ class _LivrosPageState extends State<LivrosPage> {
                                     texto: "Troca",
                                     corTexto: kCorFonte,
                                     ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.TROCA,
-                                    aoClicar: () => setState(() => _tipoSolicitacaoSelecionado = TipoSolicitacao.TROCA),
+                                    aoClicar: () => _selecionarTipoSolicitacao(TipoSolicitacao.TROCA),
                                   ),
                                   SizedBox(width: tema.espacamento * 2),
                                 ],
@@ -258,8 +302,7 @@ class _LivrosPageState extends State<LivrosPage> {
                                     texto: "Empréstimo",
                                     ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.EMPRESTIMO,
                                     corTexto: kCorFonte,
-                                    aoClicar: () =>
-                                        setState(() => _tipoSolicitacaoSelecionado = TipoSolicitacao.EMPRESTIMO),
+                                    aoClicar: () => _selecionarTipoSolicitacao(TipoSolicitacao.EMPRESTIMO),
                                   ),
                                   SizedBox(width: tema.espacamento * 2),
                                 ],
@@ -271,8 +314,7 @@ class _LivrosPageState extends State<LivrosPage> {
                                     texto: "Doação",
                                     corTexto: kCorFonte,
                                     ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.DOACAO,
-                                    aoClicar: () =>
-                                        setState(() => _tipoSolicitacaoSelecionado = TipoSolicitacao.DOACAO),
+                                    aoClicar: () => _selecionarTipoSolicitacao(TipoSolicitacao.DOACAO),
                                   ),
                               ],
                             ),
@@ -307,5 +349,9 @@ class _LivrosPageState extends State<LivrosPage> {
         ),
       ),
     );
+  }
+
+  void _selecionarTipoSolicitacao(TipoSolicitacao tipo) {
+    setState(() => _tipoSolicitacaoSelecionado = _tipoSolicitacaoSelecionado == tipo ? null : tipo);
   }
 }

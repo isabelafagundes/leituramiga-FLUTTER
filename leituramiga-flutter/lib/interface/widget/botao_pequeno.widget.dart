@@ -13,6 +13,7 @@ class BotaoPequenoWidget extends StatefulWidget {
   final Widget? icone;
   final EdgeInsets? padding;
   final double altura;
+  final double? tamanhoFonte;
 
   const BotaoPequenoWidget({
     super.key,
@@ -23,6 +24,7 @@ class BotaoPequenoWidget extends StatefulWidget {
     required this.label,
     this.icone,
     this.padding,
+    this.tamanhoFonte,
     this.altura = 35,
   });
 
@@ -71,7 +73,7 @@ class _BotaoPequenoWidgetState extends State<BotaoPequenoWidget> {
                     cor: widget.corFonte ?? kCorFonte,
                     texto: widget.label,
                     weight: FontWeight.w500,
-                    tamanho: widget.tema.tamanhoFonteM + 2,
+                    tamanho: widget.tamanhoFonte ?? widget.tema.tamanhoFonteM + 2,
                   ),
               ],
             ),

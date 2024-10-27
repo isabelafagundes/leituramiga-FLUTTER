@@ -1,6 +1,6 @@
 import 'package:leituramiga/domain/super/entidade.dart';
 
-class ResumoUsuario extends Entidade {
+class ResumoUsuario extends Entidade implements Comparable {
   final String _email;
   final String _nome;
   final String _nomeUsuario;
@@ -52,4 +52,23 @@ class ResumoUsuario extends Entidade {
   String get nomeUsuario => _nomeUsuario;
 
   String get nome => _nome;
+
+  @override
+  int compareTo(other) {
+    if (other is ResumoUsuario) {
+      return _nome.compareTo(other.nome);
+    }
+    return 0;
+  }
+  @override
+  bool operator ==(Object other) {
+    if (other is ResumoUsuario) {
+      return _email == other._email;
+    }
+    return false;
+  }
+
+  hashcode() {
+    return _email.hashCode;
+  }
 }
