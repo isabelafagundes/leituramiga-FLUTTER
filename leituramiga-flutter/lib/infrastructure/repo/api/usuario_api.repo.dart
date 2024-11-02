@@ -1,6 +1,7 @@
 import 'package:leituramiga/domain/usuario/resumo_usuario.dart';
 import 'package:leituramiga/domain/usuario/usuario.dart';
 import 'package:leituramiga/repo/usuario.repo.dart';
+import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/configuracao_api.state.dart';
 import 'package:projeto_leituramiga/infrastructure/service/auth/http.client.dart';
 
@@ -16,6 +17,8 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
 
   final HttpClient _client = HttpClient.instancia;
 
+  AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
+
   @override
   Future<void> atualizarUsuario(Usuario usuario) async {
     if (usuario.senha != null) {
@@ -26,10 +29,10 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
   }
 
   Future<void> _criarUsuario(Usuario usuario) async {
-    print(usuario.paraMapa());
-    await _client.post("$host/criar-usuario", data: usuario.paraMapa()).catchError((erro) {
+    String token = await _client.post("$host/criar-usuario", data: usuario.paraMapa()).catchError((erro) {
       throw erro;
-    });
+    }).then((response) => response.data);
+    _autenticacaoState.atualizarCriacaoUsuarioToken(token);
   }
 
   Future<void> _atualizarUsuario(Usuario usuario) async {

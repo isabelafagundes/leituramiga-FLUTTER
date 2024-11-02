@@ -64,7 +64,6 @@ class _HomePageState extends State<HomePage> {
       atualizar,
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      print("HomePage");
       await _livrosComponent.obterLivrosIniciais();
       await _livrosComponent.obterCategorias();
       await _livrosComponent.obterInstituicoes();

@@ -6,7 +6,6 @@ import 'package:leituramiga/domain/livro/livro.dart';
 import 'package:leituramiga/domain/livro/tipo_status_livro.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
-import 'package:leituramiga/state/filtros.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
@@ -37,8 +36,6 @@ class _CriarLivroPageState extends State<CriarLivroPage> {
   TemaState get _temaState => TemaState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
-
-  FiltroState get _filtroState => FiltroState.instancia;
 
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
@@ -106,7 +103,8 @@ class _CriarLivroPageState extends State<CriarLivroPage> {
       controllerNome.text.isNotEmpty &&
       controllerAutor.text.isNotEmpty &&
       controllerDescricao.text.isNotEmpty &&
-      controllerEstadoFisico.text.isNotEmpty;
+      controllerEstadoFisico.text.isNotEmpty &&
+      tiposSolicitacao.isNotEmpty;
 
   Livro get livro => Livro.carregar(
         null,

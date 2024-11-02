@@ -118,7 +118,7 @@ class Usuario extends Entidade {
               ),
         usuarioAsMap["quantidadeLivros"],
         usuarioAsMap["descricao"],
-        usuarioAsMap["codigoInstituicao"] == null
+        usuarioAsMap["codigoInstituicao"] == null || usuarioAsMap["nomeInstituicao"] == null
             ? null
             : InstituicaoDeEnsino.carregar(
                 usuarioAsMap["codigoInstituicao"],

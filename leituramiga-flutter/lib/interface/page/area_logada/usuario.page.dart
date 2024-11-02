@@ -60,9 +60,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _usuarioComponent.obterUsuario(widget.identificador);
-      await _usuarioComponent.obterComentarios(_usuarioComponent.usuarioSelecionado!.email.endereco);
-      await _usuarioComponent.obterLivrosUsuario();
+      await _buscarDados();
     });
   }
 
@@ -259,11 +257,17 @@ class _UsuarioPageState extends State<UsuarioPage> {
         context,
         () async {
           await _enviarComentario();
-          await _usuarioComponent.obterComentarios(_usuarioComponent.usuarioSelecionado!.email.endereco);
           Navigator.pop(context);
         },
       ),
     );
+    await _buscarDados();
+  }
+
+  Future<void> _buscarDados() async {
+    await _usuarioComponent.obterUsuario(widget.identificador);
+    await _usuarioComponent.obterComentarios(_usuarioComponent.usuarioSelecionado!.email.endereco);
+    await _usuarioComponent.obterLivrosUsuario();
   }
 
   Future<void> _enviarComentario() async {

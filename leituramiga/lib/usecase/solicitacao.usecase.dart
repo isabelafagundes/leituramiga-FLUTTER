@@ -19,6 +19,7 @@ class SolicitacaoUseCase {
   Future<void> obterSolicitacao(int numero) async {
     Solicitacao solicitacao = await _repo.obterSolicitacao(numero);
     _state.solicitacaoSelecionada = solicitacao;
+    _state.utilizarEnderecoPerfil = solicitacao.endereco?.principal ?? false;
   }
 
   Future<void> aceitarSolicitacao(int numero) async {
@@ -40,7 +41,7 @@ class SolicitacaoUseCase {
   }
 
   Future<void> cancelarSolicitacao(int numero, String motivo) async {
-    await _service.cancelarSolicitacao(numero,motivo);
+    await _service.cancelarSolicitacao(numero, motivo);
     await obterSolicitacao(numero);
   }
 

@@ -1,11 +1,14 @@
 import 'package:leituramiga/domain/usuario/usuario.dart';
 import 'package:leituramiga/domain/usuario/usuario_autenticado.dart';
 import 'package:leituramiga/service/autenticacao.service.dart';
+import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/configuracao_api.state.dart';
 import 'package:projeto_leituramiga/infrastructure/service/auth/http.client.dart';
 
 class AutenticacaoApiService extends AutenticacaoService with ConfiguracaoApiState {
   static AutenticacaoApiService? _instancia;
+
+  AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
   AutenticacaoApiService._();
 
@@ -46,9 +49,8 @@ class AutenticacaoApiService extends AutenticacaoService with ConfiguracaoApiSta
 
   @override
   Future<void> verificarCodigoSeguranca(String codigo, String email) async {
-    print(email);
-    await _client.post(
-      "$host/verificar-codigo-seguranca",
+    await _client.post("$host/verificar-codigo-seguranca",
+      headers: {"Authorization": "Bearer ${_autenticacaoState.criacaoUsuarioToken}"},
       data: {"codigo": codigo, "email": email},
     ).catchError((erro) {
       if(erro.response.statusCode == 404) throw UsuarioJaExiste();
