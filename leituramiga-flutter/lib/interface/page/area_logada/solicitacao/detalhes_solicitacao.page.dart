@@ -4,6 +4,7 @@ import 'package:leituramiga/component/solicitacao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/domain/endereco/endereco.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
+import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
@@ -257,12 +258,19 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
         tema: tema,
         corTexto: Color(tema.base200),
         texto: "Escolher livros",
-        aoClicar: () => Rota.navegarComArgumentos(
-          context,
-          AceiteSolicitacaoRoute(
-            numeroSolicitacao: widget.numeroSolicitacao,
-          ),
-        ),
+        aoClicar: () {
+          if ((solicitacao?.tipoSolicitacao.possuiSegundoEndereco ?? false) &&
+              solicitacao?.formaEntrega == FormaEntrega.CORREIOS) {
+            Rota.navegarComArgumentos(
+              context,
+              AceiteSolicitacaoRoute(
+                numeroSolicitacao: widget.numeroSolicitacao,
+              ),
+            );
+          } else {
+            _atualizarAbaSelecionada(DetalhesSolicitacao.SELECAO_LIVROS);
+          }
+        },
         icone: Icon(
           Icons.bookmark_add_outlined,
           color: Color(tema.base200),
