@@ -32,7 +32,7 @@ class BotaoNotificacaoWidget extends StatelessWidget {
                 tema: tema,
                 aoClicar: aoClicar,
                 corFundo: numeroNotificacoes == 0 ? Color(tema.base200) : Color(tema.accent),
-                corIcone: numeroNotificacoes == 0 ? Color(tema.baseContent) : kCorFonte,
+                corIcone: numeroNotificacoes == 0 ? Color(tema.baseContent) : Color(tema.base200),
                 nomeSvg: numeroNotificacoes > 0 ? "bell-alert" : "bell",
                 tamanhoIcone: 35,
               )
@@ -40,11 +40,11 @@ class BotaoNotificacaoWidget extends StatelessWidget {
                 tema: tema,
                 aoClicar: aoClicar,
                 padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
-                corFonte: numeroNotificacoes == 0 ? Color(tema.baseContent) : kCorFonte,
+                corFonte: numeroNotificacoes == 0 ? Color(tema.baseContent) : Color(tema.base200),
                 corFundo: numeroNotificacoes == 0 ? Color(tema.base200) : Color(tema.accent),
                 icone: SvgWidget(
                   nomeSvg: numeroNotificacoes > 0 ? "bell-alert" : "bell",
-                  cor: numeroNotificacoes > 0 ? kCorFonte : Color(tema.baseContent),
+                  cor: numeroNotificacoes > 0 ? Color(tema.base200) : Color(tema.baseContent),
                 ),
                 label: modoMinimizado ? "" : "Notificações",
               ),

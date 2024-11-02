@@ -206,6 +206,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Flexible(
+                  flex: 3,
                   child: SvgWidget(
                     altura: 350,
                     nomeSvg: "solicitacao_fim",

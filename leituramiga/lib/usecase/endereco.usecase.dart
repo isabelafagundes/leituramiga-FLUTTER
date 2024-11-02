@@ -29,7 +29,8 @@ class EnderecoUseCase {
     _state.enderecoEdicao = endereco;
   }
 
-  Future<void> obterMunicipios(UF uf, [String? pesquisa]) async {
+  Future<void> obterMunicipios(UF? uf, [String? pesquisa]) async {
+    if(uf == null) return;
     List<Municipio> municipios = await _repo.obterMunicipios(uf, pesquisa);
     _state.municipiosPorNumero.clear();
     for (Municipio municipio in municipios) {

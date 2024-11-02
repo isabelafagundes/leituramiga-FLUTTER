@@ -105,7 +105,6 @@ class Usuario extends Entidade {
   }
 
   factory Usuario.carregarDeMapa(Map<String, dynamic> usuarioAsMap) {
-    print("MAPA: $usuarioAsMap");
     return Usuario.carregar(
         usuarioAsMap["nome"],
         usuarioAsMap["username"],
@@ -154,4 +153,12 @@ class CredenciaisExistentes extends ErroDominio {
 
 class UsuarioJaExiste extends ErroDominio {
   UsuarioJaExiste() : super("O usuário já existe! Altere o email ou o seu nome de usuário");
+}
+
+class TokenExpirado extends ErroDominio {
+  TokenExpirado() : super("Não é possível utilizar o código pois ele expirou! Tente novamente!");
+}
+
+class CodigoInvalido extends ErroDominio {
+  CodigoInvalido() : super("O código é inválido!");
 }

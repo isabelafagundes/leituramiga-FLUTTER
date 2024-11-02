@@ -22,6 +22,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
   final Function()? aoSalvar;
   final List<String> estados;
   final Widget? botaoInferior;
+  final String? textoAjuda;
 
   FormularioEnderecoWidget({
     super.key,
@@ -35,6 +36,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
     required this.controllerEstado,
     required this.aoSelecionarCidade,
     required this.aoSelecionarEstado,
+    this.textoAjuda = "Preencha com o endereço que será feita a entrega!",
     required this.cidades,
     required this.estados,
     this.aoSalvar,
@@ -53,7 +55,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         TextoWidget(
-          texto: "Preencha com o endereço que será feita a entrega!",
+          texto: textoAjuda ?? "Preencha com o endereço que será feita a entrega!",
           tema: tema,
           align: TextAlign.center,
           cor: Color(tema.baseContent),

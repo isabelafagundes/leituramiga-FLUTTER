@@ -96,8 +96,8 @@ class Endereco extends ObjetoDeValor {
   bool get principal => _principal;
 
   String get enderecoFormatado {
-    String numeroCompleto = _numeroResidencial != null ? "$_numeroResidencial" : "";
-    String complementoFormatado = _complemento != null ? ", $_complemento" : "";
+    String numeroCompleto = _numeroResidencial != null && _numeroResidencial!.isNotEmpty ? "$_numeroResidencial" : "";
+    String complementoFormatado = _complemento != null && _complemento!.isNotEmpty ? ", $_complemento" : "";
     return "$_rua, $numeroCompleto$complementoFormatado, $_bairro, ${_municipio.nome} - ${_municipio.estado.descricao}, $_cepFormatado";
   }
 

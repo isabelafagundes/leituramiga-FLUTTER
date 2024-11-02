@@ -11,7 +11,6 @@ import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
-import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -29,19 +28,19 @@ import 'package:projeto_leituramiga/interface/widget/tab.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/time_picker.widget.dart';
 
 @RoutePage()
-class VisualizarSolicitacaoPage extends StatefulWidget {
+class EditarSolicitacaoPage extends StatefulWidget {
   final int numeroSolicitacao;
 
-  const VisualizarSolicitacaoPage({
+  const EditarSolicitacaoPage({
     super.key,
     @PathParam('numeroSolicitacao') required this.numeroSolicitacao,
   });
 
   @override
-  State<VisualizarSolicitacaoPage> createState() => _VisualizarSolicitacaoPageState();
+  State<EditarSolicitacaoPage> createState() => _EditarSolicitacaoPageState();
 }
 
-class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
+class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
   final SolicitacaoComponent _solicitacaoComponent = SolicitacaoComponent();
   final UsuarioComponent _usuarioComponent = UsuarioComponent();
   final TextEditingController controllerInformacoes = TextEditingController();
@@ -69,6 +68,21 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
   TipoSolicitacao _tipoSolicitacao = TipoSolicitacao.DOACAO;
   FormaEntrega? formaEntregaSelecionada;
 
+  Endereco? get enderecoEmEdicao {
+    bool possuiSegundoEndereco = _tipoSolicitacao.possuiSegundoEndereco &&
+        _solicitacaoComponent.solicitacaoSelecionada!.formaEntrega == FormaEntrega.CORREIOS;
+
+    if (possuiSegundoEndereco) {
+      if (_autenticacaoState.usuario!.email.endereco == _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioCriador) {
+        return _solicitacaoComponent.solicitacaoSelecionada!.enderecoSolicitante!;
+      } else {
+        return _solicitacaoComponent.solicitacaoSelecionada!.enderecoReceptor!;
+      }
+    }
+
+    return _solicitacaoComponent.solicitacaoSelecionada!.enderecoSolicitante!;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -88,13 +102,14 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
+      setState(() => _tipoSolicitacao = _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao);
       await _obterUsuarioSolicitacao();
       await _usuarioComponent.obterUsuario(_autenticacaoState.usuario!.email.endereco);
       await _usuarioComponent.obterLivrosUsuario();
       _preencherControllers();
-      UF? uf = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.municipio.estado;
-      await _usuarioComponent.obterCidades(uf!);
-      setState(() => _tipoSolicitacao = _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao);
+      if (enderecoEmEdicao?.principal ?? false) _solicitacaoComponent.utilizarEnderecoDoPerfil();
+      UF? uf = enderecoEmEdicao?.municipio.estado;
+      await _usuarioComponent.obterCidades(uf);
     });
   }
 
@@ -125,14 +140,14 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
                 children: [
                   BotaoWidget(
                     tema: tema,
-                    corTexto: kCorFonte,
+                    corTexto: Color(tema.base200),
                     altura: 45,
                     largura: 140,
                     texto: "Salvar",
                     aoClicar: salvarSolicitacao,
                     icone: Icon(
                       Icons.check,
-                      color: kCorFonte,
+                      color: Color(tema.base200),
                     ),
                     corFundo: Color(tema.accent),
                   ),
@@ -194,28 +209,30 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
           ),
         ),
       EditarSolicitacao.ENDERECO => SingleChildScrollView(
-          child: ConteudoEnderecoSolicitacaoWidget(
-            tema: tema,
-            semBotaoProximo: true,
-            aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
-            aoSelecionarFrete: (frete) => setState(() => controllerCodigoRastreio.text = frete),
-            estados: UF.values.map((e) => e.descricao).toList(),
-            cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome).toList(),
-            controllerFrete: controllerCodigoRastreio,
-            aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
-            aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
-            aoClicarProximo: () => atualizarPagina(CriarSolicitacao.CONCLUSAO),
-            utilizarEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoDoPerfil,
-            aoClicarFrete: (frete) {},
-            controllerRua: controllerRua,
-            controllerBairro: controllerBairro,
-            controllerCep: controllerCep,
-            controllerNumero: controllerNumero,
-            controllerComplemento: controllerComplemento,
-            controllerCidade: controllerCidade,
-            controllerEstado: controllerEstado,
-            permitirUsarEnderecoPerfil: true,
-            utilizaEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoPerfil,
+          child: IgnorePointer(
+            child: ConteudoEnderecoSolicitacaoWidget(
+              tema: tema,
+              semBotaoProximo: true,
+              aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
+              aoSelecionarFrete: (frete) => setState(() => controllerCodigoRastreio.text = frete),
+              estados: UF.values.map((e) => e.descricao).toList(),
+              cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome).toList(),
+              controllerFrete: controllerCodigoRastreio,
+              aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
+              aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
+              aoClicarProximo: () => atualizarPagina(CriarSolicitacao.CONCLUSAO),
+              utilizarEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoDoPerfil,
+              aoClicarFrete: (frete) {},
+              controllerRua: controllerRua,
+              controllerBairro: controllerBairro,
+              controllerCep: controllerCep,
+              controllerNumero: controllerNumero,
+              controllerComplemento: controllerComplemento,
+              controllerCidade: controllerCidade,
+              controllerEstado: controllerEstado,
+              permitirUsarEnderecoPerfil: true,
+              utilizaEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoPerfil,
+            ),
           ),
         ),
       EditarSolicitacao.LIVROS => ConteudoLivrosSolicitacaoWidget(
@@ -248,13 +265,13 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
   }
 
   void _preencherControllers() {
-    controllerRua.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.rua ?? '';
-    controllerBairro.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.bairro ?? '';
-    controllerCep.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.cep ?? '';
-    controllerNumero.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.numeroResidencial ?? '';
-    controllerComplemento.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.complemento ?? '';
-    controllerCidade.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.municipio.nome ?? '';
-    controllerEstado.text = _solicitacaoComponent.solicitacaoSelecionada?.endereco?.municipio.estado.descricao ?? '';
+    controllerRua.text = enderecoEmEdicao?.rua ?? '';
+    controllerBairro.text = enderecoEmEdicao?.bairro ?? '';
+    controllerCep.text = enderecoEmEdicao?.cep ?? '';
+    controllerNumero.text = enderecoEmEdicao?.numeroResidencial ?? '';
+    controllerComplemento.text = enderecoEmEdicao?.complemento ?? '';
+    controllerCidade.text = enderecoEmEdicao?.municipio.nome ?? '';
+    controllerEstado.text = enderecoEmEdicao?.municipio.estado.descricao ?? '';
     controllerDataEntrega.text =
         _solicitacaoComponent.solicitacaoSelecionada?.dataEntrega?.formatar("dd/MM/yyyy") ?? '';
     controllerDataDevolucao.text =
@@ -296,8 +313,8 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
         dataDevolucao,
         _solicitacaoComponent.solicitacaoSelecionada!.dataAtualizacao,
         controllerInformacoes.text,
-        _solicitacaoComponent.solicitacaoSelecionada!.endereco!.principal
-            ? _solicitacaoComponent.solicitacaoSelecionada!.endereco
+        _solicitacaoComponent.solicitacaoSelecionada!.enderecoSolicitante!.principal
+            ? _solicitacaoComponent.solicitacaoSelecionada!.enderecoSolicitante
             : endereco,
         _solicitacaoComponent.solicitacaoSelecionada!.status,
         _solicitacaoComponent.solicitacaoSelecionada!.dataAceite,
@@ -319,9 +336,7 @@ class _VisualizarSolicitacaoPageState extends State<VisualizarSolicitacaoPage> {
         )
         .firstOrNull;
 
-    Solicitacao solicitacaoEdicao = _solicitacaoComponent.solicitacaoSelecionada!;
-
-    if (solicitacaoEdicao.endereco != null && municipio == null) return solicitacaoEdicao.endereco;
+    if (enderecoEmEdicao != null && municipio == null) return enderecoEmEdicao;
 
     if (municipio == null) return null;
 

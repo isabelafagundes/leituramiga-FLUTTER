@@ -31,7 +31,8 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
   Future<void> _criarUsuario(Usuario usuario) async {
     String token = await _client.post("$host/criar-usuario", data: usuario.paraMapa()).catchError((erro) {
       throw erro;
-    }).then((response) => response.data);
+    }).then((response) => response.data["token"]);
+    print("Token: $token");
     _autenticacaoState.atualizarCriacaoUsuarioToken(token);
   }
 

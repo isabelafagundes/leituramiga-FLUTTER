@@ -107,7 +107,7 @@ class _EditarLivroPageState extends State<EditarLivroPage> {
                     texto: 'Excluir livro',
                     nomeIcone: "seta/arrow-long-right",
                     corFundo: Color(tema.error),
-                    icone: Icon(Icons.restore_from_trash_sharp, color: kCorFonte),
+                    icone: Icon(Icons.restore_from_trash_sharp, color: Color(tema.base200)),
                     aoClicar: _excluirLivro,
                   ),
                   selecionarTipoSolicitacao: (tipo) => setState(

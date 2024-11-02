@@ -22,7 +22,8 @@ enum Rota {
   CALENDARIO(url: "calendario", pageInfo: CalendarioRoute.page),
   DETALHES_SOLICITACAO(url: "detalhes-solicitacao/:numeroSolicitacao", pageInfo: DetalhesSolicitacaoRoute.page),
   HISTORICO(url: "historico", pageInfo: HistoricoRoute.page),
-  SOLICITACAO(url: "solicitacao/:numeroSolicitacao", pageInfo: VisualizarSolicitacaoRoute.page);
+  ACEITE_SOLICITACAO(url: "aceitar-solicitacao", pageInfo: AceiteSolicitacaoRoute.page),
+  SOLICITACAO(url: "solicitacao/:numeroSolicitacao", pageInfo: EditarSolicitacaoRoute.page);
 
   final PageInfo<dynamic> pageInfo;
   final String url;
@@ -47,6 +48,7 @@ enum Rota {
             adicionar(rota: DETALHES_SOLICITACAO, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: CALENDARIO, guards: [UsuarioLogadoGuard()]),
             adicionar(rota: HISTORICO, guards: [UsuarioLogadoGuard()]),
+            adicionar(rota: ACEITE_SOLICITACAO, guards: [UsuarioLogadoGuard()]),
           ],
         ),
         adicionar(

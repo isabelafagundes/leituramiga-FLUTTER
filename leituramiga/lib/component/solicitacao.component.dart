@@ -1,3 +1,4 @@
+import 'package:leituramiga/domain/endereco/endereco.dart';
 import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:leituramiga/domain/solicitacao/livro_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/resumo_solicitacao.dart';
@@ -54,9 +55,9 @@ class SolicitacaoComponent extends State with SolicitacaoState, PaginacaoState<R
     );
   }
 
-  Future<void> aceitarSolicitacao(int numeroSolicitacao) async {
+  Future<void> aceitarSolicitacao(int numeroSolicitacao, Endereco? endereco) async {
     await executar(
-      rotina: () => _solicitacaoUseCase.aceitarSolicitacao(numeroSolicitacao),
+      rotina: () => _solicitacaoUseCase.aceitarSolicitacao(numeroSolicitacao, endereco),
       mensagemErro: "Não foi possível aceitar a solicitação",
     );
   }

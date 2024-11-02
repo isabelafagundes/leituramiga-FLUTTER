@@ -21,7 +21,7 @@ class BackgroundWidget extends StatelessWidget {
               child: TextoWidget(
                 texto: "© 2024 LeiturAmiga. Todos os direitos reservados.",
                 tema: tema,
-                cor: Color(tema.baseContent).withOpacity(.5),
+                cor: Color(tema.baseContent).withOpacity(.7),
               ),
             ),
             child,

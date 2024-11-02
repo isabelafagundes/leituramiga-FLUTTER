@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:leituramiga/domain/livro/resumo_livro.dart';
-import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/dica.widget.dart';
@@ -18,6 +17,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
   final List<ResumoLivro> livros;
   final Function() navegarParaSolicitacao;
   final String textoPopUp;
+  final bool exibirBotao;
 
   const ConteudoSelecaoLivrosWidget({
     super.key,
@@ -29,6 +29,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
     required this.aoClicarLivro,
     required this.textoPopUp,
     this.aceitarSolicitacao,
+    this.exibirBotao = true,
   });
 
   @override
@@ -43,23 +44,25 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
               tema: tema,
               texto: "Selecione os livros que deseja adicionar na solicitação:",
             ),
-            SizedBox(height: tema.espacamento),
-            BotaoWidget(
-              tema: tema,
-              texto: "Selecionar livros",
-              icone: Icon(
-                Icons.check,
-                color: kCorFonte,
+            if (exibirBotao) ...[
+              SizedBox(height: tema.espacamento),
+              BotaoWidget(
+                tema: tema,
+                texto: "Selecionar livros",
+                icone: Icon(
+                  Icons.check,
+                  color: Color(tema.base200),
+                ),
+                aoClicar: () async {
+                  bool? navegarParaSolicitacoes = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) => _obterPopUpPadrao(context),
+                  );
+                  if (navegarParaSolicitacoes == null) return;
+                  if (navegarParaSolicitacoes) return navegarParaSolicitacao();
+                },
               ),
-              aoClicar: () async {
-                bool? navegarParaSolicitacoes = await showDialog(
-                  context: context,
-                  builder: (BuildContext context) => _obterPopUpPadrao(context),
-                );
-                if (navegarParaSolicitacoes == null) return;
-                if (navegarParaSolicitacoes) return navegarParaSolicitacao();
-              },
-            ),
+            ]
           ],
         ),
         SizedBox(height: tema.espacamento * 2),
@@ -125,7 +128,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
                   tema: tema,
                   icone: Icon(
                     Icons.close,
-                    color: kCorFonte,
+                    color: Color(tema.base200),
                   ),
                   texto: "Cancelar",
                   corFundo: Color(tema.error),
@@ -136,7 +139,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
                   tema: tema,
                   icone: Icon(
                     Icons.check,
-                    color: kCorFonte,
+                    color: Color(tema.base200),
                   ),
                   texto: "Adicionar",
                   aoClicar: () {

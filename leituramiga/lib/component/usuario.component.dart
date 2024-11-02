@@ -160,7 +160,7 @@ class UsuarioComponent extends State
     );
   }
 
-  Future<void> obterCidades(UF uf, [String? pesquisa]) async {
+  Future<void> obterCidades(UF? uf, [String? pesquisa]) async {
     executar(
       rotina: () => _enderecoUseCase.obterMunicipios(uf, pesquisa),
       mensagemErro: "Não foi possível atualizar o endereço",

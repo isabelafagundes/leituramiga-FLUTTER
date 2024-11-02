@@ -1,3 +1,4 @@
+import 'package:leituramiga/domain/endereco/endereco.dart';
 import 'package:leituramiga/domain/solicitacao/livros_solicitacao.dart';
 import 'package:leituramiga/service/solicitacao.service.dart';
 
@@ -23,7 +24,7 @@ class SolicitacaoMockService extends SolicitacaoService {
   }
 
   @override
-  Future<void> aceitarSolicitacao(int numero, LivrosSolicitacao? livrosTroca) {
+  Future<void> aceitarSolicitacao(int numero, LivrosSolicitacao? livrosTroca, Endereco? segundoEndereco) {
     // TODO: implement aceitarSolicitacao
     throw UnimplementedError();
   }

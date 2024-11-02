@@ -107,29 +107,26 @@ class ConteudoLivrosSolicitacaoWidget extends StatelessWidget {
                   LivroSolicitacao livro = usuarioDoador![index];
                   return Column(
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: tema.espacamento * 2),
-                        child: CardBaseWidget(
-                          tema: tema,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextoWidget(
-                                  texto: livro.nome,
-                                  tamanho: tema.tamanhoFonteXG,
-                                  weight: FontWeight.w500,
-                                  tema: tema,
-                                ),
-                                TextoWidget(
-                                  texto: livro.nomeAutor,
-                                  tema: tema,
-                                  tamanho: tema.tamanhoFonteG,
-                                ),
-                              ],
-                            ),
+                      CardBaseWidget(
+                        tema: tema,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextoWidget(
+                                texto: livro.nome,
+                                tamanho: tema.tamanhoFonteXG,
+                                weight: FontWeight.w500,
+                                tema: tema,
+                              ),
+                              TextoWidget(
+                                texto: livro.nomeAutor,
+                                tema: tema,
+                                tamanho: tema.tamanhoFonteG,
+                              ),
+                            ],
                           ),
                         ),
                       ),

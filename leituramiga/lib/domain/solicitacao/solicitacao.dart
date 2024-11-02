@@ -10,8 +10,8 @@ import 'package:leituramiga/domain/super/entidade.dart';
 
 class Solicitacao extends Entidade {
   final int? _numero;
-  final String _emailUsuarioProprietario;
-  final String _emailUsuarioCriador;
+  final String _emailUsuarioReceptor;
+  final String _emailUsuarioSolicitante;
   final LivrosSolicitacao _livrosUsuarioSolicitante;
   LivrosSolicitacao? _livrosUsuarioReceptor;
   final FormaEntrega _formaEntrega;
@@ -20,7 +20,8 @@ class Solicitacao extends Entidade {
   final DataHora? _dataDevolucao;
   final DataHora? _dataAtualizacao;
   final String _informacoesAdicionais;
-  Endereco? _endereco;
+  Endereco? _enderecoSolicitante;
+  Endereco? _enderecoReceptor;
   final bool _enderecoUsuarioCriador;
   final TipoSolicitacao _tipoSolicitacao;
   final TipoStatusSolicitacao _status;
@@ -30,15 +31,15 @@ class Solicitacao extends Entidade {
 
   Solicitacao.criar(
     this._numero,
-    this._emailUsuarioProprietario,
-    this._emailUsuarioCriador,
+    this._emailUsuarioReceptor,
+    this._emailUsuarioSolicitante,
     this._formaEntrega,
     this._dataCriacao,
     this._dataEntrega,
     this._dataDevolucao,
     this._dataAtualizacao,
     this._informacoesAdicionais,
-    this._endereco,
+    this._enderecoSolicitante,
     this._status,
     this._dataAceite,
     this._motivoRecusa,
@@ -46,12 +47,13 @@ class Solicitacao extends Entidade {
     this._codigoRastreamento,
     this._livrosUsuarioSolicitante,
     this._livrosUsuarioReceptor,
-  ) : _enderecoUsuarioCriador = false;
+  )   : _enderecoUsuarioCriador = false,
+        _enderecoReceptor = null;
 
   Solicitacao.carregar(
     this._numero,
-    this._emailUsuarioProprietario,
-    this._emailUsuarioCriador,
+    this._emailUsuarioReceptor,
+    this._emailUsuarioSolicitante,
     this._livrosUsuarioSolicitante,
     this._livrosUsuarioReceptor,
     this._formaEntrega,
@@ -60,13 +62,14 @@ class Solicitacao extends Entidade {
     this._dataDevolucao,
     this._dataAtualizacao,
     this._informacoesAdicionais,
-    this._endereco,
+    this._enderecoSolicitante,
     this._enderecoUsuarioCriador,
     this._tipoSolicitacao,
     this._status,
     this._dataAceite,
     this._motivoRecusa,
     this._codigoRastreamento,
+    this._enderecoReceptor,
   );
 
   int? get numero => _numero;
@@ -78,8 +81,8 @@ class Solicitacao extends Entidade {
   Map<String, dynamic> paraMapa() {
     return {
       "codigoSolicitacao": _numero,
-      "emailUsuarioReceptor": _emailUsuarioProprietario,
-      "emailUsuarioSolicitante": _emailUsuarioCriador,
+      "emailUsuarioReceptor": _emailUsuarioReceptor,
+      "emailUsuarioSolicitante": _emailUsuarioSolicitante,
       "livrosUsuarioSolicitante": _livrosUsuarioSolicitante.paraMapa(),
       "livrosTroca": _livrosUsuarioReceptor?.paraMapa(),
       "codigoFormaEntrega": _formaEntrega.id,
@@ -94,7 +97,7 @@ class Solicitacao extends Entidade {
       "dataAceite": _dataAceite?.formatar("yyyy-MM-dd"),
       "dataAtualizacao": _dataAtualizacao?.toString(),
       "informacoesAdicionais": _informacoesAdicionais,
-      "endereco": _endereco?.paraMapa(),
+      "enderecoSolicitante": _enderecoSolicitante?.paraMapa(),
       "enderecoUsuarioCriador": _enderecoUsuarioCriador,
       "codigoTipoSolicitacao": _tipoSolicitacao.id,
       "codigoStatusSolicitacao": _status.id,
@@ -109,8 +112,7 @@ class Solicitacao extends Entidade {
     } else if (_dataEntrega != null && _dataEntrega!.ehDepoisDe(DataHora.hoje())) {
       return false;
     }
-    return  _dataEntrega == null || _dataDevolucao == null ||
-        (_dataEntrega != null || _dataDevolucao != null);
+    return _dataEntrega == null || _dataDevolucao == null || (_dataEntrega != null || _dataDevolucao != null);
   }
 
   void adicionarEndereco(
@@ -130,14 +132,14 @@ class Solicitacao extends Entidade {
       municipio,
       false,
     );
-    _endereco = endereco;
+    _enderecoSolicitante = endereco;
   }
 
   void adicionar(Livro livro, String emailUsuario) {
-    if (emailUsuario == _emailUsuarioCriador) {
+    if (emailUsuario == _emailUsuarioSolicitante) {
       _livrosUsuarioSolicitante.adicionar(livro);
     } else {
-      _livrosUsuarioReceptor ??= LivrosSolicitacao.carregar(_numero ?? 0, _emailUsuarioProprietario, []);
+      _livrosUsuarioReceptor ??= LivrosSolicitacao.carregar(_numero ?? 0, _emailUsuarioReceptor, []);
       _livrosUsuarioReceptor!.adicionar(livro);
     }
   }
@@ -169,19 +171,20 @@ class Solicitacao extends Entidade {
       solicitacaoAsMap["dataDevolucao"] == null ? null : DataHora.deString(dataDevolucao),
       solicitacaoAsMap['dataAtualizacao'] == null ? null : DataHora.deString(dataAtualizacao),
       solicitacaoAsMap["informacoesAdicionais"],
-      solicitacaoAsMap["endereco"] == null ? null : Endereco.carregarDeMapa(solicitacaoAsMap["endereco"]),
+      solicitacaoAsMap["enderecoSolicitante"] == null ? null : Endereco.carregarDeMapa(solicitacaoAsMap["enderecoSolicitante"]),
       solicitacaoAsMap["enderecoUsuarioCriador"] == null ? false : solicitacaoAsMap["enderecoUsuarioCriador"] as bool,
       TipoSolicitacao.deNumero(solicitacaoAsMap["codigoTipoSolicitacao"] as int? ?? 1),
       TipoStatusSolicitacao.deNumero(int.tryParse(solicitacaoAsMap["codigoStatusSolicitacao"].toString()) ?? 1),
       solicitacaoAsMap["dataAceite"] == null ? null : DataHora.deString(dataAceite),
       solicitacaoAsMap["motivoRecusa"],
       solicitacaoAsMap["codigoRastreioCorreio"],
+      solicitacaoAsMap["enderecoReceptor"] == null ? null : Endereco.carregarDeMapa(solicitacaoAsMap["enderecoReceptor"]),
     );
   }
 
   LivrosSolicitacao get livrosUsuarioSolicitante => _livrosUsuarioSolicitante;
 
-  String get emailUsuarioProprietario => _emailUsuarioProprietario;
+  String get emailUsuarioProprietario => _emailUsuarioReceptor;
 
   LivrosSolicitacao get livrosSolicitante => _livrosUsuarioSolicitante;
 
@@ -199,7 +202,9 @@ class Solicitacao extends Entidade {
 
   String get informacoesAdicionais => _informacoesAdicionais;
 
-  Endereco? get endereco => _endereco;
+  Endereco? get enderecoSolicitante => _enderecoSolicitante;
+
+  Endereco? get enderecoReceptor => _enderecoReceptor;
 
   TipoStatusSolicitacao get status => _status;
 
@@ -213,7 +218,7 @@ class Solicitacao extends Entidade {
 
   TipoSolicitacao get tipoSolicitacao => _tipoSolicitacao;
 
-  String get emailUsuarioCriador => _emailUsuarioCriador;
+  String get emailUsuarioCriador => _emailUsuarioSolicitante;
 
   LivrosSolicitacao? get livrosUsuarioReceptor => _livrosUsuarioReceptor;
 

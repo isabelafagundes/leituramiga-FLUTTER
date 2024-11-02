@@ -49,11 +49,14 @@ class AutenticacaoApiService extends AutenticacaoService with ConfiguracaoApiSta
 
   @override
   Future<void> verificarCodigoSeguranca(String codigo, String email) async {
-    await _client.post("$host/verificar-codigo-seguranca",
+    await _client.post(
+      "$host/verificar-codigo-seguranca",
       headers: {"Authorization": "Bearer ${_autenticacaoState.criacaoUsuarioToken}"},
       data: {"codigo": codigo, "email": email},
     ).catchError((erro) {
-      if(erro.response.statusCode == 404) throw UsuarioJaExiste();
+      if (erro.response.statusCode == 404) throw UsuarioJaExiste();
+      if (erro.response.statusCode == 400) throw CodigoInvalido();
+      if (erro.response.statusCode == 412) throw TokenExpirado();
       throw erro;
     });
   }

@@ -40,7 +40,7 @@ class ResumoSolicitacao extends Entidade {
   factory ResumoSolicitacao.carregarDeMapa(Map<String, dynamic> mapa) {
     return ResumoSolicitacao.carregar(
       mapa['codigoSolicitacao'],
-      Endereco.carregarDeMapa(mapa['endereco']),
+      Endereco.carregarDeMapa(mapa['enderecoSolicitante']),
       mapa['nomeUsuarioSolicitante'],
         mapa['dataEntrega']==null?null:  DataHora.deString("${mapa['dataEntrega']} 00:00:00"),
       mapa['dataDevolucao'] == null ? null : DataHora.deString("${mapa['dataDevolucao']} 00:00:00"),

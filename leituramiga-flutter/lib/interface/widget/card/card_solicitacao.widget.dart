@@ -34,10 +34,10 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(widget.tema.borderRadiusG),
-            border: Border.all(color: Color(widget.tema.neutral).withOpacity(.2)),
+            border: Border.all(color: Color(widget.tema.neutral).withOpacity(.1)),
             boxShadow: [
               BoxShadow(
-                color: Color(widget.tema.neutral).withOpacity(.2),
+                color: Color(widget.tema.neutral).withOpacity(.1),
                 offset: Offset(0, 2),
                 blurRadius: 4,
               ),
@@ -48,6 +48,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
             child: Stack(
               children: [
                 CardBaseWidget(
+                  borda: Border.all(color: Colors.transparent),
                   padding: EdgeInsets.symmetric(
                     horizontal: widget.tema.espacamento * 2,
                   ),
@@ -210,7 +211,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
             children: [
               BotaoPequenoWidget(
                 tema: widget.tema,
-                corFonte: kCorFonte,
+                corFonte: Color(widget.tema.base200),
                 aoClicar: () => widget.aoVisualizar(widget.solicitacao.numero!),
                 label: "Visualizar",
               ),

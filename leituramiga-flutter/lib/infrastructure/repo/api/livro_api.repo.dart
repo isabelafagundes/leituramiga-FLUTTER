@@ -74,7 +74,6 @@ class LivroApiRepo extends LivroRepo with ConfiguracaoApiState {
       numeroCategoria: numeroCategoria,
       emailUsuario: emailUsuario,
     );
-    print(filtros);
     return await _client.post("$host/livros", data: filtros).catchError((erro) {
       throw erro;
     }).then((response) => (response.data as List).map((e) => ResumoLivro.carregarDeMapa(e)).toList());

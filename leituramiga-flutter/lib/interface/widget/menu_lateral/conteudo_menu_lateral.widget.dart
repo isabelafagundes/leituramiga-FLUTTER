@@ -85,8 +85,8 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
       children: [
         Container(
           padding: EdgeInsets.symmetric(
-            vertical: widget.tema.espacamento,
-            horizontal: widget.tema.espacamento,
+            vertical: widget.tema.espacamento * 1.5,
+            horizontal: widget.tema.espacamento * 1.5,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -102,7 +102,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                   alterarTema: _alterarTema,
                   alterarFonte: _alterarFonte,
                 ),
-                SizedBox(width: widget.tema.espacamento * 4),
+                SizedBox(width: widget.tema.espacamento * 2),
               ],
               Expanded(
                 child: Column(
@@ -110,108 +110,113 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          if (Responsive.larguraM(context)) ...[
-                            BotaoRedondoWidget(
-                              tema: widget.tema,
-                              nomeSvg: '',
-                              icone: Icon(
-                                Icons.more_horiz_rounded,
-                                color: Color(widget.tema.accent),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Responsive.larguraPP(context) ? 0 : widget.tema.espacamento * 2,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            if (Responsive.larguraM(context)) ...[
+                              BotaoRedondoWidget(
+                                tema: widget.tema,
+                                nomeSvg: '',
+                                icone: Icon(
+                                  Icons.more_horiz_rounded,
+                                  color: Color(widget.tema.accent),
+                                ),
+                                aoClicar: () {
+                                  setState(() => exibindoMenu = !exibindoMenu);
+                                  Future.delayed(
+                                    const Duration(milliseconds: 100),
+                                    () => setState(
+                                      () => ativarAnimacao = true,
+                                    ),
+                                  );
+                                },
                               ),
-                              aoClicar: () {
-                                setState(() => exibindoMenu = !exibindoMenu);
-                                Future.delayed(
-                                  const Duration(milliseconds: 100),
-                                  () => setState(
-                                    () => ativarAnimacao = true,
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                          widget.widgetNoCabecalho ?? const SizedBox(),
-                          if (widget.exibirPerfil && _autenticacaoState.usuario == null) ...[
-                            Spacer(),
-                            BotaoPequenoWidget(
-                              tema: widget.tema,
-                              aoClicar: () => Rota.navegar(context, Rota.AUTENTICACAO),
-                              label: "Login",
-                              icone: Icon(Icons.login, color: Color(widget.tema.base200)),
-                            ),
-                          ],
-                          if (widget.exibirPerfil && _autenticacaoState.usuario != null) ...[
-                            const Spacer(),
-                            SizedBox(
-                              height: 60,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  TextoWidget(
-                                    texto: "Olá,",
-                                    tema: widget.tema,
-                                    cor: Color(widget.tema.baseContent),
-                                  ),
-                                  TextoWidget(
-                                    texto: "${_autenticacaoState.usuario?.nome.split(" ").first}!",
-                                    tema: widget.tema,
-                                    weight: FontWeight.w500,
-                                    tamanho: widget.tema.tamanhoFonteXG,
-                                    cor: Color(widget.tema.accent),
-                                  ),
-                                ],
+                            ],
+                            widget.widgetNoCabecalho ?? const SizedBox(),
+                            if (widget.exibirPerfil && _autenticacaoState.usuario == null) ...[
+                              Spacer(),
+                              BotaoPequenoWidget(
+                                tema: widget.tema,
+                                aoClicar: () => Rota.navegar(context, Rota.AUTENTICACAO),
+                                label: "Login",
+                                icone: Icon(Icons.login, color: Color(widget.tema.base200)),
                               ),
-                            ),
-                            SizedBox(width: widget.tema.espacamento),
-                            MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: GestureDetector(
-                                onTap: () => Rota.navegar(context, Rota.PERFIL),
-                                child: Container(
-                                  width: 70,
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 2),
-                                    color: kCorPessego.withOpacity(.5),
-                                  ),
-                                  child: Center(
-                                    child: TextoWidget(
-                                      tamanho: widget.tema.tamanhoFonteXG * 1.5,
-                                      weight: FontWeight.w600,
-                                      texto: "${_autenticacaoState.usuario?.nome.substring(0, 1)}",
+                            ],
+                            if (widget.exibirPerfil && _autenticacaoState.usuario != null) ...[
+                              const Spacer(),
+                              SizedBox(
+                                height: 60,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    TextoWidget(
+                                      texto: "Olá,",
                                       tema: widget.tema,
+                                      cor: Color(widget.tema.baseContent),
+                                    ),
+                                    TextoWidget(
+                                      texto: "${_autenticacaoState.usuario?.nome.split(" ").first}!",
+                                      tema: widget.tema,
+                                      weight: FontWeight.w500,
+                                      tamanho: widget.tema.tamanhoFonteXG,
+                                      cor: Color(widget.tema.accent),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: widget.tema.espacamento),
+                              MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: GestureDetector(
+                                  onTap: () => Rota.navegar(context, Rota.PERFIL),
+                                  child: Container(
+                                    width: 70,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 2),
+                                      color: kCorPessego.withOpacity(.5),
+                                    ),
+                                    child: Center(
+                                      child: TextoWidget(
+                                        tamanho: widget.tema.tamanhoFonteXG * 1.5,
+                                        weight: FontWeight.w600,
+                                        texto: "${_autenticacaoState.usuario?.nome.substring(0, 1)}",
+                                        tema: widget.tema,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                          if (!widget.exibirPerfil && widget.voltar != null) ...[
-                            const Spacer(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                BotaoPequenoWidget(
-                                  tema: widget.tema,
-                                  padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 2),
-                                  corFundo: Color(widget.tema.base200),
-                                  aoClicar: () => Rota.navegar(context, Rota.HOME),
-                                  label: "Voltar",
-                                  corFonte: Color(widget.tema.baseContent),
-                                  icone: Icon(
-                                    Icons.chevron_left_outlined,
-                                    color: Color(widget.tema.baseContent),
+                            ],
+                            if (!widget.exibirPerfil && widget.voltar != null) ...[
+                              const Spacer(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  BotaoPequenoWidget(
+                                    tema: widget.tema,
+                                    padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 2),
+                                    corFundo: Color(widget.tema.base200),
+                                    aoClicar: () => Rota.navegar(context, Rota.HOME),
+                                    label: "Voltar",
+                                    corFonte: Color(widget.tema.baseContent),
+                                    icone: Icon(
+                                      Icons.chevron_left_outlined,
+                                      color: Color(widget.tema.baseContent),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ]
-                        ],
+                                ],
+                              ),
+                            ]
+                          ],
+                        ),
                       ),
                     ),
                     if (widget.exibirPerfil) SizedBox(height: widget.tema.espacamento * 2),

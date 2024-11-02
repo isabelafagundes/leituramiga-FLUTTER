@@ -57,6 +57,7 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                   tema: widget.tema,
                   label: "Adicionar livro",
                   tamanhoFonte: widget.tema.tamanhoFonteM,
+                  corFonte: Color(widget.tema.base200),
                   padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 2),
                   icone: Icon(
                     Icons.add,
@@ -102,43 +103,40 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                           LivroSolicitacao livro = widget.livrosSolicitacao[index];
                           return Column(
                             children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: widget.tema.espacamento),
-                                child: CardBaseWidget(
-                                  tema: widget.tema,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(widget.tema.espacamento * 1.5),
-                                    child: Row(
-                                      children: [
-                                        IconButton(
+                              CardBaseWidget(
+                                tema: widget.tema,
+                                child: Padding(
+                                  padding: EdgeInsets.all(widget.tema.espacamento * 1.5),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        color: Color(widget.tema.accent),
+                                        onPressed: () => widget.removerLivro(livro),
+                                        icon: Icon(
+                                          Icons.close,
                                           color: Color(widget.tema.accent),
-                                          onPressed: () => widget.removerLivro(livro),
-                                          icon: Icon(
-                                            Icons.close,
-                                            color: Color(widget.tema.accent),
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          TextoWidget(
+                                            texto: livro.nome,
+                                            tamanho: widget.tema.tamanhoFonteXG,
+                                            weight: FontWeight.w500,
+                                            tema: widget.tema,
                                           ),
-                                        ),
-                                        const Spacer(),
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: [
-                                            TextoWidget(
-                                              texto: livro.nome,
-                                              tamanho: widget.tema.tamanhoFonteXG,
-                                              weight: FontWeight.w500,
-                                              tema: widget.tema,
-                                            ),
-                                            SizedBox(height: widget.tema.espacamento),
-                                            TextoWidget(
-                                              texto: livro.nomeAutor,
-                                              tema: widget.tema,
-                                              tamanho: widget.tema.tamanhoFonteM + 2,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          SizedBox(height: widget.tema.espacamento),
+                                          TextoWidget(
+                                            texto: livro.nomeAutor,
+                                            tema: widget.tema,
+                                            tamanho: widget.tema.tamanhoFonteM + 2,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),

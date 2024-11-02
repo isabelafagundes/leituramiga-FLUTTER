@@ -5,7 +5,6 @@ import 'package:leituramiga/domain/usuario/comentario_perfil.dart';
 import 'package:leituramiga/domain/usuario/usuario.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
-import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
@@ -110,12 +109,14 @@ class _UsuarioPageState extends State<UsuarioPage> {
                               children: [
                                 BotaoPequenoWidget(
                                   tema: tema,
+                                  padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
                                   aoClicar: _exibirPopUpComentario,
                                   icone: Icon(
                                     Icons.add,
                                     color: Color(tema.base200),
                                     size: 20,
                                   ),
+                                  corFonte: Color(tema.base200),
                                   label: "Criar comentário",
                                 )
                               ],
@@ -235,12 +236,12 @@ class _UsuarioPageState extends State<UsuarioPage> {
             SizedBox(height: tema.espacamento * 2),
             BotaoWidget(
               tema: tema,
-              corTexto: kCorFonte,
+              corTexto: Color(tema.base200),
               texto: "Enviar",
               aoClicar: aoClicar,
               icone: Icon(
                 Icons.send,
-                color: kCorFonte,
+                color: Color(tema.base200),
               ),
               corFundo: Color(tema.accent),
             ),

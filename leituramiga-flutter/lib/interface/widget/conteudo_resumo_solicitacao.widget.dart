@@ -123,7 +123,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _obterTextoComIcone(
-                          "Endereço",
+                          "Endereço de $usuarioSolicitante",
                           Icon(
                             Icons.location_on,
                             size: 18,
@@ -133,11 +133,29 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                         SizedBox(height: tema.espacamento),
                         TextoWidget(
                           texto: solicitacao.status == TipoStatusSolicitacao.EM_ANDAMENTO
-                              ? solicitacao.endereco!.enderecoFormatado
-                              : solicitacao.endereco!.enderecoFormatadoCensurado,
+                              ? solicitacao.enderecoSolicitante!.enderecoFormatado
+                              : solicitacao.enderecoSolicitante!.enderecoFormatadoCensurado,
                           tema: tema,
                         ),
                         SizedBox(height: tema.espacamento * 2),
+                        if (solicitacao.enderecoReceptor != null) ...[
+                          _obterTextoComIcone(
+                            "Endereço de $nomeUsuarioReceptor",
+                            Icon(
+                              Icons.location_on,
+                              size: 18,
+                              color: Color(tema.baseContent),
+                            ),
+                          ),
+                          SizedBox(height: tema.espacamento),
+                          TextoWidget(
+                            texto: solicitacao.status == TipoStatusSolicitacao.EM_ANDAMENTO
+                                ? solicitacao.enderecoReceptor!.enderecoFormatado
+                                : solicitacao.enderecoReceptor!.enderecoFormatadoCensurado,
+                            tema: tema,
+                          ),
+                          SizedBox(height: tema.espacamento * 2),
+                        ],
                         _obterTextoComIcone(
                           "Informações adicionais",
                           Icon(
@@ -173,7 +191,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                                 vertical: tema.espacamento / 2,
                               ),
                               decoration: BoxDecoration(
-                                color: Color(tema.accent),
+                                color: Color(tema.base200),
                                 borderRadius: BorderRadius.circular(tema.borderRadiusM),
                                 border: Border.all(color: Color(tema.neutral).withOpacity(.2)),
                               ),
@@ -181,7 +199,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                                 texto: solicitacao.formaEntrega.descricao,
                                 tema: tema,
                                 weight: FontWeight.w500,
-                                cor: kCorFonte,
+                                cor: Color(tema.baseContent),
                               ),
                             ),
                           ],

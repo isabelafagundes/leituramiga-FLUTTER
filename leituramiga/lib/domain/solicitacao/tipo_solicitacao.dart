@@ -11,4 +11,6 @@ enum TipoSolicitacao {
   }
 
   const TipoSolicitacao({required this.id, required this.descricao});
+
+  bool get possuiSegundoEndereco => this == TipoSolicitacao.EMPRESTIMO || this == TipoSolicitacao.TROCA;
 }

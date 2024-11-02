@@ -1,3 +1,4 @@
+import 'package:leituramiga/domain/endereco/endereco.dart';
 import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:leituramiga/domain/solicitacao/livro_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/livros_solicitacao.dart';
@@ -19,14 +20,14 @@ class SolicitacaoUseCase {
   Future<void> obterSolicitacao(int numero) async {
     Solicitacao solicitacao = await _repo.obterSolicitacao(numero);
     _state.solicitacaoSelecionada = solicitacao;
-    _state.utilizarEnderecoPerfil = solicitacao.endereco?.principal ?? false;
+    _state.utilizarEnderecoPerfil = solicitacao.enderecoSolicitante?.principal ?? false;
   }
 
-  Future<void> aceitarSolicitacao(int numero) async {
+  Future<void> aceitarSolicitacao(int numero, Endereco? endereco) async {
     LivrosSolicitacao? livrosTroca = _state.livrosSelecionados.isEmpty
         ? null
         : LivrosSolicitacao.criar(_autenticacaoState.emailUsuario, _state.livrosSelecionados);
-    await _service.aceitarSolicitacao(numero, livrosTroca);
+    await _service.aceitarSolicitacao(numero, livrosTroca, endereco);
     await obterSolicitacao(numero);
   }
 

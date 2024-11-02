@@ -44,7 +44,7 @@ class TabWidget extends StatelessWidget {
                     SizedBox(height: tema.espacamento),
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
-                      color: validarAtivo(opcao) ? Color(tema.base200) : Color(tema.accent),
+                      color: validarAtivo(opcao) ?  Color(tema.accent).withOpacity(.2) : Color(tema.accent),
                       height: 2,
                       width: 100,
                     ),

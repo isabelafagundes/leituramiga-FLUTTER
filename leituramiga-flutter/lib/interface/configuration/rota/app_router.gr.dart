@@ -15,6 +15,16 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    AceiteSolicitacaoRoute.name: (routeData) {
+      final args = routeData.argsAs<AceiteSolicitacaoRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AceiteSolicitacaoPage(
+          key: args.key,
+          numeroSolicitacao: args.numeroSolicitacao,
+        ),
+      );
+    },
     AreaLogadaRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -95,6 +105,19 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const EditarPefilPage(),
       );
     },
+    EditarSolicitacaoRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<EditarSolicitacaoRouteArgs>(
+          orElse: () => EditarSolicitacaoRouteArgs(
+              numeroSolicitacao: pathParams.getInt('numeroSolicitacao')));
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EditarSolicitacaoPage(
+          key: args.key,
+          numeroSolicitacao: args.numeroSolicitacao,
+        ),
+      );
+    },
     EsqueceSenhaRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -151,20 +174,45 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    VisualizarSolicitacaoRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<VisualizarSolicitacaoRouteArgs>(
-          orElse: () => VisualizarSolicitacaoRouteArgs(
-              numeroSolicitacao: pathParams.getInt('numeroSolicitacao')));
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: VisualizarSolicitacaoPage(
-          key: args.key,
-          numeroSolicitacao: args.numeroSolicitacao,
-        ),
-      );
-    },
   };
+}
+
+/// generated route for
+/// [AceiteSolicitacaoPage]
+class AceiteSolicitacaoRoute extends PageRouteInfo<AceiteSolicitacaoRouteArgs> {
+  AceiteSolicitacaoRoute({
+    Key? key,
+    required int numeroSolicitacao,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AceiteSolicitacaoRoute.name,
+          args: AceiteSolicitacaoRouteArgs(
+            key: key,
+            numeroSolicitacao: numeroSolicitacao,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AceiteSolicitacaoRoute';
+
+  static const PageInfo<AceiteSolicitacaoRouteArgs> page =
+      PageInfo<AceiteSolicitacaoRouteArgs>(name);
+}
+
+class AceiteSolicitacaoRouteArgs {
+  const AceiteSolicitacaoRouteArgs({
+    this.key,
+    required this.numeroSolicitacao,
+  });
+
+  final Key? key;
+
+  final int numeroSolicitacao;
+
+  @override
+  String toString() {
+    return 'AceiteSolicitacaoRouteArgs{key: $key, numeroSolicitacao: $numeroSolicitacao}';
+  }
 }
 
 /// generated route for
@@ -384,6 +432,45 @@ class EditarPefilRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [EditarSolicitacaoPage]
+class EditarSolicitacaoRoute extends PageRouteInfo<EditarSolicitacaoRouteArgs> {
+  EditarSolicitacaoRoute({
+    Key? key,
+    required int numeroSolicitacao,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EditarSolicitacaoRoute.name,
+          args: EditarSolicitacaoRouteArgs(
+            key: key,
+            numeroSolicitacao: numeroSolicitacao,
+          ),
+          rawPathParams: {'numeroSolicitacao': numeroSolicitacao},
+          initialChildren: children,
+        );
+
+  static const String name = 'EditarSolicitacaoRoute';
+
+  static const PageInfo<EditarSolicitacaoRouteArgs> page =
+      PageInfo<EditarSolicitacaoRouteArgs>(name);
+}
+
+class EditarSolicitacaoRouteArgs {
+  const EditarSolicitacaoRouteArgs({
+    this.key,
+    required this.numeroSolicitacao,
+  });
+
+  final Key? key;
+
+  final int numeroSolicitacao;
+
+  @override
+  String toString() {
+    return 'EditarSolicitacaoRouteArgs{key: $key, numeroSolicitacao: $numeroSolicitacao}';
+  }
+}
+
+/// generated route for
 /// [EsqueceSenhaPage]
 class EsqueceSenhaRoute extends PageRouteInfo<void> {
   const EsqueceSenhaRoute({List<PageRouteInfo>? children})
@@ -527,45 +614,5 @@ class UsuarioRouteArgs {
   @override
   String toString() {
     return 'UsuarioRouteArgs{key: $key, identificador: $identificador}';
-  }
-}
-
-/// generated route for
-/// [VisualizarSolicitacaoPage]
-class VisualizarSolicitacaoRoute
-    extends PageRouteInfo<VisualizarSolicitacaoRouteArgs> {
-  VisualizarSolicitacaoRoute({
-    Key? key,
-    required int numeroSolicitacao,
-    List<PageRouteInfo>? children,
-  }) : super(
-          VisualizarSolicitacaoRoute.name,
-          args: VisualizarSolicitacaoRouteArgs(
-            key: key,
-            numeroSolicitacao: numeroSolicitacao,
-          ),
-          rawPathParams: {'numeroSolicitacao': numeroSolicitacao},
-          initialChildren: children,
-        );
-
-  static const String name = 'VisualizarSolicitacaoRoute';
-
-  static const PageInfo<VisualizarSolicitacaoRouteArgs> page =
-      PageInfo<VisualizarSolicitacaoRouteArgs>(name);
-}
-
-class VisualizarSolicitacaoRouteArgs {
-  const VisualizarSolicitacaoRouteArgs({
-    this.key,
-    required this.numeroSolicitacao,
-  });
-
-  final Key? key;
-
-  final int numeroSolicitacao;
-
-  @override
-  String toString() {
-    return 'VisualizarSolicitacaoRouteArgs{key: $key, numeroSolicitacao: $numeroSolicitacao}';
   }
 }

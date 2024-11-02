@@ -1,3 +1,4 @@
+import 'package:leituramiga/domain/endereco/endereco.dart';
 import 'package:leituramiga/domain/solicitacao/livros_solicitacao.dart';
 import 'package:leituramiga/service/solicitacao.service.dart';
 import 'package:projeto_leituramiga/application/state/configuracao_api.state.dart';
@@ -16,11 +17,13 @@ class SolicitacaoApiService extends SolicitacaoService with ConfiguracaoApiState
   final HttpClient _client = HttpClient.instancia;
 
   @override
-  Future<void> aceitarSolicitacao(int numero, LivrosSolicitacao? livrosTroca) async {
-    await _client.post("$host/solicitacao/$numero/aceitar", data: {
+  Future<void> aceitarSolicitacao(int numero, LivrosSolicitacao? livrosTroca, Endereco? segundoEndereco) async {
+    Map<String, dynamic> mapa = {
       "livros": livrosTroca?.paraMapa(),
       "codigoSolicitacao": numero,
-    }).catchError((erro) {
+      "endereco": segundoEndereco?.paraMapa(),
+    };
+    await _client.post("$host/solicitacao/$numero/aceitar", data: mapa).catchError((erro) {
       throw erro;
     });
   }

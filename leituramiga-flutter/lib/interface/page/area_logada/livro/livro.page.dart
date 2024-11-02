@@ -251,7 +251,7 @@ class _LivrosPageState extends State<LivrosPage> {
                                           texto: _livrosComponent.livroSelecionado?.nomeInstituicao ?? 'Não informado',
                                           tamanhoFonte: tema.tamanhoFonteM + 2,
                                         ),
-                                        SizedBox(height: tema.espacamento / 2),
+                                        SizedBox(height: tema.espacamento*1.5),
                                         TextoComIconeWidget(
                                           tema: tema,
                                           nomeSvg: 'menu/map-pin-fill',

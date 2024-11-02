@@ -20,6 +20,7 @@ class PaginacaoLivroUseCase {
     _state.pesquisou = true;
     _state.pesquisa = pesquisa;
     List<ResumoLivro> pagina = await _repo.obterLivros(pesquisa: pesquisa);
+    print(pagina.length);
     _state.paginar(pagina);
   }
 
@@ -44,6 +45,7 @@ class PaginacaoLivroUseCase {
       numeroCategoria: numeroCategoria,
       emailUsuario: emailUsuario,
     );
+    print(pagina.length);
     _state.paginar(pagina, limite, pesquisa ?? '');
   }
 }

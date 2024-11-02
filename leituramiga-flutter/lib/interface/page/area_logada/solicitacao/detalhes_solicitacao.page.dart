@@ -2,13 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/solicitacao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
+import 'package:leituramiga/domain/endereco/endereco.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
-import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
@@ -92,7 +92,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
       await _usuarioComponent.obterUsuario(solicitacao!.emailUsuarioCriador);
       await _usuarioComponent.obterUsuarioSolicitacao(solicitacao!.emailUsuarioProprietario);
       await _usuarioComponent.obterLivrosUsuario();
-      UF? uf = solicitacao?.endereco?.municipio.estado;
+      UF? uf = solicitacao?.enderecoSolicitante?.municipio.estado;
       await _usuarioComponent.obterCidades(uf!);
     });
   }
@@ -139,19 +139,19 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
                               SizedBox(
                                 child: BotaoWidget(
                                   tema: tema,
-                                  corTexto: kCorFonte,
+                                  corTexto: Color(tema.base200),
                                   altura: 45,
                                   largura: 140,
                                   texto: "Editar",
                                   aoClicar: () => Rota.navegarComArgumentos(
                                     context,
-                                    VisualizarSolicitacaoRoute(
+                                    EditarSolicitacaoRoute(
                                       numeroSolicitacao: widget.numeroSolicitacao,
                                     ),
                                   ),
                                   icone: Icon(
                                     Icons.edit,
-                                    color: kCorFonte,
+                                    color: Color(tema.base200),
                                   ),
                                   corFundo: Color(tema.accent),
                                 ),
@@ -240,12 +240,12 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
     if (solicitacao?.status == TipoStatusSolicitacao.EM_ANDAMENTO && solicitacao!.validarPodeFinalizar) {
       return BotaoWidget(
         tema: tema,
-        corTexto: kCorFonte,
+        corTexto: Color(tema.base200),
         texto: "Finalizar",
         aoClicar: _finalizarSolicitacao,
         icone: Icon(
           Icons.done_all,
-          color: kCorFonte,
+          color: Color(tema.base200),
         ),
         corFundo: Color(tema.success),
       );
@@ -255,12 +255,17 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
         solicitacao?.status == TipoStatusSolicitacao.PENDENTE) {
       return BotaoWidget(
         tema: tema,
-        corTexto: kCorFonte,
+        corTexto: Color(tema.base200),
         texto: "Escolher livros",
-        aoClicar: () => _atualizarAbaSelecionada(DetalhesSolicitacao.SELECAO_LIVROS),
+        aoClicar: () => Rota.navegarComArgumentos(
+          context,
+          AceiteSolicitacaoRoute(
+            numeroSolicitacao: widget.numeroSolicitacao,
+          ),
+        ),
         icone: Icon(
           Icons.bookmark_add_outlined,
-          color: kCorFonte,
+          color: Color(tema.base200),
         ),
         corFundo: Color(tema.accent),
       );
@@ -269,12 +274,12 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
     if (solicitacao?.status == TipoStatusSolicitacao.PENDENTE)
       return BotaoWidget(
         tema: tema,
-        corTexto: kCorFonte,
+        corTexto: Color(tema.base200),
         texto: "Aceitar",
         aoClicar: _aceitarSolicitacao,
         icone: Icon(
           Icons.done,
-          color: kCorFonte,
+          color: Color(tema.base200),
         ),
         corFundo: Color(tema.success),
       );
@@ -286,7 +291,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
     if (solicitacao?.status == TipoStatusSolicitacao.EM_ANDAMENTO) {
       return BotaoWidget(
         tema: tema,
-        corTexto: kCorFonte,
+        corTexto: Color(tema.base200),
         texto: "Cancelar",
         aoClicar: () async => showDialog(
           context: context,
@@ -299,14 +304,14 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
         ),
         icone: Icon(
           Icons.close,
-          color: kCorFonte,
+          color: Color(tema.base200),
         ),
         corFundo: Color(tema.error),
       );
     }
     return BotaoWidget(
       tema: tema,
-      corTexto: kCorFonte,
+      corTexto: Color(tema.base200),
       texto: "Recusar",
       aoClicar: () async {
         await showDialog(
@@ -321,7 +326,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
       },
       icone: Icon(
         Icons.close,
-        color: kCorFonte,
+        color: Color(tema.base200),
       ),
       corFundo: Color(tema.error),
     );
@@ -359,12 +364,12 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
             SizedBox(height: tema.espacamento * 4),
             BotaoWidget(
               tema: tema,
-              corTexto: kCorFonte,
+              corTexto: Color(tema.base200),
               texto: textoBotao,
               aoClicar: aoClicar,
               icone: Icon(
                 Icons.close,
-                color: kCorFonte,
+                color: Color(tema.base200),
               ),
               corFundo: Color(tema.error),
             ),
@@ -405,11 +410,11 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
     _atualizarCarregamento();
   }
 
-  Future<void> _aceitarSolicitacao() async {
+  Future<void> _aceitarSolicitacao([Endereco? endereco]) async {
     _atualizarCarregamento();
     await notificarCasoErro(() async {
       setState(() => _carregando = true);
-      await _solicitacaoComponent.aceitarSolicitacao(widget.numeroSolicitacao);
+      await _solicitacaoComponent.aceitarSolicitacao(widget.numeroSolicitacao, endereco);
     });
     _atualizarCarregamento();
   }

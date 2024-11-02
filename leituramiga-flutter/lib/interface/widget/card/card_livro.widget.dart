@@ -50,10 +50,10 @@ class CardLivroWidget extends StatelessWidget {
             child: Container(
               decoration: ativado
                   ? BoxDecoration(
-                      color: Color(tema.base200),
-                      border: Border.all(color: Color(tema.accent), width: 3),
-                      borderRadius: BorderRadius.circular(tema.borderRadiusM),
-                    )
+                color: Color(tema.base200),
+                border: Border.all(color: Color(tema.accent), width: 3),
+                borderRadius: BorderRadius.circular(tema.borderRadiusM),
+              )
                   : null,
               child: CardBaseWidget(
                 bordaColorida: !ativado,
@@ -158,13 +158,17 @@ class CardLivroWidget extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
+                      border: Border.all(
+                          color: Color(tema.neutral).withOpacity(.1),
+                          width: 1
+                      ),
                       color: !ativado ? Color(tema.accent) : Color(tema.base200),
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Center(
                       child: Icon(
-                        ativado ? Icons.close : Icons.add,
-                        color: ativado ? Color(tema.accent) : kCorFonte,
+                          ativado ? Icons.close : Icons.add,
+                          color: ativado ? Color(tema.accent) : Color(tema.base200),
                       ),
                     ),
                   ),
