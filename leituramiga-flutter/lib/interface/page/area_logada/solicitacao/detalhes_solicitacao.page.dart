@@ -422,6 +422,16 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
     _atualizarCarregamento();
     await notificarCasoErro(() async {
       setState(() => _carregando = true);
+      Solicitacao solicitacao = _solicitacaoComponent.solicitacaoSelecionada!;
+      if (solicitacao.tipoSolicitacao.possuiSegundoEndereco && solicitacao.formaEntrega == FormaEntrega.CORREIOS) {
+        return Rota.navegarComArgumentos(
+          context,
+          AceiteSolicitacaoRoute(
+            numeroSolicitacao: widget.numeroSolicitacao,
+          ),
+        );
+      }
+
       await _solicitacaoComponent.aceitarSolicitacao(widget.numeroSolicitacao, endereco);
     });
     _atualizarCarregamento();

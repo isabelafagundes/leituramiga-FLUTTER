@@ -18,8 +18,10 @@ import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/conteudo_selecao_livros.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/conteudo_endereco_solicitacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/tab.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 @RoutePage()
 class AceiteSolicitacaoPage extends StatefulWidget {
@@ -70,15 +72,21 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      setState(() => _carregando = true);
       await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
       Solicitacao? solicitacao = _solicitacaoComponent.solicitacaoSelecionada;
+      setState(() {
+        _tipoSolicitacao = _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao;
+        _abaSelecionada = AceitarSolicitacao.deDescricao(_opcoes.first);
+      });
       await _usuarioComponent.obterUsuario(solicitacao!.emailUsuarioSolicitante);
       await _usuarioComponent.obterUsuarioSolicitacao(solicitacao.emailUsuarioProprietario);
       await _usuarioComponent.obterLivrosUsuario();
       await _usuarioComponent.obterEndereco();
+      if (_usuarioComponent.enderecoEdicao!.principal) _preencherControllersEndereco(_usuarioComponent.enderecoEdicao!);
       UF? uf = _solicitacaoComponent.solicitacaoSelecionada?.enderecoSolicitante?.municipio.estado;
       await _usuarioComponent.obterCidades(uf!);
-      setState(() => _tipoSolicitacao = _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao);
+      setState(() => _carregando = false);
     });
   }
 
@@ -114,7 +122,14 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
                     altura: 45,
                     largura: 140,
                     texto: "Aceitar",
-                    aoClicar: _aceitarSolicitacao,
+                    aoClicar: () async {
+                      bool? navegarParaSolicitacoes = await showDialog(
+                        context: context,
+                        builder: (BuildContext context) => _obterPopUpPadrao(context),
+                      );
+                      if (navegarParaSolicitacoes == null) return;
+                      if (navegarParaSolicitacoes) return await _aceitarSolicitacao(enderecoSolicitacao);
+                    },
                     icone: Icon(
                       Icons.check,
                       color: Color(tema.base200),
@@ -147,6 +162,60 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
             ),
             SizedBox(height: tema.espacamento * 2),
             Expanded(child: paginaSelecionada),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _obterPopUpPadrao(BuildContext context) {
+    return PopUpPadraoWidget(
+      tema: tema,
+      conteudo: Container(
+        height: 320,
+        child: Column(
+          children: [
+            SizedBox(height: tema.espacamento * 4),
+            Icon(
+              Icons.warning_rounded,
+              color: Color(tema.baseContent),
+              size: 80,
+            ),
+            SizedBox(height: tema.espacamento * 3),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
+              child: TextoWidget(
+                tema: tema,
+                texto: "Confirmar endereço e aceitar a solicitação?",
+                weight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(height: tema.espacamento * 4),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                BotaoWidget(
+                  tema: tema,
+                  icone: Icon(
+                    Icons.close,
+                    color: Color(tema.base200),
+                  ),
+                  texto: "Cancelar",
+                  corFundo: Color(tema.error),
+                  aoClicar: () => Navigator.of(context).pop(false),
+                ),
+                SizedBox(height: tema.espacamento * 2),
+                BotaoWidget(
+                  tema: tema,
+                  icone: Icon(
+                    Icons.check,
+                    color: Color(tema.base200),
+                  ),
+                  texto: "Aceitar",
+                  aoClicar: () => Navigator.of(context).pop(true),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -281,7 +350,13 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
     }
   }
 
-  List<String> get _opcoes => AceitarSolicitacao.values.where((e) => e.aba).map((e) => e.descricao).toList();
+  List<String> get _opcoes => AceitarSolicitacao.values
+      .where((e) {
+        if (e == AceitarSolicitacao.SELECIONAR_LIVROS && _tipoSolicitacao == TipoSolicitacao.EMPRESTIMO) return false;
+        return e.aba;
+      })
+      .map((e) => e.descricao)
+      .toList();
 }
 
 enum AceitarSolicitacao {
