@@ -102,7 +102,7 @@ class Endereco extends ObjetoDeValor {
   }
 
   String get enderecoFormatadoCensurado {
-    return "$_bairro, ${_municipio.nome} - ${_municipio.estado.descricao}";
+    return "$_bairro, ${_municipio.nome} - ${_municipio.estado.name}";
   }
 }
 

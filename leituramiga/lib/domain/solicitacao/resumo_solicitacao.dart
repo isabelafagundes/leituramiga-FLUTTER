@@ -5,20 +5,18 @@ import 'package:leituramiga/domain/super/entidade.dart';
 
 class ResumoSolicitacao extends Entidade {
   final int? _numero;
-  final Endereco _endereco;
+  final Endereco? _endereco;
   final String _nomeUsuario;
   final DataHora? _dataEntrega;
   final DataHora? _dataDevolucao;
   final TipoSolicitacao _tipo;
 
-  ResumoSolicitacao.carregar(
-    this._numero,
-    this._endereco,
-    this._nomeUsuario,
-    this._dataEntrega,
-    this._dataDevolucao,
-    this._tipo,
-  );
+  ResumoSolicitacao.carregar(this._numero,
+      this._endereco,
+      this._nomeUsuario,
+      this._dataEntrega,
+      this._dataDevolucao,
+      this._tipo,);
 
   int? get numero => _numero;
 
@@ -29,7 +27,7 @@ class ResumoSolicitacao extends Entidade {
   Map<String, dynamic> paraMapa() {
     return {
       'codigoSolicitacao': _numero,
-      'endereco': _endereco.paraMapa(),
+      'endereco': _endereco?.paraMapa(),
       'nomeUsuario': _nomeUsuario,
       'dataEntrega': _dataEntrega.toString(),
       'dataDevolucao': _dataDevolucao?.toString(),
@@ -40,15 +38,16 @@ class ResumoSolicitacao extends Entidade {
   factory ResumoSolicitacao.carregarDeMapa(Map<String, dynamic> mapa) {
     return ResumoSolicitacao.carregar(
       mapa['codigoSolicitacao'],
-      Endereco.carregarDeMapa(mapa['enderecoSolicitante']),
+      mapa['enderecoSolicitante'] == null ? null : Endereco.carregarDeMapa(mapa['enderecoSolicitante']),
       mapa['nomeUsuarioSolicitante'],
-        mapa['dataEntrega']==null?null:  DataHora.deString("${mapa['dataEntrega']} 00:00:00"),
+      mapa['dataEntrega'] == null ? null : DataHora.deString("${mapa['dataEntrega']} 00:00:00"),
       mapa['dataDevolucao'] == null ? null : DataHora.deString("${mapa['dataDevolucao']} 00:00:00"),
-      TipoSolicitacao.deNumero(mapa['codigoTipoSolicitacao']),
+      TipoSolicitacao.deNumero(mapa['codigoTipoSolicitacao']
+      ),
     );
   }
 
-  Endereco get endereco => _endereco;
+  Endereco? get endereco => _endereco;
 
   String get nomeUsuario => _nomeUsuario;
 

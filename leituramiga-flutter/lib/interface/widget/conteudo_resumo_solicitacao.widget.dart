@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
@@ -72,6 +73,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: tema.espacamento / 2),
+                    if (Responsive.larguraP(context)) SizedBox(height: tema.espacamento * 2),
                     if (solicitacao.dataEntrega != null)
                       Row(
                         children: [
@@ -94,6 +96,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                               ),
                             ],
                           ),
+                          if(Responsive.larguraP(context)) Spacer(),
                           SizedBox(width: tema.espacamento * 2),
                           if (solicitacao.dataDevolucao != null)
                             Column(
@@ -191,7 +194,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                                 vertical: tema.espacamento / 2,
                               ),
                               decoration: BoxDecoration(
-                                color: Color(tema.base200),
+                                color: solicitacao.formaEntrega == FormaEntrega.CORREIOS ? kCorRosa : kCorRoxa,
                                 borderRadius: BorderRadius.circular(tema.borderRadiusM),
                                 border: Border.all(color: Color(tema.neutral).withOpacity(.2)),
                               ),
@@ -199,7 +202,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                                 texto: solicitacao.formaEntrega.descricao,
                                 tema: tema,
                                 weight: FontWeight.w500,
-                                cor: Color(tema.baseContent),
+                                cor: kCorFonte,
                               ),
                             ),
                           ],

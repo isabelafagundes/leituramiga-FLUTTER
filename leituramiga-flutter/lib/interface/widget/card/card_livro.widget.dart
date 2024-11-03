@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/contants.dart';
@@ -8,7 +9,7 @@ import 'package:projeto_leituramiga/interface/widget/chip/chip.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto_com_icone.widget.dart';
 
-class CardLivroWidget extends StatelessWidget {
+class CardLivroWidget extends StatefulWidget {
   final Tema tema;
   final String nomeLivro;
   final String descricao;
@@ -39,25 +40,40 @@ class CardLivroWidget extends StatelessWidget {
   });
 
   @override
+  State<CardLivroWidget> createState() => _CardLivroWidgetState();
+}
+
+class _CardLivroWidgetState extends State<CardLivroWidget> {
+  Uint8List? _imagemBytes;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _carregarImagem();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: aoClicar,
+      onTap: widget.aoClicar,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Container(
-              decoration: ativado
+              decoration: widget.ativado
                   ? BoxDecoration(
-                color: Color(tema.base200),
-                border: Border.all(color: Color(tema.accent), width: 3),
-                borderRadius: BorderRadius.circular(tema.borderRadiusM),
-              )
+                      color: Color(widget.tema.base200),
+                      border: Border.all(color: Color(widget.tema.accent), width: 3),
+                      borderRadius: BorderRadius.circular(widget.tema.borderRadiusM),
+                    )
                   : null,
               child: CardBaseWidget(
-                bordaColorida: !ativado,
-                tema: tema,
+                bordaColorida: !widget.ativado,
+                tema: widget.tema,
                 child: Flex(
                   direction: Axis.horizontal,
                   children: [
@@ -72,8 +88,8 @@ class CardLivroWidget extends StatelessWidget {
                             bottom: 4,
                             left: 4,
                             child: ChipWidget(
-                              tema: tema,
-                              texto: nomeCategoria,
+                              tema: widget.tema,
+                              texto: widget.nomeCategoria,
                               cor: kCorPessego,
                               corTexto: const Color(0xff464A52),
                             ),
@@ -81,7 +97,7 @@ class CardLivroWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(width: tema.espacamento),
+                    SizedBox(width: widget.tema.espacamento),
                     Flexible(
                       flex: 4,
                       child: Column(
@@ -92,52 +108,52 @@ class CardLivroWidget extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: TextoWidget(
-                                  tema: tema,
-                                  texto: nomeLivro,
-                                  cor: Color(tema.baseContent),
+                                  tema: widget.tema,
+                                  texto: widget.nomeLivro,
+                                  cor: Color(widget.tema.baseContent),
                                   weight: FontWeight.w500,
-                                  tamanho: tema.tamanhoFonteXG,
+                                  tamanho: widget.tema.tamanhoFonteXG,
                                 ),
                               ),
-                              if (ativado)
+                              if (widget.ativado)
                                 Icon(
                                   Icons.check_circle,
-                                  color: Color(tema.accent),
+                                  color: Color(widget.tema.accent),
                                 ),
                             ],
                           ),
                           const Spacer(),
                           Container(
                             child: TextoWidget(
-                              texto: descricao,
-                              tema: tema,
-                              cor: Color(tema.baseContent),
+                              texto: widget.descricao,
+                              tema: widget.tema,
+                              cor: Color(widget.tema.baseContent),
                               weight: FontWeight.w400,
                               maxLines: 3,
                               align: TextAlign.justify,
-                              tamanho: tema.tamanhoFonteM,
+                              tamanho: widget.tema.tamanhoFonteM,
                             ),
                           ),
                           const Spacer(),
                           TextoComIconeWidget(
-                            tema: tema,
+                            tema: widget.tema,
                             nomeSvg: 'usuario/user',
-                            texto: nomeUsuario,
-                            tamanhoFonte: tema.tamanhoFonteM,
+                            texto: widget.nomeUsuario,
+                            tamanhoFonte: widget.tema.tamanhoFonteM,
                           ),
-                          SizedBox(height: tema.espacamento / 2),
+                          SizedBox(height: widget.tema.espacamento / 2),
                           TextoComIconeWidget(
-                            tema: tema,
+                            tema: widget.tema,
                             nomeSvg: 'academico/academic-cap',
-                            texto: nomeInstituicao ?? 'Não informado',
-                            tamanhoFonte: tema.tamanhoFonteM,
+                            texto: widget.nomeInstituicao ?? 'Não informado',
+                            tamanhoFonte: widget.tema.tamanhoFonteM,
                           ),
-                          SizedBox(height: tema.espacamento / 2),
+                          SizedBox(height: widget.tema.espacamento / 2),
                           TextoComIconeWidget(
-                            tema: tema,
+                            tema: widget.tema,
                             nomeSvg: 'menu/map-pin-fill',
-                            tamanhoFonte: tema.tamanhoFonteM,
-                            texto: nomeCidade ?? 'Não informado',
+                            tamanhoFonte: widget.tema.tamanhoFonteM,
+                            texto: widget.nomeCidade ?? 'Não informado',
                           ),
                         ],
                       ),
@@ -147,28 +163,25 @@ class CardLivroWidget extends StatelessWidget {
               ),
             ),
           ),
-          if (selecao)
+          if (widget.selecao)
             Positioned(
               top: 0,
               left: 0,
               child: MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
-                  onTap: aoClicarSelecao,
+                  onTap: widget.aoClicarSelecao,
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      border: Border.all(
-                          color: Color(tema.neutral).withOpacity(.1),
-                          width: 1
-                      ),
-                      color: !ativado ? Color(tema.accent) : Color(tema.base200),
+                      border: Border.all(color: Color(widget.tema.neutral).withOpacity(.1), width: 1),
+                      color: !widget.ativado ? Color(widget.tema.accent) : Color(widget.tema.base200),
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Center(
                       child: Icon(
-                          ativado ? Icons.close : Icons.add,
-                          color: ativado ? Color(tema.accent) : Color(tema.base200),
+                        widget.ativado ? Icons.close : Icons.add,
+                        color: widget.ativado ? Color(widget.tema.accent) : Color(widget.tema.base200),
                       ),
                     ),
                   ),
@@ -181,11 +194,11 @@ class CardLivroWidget extends StatelessWidget {
   }
 
   Widget get _obterImagem {
-    if (imagem == null) {
+    if (widget.imagem == null) {
       return Container(
         decoration: BoxDecoration(
-          color: Color(tema.neutral).withOpacity(.3),
-          borderRadius: BorderRadius.circular(tema.tamanhoFonteP),
+          color: Color(widget.tema.neutral).withOpacity(.3),
+          borderRadius: BorderRadius.circular(widget.tema.tamanhoFonteP),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -197,8 +210,8 @@ class CardLivroWidget extends StatelessWidget {
               children: [
                 Icon(
                   Icons.image_not_supported,
-                  color: Color(tema.base200),
-                  size: tema.tamanhoFonteXG * 2,
+                  color: Color(widget.tema.base200),
+                  size: widget.tema.tamanhoFonteXG * 2,
                 ),
               ],
             ),
@@ -207,17 +220,26 @@ class CardLivroWidget extends StatelessWidget {
       );
     }
 
-    final decodedBytes = base64Decode(imagem!);
-
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(tema.tamanhoFonteM),
-        color: Color(tema.neutral).withOpacity(.3),
+        borderRadius: BorderRadius.circular(widget.tema.tamanhoFonteM),
+        color: Color(widget.tema.neutral).withOpacity(.3),
         image: DecorationImage(
-          image: MemoryImage(decodedBytes),
+          image: MemoryImage(_imagemBytes!),
           fit: BoxFit.fitHeight,
+          filterQuality: FilterQuality.low,
         ),
       ),
     );
+  }
+
+  void _carregarImagem() {
+    if (widget.imagem == null) {
+      return;
+    }
+
+    final decodedBytes = base64Decode(widget.imagem!);
+
+    setState(() => _imagemBytes = decodedBytes);
   }
 }

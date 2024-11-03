@@ -28,7 +28,7 @@ class EnderecoApiRepo extends EnderecoRepo with ConfiguracaoApiState {
   }
 
   Future<void> _salvarEndereco(Endereco endereco) async {
-    await _client.post("$host/salvar-endereco", data: endereco.paraMapa()).catchError((erro) {
+    await _client.post("$host/criar-endereco", data: endereco.paraMapa()).catchError((erro) {
       throw erro;
     });
   }

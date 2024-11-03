@@ -46,9 +46,9 @@ class Solicitacao extends Entidade {
     this._tipoSolicitacao,
     this._codigoRastreamento,
     this._livrosUsuarioSolicitante,
-    this._livrosUsuarioReceptor,
-  )   : _enderecoUsuarioCriador = false,
-        _enderecoReceptor = null;
+    this._livrosUsuarioReceptor, [
+    this._enderecoReceptor = null,
+  ]) : _enderecoUsuarioCriador = false;
 
   Solicitacao.carregar(
     this._numero,
@@ -97,7 +97,8 @@ class Solicitacao extends Entidade {
       "dataAceite": _dataAceite?.formatar("yyyy-MM-dd"),
       "dataAtualizacao": _dataAtualizacao?.toString(),
       "informacoesAdicionais": _informacoesAdicionais,
-      "enderecoSolicitante": _enderecoSolicitante?.paraMapa(),
+      "enderecoSolicitante": _enderecoSolicitante?.paraMapa(_emailUsuarioSolicitante),
+      "enderecoReceptor": _enderecoReceptor?.paraMapa(_emailUsuarioReceptor),
       "enderecoUsuarioCriador": _enderecoUsuarioCriador,
       "codigoTipoSolicitacao": _tipoSolicitacao.id,
       "codigoStatusSolicitacao": _status.id,
@@ -171,14 +172,18 @@ class Solicitacao extends Entidade {
       solicitacaoAsMap["dataDevolucao"] == null ? null : DataHora.deString(dataDevolucao),
       solicitacaoAsMap['dataAtualizacao'] == null ? null : DataHora.deString(dataAtualizacao),
       solicitacaoAsMap["informacoesAdicionais"],
-      solicitacaoAsMap["enderecoSolicitante"] == null ? null : Endereco.carregarDeMapa(solicitacaoAsMap["enderecoSolicitante"]),
+      solicitacaoAsMap["enderecoSolicitante"] == null
+          ? null
+          : Endereco.carregarDeMapa(solicitacaoAsMap["enderecoSolicitante"]),
       solicitacaoAsMap["enderecoUsuarioCriador"] == null ? false : solicitacaoAsMap["enderecoUsuarioCriador"] as bool,
       TipoSolicitacao.deNumero(solicitacaoAsMap["codigoTipoSolicitacao"] as int? ?? 1),
       TipoStatusSolicitacao.deNumero(int.tryParse(solicitacaoAsMap["codigoStatusSolicitacao"].toString()) ?? 1),
       solicitacaoAsMap["dataAceite"] == null ? null : DataHora.deString(dataAceite),
       solicitacaoAsMap["motivoRecusa"],
       solicitacaoAsMap["codigoRastreioCorreio"],
-      solicitacaoAsMap["enderecoReceptor"] == null ? null : Endereco.carregarDeMapa(solicitacaoAsMap["enderecoReceptor"]),
+      solicitacaoAsMap["enderecoReceptor"] == null
+          ? null
+          : Endereco.carregarDeMapa(solicitacaoAsMap["enderecoReceptor"]),
     );
   }
 
@@ -218,7 +223,7 @@ class Solicitacao extends Entidade {
 
   TipoSolicitacao get tipoSolicitacao => _tipoSolicitacao;
 
-  String get emailUsuarioCriador => _emailUsuarioSolicitante;
+  String get emailUsuarioSolicitante => _emailUsuarioSolicitante;
 
   LivrosSolicitacao? get livrosUsuarioReceptor => _livrosUsuarioReceptor;
 

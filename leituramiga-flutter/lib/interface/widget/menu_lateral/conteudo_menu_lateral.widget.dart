@@ -15,6 +15,7 @@ import 'package:projeto_leituramiga/interface/widget/menu_lateral/botoes_menu_la
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/rodape_mobile.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class ConteudoMenuLateralWidget extends StatefulWidget {
@@ -144,7 +145,11 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                 tema: widget.tema,
                                 aoClicar: () => Rota.navegar(context, Rota.AUTENTICACAO),
                                 label: "Login",
-                                icone: Icon(Icons.login, color: Color(widget.tema.base200)),
+                                icone: SvgWidget(
+                                  nomeSvg: "login",
+                                  cor: Color(widget.tema.base200),
+                                  altura: 20,
+                                ),
                               ),
                             ],
                             if (widget.exibirPerfil && _autenticacaoState.usuario != null) ...[

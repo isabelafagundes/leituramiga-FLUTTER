@@ -33,8 +33,8 @@ enum MenuLateral {
   HISTORICO(
     id: 5,
     descricao: "Histórico",
-    iconeAtivado: "menu/plus-circle-fill",
-    iconeDesativado: "menu/plus-circle",
+    iconeAtivado: "clock",
+    iconeDesativado: "clock_outline",
     rota: Rota.HISTORICO,
   );
 

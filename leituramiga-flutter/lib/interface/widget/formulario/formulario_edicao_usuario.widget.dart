@@ -70,6 +70,7 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
               Flexible(
                 child: InputWidget(
                   tema: tema,
+                  obrigatorio: false,
                   controller: controllerTelefone,
                   label: "Número de telefone",
                   formatters: [_mascaraTelefone],
@@ -82,16 +83,6 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
         ),
         SizedBox(height: tema.espacamento * 2),
         SizedBox(height: tema.espacamento * 2),
-        // if (Responsive.larguraP(context)) ..._obterChildren,
-        // if (!Responsive.larguraP(context))
-        //   Flexible(
-        //     child: Flex(
-        //       direction: Axis.horizontal,
-        //       mainAxisSize: MainAxisSize.min,
-        //       children: _obterChildren,
-        //     ),
-        //   ),
-        // SizedBox(height: tema.espacamento * 2),
         Flexible(
           child: Flex(
             direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
@@ -102,6 +93,7 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
               Flexible(
                 child: InputWidget(
                   tema: tema,
+                  obrigatorio: false,
                   controller: controllerDescricao,
                   label: "Descrição",
                   alturaCampo: 90,

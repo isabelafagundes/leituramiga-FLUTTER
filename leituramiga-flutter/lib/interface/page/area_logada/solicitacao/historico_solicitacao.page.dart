@@ -6,6 +6,7 @@ import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
@@ -67,11 +68,11 @@ class _HistoricoPageState extends State<HistoricoPage> {
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: Responsive.larguraP(context) ? 1 :3,
+                  crossAxisCount:_obterQuantidadeColunas(context),
                   crossAxisSpacing: tema.espacamento * 2,
                   mainAxisSpacing: tema.espacamento * 2,
                   childAspectRatio: 1.5,
-                  mainAxisExtent: 180,
+                  mainAxisExtent: 170,
                 ),
                 itemCount: solicitacaoComponent.itensPaginados.length,
                 itemBuilder: (context, index) {
@@ -79,7 +80,15 @@ class _HistoricoPageState extends State<HistoricoPage> {
                   return CardSolicitacaoWidget(
                     tema: tema,
                     solicitacao: solicitacao,
-                    aoVisualizar: (int) {},
+                    aoVisualizar: (numero) async {
+                      Rota.navegarComArgumentos(
+                        context,
+                        DetalhesSolicitacaoRoute(
+                          numeroSolicitacao: numero,
+                        ),
+                      );
+                      Navigator.pop(context, true);
+                    },
                     usuarioPerfil: '',
                   );
                 },
@@ -91,4 +100,11 @@ class _HistoricoPageState extends State<HistoricoPage> {
       tema: tema,
     );
   }
+
+  int _obterQuantidadeColunas(BuildContext context) {
+    if (Responsive.largura(context) > 1400) return 3;
+    if (Responsive.largura(context) > 900) return 2;
+    return 1;
+  }
+
 }

@@ -59,6 +59,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
   final TextEditingController controllerFormaEntrega = TextEditingController();
   EditarSolicitacao _abaSelecionada = EditarSolicitacao.INFORMACOES;
   CriarSolicitacao estagioPagina = CriarSolicitacao.INFORMACOES_ADICIONAIS;
+  bool _enderecoSolicitante = false;
 
   TemaState get _temaState => TemaState.instancia;
 
@@ -73,13 +74,15 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
         _solicitacaoComponent.solicitacaoSelecionada!.formaEntrega == FormaEntrega.CORREIOS;
 
     if (possuiSegundoEndereco) {
-      if (_autenticacaoState.usuario!.email.endereco == _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioCriador) {
+      if (_autenticacaoState.usuario!.email.endereco ==
+          _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioSolicitante) {
+        _enderecoSolicitante = true;
         return _solicitacaoComponent.solicitacaoSelecionada!.enderecoSolicitante!;
       } else {
         return _solicitacaoComponent.solicitacaoSelecionada!.enderecoReceptor!;
       }
     }
-
+    _enderecoSolicitante = true;
     return _solicitacaoComponent.solicitacaoSelecionada!.enderecoSolicitante!;
   }
 
@@ -209,30 +212,28 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
           ),
         ),
       EditarSolicitacao.ENDERECO => SingleChildScrollView(
-          child: IgnorePointer(
-            child: ConteudoEnderecoSolicitacaoWidget(
-              tema: tema,
-              semBotaoProximo: true,
-              aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
-              aoSelecionarFrete: (frete) => setState(() => controllerCodigoRastreio.text = frete),
-              estados: UF.values.map((e) => e.descricao).toList(),
-              cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome).toList(),
-              controllerFrete: controllerCodigoRastreio,
-              aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
-              aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
-              aoClicarProximo: () => atualizarPagina(CriarSolicitacao.CONCLUSAO),
-              utilizarEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoDoPerfil,
-              aoClicarFrete: (frete) {},
-              controllerRua: controllerRua,
-              controllerBairro: controllerBairro,
-              controllerCep: controllerCep,
-              controllerNumero: controllerNumero,
-              controllerComplemento: controllerComplemento,
-              controllerCidade: controllerCidade,
-              controllerEstado: controllerEstado,
-              permitirUsarEnderecoPerfil: true,
-              utilizaEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoPerfil,
-            ),
+          child: ConteudoEnderecoSolicitacaoWidget(
+            tema: tema,
+            semBotaoProximo: true,
+            aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
+            aoSelecionarFrete: (frete) => setState(() => controllerCodigoRastreio.text = frete),
+            estados: UF.values.map((e) => e.descricao).toList(),
+            cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome).toList(),
+            controllerFrete: controllerCodigoRastreio,
+            aoSelecionarEstado: _selecionarEstado,
+            aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
+            aoClicarProximo: () => atualizarPagina(CriarSolicitacao.CONCLUSAO),
+            utilizarEnderecoPerfil: _utilizarEnderecoPerfil,
+            aoClicarFrete: (frete) {},
+            controllerRua: controllerRua,
+            controllerBairro: controllerBairro,
+            controllerCep: controllerCep,
+            controllerNumero: controllerNumero,
+            controllerComplemento: controllerComplemento,
+            controllerCidade: controllerCidade,
+            controllerEstado: controllerEstado,
+            permitirUsarEnderecoPerfil: true,
+            utilizaEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoPerfil,
           ),
         ),
       EditarSolicitacao.LIVROS => ConteudoLivrosSolicitacaoWidget(
@@ -244,6 +245,31 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
         ),
       _ => const SizedBox(),
     };
+  }
+
+  Future<void> _selecionarEstado(String estado) async {
+    UF uf = UF.deDescricao(estado);
+    await _usuarioComponent.obterCidades(uf);
+    setState(() => controllerEstado.text = estado);
+  }
+
+  Future<void> _utilizarEnderecoPerfil() async {
+    notificarCasoErro(() async {
+      await _usuarioComponent.obterEndereco();
+      if (_usuarioComponent.enderecoEdicao != null) _solicitacaoComponent.utilizarEnderecoDoPerfil();
+      if (_solicitacaoComponent.utilizarEnderecoPerfil) {
+        _preencherControllersEndereco(_usuarioComponent.enderecoEdicao!);
+        setState(() {});
+      } else {
+        controllerRua.text = "";
+        controllerBairro.text = "";
+        controllerCep.text = "";
+        controllerNumero.text = "";
+        controllerComplemento.text = "";
+        controllerCidade.text = "";
+        controllerEstado.text = "";
+      }
+    });
   }
 
   Future<void> salvarSolicitacao() async {
@@ -285,7 +311,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
   }
 
   Future<void> _obterUsuarioSolicitacao() async {
-    String emailoUsuarioCriador = _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioCriador;
+    String emailoUsuarioCriador = _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioSolicitante;
     String emailUsuarioProprietario = _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioProprietario;
     if (emailoUsuarioCriador == _autenticacaoState.usuario!.email) {
       await _usuarioComponent.obterUsuarioSolicitacao(emailUsuarioProprietario);
@@ -305,17 +331,15 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
 
       return Solicitacao.criar(
         _solicitacaoComponent.solicitacaoSelecionada!.numero,
-        _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioCriador,
         _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioProprietario,
+        _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioSolicitante,
         formaEntregaSelecionada ?? FormaEntrega.CORREIOS,
         _solicitacaoComponent.solicitacaoSelecionada!.dataCriacao,
         dataEntrega,
         dataDevolucao,
         _solicitacaoComponent.solicitacaoSelecionada!.dataAtualizacao,
         controllerInformacoes.text,
-        _solicitacaoComponent.solicitacaoSelecionada!.enderecoSolicitante!.principal
-            ? _solicitacaoComponent.solicitacaoSelecionada!.enderecoSolicitante
-            : endereco,
+        _enderecoSolicitante ? endereco : _solicitacaoComponent.solicitacaoSelecionada!.enderecoSolicitante,
         _solicitacaoComponent.solicitacaoSelecionada!.status,
         _solicitacaoComponent.solicitacaoSelecionada!.dataAceite,
         "",
@@ -323,6 +347,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
         controllerCodigoRastreio.text,
         _solicitacaoComponent.solicitacaoSelecionada!.livrosSolicitante,
         _solicitacaoComponent.solicitacaoSelecionada!.livrosReceptor,
+        !_enderecoSolicitante ? endereco : _solicitacaoComponent.solicitacaoSelecionada!.enderecoReceptor,
       );
     } catch (e) {
       rethrow;
@@ -340,7 +365,8 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
 
     if (municipio == null) return null;
 
-    return Endereco.criar(
+    return Endereco.carregar(
+      enderecoEmEdicao?.numero,
       controllerNumero.text.trim(),
       controllerComplemento.text.trim(),
       controllerRua.text.trim(),
@@ -370,6 +396,16 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
         }
       }
     });
+  }
+
+  void _preencherControllersEndereco(Endereco endereco) {
+    controllerRua.text = endereco.rua;
+    controllerBairro.text = endereco.bairro;
+    controllerCep.text = endereco.cep;
+    controllerNumero.text = endereco.numeroResidencial?.toString() ?? "";
+    controllerComplemento.text = endereco.complemento?.toString() ?? "";
+    controllerCidade.text = endereco.municipio.nome ?? "";
+    controllerEstado.text = endereco.municipio.estado.descricao ?? "";
   }
 
   void abrirDatePicker(bool ehDataDevolucao) {

@@ -89,7 +89,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextoWidget(
-                        texto: "Estado",
+                        texto: "Estado *",
                         tema: tema,
                         cor: Color(tema.baseContent),
                       ),
@@ -126,7 +126,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextoWidget(
-                        texto: "Cidade",
+                        texto: "Cidade *",
                         tema: tema,
                         cor: Color(tema.baseContent),
                       ),
@@ -211,6 +211,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
               Flexible(
                 child: InputWidget(
                   tema: tema,
+                  obrigatorio: false,
                   controller: controllerComplemento,
                   label: "Complemento",
                   alturaCampo: 50,

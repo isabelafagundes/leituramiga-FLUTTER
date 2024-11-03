@@ -84,10 +84,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                                height: Responsive.larguraP(context)
-                                    ? widget.tema.espacamento * 3
-                                    : widget.tema.espacamento * 2),
+                            SizedBox(height: widget.tema.espacamento * 2),
                             Container(
                               child: Wrap(
                                 alignment: WrapAlignment.start,
@@ -159,15 +156,15 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                                   tema: widget.tema,
                                 ),
                                 TextoWidget(
-                                  texto: widget.solicitacao.endereco.enderecoFormatadoCensurado,
+                                  texto: widget.solicitacao.endereco?.enderecoFormatadoCensurado ?? "",
                                   tema: widget.tema,
                                 ),
                               ],
                             ),
                             SizedBox(
-                                height: Responsive.larguraP(context)
-                                    ? widget.tema.espacamento *5
-                                    : widget.tema.espacamento),
+                              height:
+                                  Responsive.larguraP(context) ? widget.tema.espacamento * 5 : widget.tema.espacamento,
+                            ),
                           ],
                         ),
                       )
@@ -212,6 +209,11 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
               BotaoPequenoWidget(
                 tema: widget.tema,
                 corFonte: Color(widget.tema.base200),
+                padding: EdgeInsets.symmetric(
+                  horizontal: widget.tema.espacamento * 1.5,
+                  vertical: widget.tema.espacamento / 1.5,
+                ),
+                icone: Icon(Icons.remove_red_eye, color: kCorFonte),
                 aoClicar: () => widget.aoVisualizar(widget.solicitacao.numero!),
                 label: "Visualizar",
               ),

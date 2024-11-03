@@ -98,7 +98,7 @@ class Livro extends Entidade {
         livroAsMap['tipoSolicitacao'].toString().split(",").map((e) => TipoSolicitacao.deNumero(int.parse(e))).toList(),
         livroAsMap['emailUsuario'],
         livroAsMap['dataCriacao'] == null ? null : DataHora.criar(livroAsMap['dataCriacao']),
-        livroAsMap['dataUltimaSolicitacao'] == null ? null : DataHora.criar(livroAsMap['dataUltimaSolicitacao']),
+        null,
         TipoStatusLivro.obterDeNumero(livroAsMap['codigoStatusLivro']),
         livroAsMap['nomeUsuario'],
         livroAsMap['nomeInstituicao'],

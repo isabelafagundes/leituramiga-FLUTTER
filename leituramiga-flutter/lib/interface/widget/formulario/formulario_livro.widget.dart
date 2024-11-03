@@ -125,7 +125,7 @@ class FormularioLivroWidget extends StatelessWidget {
               ),
               SizedBox(height: tema.espacamento * 3),
               TextoWidget(
-                texto: "Categorias",
+                texto: "Categorias *",
                 tema: tema,
                 weight: FontWeight.w500,
                 cor: Color(tema.baseContent),
@@ -139,7 +139,7 @@ class FormularioLivroWidget extends StatelessWidget {
               ),
               SizedBox(height: tema.espacamento * 3),
               TextoWidget(
-                texto: "Tipo de solicitação",
+                texto: "Tipo de solicitação *",
                 tema: tema,
                 weight: FontWeight.w500,
                 cor: Color(tema.baseContent),

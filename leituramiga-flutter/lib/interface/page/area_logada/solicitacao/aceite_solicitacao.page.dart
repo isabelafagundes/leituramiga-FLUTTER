@@ -72,7 +72,7 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
       Solicitacao? solicitacao = _solicitacaoComponent.solicitacaoSelecionada;
-      await _usuarioComponent.obterUsuario(solicitacao!.emailUsuarioCriador);
+      await _usuarioComponent.obterUsuario(solicitacao!.emailUsuarioSolicitante);
       await _usuarioComponent.obterUsuarioSolicitacao(solicitacao.emailUsuarioProprietario);
       await _usuarioComponent.obterLivrosUsuario();
       await _usuarioComponent.obterEndereco();
@@ -189,8 +189,7 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
           aoClicarLivro: _solicitacaoComponent.selecionarLivro,
           aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
           verificarSelecao: _solicitacaoComponent.verificarSelecao,
-          livros: _usuarioComponent.itensPaginados,
-          // livros: _usuarioComponent.itensPaginados.where((e) => e.tiposSolicitacao.contains(_tipoSolicitacao)).toList(),
+          livros: _usuarioComponent.itensPaginados.where((e) => e.tiposSolicitacao.contains(_tipoSolicitacao)).toList(),
           textoPopUp: "Deseja adicionar os livros selecionados na solicitação?",
           navegarParaSolicitacao: () => _atualizarAbaSelecionada(AceitarSolicitacao.ENDERECO),
         ),
@@ -273,7 +272,7 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
   }
 
   Future<void> _obterUsuarioSolicitacao() async {
-    String emailoUsuarioCriador = _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioCriador;
+    String emailoUsuarioCriador = _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioSolicitante;
     String emailUsuarioProprietario = _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioProprietario;
     if (emailoUsuarioCriador == _autenticacaoState.usuario!.email) {
       await _usuarioComponent.obterUsuarioSolicitacao(emailUsuarioProprietario);

@@ -55,7 +55,7 @@ class _CardNotificacaoWidgetState extends State<CardNotificacaoWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                constraints: BoxConstraints(maxWidth: Responsive.largura(context)-200),
+                constraints: BoxConstraints(maxWidth: Responsive.largura(context) - 200),
                 child: Wrap(
                   alignment: WrapAlignment.start,
                   crossAxisAlignment: WrapCrossAlignment.start,
@@ -77,19 +77,15 @@ class _CardNotificacaoWidgetState extends State<CardNotificacaoWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // BotaoPequenoWidget(
-                  //   tema: widget.tema,
-                  //   corFundo: Color(widget.tema.base100),
-                  //   corFonte: Color(widget.tema.baseContent),
-                  //   aoClicar: () => widget.aoRecusar(widget.notificacao.numeroSolicitacao),
-                  //   label: "Recusar",
-                  // ),
-                  // SizedBox(width: widget.tema.espacamento),
                   BotaoPequenoWidget(
                     tema: widget.tema,
                     corFonte: kCorFonte,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: widget.tema.espacamento * 1.5,
+                      vertical: widget.tema.espacamento / 1.5,
+                    ),
                     icone: Icon(Icons.remove_red_eye, color: kCorFonte),
-                    aoClicar: ()=>widget.aoVisualizar(widget.notificacao.numeroSolicitacao),
+                    aoClicar: () => widget.aoVisualizar(widget.notificacao.numeroSolicitacao),
                     label: "Visualizar",
                   ),
                 ],

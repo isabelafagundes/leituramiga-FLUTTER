@@ -224,9 +224,9 @@ class _LivrosPageState extends State<LivrosPage> {
                                                   BotaoPequenoWidget(
                                                     tema: tema,
                                                     icone: Icon(
-                                                      Icons.logout,
+                                                      Icons.person,
                                                       color: Color(tema.base200),
-                                                      size: 16,
+                                                      size: 20,
                                                     ),
                                                     corFonte: Color(tema.base200),
                                                     padding: EdgeInsets.symmetric(horizontal: tema.espacamento),

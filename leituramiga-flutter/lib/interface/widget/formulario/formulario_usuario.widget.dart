@@ -88,6 +88,7 @@ class FormularioUsuarioWidget extends StatelessWidget {
               Flexible(
                 child: InputWidget(
                   tema: tema,
+                  obrigatorio: false,
                   controller: controllerTelefone,
                   label: "Número de telefone",
                   formatters: [_mascaraTelefone],
