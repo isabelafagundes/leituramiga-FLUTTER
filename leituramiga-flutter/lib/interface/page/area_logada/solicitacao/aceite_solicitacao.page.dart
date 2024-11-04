@@ -12,6 +12,8 @@ import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
@@ -123,12 +125,27 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
                     largura: 140,
                     texto: "Aceitar",
                     aoClicar: () async {
-                      bool? navegarParaSolicitacoes = await showDialog(
-                        context: context,
-                        builder: (BuildContext context) => _obterPopUpPadrao(context),
-                      );
-                      if (navegarParaSolicitacoes == null) return;
-                      if (navegarParaSolicitacoes) return await _aceitarSolicitacao(enderecoSolicitacao);
+                      notificarCasoErro(() async {
+                        if (!_enderecoValido) return Notificacoes.mostrar("Preencha todos os campos do endereço!");
+                        if (_solicitacaoComponent.livrosSelecionados.isEmpty)
+                          return Notificacoes.mostrar("Selecione um livro!");
+                        _solicitacaoComponent.validarNumeroLivrosSelecionados();
+
+                        bool? navegarParaSolicitacoes = await showDialog(
+                          context: context,
+                          builder: (BuildContext context) => _obterPopUpPadrao(context),
+                        );
+
+                        if (navegarParaSolicitacoes ?? false) {
+                          await _aceitarSolicitacao(enderecoSolicitacao);
+                          Rota.navegarComArgumentos(
+                            context,
+                            DetalhesSolicitacaoRoute(
+                              numeroSolicitacao: widget.numeroSolicitacao,
+                            ),
+                          );
+                        }
+                      });
                     },
                     icone: Icon(
                       Icons.check,
@@ -167,6 +184,14 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
       ),
     );
   }
+
+  bool get _enderecoValido =>
+      controllerRua.text.isNotEmpty &&
+      controllerBairro.text.isNotEmpty &&
+      controllerCep.text.isNotEmpty &&
+      controllerNumero.text.isNotEmpty &&
+      controllerCidade.text.isNotEmpty &&
+      controllerEstado.text.isNotEmpty;
 
   Widget _obterPopUpPadrao(BuildContext context) {
     return PopUpPadraoWidget(

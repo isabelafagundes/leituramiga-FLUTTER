@@ -23,10 +23,16 @@ class SolicitacaoUseCase {
     _state.utilizarEnderecoPerfil = solicitacao.enderecoSolicitante?.principal ?? false;
   }
 
+  void validarNumeroLivrosSelecionados() {
+    int quantidadeLivrosSolicitante = _state.solicitacaoSelecionada!.livrosSolicitante.quantidade;
+    if (_state.livrosSelecionados.length > quantidadeLivrosSolicitante) throw QuantidadeInvalidaLivros();
+  }
+
   Future<void> aceitarSolicitacao(int numero, Endereco? endereco) async {
     LivrosSolicitacao? livrosTroca = _state.livrosSelecionados.isEmpty
         ? null
         : LivrosSolicitacao.criar(_autenticacaoState.emailUsuario, _state.livrosSelecionados);
+    validarNumeroLivrosSelecionados();
     await _service.aceitarSolicitacao(numero, livrosTroca, endereco);
     await obterSolicitacao(numero);
   }

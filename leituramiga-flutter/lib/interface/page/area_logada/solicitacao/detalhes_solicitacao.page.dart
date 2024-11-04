@@ -422,6 +422,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
     _atualizarCarregamento();
     await notificarCasoErro(() async {
       setState(() => _carregando = true);
+      _solicitacaoComponent.validarNumeroLivrosSelecionados();
       Solicitacao solicitacao = _solicitacaoComponent.solicitacaoSelecionada!;
       if (solicitacao.tipoSolicitacao.possuiSegundoEndereco && solicitacao.formaEntrega == FormaEntrega.CORREIOS) {
         return Rota.navegarComArgumentos(

@@ -62,6 +62,13 @@ class SolicitacaoComponent extends State with SolicitacaoState, PaginacaoState<R
     );
   }
 
+  void validarNumeroLivrosSelecionados() {
+    executar(
+      rotina: () => _solicitacaoUseCase.validarNumeroLivrosSelecionados(),
+      mensagemErro: "Você não pode adicionar mais livros do que o solicitante pediu.",
+    );
+  }
+
   Future<void> recusarSolicitacao(int numeroSolicitacao, String motivo) async {
     await executar(
       rotina: () => _solicitacaoUseCase.recusarSolicitacao(numeroSolicitacao, motivo),

@@ -153,7 +153,12 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
             abrirTimePicker: ([bool ehDevolucao = false]) => abrirTimePicker(ehDevolucao),
             livrosSolicitacao: _solicitacaoComponent.livrosSelecionados,
             controllerInformacoes: controllerInformacoes,
-            aoClicarProximo: () => atualizarPagina(CriarSolicitacao.ENDERECO),
+            aoClicarProximo: () async {
+              await notificarCasoErro(() async {
+                _validarDataDevolucao();
+                atualizarPagina(CriarSolicitacao.ENDERECO);
+              });
+            },
             controllerDataEntrega: controllerDataEntrega,
             removerLivro: _solicitacaoComponent.removerLivro,
             controllerDataDevolucao: controllerDataDevolucao,
@@ -167,9 +172,11 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
               });
             },
             abrirDatePicker: ([bool ehDevolucao = false]) => abrirDatePicker(ehDevolucao),
-            aoClicarAdicionarLivro: () {
-              _validarDatas();
-              atualizarPagina(CriarSolicitacao.SELECIONAR_LIVROS);
+            aoClicarAdicionarLivro: () async {
+              await notificarCasoErro(() async {
+                _validarDataDevolucao();
+                atualizarPagina(CriarSolicitacao.SELECIONAR_LIVROS);
+              });
             },
           ),
         ),
@@ -198,7 +205,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
         ),
       CriarSolicitacao.CONCLUSAO => SingleChildScrollView(
           child: SizedBox(
-            height: Responsive.altura(context)*.8,
+            height: Responsive.altura(context) * .8,
             child: Flex(
               direction: Axis.vertical,
               mainAxisSize: MainAxisSize.min,
@@ -410,17 +417,31 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
     );
   }
 
-  void _validarDatas() {
-    if (controllerDataEntrega.text.isNotEmpty &&
-        controllerDataDevolucao.text.isNotEmpty &&
-        formaEntregaSelecionada == FormaEntrega.PRESENCIAL) {
-      DataHora dataEntrega = DataHora.deString(controllerDataEntrega.text, "dd/MM/yyyy");
-      DataHora dataDevolucao = DataHora.deString(controllerDataDevolucao.text, "dd/MM/yyyy");
-      if (dataDevolucao.ehAntesDe(dataEntrega)) {
-        Notificacoes.mostrar("A data de devolução não pode ser anterior à data de entrega");
-        throw DataInvalida();
-      }
-    }
+  void _validarDataDevolucao() {
+    bool possuiDataDevolucao = controllerDataDevolucao.text.isNotEmpty && controllerHoraDevolucao.text.isNotEmpty;
+    bool possuiDataEntrega = controllerDataEntrega.text.isNotEmpty && controllerHoraEntrega.text.isNotEmpty;
+    bool possuiHoraDevolucao = controllerHoraDevolucao.text.isNotEmpty;
+    bool possuiHoraEntrega = controllerHoraEntrega.text.isNotEmpty;
+
+    if (controllerDataDevolucao.text.isNotEmpty && !possuiHoraDevolucao) throw DataSolicitacaoInvalida("Informe a hora de devolução");
+    if (controllerDataEntrega.text.isNotEmpty && !possuiHoraEntrega) throw DataSolicitacaoInvalida("Informe a hora de entrega");
+    if (formaEntregaSelecionada == FormaEntrega.PRESENCIAL && !possuiDataEntrega) throw DataSolicitacaoInvalida("Informe a data de entrega");
+    if (_tipoSolicitacao == TipoSolicitacao.EMPRESTIMO && !possuiDataDevolucao) throw DataSolicitacaoInvalida("Informe a data de devolução");
+    if (!possuiDataEntrega && !possuiDataDevolucao) return;
+    if (dataEntrega != null) Solicitacao.validarDataEntrega(dataEntrega);
+    if (dataDevolucao != null) Solicitacao.validarDataDevolucao(dataDevolucao);
+    if (dataEntrega != null && dataDevolucao != null)
+      Solicitacao.validarDataEntregaEDevolucao(dataEntrega, dataDevolucao);
+  }
+
+  DataHora? get dataEntrega {
+    if (controllerDataEntrega.text.isEmpty || controllerHoraEntrega.text.isEmpty) return null;
+    return DataHora.deString("${controllerDataEntrega.text} ${controllerHoraEntrega.text}", "dd/MM/yyyy HH:mm");
+  }
+
+  DataHora? get dataDevolucao {
+    if (controllerDataDevolucao.text.isEmpty || controllerHoraDevolucao.text.isEmpty) return null;
+    return DataHora.deString("${controllerDataDevolucao.text} ${controllerHoraDevolucao.text}", "dd/MM/yyyy HH:mm");
   }
 }
 

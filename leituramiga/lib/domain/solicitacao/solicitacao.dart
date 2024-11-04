@@ -7,6 +7,7 @@ import 'package:leituramiga/domain/solicitacao/livros_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:leituramiga/domain/super/entidade.dart';
+import 'package:leituramiga/domain/super/erro_dominio.dart';
 
 class Solicitacao extends Entidade {
   final int? _numero;
@@ -48,7 +49,12 @@ class Solicitacao extends Entidade {
     this._livrosUsuarioSolicitante,
     this._livrosUsuarioReceptor, [
     this._enderecoReceptor = null,
-  ]) : _enderecoUsuarioCriador = false;
+    this._enderecoUsuarioCriador = false,
+  ]) {
+    validarDataEntrega(_dataEntrega);
+    validarDataDevolucao(_dataDevolucao);
+    validarDataEntregaEDevolucao(_dataEntrega, _dataDevolucao);
+  }
 
   Solicitacao.carregar(
     this._numero,
@@ -70,7 +76,11 @@ class Solicitacao extends Entidade {
     this._motivoRecusa,
     this._codigoRastreamento,
     this._enderecoReceptor,
-  );
+  ) {
+    validarDataEntrega(_dataEntrega);
+    validarDataDevolucao(_dataDevolucao);
+    validarDataEntregaEDevolucao(_dataEntrega, _dataDevolucao);
+  }
 
   int? get numero => _numero;
 
@@ -187,6 +197,32 @@ class Solicitacao extends Entidade {
     );
   }
 
+  static void validarDataDevolucao(DataHora? dataDevolucao) {
+    if (dataDevolucao != null && dataDevolucao.ehAntesDe(DataHora.hoje())) {
+      throw DataSolicitacaoInvalida("Data de devolução não pode ser anterior a data atual");
+    }
+  }
+
+  static void validarDataEntrega(DataHora? dataEntrega) {
+    if (dataEntrega != null && dataEntrega.ehAntesDe(DataHora.hoje())) {
+      throw DataSolicitacaoInvalida("Data de entrega não pode ser anterior a data atual");
+    }
+  }
+
+  static void validarDataEntregaEDevolucao(DataHora? dataEntrega, DataHora? dataDevolucao) {
+    if (dataEntrega != null && dataDevolucao != null && dataEntrega.ehDepoisDe(dataDevolucao)) {
+      throw DataSolicitacaoInvalida("Data de entrega não pode ser posterior a data de devolução");
+    }
+
+    if (dataEntrega != null && dataDevolucao != null && dataDevolucao.ehAntesDe(dataEntrega)) {
+      throw DataSolicitacaoInvalida("Data de devolução não pode ser anterior a data de entrega");
+    }
+
+    if (dataEntrega != null && dataDevolucao != null && dataDevolucao.ehIgualA(dataEntrega)) {
+      throw DataSolicitacaoInvalida("Data de devolução não pode ser igual a data de entrega");
+    }
+  }
+
   LivrosSolicitacao get livrosUsuarioSolicitante => _livrosUsuarioSolicitante;
 
   String get emailUsuarioProprietario => _emailUsuarioReceptor;
@@ -228,4 +264,8 @@ class Solicitacao extends Entidade {
   LivrosSolicitacao? get livrosUsuarioReceptor => _livrosUsuarioReceptor;
 
   String? get codigoRastreamento => _codigoRastreamento;
+}
+
+class DataSolicitacaoInvalida extends ErroDominio {
+  DataSolicitacaoInvalida(String mensagemException) : super(mensagemException);
 }
