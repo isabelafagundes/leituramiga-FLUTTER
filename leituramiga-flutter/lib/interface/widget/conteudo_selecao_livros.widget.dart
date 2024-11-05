@@ -4,6 +4,7 @@ import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/dica.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/grid/grid_livros.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
@@ -14,6 +15,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
   final bool Function(ResumoLivro) verificarSelecao;
   final Function(ResumoLivro) aoClicarLivro;
   final Function()? aceitarSolicitacao;
+  final Function()? validarSelecao;
   final List<ResumoLivro> livros;
   final Function() navegarParaSolicitacao;
   final String textoPopUp;
@@ -30,6 +32,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
     required this.textoPopUp,
     this.aceitarSolicitacao,
     this.exibirBotao = true,
+    this.validarSelecao,
   });
 
   @override
@@ -54,12 +57,16 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
                   color: Color(tema.base200),
                 ),
                 aoClicar: () async {
-                  bool? navegarParaSolicitacoes = await showDialog(
-                    context: context,
-                    builder: (BuildContext context) => _obterPopUpPadrao(context),
-                  );
-                  if (navegarParaSolicitacoes == null) return;
-                  if (navegarParaSolicitacoes) return navegarParaSolicitacao();
+                  await notificarCasoErro(() async {
+                    if (validarSelecao != null) validarSelecao!();
+
+                    bool? navegarParaSolicitacoes = await showDialog(
+                      context: context,
+                      builder: (BuildContext context) => _obterPopUpPadrao(context),
+                    );
+                    if (navegarParaSolicitacoes == null) return;
+                    if (navegarParaSolicitacoes) return navegarParaSolicitacao();
+                  });
                 },
               ),
             ]

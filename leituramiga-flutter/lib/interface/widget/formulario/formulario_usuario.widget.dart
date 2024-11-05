@@ -20,6 +20,7 @@ class FormularioUsuarioWidget extends StatelessWidget {
   final List<String> instituicoes;
   final Function(String) aoSelecionarInstituicao;
   final Function() aoCadastrar;
+  final Function() atualizar;
   final Widget? botaoInferior;
 
   FormularioUsuarioWidget({
@@ -35,7 +36,7 @@ class FormularioUsuarioWidget extends StatelessWidget {
     required this.controllerTelefone,
     required this.controllerInstituicao,
     required this.instituicoes,
-    required this.aoSelecionarInstituicao,
+    required this.aoSelecionarInstituicao, required this.atualizar,
   });
 
   final MaskTextInputFormatter _mascaraTelefone = MaskTextInputFormatter(mask: "(##) #########");
@@ -137,6 +138,8 @@ class FormularioUsuarioWidget extends StatelessWidget {
                 Expanded(
                   child: MenuWidget(
                     tema: tema,
+                    controller: controllerInstituicao,
+                    atualizar: atualizar,
                     valorSelecionado: controllerInstituicao.text.isEmpty ? null : controllerInstituicao.text,
                     escolhas: instituicoes,
                     aoClicar: aoSelecionarInstituicao,

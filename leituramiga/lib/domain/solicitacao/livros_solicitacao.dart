@@ -47,3 +47,7 @@ class LivrosSolicitacao {
 class QuantidadeInvalidaLivros extends ErroDominio {
   QuantidadeInvalidaLivros() : super("Você não pode adicionar mais livros do que o solicitante pediu.");
 }
+
+class QuantidadeZeroLivros extends ErroDominio {
+  QuantidadeZeroLivros() : super("Você deve adicionar pelo menos um livro.");
+}

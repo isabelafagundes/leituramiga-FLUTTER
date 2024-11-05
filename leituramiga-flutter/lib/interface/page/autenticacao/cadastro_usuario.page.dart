@@ -203,6 +203,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                 height: !Responsive.larguraP(context) ? 450 : 550,
                 child: FormularioUsuarioWidget(
                   tema: tema,
+                  atualizar: () => setState(() {}),
                   controllerConfirmacaoSenha: controllerConfirmacaoSenha,
                   controllerEmail: controllerEmail,
                   controllerNome: controllerNome,
@@ -251,6 +252,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
           children: [
             FormularioEnderecoWidget(
               tema: tema,
+              atualizar: () => setState(() {}),
               estados: UF.values.map((e) => e.descricao).toList(),
               cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome.toString()).toList(),
               aoSelecionarEstado: _selecionarEstado,

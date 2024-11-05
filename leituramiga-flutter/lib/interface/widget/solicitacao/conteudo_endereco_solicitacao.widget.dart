@@ -24,6 +24,7 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
   final Function(String) aoSelecionarEstado;
   final Function(String) aoSelecionarFormaEntrega;
   final Function(String) aoSelecionarFrete;
+  final Function() atualizar;
   final List<String> cidades;
   final List<String> estados;
   final bool utilizaEnderecoPerfil;
@@ -55,6 +56,7 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
     this.permitirUsarEnderecoPerfil = true,
     this.textoAjuda = "Preencha com o endereço que será feita a entrega!",
     this.semBotaoProximo = false,
+    required this.atualizar,
   });
 
   @override
@@ -110,6 +112,7 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
                   child: FormularioEnderecoWidget(
                     tema: tema,
                     textoAjuda: textoAjuda,
+                    atualizar: atualizar,
                     aoSelecionarCidade: aoSelecionarCidade,
                     aoSelecionarEstado: aoSelecionarEstado,
                     cidades: cidades,

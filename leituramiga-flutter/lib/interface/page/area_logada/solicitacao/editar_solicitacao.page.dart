@@ -60,6 +60,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
   EditarSolicitacao _abaSelecionada = EditarSolicitacao.INFORMACOES;
   CriarSolicitacao estagioPagina = CriarSolicitacao.INFORMACOES_ADICIONAIS;
   bool _enderecoSolicitante = false;
+  bool _carregando = false;
 
   TemaState get _temaState => TemaState.instancia;
 
@@ -131,7 +132,8 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
         carregando: _usuarioComponent.carregando ||
             _solicitacaoComponent.carregando ||
             _usuarioComponent.usuarioSolicitacao == null ||
-            _solicitacaoComponent.solicitacaoSelecionada == null,
+            _solicitacaoComponent.solicitacaoSelecionada == null ||
+            _carregando,
         child: Column(
           children: [
             SizedBox(
@@ -193,6 +195,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
       EditarSolicitacao.INFORMACOES => SingleChildScrollView(
           child: FormularioInformacoesAdicionaisWidget(
             tema: tema,
+            atualizar: () => setState(() {}),
             controllerCodigoRastreio: controllerCodigoRastreio,
             controllerHoraDevolucao: controllerHoraDevolucao,
             controllerHoraEntrega: controllerHoraEntrega,
@@ -214,6 +217,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
       EditarSolicitacao.ENDERECO => SingleChildScrollView(
           child: ConteudoEnderecoSolicitacaoWidget(
             tema: tema,
+            atualizar: () => setState(() {}),
             semBotaoProximo: true,
             aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
             aoSelecionarFrete: (frete) => setState(() => controllerCodigoRastreio.text = frete),
@@ -255,6 +259,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
 
   Future<void> _utilizarEnderecoPerfil() async {
     notificarCasoErro(() async {
+      setState(() => _carregando = true);
       await _usuarioComponent.obterEndereco();
       if (_usuarioComponent.enderecoEdicao != null) _solicitacaoComponent.utilizarEnderecoDoPerfil();
       if (_solicitacaoComponent.utilizarEnderecoPerfil) {
@@ -269,6 +274,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
         controllerCidade.text = "";
         controllerEstado.text = "";
       }
+      setState(() => _carregando = false);
     });
   }
 

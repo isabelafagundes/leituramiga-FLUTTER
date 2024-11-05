@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
@@ -12,7 +13,6 @@ import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_endereco.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
-import 'package:auto_route/auto_route.dart';
 
 @RoutePage()
 class EsqueceSenhaPage extends StatefulWidget {
@@ -111,6 +111,7 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
           height: 600,
           child: FormularioUsuarioWidget(
             tema: tema,
+            atualizar: () => setState(() {}),
             controllerConfirmacaoSenha: TextEditingController(),
             controllerEmail: TextEditingController(),
             controllerNome: TextEditingController(),
@@ -128,6 +129,7 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             FormularioEnderecoWidget(
+              atualizar: () => setState(() {}),
               tema: tema,
               estados: [],
               cidades: [],

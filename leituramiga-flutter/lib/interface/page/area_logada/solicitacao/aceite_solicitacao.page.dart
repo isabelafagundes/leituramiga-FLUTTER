@@ -290,6 +290,7 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
       AceitarSolicitacao.ENDERECO => SingleChildScrollView(
           child: ConteudoEnderecoSolicitacaoWidget(
             tema: tema,
+            atualizar: () => setState(() {}),
             textoAjuda: _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao == TipoSolicitacao.EMPRESTIMO
                 ? "Preencha com o endereço que será feita a devolução!"
                 : "Preencha com o endereço que será feita a entrega!",
@@ -332,6 +333,7 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
 
   Future<void> _utilizarEnderecoPerfil() async {
     notificarCasoErro(() async {
+      setState(() => _carregando = true);
       await _usuarioComponent.obterEndereco();
       if (_usuarioComponent.enderecoEdicao != null) _solicitacaoComponent.utilizarEnderecoDoPerfil();
       if (_solicitacaoComponent.utilizarEnderecoPerfil) {
@@ -346,6 +348,7 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
         controllerCidade.text = "";
         controllerEstado.text = "";
       }
+      setState(() => _carregando = false);
     });
   }
 

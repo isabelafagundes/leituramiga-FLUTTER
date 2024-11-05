@@ -67,186 +67,195 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
     );
   }
 
-  Widget obterConteudo(BuildContext context) => Container(
+  Widget obterConteudo(BuildContext context) =>
+      Container(
         padding: EdgeInsets.symmetric(vertical: widget.tema.espacamento * 2),
         width: 550,
         height: Responsive.largura(context) < 600 ? 700 : Responsive.altura(context),
         child: Column(
           children: widget.carrergando
               ? [
-                  Center(
-                    child: CircularProgressIndicator(
-                      color: Color(widget.tema.baseContent),
-                    ),
-                  )
-                ]
+            Center(
+              child: CircularProgressIndicator(
+                color: Color(widget.tema.baseContent),
+              ),
+            )
+          ]
               : [
-                  Row(
-                    children: [
-                      TextoWidget(
-                        texto: "Filtros",
-                        tema: widget.tema,
-                        tamanho: widget.tema.tamanhoFonteG,
-                        weight: FontWeight.w400,
-                        cor: Color(widget.tema.baseContent),
-                      ),
-                      SizedBox(width: widget.tema.espacamento),
-                      SvgWidget(
-                        nomeSvg: 'filtro',
-                        cor: Color(widget.tema.baseContent),
-                      )
-                    ],
-                  ),
-                  if (!widget.usuario) ...[
-                    TextoWidget(
-                      texto: "Categorias",
-                      tema: widget.tema,
-                      cor: Color(widget.tema.baseContent),
-                    ),
-                    SizedBox(height: widget.tema.espacamento),
-                    CarrosselCategoriaWidget(
-                      tema: widget.tema,
-                      selecionarCategoria: (categoria) => setState(() => widget.selecionarCategoria(categoria)),
-                      categoriasPorId: widget.categoriasPorId,
-                      categoriaSelecionada: _filtroState.numeroCategoria,
-                    ),
-                    SizedBox(height: widget.tema.espacamento * 2),
-                    TextoWidget(
-                      texto: "Tipo de solicitação",
-                      tema: widget.tema,
-                      cor: Color(widget.tema.baseContent),
-                    ),
-                    SizedBox(height: widget.tema.espacamento),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ChipWidget(
-                          tema: widget.tema,
-                          cor: kCorPessego,
-                          texto: "Troca",
-                          ativado: _filtroState.tipo == TipoSolicitacao.TROCA,
-                          aoClicar: () => setState(() => widget.selecionarTipoSolicitacao(TipoSolicitacao.TROCA)),
-                          corTexto: const Color(0xff464A52),
-                        ),
-                        SizedBox(width: widget.tema.espacamento * 2),
-                        ChipWidget(
-                          tema: widget.tema,
-                          cor: kCorVerde,
-                          aoClicar: () => setState(() => widget.selecionarTipoSolicitacao(TipoSolicitacao.EMPRESTIMO)),
-                          texto: "Empréstimo",
-                          ativado: _filtroState.tipo == TipoSolicitacao.EMPRESTIMO,
-                          corTexto: const Color(0xff464A52),
-                        ),
-                        SizedBox(width: widget.tema.espacamento * 2),
-                        ChipWidget(
-                          aoClicar: () => setState(() => widget.selecionarTipoSolicitacao(TipoSolicitacao.DOACAO)),
-                          tema: widget.tema,
-                          cor: kCorAzul,
-                          ativado: _filtroState.tipo == TipoSolicitacao.DOACAO,
-                          texto: "Doação",
-                          corTexto: const Color(0xff464A52),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: widget.tema.espacamento * 2),
-                  ],
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      TextoWidget(
-                        texto: "Estado",
-                        tema: widget.tema,
-                        cor: Color(widget.tema.baseContent),
-                      ),
-                      SizedBox(height: widget.tema.espacamento),
-                      Container(
-                        constraints: const BoxConstraints(maxWidth: 400),
-                        child: MenuWidget(
-                          tema: widget.tema,
-                          valorSelecionado: FiltroState.instancia.estado?.descricao,
-                          escolhas: UF.values.map((e) => e.descricao.toString()).toList(),
-                          aoClicar: (estado) async {
-                            await widget.selecionarEstado(UF.deDescricao(estado));
-                            print('Estado selecionado: ${_filtroState.municipios.length}');
-                            setState(() {});
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: widget.tema.espacamento * 2),
-                  TextoWidget(
-                    texto: "Cidade",
+            Row(
+              children: [
+                TextoWidget(
+                  texto: "Filtros",
+                  tema: widget.tema,
+                  tamanho: widget.tema.tamanhoFonteG,
+                  weight: FontWeight.w400,
+                  cor: Color(widget.tema.baseContent),
+                ),
+                SizedBox(width: widget.tema.espacamento),
+                SvgWidget(
+                  nomeSvg: 'filtro',
+                  cor: Color(widget.tema.baseContent),
+                )
+              ],
+            ),
+            if (!widget.usuario) ...[
+              TextoWidget(
+                texto: "Categorias",
+                tema: widget.tema,
+                cor: Color(widget.tema.baseContent),
+              ),
+              SizedBox(height: widget.tema.espacamento),
+              CarrosselCategoriaWidget(
+                tema: widget.tema,
+                selecionarCategoria: (categoria) => setState(() => widget.selecionarCategoria(categoria)),
+                categoriasPorId: widget.categoriasPorId,
+                categoriaSelecionada: _filtroState.numeroCategoria,
+              ),
+              SizedBox(height: widget.tema.espacamento * 2),
+              TextoWidget(
+                texto: "Tipo de solicitação",
+                tema: widget.tema,
+                cor: Color(widget.tema.baseContent),
+              ),
+              SizedBox(height: widget.tema.espacamento),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ChipWidget(
                     tema: widget.tema,
-                    cor: Color(widget.tema.baseContent),
+                    cor: kCorPessego,
+                    texto: "Troca",
+                    ativado: _filtroState.tipo == TipoSolicitacao.TROCA,
+                    aoClicar: () => setState(() => widget.selecionarTipoSolicitacao(TipoSolicitacao.TROCA)),
+                    corTexto: const Color(0xff464A52),
                   ),
-                  SizedBox(height: widget.tema.espacamento),
-                  Container(
-                    constraints: const BoxConstraints(maxWidth: 400),
-                    child: MenuWidget(
-                      tema: widget.tema,
-                      valorSelecionado: _filtroState.municipios
-                          .where((element) => element.numero == FiltroState.instancia.numeroMunicipio)
-                          .firstOrNull
-                          ?.nome,
-                      escolhas: _filtroState.municipios.map((e) => e.nome).toList(),
-                      aoClicar: (nomeCidade) => setState(() {
-                        widget.selecionarMunicipio(
-                          _filtroState.municipios.firstWhere((element) => element.nome == nomeCidade),
-                        );
-                      }),
-                    ),
-                  ),
-                  SizedBox(height: widget.tema.espacamento * 2),
-                  TextoWidget(
-                    texto: "Intituições de ensino",
+                  SizedBox(width: widget.tema.espacamento * 2),
+                  ChipWidget(
                     tema: widget.tema,
-                    cor: Color(widget.tema.baseContent),
+                    cor: kCorVerde,
+                    aoClicar: () => setState(() => widget.selecionarTipoSolicitacao(TipoSolicitacao.EMPRESTIMO)),
+                    texto: "Empréstimo",
+                    ativado: _filtroState.tipo == TipoSolicitacao.EMPRESTIMO,
+                    corTexto: const Color(0xff464A52),
                   ),
-                  SizedBox(height: widget.tema.espacamento),
-                  Container(
-                    constraints: const BoxConstraints(maxWidth: 400),
-                    child: MenuWidget(
-                      tema: widget.tema,
-                      escolhas: widget.instituicoesPorId.values.map((e) => e.nome).toList(),
-                      aoClicar: (nomeInstituicao) => setState(() {
-                        widget.selecionarInstituicao(
-                          widget.instituicoesPorId.values.firstWhere((element) => element.nome == nomeInstituicao),
-                        );
-                      }),
-                    ),
-                  ),
-                  const Spacer(),
-                  if (_filtroState.temFiltros)
-                    BotaoWidget(
-                      tema: widget.tema,
-                      corFundo: Color(widget.tema.base200),
-                      corTexto: Color(widget.tema.baseContent),
-                      texto: 'Limpar filtros',
-                      icone: SvgWidget(
-                        nomeSvg: 'limpar_icon',
-                        cor: Color(widget.tema.baseContent),
-                      ),
-                      aoClicar: () {
-                        widget.limparFiltros();
-
-                        setState(() {});
-                      },
-                    ),
-                  SizedBox(height: widget.tema.espacamento * 2),
-                  BotaoWidget(
+                  SizedBox(width: widget.tema.espacamento * 2),
+                  ChipWidget(
+                    aoClicar: () => setState(() => widget.selecionarTipoSolicitacao(TipoSolicitacao.DOACAO)),
                     tema: widget.tema,
-                    texto: 'Aplicar filtros',
-                    icone: Icon(
-                      Icons.done,
-                      color: Color(widget.tema.base200),
-                    ),
-                    aoClicar: widget.aplicarFiltros,
+                    cor: kCorAzul,
+                    ativado: _filtroState.tipo == TipoSolicitacao.DOACAO,
+                    texto: "Doação",
+                    corTexto: const Color(0xff464A52),
                   ),
-                  SizedBox(height: widget.tema.espacamento * 4),
                 ],
+              ),
+              SizedBox(height: widget.tema.espacamento * 2),
+            ],
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextoWidget(
+                  texto: "Estado",
+                  tema: widget.tema,
+                  cor: Color(widget.tema.baseContent),
+                ),
+                SizedBox(height: widget.tema.espacamento),
+                Container(
+                  constraints: const BoxConstraints(maxWidth: 400),
+                  child: MenuWidget(
+                    controller: TextEditingController(text: _filtroState.estado?.descricao),
+                    tema: widget.tema,
+                    atualizar: () => setState(() {}),
+                    valorSelecionado: FiltroState.instancia.estado?.descricao,
+                    escolhas: UF.values.map((e) => e.descricao.toString()).toList(),
+                    aoClicar: (estado) async {
+                      await widget.selecionarEstado(UF.deDescricao(estado));
+                      print('Estado selecionado: ${_filtroState.municipios.length}');
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: widget.tema.espacamento * 2),
+            TextoWidget(
+              texto: "Cidade",
+              tema: widget.tema,
+              cor: Color(widget.tema.baseContent),
+            ),
+            SizedBox(height: widget.tema.espacamento),
+            Container(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: MenuWidget(
+                tema: widget.tema,
+                controller: TextEditingController(),
+                atualizar: () => setState(() {}),
+                valorSelecionado: _filtroState.municipios
+                    .where((element) => element.numero == FiltroState.instancia.numeroMunicipio)
+                    .firstOrNull
+                    ?.nome,
+                escolhas: _filtroState.municipios.map((e) => e.nome).toList(),
+                aoClicar: (nomeCidade) =>
+                    setState(() {
+                      widget.selecionarMunicipio(
+                        _filtroState.municipios.firstWhere((element) => element.nome == nomeCidade),
+                      );
+                    }),
+              ),
+            ),
+            SizedBox(height: widget.tema.espacamento * 2),
+            TextoWidget(
+              texto: "Intituições de ensino",
+              tema: widget.tema,
+              cor: Color(widget.tema.baseContent),
+            ),
+            SizedBox(height: widget.tema.espacamento),
+            Container(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: MenuWidget(
+                tema: widget.tema,
+                controller: TextEditingController(),
+                atualizar: () => setState(() {}),
+                escolhas: widget.instituicoesPorId.values.map((e) => e.nome).toList(),
+                aoClicar: (nomeInstituicao) =>
+                    setState(() {
+                      widget.selecionarInstituicao(
+                        widget.instituicoesPorId.values.firstWhere((element) => element.nome == nomeInstituicao),
+                      );
+                    }),
+              ),
+            ),
+            const Spacer(),
+            if (_filtroState.temFiltros)
+              BotaoWidget(
+                tema: widget.tema,
+                corFundo: Color(widget.tema.base200),
+                corTexto: Color(widget.tema.baseContent),
+                texto: 'Limpar filtros',
+                icone: SvgWidget(
+                  nomeSvg: 'limpar_icon',
+                  cor: Color(widget.tema.baseContent),
+                ),
+                aoClicar: () {
+                  widget.limparFiltros();
+
+                  setState(() {});
+                },
+              ),
+            SizedBox(height: widget.tema.espacamento * 2),
+            BotaoWidget(
+              tema: widget.tema,
+              texto: 'Aplicar filtros',
+              icone: Icon(
+                Icons.done,
+                color: Color(widget.tema.base200),
+              ),
+              aoClicar: widget.aplicarFiltros,
+            ),
+            SizedBox(height: widget.tema.espacamento * 4),
+          ],
         ),
       );
 }

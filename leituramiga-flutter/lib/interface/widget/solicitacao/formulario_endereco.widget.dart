@@ -19,6 +19,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
   final Function(String) aoSelecionarCidade;
   final Function(String) aoSelecionarEstado;
   final List<String> cidades;
+  final Function() atualizar;
   final Function()? aoSalvar;
   final List<String> estados;
   final Widget? botaoInferior;
@@ -41,6 +42,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
     required this.estados,
     this.aoSalvar,
     this.botaoInferior,
+    required this.atualizar,
   });
 
   MaskTextInputFormatter _mascaraCEP = MaskTextInputFormatter(
@@ -97,6 +99,8 @@ class FormularioEnderecoWidget extends StatelessWidget {
                       Expanded(
                         child: MenuWidget(
                           tema: tema,
+                          controller: controllerEstado,
+                          atualizar: atualizar,
                           valorSelecionado: controllerEstado.text.isEmpty ? null : controllerEstado.text,
                           escolhas: estados,
                           aoClicar: aoSelecionarEstado,
@@ -134,6 +138,8 @@ class FormularioEnderecoWidget extends StatelessWidget {
                       Expanded(
                         child: MenuWidget(
                           tema: tema,
+                          controller: controllerCidade,
+                          atualizar: atualizar,
                           valorSelecionado: controllerCidade.text.isEmpty ? null : controllerCidade.text,
                           escolhas: cidades,
                           aoClicar: aoSelecionarCidade,

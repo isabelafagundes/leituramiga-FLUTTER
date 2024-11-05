@@ -19,6 +19,7 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
   final TextEditingController controllerDescricao;
   final TextEditingController controllerInstituicao;
   final List<String> instituicoes;
+  final Function() atualizar;
   final Function(String) aoSelecionarInstituicao;
   final Function() aoCadastrar;
   final Widget? botaoInferior;
@@ -38,6 +39,7 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
     required this.instituicoes,
     required this.aoSelecionarInstituicao,
     required this.controllerDescricao,
+    required this.atualizar,
   });
 
   final MaskTextInputFormatter _mascaraTelefone = MaskTextInputFormatter(mask: "(##) #########");
@@ -119,6 +121,8 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
                       Expanded(
                         child: MenuWidget(
                           tema: tema,
+                          controller: controllerInstituicao,
+                          atualizar: atualizar,
                           valorSelecionado: controllerInstituicao.text.isEmpty ? null : controllerInstituicao.text,
                           escolhas: instituicoes,
                           aoClicar: aoSelecionarInstituicao,

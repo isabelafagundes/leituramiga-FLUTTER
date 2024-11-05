@@ -29,6 +29,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
   final Function([bool devolucao]) abrirTimePicker;
   final Function() aoClicarAdicionarLivro;
   final bool semSelecaoLivros;
+  final Function() atualizar;
 
   const FormularioInformacoesAdicionaisWidget({
     super.key,
@@ -48,7 +49,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
     required this.controllerFormaEntrega,
     required this.aoClicarFormaEntrega,
     this.semSelecaoLivros = false,
-    required this.controllerCodigoRastreio,
+    required this.controllerCodigoRastreio, required this.atualizar,
   });
 
   @override
@@ -118,6 +119,8 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                               Expanded(
                                 child: MenuWidget(
                                   tema: tema,
+                                  controller: controllerFormaEntrega,
+                                  atualizar: atualizar,
                                   valorSelecionado:
                                       controllerFormaEntrega.text.isNotEmpty ? controllerFormaEntrega.text : null,
                                   escolhas: const ["Correios", "Presencial"],
@@ -149,6 +152,8 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                                   Expanded(
                                     child: MenuWidget(
                                       tema: tema,
+                                      controller: controllerFormaEntrega,
+                                      atualizar: atualizar,
                                       valorSelecionado:
                                           controllerFormaEntrega.text.isNotEmpty ? controllerFormaEntrega.text : null,
                                       escolhas: const ["Correios", "Presencial"],
@@ -165,10 +170,10 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                 ),
               ),
               if (semSelecaoLivros && controllerFormaEntrega.text == "Correios") ...[
-                  SizedBox(
-                    width: tema.espacamento * 2,
-                    height: tema.espacamento * 2,
-                  ),
+                SizedBox(
+                  width: tema.espacamento * 2,
+                  height: tema.espacamento * 2,
+                ),
                 Flexible(
                   child: InputWidget(
                     tema: tema,

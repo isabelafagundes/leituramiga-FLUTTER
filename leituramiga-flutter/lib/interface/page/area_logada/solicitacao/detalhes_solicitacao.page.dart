@@ -128,7 +128,11 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
                           aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
                           verificarSelecao: _solicitacaoComponent.verificarSelecao,
                           livros: _usuarioComponent.itensPaginados,
-                          navegarParaSolicitacao: () => _atualizarAbaSelecionada(DetalhesSolicitacao.LIVROS),
+                          validarSelecao: _solicitacaoComponent.validarNumeroLivrosSelecionados,
+                          navegarParaSolicitacao: () async {
+                            _solicitacaoComponent.validarNumeroLivrosSelecionados();
+                            _atualizarAbaSelecionada(DetalhesSolicitacao.LIVROS);
+                          },
                         )
                       : Flex(
                           direction: Axis.vertical,

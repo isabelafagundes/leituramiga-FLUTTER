@@ -7,7 +7,9 @@ class MenuWidget extends StatefulWidget {
   final Tema tema;
   final List<String> escolhas;
   final Function(String) aoClicar;
+  final TextEditingController controller;
   final String? valorSelecionado;
+  final Function() atualizar;
 
   const MenuWidget({
     super.key,
@@ -15,6 +17,8 @@ class MenuWidget extends StatefulWidget {
     required this.tema,
     required this.escolhas,
     this.valorSelecionado,
+    required this.atualizar,
+    required this.controller,
   });
 
   @override
@@ -32,8 +36,15 @@ class _MenuWidgetState extends State<MenuWidget> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() => _label = widget.valorSelecionado ?? "Selecione");
+      _label = widget.valorSelecionado ?? "Selecione";
+      atualizar();
+      widget.controller.addListener(atualizar);
     });
+  }
+
+  void atualizar() {
+    widget.atualizar();
+    setState(() {});
   }
 
   @override
@@ -43,7 +54,8 @@ class _MenuWidgetState extends State<MenuWidget> {
       child: GestureDetector(
         onTap: () {
           if (_overlayEntry != null && _overlayEntry!.mounted) return _removerOverlay();
-          setState(() => _visivel = !_visivel);
+          _visivel = !_visivel;
+          atualizar();
           RenderBox renderBox = _key.currentContext?.findRenderObject() as RenderBox;
           Offset containerPosition = renderBox.localToGlobal(Offset.zero);
           _exibirOverlay(context, containerPosition, renderBox);
@@ -146,11 +158,10 @@ class _MenuWidgetState extends State<MenuWidget> {
                             ),
                             onPressed: () {
                               _removerOverlay();
-                              setState(() {
-                                _label = widget.escolhas[index];
-                                _indiceHover = -1;
-                                widget.aoClicar(_label);
-                              });
+                              _label = widget.escolhas[index];
+                              _indiceHover = -1;
+                              widget.aoClicar(_label);
+                              atualizar();
                             },
                             child: TextoWidget(
                               tema: widget.tema,
@@ -172,6 +183,7 @@ class _MenuWidgetState extends State<MenuWidget> {
 
   void _removerOverlay() {
     if (_overlayEntry != null && _overlayEntry!.mounted) _overlayEntry!.remove();
-    setState(() => _visivel = false);
+    _visivel = false;
+    atualizar();
   }
 }

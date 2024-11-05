@@ -167,6 +167,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
     return switch (_estagioAtual) {
       EditarPerfil.DADOS_GERAIS => FormularioEdicaoUsuarioWidget(
           tema: tema,
+          atualizar: () => setState(() {}),
           controllerDescricao: controllerDescricao,
           controllerConfirmacaoSenha: controllerConfirmacaoSenha,
           controllerEmail: controllerEmail,
@@ -189,6 +190,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       EditarPerfil.ENDERECO => FormularioEnderecoWidget(
           tema: tema,
           aoSalvar: () {},
+          atualizar: () => setState(() {}),
           estados: UF.values.map((e) => e.descricao).toList(),
           cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome.toString()).toList(),
           aoSelecionarEstado: _selecionarEstado,

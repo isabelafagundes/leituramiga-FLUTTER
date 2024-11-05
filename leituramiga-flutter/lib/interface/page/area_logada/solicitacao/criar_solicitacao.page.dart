@@ -102,7 +102,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
         ResumoLivro? livro = _usuarioComponent.livroSelecionado?.criarResumoLivro();
         if (livro != null) _solicitacaoComponent.selecionarLivro(livro);
         await _obterUsuarioSolicitacao();
-      } else {}
+      }
 
       await _usuarioComponent.obterLivrosUsuarioSolicitacao();
       _tipoSolicitacao = TipoSolicitacao.deNumero(widget.tipoSolicitacao);
@@ -147,6 +147,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       CriarSolicitacao.INFORMACOES_ADICIONAIS => SingleChildScrollView(
           child: FormularioInformacoesAdicionaisWidget(
             tema: tema,
+            atualizar: () => setState(() {}),
             controllerCodigoRastreio: TextEditingController(),
             controllerHoraDevolucao: controllerHoraDevolucao,
             controllerHoraEntrega: controllerHoraEntrega,
@@ -183,6 +184,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       CriarSolicitacao.ENDERECO => SingleChildScrollView(
           child: ConteudoEnderecoSolicitacaoWidget(
             tema: tema,
+            atualizar: () => setState(() {}),
             utilizaEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoPerfil,
             aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
             aoSelecionarFrete: (frete) => setState(() => controllerFrete.text = frete),
@@ -281,6 +283,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
 
   Future<void> _utilizarEnderecoPerfil() async {
     notificarCasoErro(() async {
+      setState(() => _carregando = true);
       await _usuarioComponent.obterEndereco();
       if (_usuarioComponent.enderecoEdicao != null) _solicitacaoComponent.utilizarEnderecoDoPerfil();
       if (_solicitacaoComponent.utilizarEnderecoPerfil) {
@@ -295,6 +298,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
         controllerCidade.text = "";
         controllerEstado.text = "";
       }
+      setState(() => _carregando = false);
     });
   }
 
@@ -423,10 +427,14 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
     bool possuiHoraDevolucao = controllerHoraDevolucao.text.isNotEmpty;
     bool possuiHoraEntrega = controllerHoraEntrega.text.isNotEmpty;
 
-    if (controllerDataDevolucao.text.isNotEmpty && !possuiHoraDevolucao) throw DataSolicitacaoInvalida("Informe a hora de devolução");
-    if (controllerDataEntrega.text.isNotEmpty && !possuiHoraEntrega) throw DataSolicitacaoInvalida("Informe a hora de entrega");
-    if (formaEntregaSelecionada == FormaEntrega.PRESENCIAL && !possuiDataEntrega) throw DataSolicitacaoInvalida("Informe a data de entrega");
-    if (_tipoSolicitacao == TipoSolicitacao.EMPRESTIMO && !possuiDataDevolucao) throw DataSolicitacaoInvalida("Informe a data de devolução");
+    if (controllerDataDevolucao.text.isNotEmpty && !possuiHoraDevolucao)
+      throw DataSolicitacaoInvalida("Informe a hora de devolução");
+    if (controllerDataEntrega.text.isNotEmpty && !possuiHoraEntrega)
+      throw DataSolicitacaoInvalida("Informe a hora de entrega");
+    if (formaEntregaSelecionada == FormaEntrega.PRESENCIAL && !possuiDataEntrega)
+      throw DataSolicitacaoInvalida("Informe a data de entrega");
+    if (_tipoSolicitacao == TipoSolicitacao.EMPRESTIMO && !possuiDataDevolucao)
+      throw DataSolicitacaoInvalida("Informe a data de devolução");
     if (!possuiDataEntrega && !possuiDataDevolucao) return;
     if (dataEntrega != null) Solicitacao.validarDataEntrega(dataEntrega);
     if (dataDevolucao != null) Solicitacao.validarDataDevolucao(dataDevolucao);

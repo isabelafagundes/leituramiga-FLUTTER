@@ -8,6 +8,8 @@ import 'package:leituramiga/service/solicitacao.service.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:leituramiga/state/solicitacao.state.dart';
 
+import '../domain/solicitacao/tipo_solicitacao.dart';
+
 class SolicitacaoUseCase {
   final SolicitacaoState _state;
   final SolicitacaoRepo _repo;
@@ -25,6 +27,8 @@ class SolicitacaoUseCase {
 
   void validarNumeroLivrosSelecionados() {
     int quantidadeLivrosSolicitante = _state.solicitacaoSelecionada!.livrosSolicitante.quantidade;
+    bool solicitacaoTroca = _state.solicitacaoSelecionada!.tipoSolicitacao == TipoSolicitacao.TROCA;
+    if (solicitacaoTroca && _state.livrosSelecionados.length == 0) throw QuantidadeZeroLivros();
     if (_state.livrosSelecionados.length > quantidadeLivrosSolicitante) throw QuantidadeInvalidaLivros();
   }
 
