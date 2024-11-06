@@ -35,11 +35,24 @@ class ConteudoCodigoSegurancaWidget extends StatelessWidget {
           altura: 220,
         ),
         SizedBox(height: tema.espacamento * 4),
-        TextoWidget(
-          texto: "Informe o código de segurança enviado no email ${controllerEmail.text}",
-          tema: tema,
-          align: TextAlign.center,
-          cor: Color(tema.baseContent),
+        Wrap(
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            TextoWidget(
+              texto: "Informe o código de segurança enviado no email ",
+              tema: tema,
+              align: TextAlign.center,
+              cor: Color(tema.baseContent),
+            ),
+            TextoWidget(
+              texto: " ${controllerEmail.text}",
+              tema: tema,
+              align: TextAlign.center,
+              weight: FontWeight.w500,
+              cor: Color(tema.baseContent),
+            ),
+          ],
         ),
         SizedBox(height: tema.espacamento),
         SizedBox(

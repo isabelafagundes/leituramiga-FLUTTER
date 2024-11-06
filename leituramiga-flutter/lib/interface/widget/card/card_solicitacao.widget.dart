@@ -213,7 +213,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                   horizontal: widget.tema.espacamento * 1.5,
                   vertical: widget.tema.espacamento / 1.5,
                 ),
-                icone: Icon(Icons.remove_red_eye, color: kCorFonte),
+                icone: Icon(Icons.remove_red_eye, color: Color(widget.tema.base200)),
                 aoClicar: () => widget.aoVisualizar(widget.solicitacao.numero!),
                 label: "Visualizar",
               ),

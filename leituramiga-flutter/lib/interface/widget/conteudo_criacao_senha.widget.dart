@@ -33,12 +33,12 @@ class ConteudoCriacaoSenhaWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SvgWidget(nomeSvg: 'security', altura: 200),
+        SvgWidget(nomeSvg: 'security', altura: 190),
         SizedBox(height: tema.espacamento * 2),
         TextoWidget(
           texto: titulo ?? "Recuperação de senha",
           tema: tema,
-          tamanho: tema.tamanhoFonteG,
+          tamanho: tema.tamanhoFonteXG,
           align: TextAlign.center,
           weight: FontWeight.w500,
           cor: Color(tema.baseContent),

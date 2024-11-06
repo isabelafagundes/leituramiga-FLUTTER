@@ -158,13 +158,13 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
               texto: "Esqueceu sua senha?",
               tema: tema,
               weight: FontWeight.w500,
-              tamanho: tema.tamanhoFonteG,
+              tamanho: tema.tamanhoFonteXG,
               align: TextAlign.center,
               cor: Color(tema.baseContent),
             ),
             SizedBox(height: tema.espacamento * 2),
             TextoWidget(
-              texto: "Informe o email cadastrado para \nreceber um código de segurança",
+              texto: "Informe o email cadastrado para receber um \ncódigo de segurança",
               tema: tema,
               align: TextAlign.center,
               cor: Color(tema.baseContent),
@@ -187,7 +187,7 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
               tema: tema,
               texto: 'Próximo',
               nomeIcone: "seta/arrow-long-right",
-              aoClicar:iniciarRecuperacaoSenha ,
+              aoClicar: iniciarRecuperacaoSenha,
             ),
             SizedBox(height: tema.espacamento * 2),
             BotaoWidget(
@@ -221,11 +221,20 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            TextoWidget(
+              texto: "Senha recuperada com sucesso!",
+              tema: tema,
+              tamanho: tema.tamanhoFonteXG,
+              align: TextAlign.center,
+              weight: FontWeight.w500,
+              cor: Color(tema.baseContent),
+            ),
+            SizedBox(height: tema.espacamento * 2),
             const SvgWidget(
               nomeSvg: "garota_lendo_com_oculos",
               altura: 280,
             ),
-            SizedBox(height: tema.espacamento * 6),
+            SizedBox(height: tema.espacamento * 3),
             TextoWidget(
               texto: "Senha recuperada com sucesso!\nFaça o login e comece a compartilhar livros!",
               tema: tema,
@@ -262,7 +271,8 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
 
   Future<void> iniciarRecuperacaoSenha() async {
     await notificarCasoErro(() async {
-      if(controllerEmail.text.isEmpty) throw Exception("Informe o email");
+      if (controllerEmail.text.isEmpty)
+        return Notificacoes.mostrar("Informe o email para recuperar a senha", Emoji.ALERTA);
       await _autenticacaoComponent.iniciarRecuperacaoSenha(controllerEmail.text);
       atualizarPagina(EtapaSenha.CODIGO);
     });
