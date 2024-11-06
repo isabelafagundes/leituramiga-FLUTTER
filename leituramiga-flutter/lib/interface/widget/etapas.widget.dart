@@ -6,23 +6,25 @@ class EtapasWidget extends StatelessWidget {
   final Tema tema;
   final Color? corFundo;
   final int etapaSelecionada;
+  final bool possuiQuatroEtapas;
 
   const EtapasWidget({
     super.key,
     required this.tema,
     required this.etapaSelecionada,
     this.corFundo,
+    this.possuiQuatroEtapas = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 150,
+      width: possuiQuatroEtapas ? 200 : 150,
       child: Stack(
         alignment: Alignment.center,
         children: [
           Container(
-            width: 150,
+            width: possuiQuatroEtapas ? 200 : 150,
             height: 3,
             color: corFundo ?? Color(tema.base100),
           ),
@@ -81,6 +83,26 @@ class EtapasWidget extends StatelessWidget {
                   ),
                 ),
               ),
+              if (possuiQuatroEtapas) ...[
+                const Spacer(),
+                Container(
+                  width: 30,
+                  height: 30,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(tema.borderRadiusM),
+                    color: etapaSelecionada == 4? Color(tema.accent) : corFundo ?? Color(tema.base100),
+                  ),
+                  child: Center(
+                    child: TextoWidget(
+                      tema: tema,
+                      texto: "4",
+                      weight: FontWeight.bold,
+                      cor: etapaSelecionada ==4 ? const Color(0xff2b2b2b) : Color(tema.baseContent),
+                    ),
+                  ),
+                ),
+              ]
             ],
           ),
         ],

@@ -38,7 +38,7 @@ class LogoWidget extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(color: Color(tema.neutral).withOpacity(.1)),
               gradient: LinearGradient(
-                colors: [kCorPessego, Color(tema.accent)],
+                colors: [kCorPessego, kCorPessego],
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
               ),

@@ -18,10 +18,11 @@ mixin class State {
     try {
       alterarCarregamento(true);
       await rotina();
-      alterarCarregamento(false);
     } catch (erro) {
       adicionarErro(mensagemErro);
       rethrow;
+    } finally {
+      alterarCarregamento(false);
     }
   }
 }

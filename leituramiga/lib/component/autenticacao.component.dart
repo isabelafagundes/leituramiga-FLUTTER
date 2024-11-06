@@ -22,21 +22,21 @@ class AutenticacaoComponent extends State {
   }
 
   Future<void> deslogar() async {
-    executar(
+    await executar(
       rotina: () async => await _useCase.deslogar(),
       mensagemErro: "Não foi possível deslogar",
     );
   }
 
   Future<void> desativar() async {
-    executar(
+    await executar(
       rotina: () async => await _useCase.desativar(),
       mensagemErro: "Não foi possível desativar",
     );
   }
 
   Future<void> atualizarTokens() async {
-    executar(
+    await executar(
       rotina: () async => await _useCase.atualizarTokens(),
       mensagemErro: "Não foi possível atualizar os tokens",
     );
@@ -50,30 +50,65 @@ class AutenticacaoComponent extends State {
   }
 
   Future<void> validarCodigoSeguranca(String codigo, String email) async {
-    executar(
+    await executar(
       rotina: () async => await _useCase.validarCodigoSeguranca(codigo, email),
       mensagemErro: "Não foi possível validar o código",
     );
   }
 
+  Future<void> validarCodigoRecuperacao(String codigo, String email) async {
+    await executar(
+      rotina: () async => await _useCase.validarCodigoRecuperacao(codigo, email),
+      mensagemErro: "Não foi possível validar o código",
+    );
+  }
+
   Future<void> atualizarSenha(String senha) async {
-    executar(
+    await executar(
       rotina: () async => _useCase.atualizarSenha(senha),
       mensagemErro: "Não foi possível atualizar a senha",
     );
   }
 
   Future<void> atualizarConfirmacaoSenha(String confirmacaoSenha) async {
-    executar(
+    await executar(
       rotina: () async => _useCase.atualizarConfirmacaoSenha(confirmacaoSenha),
       mensagemErro: "Não foi possível atualizar a confirmação da senha",
     );
   }
 
   Future<void> carregarSessao() async {
-    executar(
+    await executar(
       rotina: () async => await _useCase.carregarSessao(),
       mensagemErro: "Não foi possível carregar a sessão",
+    );
+  }
+
+  Future<void> enviarCodigoCriacaoUsuario(String email) async {
+    await executar(
+      rotina: () async => await _useCase.enviarCodigoCriacaoUsuario(email),
+      mensagemErro: "Não foi possível enviar o código de criação de usuário",
+    );
+  }
+
+  Future<void> enviarCodigoRecuperacao(String email) async {
+    await executar(
+      rotina: () async => await _useCase.enviarCodigoRecuperacaoSenha(email),
+      mensagemErro: "Não foi possível enviar o código de recuperação",
+    );
+  }
+
+  Future<void> iniciarRecuperacaoSenha(String email) async {
+    await executar(
+      rotina: () async => await _useCase.iniciarRecuperacaoSenha(email),
+      mensagemErro: "Não foi possível iniciar a recuperação de senha",
+    );
+  }
+
+  Future<void> atualizarRecuperacaoSenha() async {
+    await executar(
+      rotina: () async => await _useCase.atualizarRecuperacaoSenha(),
+      mensagemErro: "Não foi possível atualizar a recuperação de senha",
     );
   }
 }

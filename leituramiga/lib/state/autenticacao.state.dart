@@ -19,7 +19,9 @@ class AutenticacaoState {
   String criacaoUsuarioToken = "";
   String recuperacaoSenhaToken = "";
   Usuario? usuario;
+  String email = "";
   Senha senha = Senha.criar();
+
 
   void validarSenha() => senha.validarSenha();
 

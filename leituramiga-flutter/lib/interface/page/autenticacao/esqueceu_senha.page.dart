@@ -1,16 +1,23 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:leituramiga/component/autenticacao.component.dart';
+import 'package:leituramiga/domain/senha.dart';
+import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/conteudo_codigo_seguranca.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/conteudo_criacao_senha.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/etapas.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/formulario/formulario_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_endereco.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/logo.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
@@ -23,18 +30,31 @@ class EsqueceSenhaPage extends StatefulWidget {
 }
 
 class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
-  final TextEditingController controllerRua = TextEditingController();
-  final TextEditingController controllerBairro = TextEditingController();
-  final TextEditingController controllerCep = TextEditingController();
-  final TextEditingController controllerNumero = TextEditingController();
-  final TextEditingController controllerComplemento = TextEditingController();
-  final TextEditingController controllerCidade = TextEditingController();
-  final TextEditingController controllerEstado = TextEditingController();
-  EtapaSenha? _etapaCadastro = EtapaSenha.EMAIL;
+  AutenticacaoComponent _autenticacaoComponent = AutenticacaoComponent();
+  final TextEditingController controllerEmail = TextEditingController();
+  final TextEditingController controllerCodigoSeguranca = TextEditingController();
+  final TextEditingController controllerSenha = TextEditingController();
+  final TextEditingController controllerConfirmacaoSenha = TextEditingController();
+  EtapaSenha? _etapaSenha = EtapaSenha.EMAIL;
 
   TemaState get _temaState => TemaState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
+
+  AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
+
+  @override
+  void initState() {
+    _autenticacaoComponent.inicializar(
+      AppModule.autenticacaoService,
+      AppModule.sessaoService,
+      AppModule.usuarioRepo,
+      atualizar,
+    );
+    super.initState();
+  }
+
+  void atualizar() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +66,21 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (_etapaCadastro != EtapaSenha.REDIRECIONAMENTO && Responsive.larguraP(context)) ...[
+              if (_etapaSenha != EtapaSenha.REDIRECIONAMENTO && Responsive.larguraP(context)) ...[
                 SizedBox(height: tema.espacamento * 2),
+                Container(
+                  width: 235,
+                  child: LogoWidget(
+                    tema: tema,
+                    tamanho: tema.tamanhoFonteM * 2,
+                  ),
+                ),
+                SizedBox(height: tema.espacamento * 3),
                 EtapasWidget(
                   tema: tema,
+                  possuiQuatroEtapas: true,
                   corFundo: Color(tema.base200),
-                  etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
+                  etapaSelecionada: _etapaSenha == null ? 1 : _etapaSenha!.index + 1,
                 ),
                 SizedBox(height: tema.espacamento * 4),
               ],
@@ -66,8 +95,8 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
                   : Padding(
                       padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
                       child: CardBaseWidget(
-                        largura: 650,
-                        altura: 560,
+                        largura: 640,
+                        altura: 740,
                         cursorDeClick: false,
                         padding: EdgeInsets.symmetric(
                           horizontal: tema.espacamento * 2,
@@ -79,14 +108,25 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            if (_etapaCadastro != EtapaSenha.REDIRECIONAMENTO)
-                              Flexible(
-                                child: EtapasWidget(
-                                  tema: tema,
-                                  etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
-                                ),
+                            if (_etapaSenha != EtapaSenha.REDIRECIONAMENTO)
+                              Column(
+                                children: [
+                                  SizedBox(height: tema.espacamento * 2),
+                                  Container(
+                                    width: 235,
+                                    child: LogoWidget(
+                                      tema: tema,
+                                      tamanho: tema.tamanhoFonteM * 2,
+                                    ),
+                                  ),
+                                  SizedBox(height: tema.espacamento * 3),
+                                  EtapasWidget(
+                                    tema: tema,
+                                    possuiQuatroEtapas: true,
+                                    etapaSelecionada: _etapaSenha == null ? 1 : _etapaSenha!.index + 1,
+                                  ),
+                                ],
                               ),
-                            SizedBox(height: tema.espacamento * 2),
                             Flexible(
                               flex: 12,
                               child: Padding(
@@ -106,63 +146,25 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
   }
 
   Widget _obterPaginaAtual() {
-    return switch (_etapaCadastro) {
-      EtapaSenha.EMAIL => SizedBox(
-          height: 600,
-          child: FormularioUsuarioWidget(
-            tema: tema,
-            atualizar: () => setState(() {}),
-            controllerConfirmacaoSenha: TextEditingController(),
-            controllerEmail: TextEditingController(),
-            controllerNome: TextEditingController(),
-            controllerSenha: TextEditingController(),
-            controllerUsuario: TextEditingController(),
-            aoCadastrar: () => atualizarPagina(EtapaSenha.CODIGO),
-            controllerTelefone: TextEditingController(),
-            controllerInstituicao: TextEditingController(),
-            instituicoes: [],
-            aoSelecionarInstituicao: (String) {},
-          ),
-        ),
-      EtapaSenha.CODIGO => Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+    return switch (_etapaSenha) {
+      EtapaSenha.EMAIL => Column(
           children: [
-            FormularioEnderecoWidget(
-              atualizar: () => setState(() {}),
-              tema: tema,
-              estados: [],
-              cidades: [],
-              aoSelecionarEstado: (estado) => setState(() => controllerEstado.text = estado),
-              aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
-              controllerRua: TextEditingController(),
-              controllerBairro: TextEditingController(),
-              controllerCep: TextEditingController(),
-              controllerNumero: TextEditingController(),
-              controllerComplemento: TextEditingController(),
-              controllerCidade: TextEditingController(),
-              controllerEstado: TextEditingController(),
-            ),
-            SizedBox(height: tema.espacamento * 4),
-            BotaoWidget(
-              tema: tema,
-              texto: 'Próximo',
-              nomeIcone: "seta/arrow-long-right",
-              aoClicar: () => atualizarPagina(EtapaSenha.CODIGO),
-            ),
-          ],
-        ),
-      EtapaSenha.CODIGO => Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SvgWidget(
-              nomeSvg: "codigo_verificacao",
+            SvgWidget(
+              nomeSvg: 'moca_esqueceu_senha',
               altura: 220,
             ),
-            SizedBox(height: tema.espacamento * 4),
+            SizedBox(height: tema.espacamento),
             TextoWidget(
-              texto: "Informe o código de segurança enviado no email email@email.com!",
+              texto: "Esqueceu sua senha?",
+              tema: tema,
+              weight: FontWeight.w500,
+              tamanho: tema.tamanhoFonteG,
+              align: TextAlign.center,
+              cor: Color(tema.baseContent),
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            TextoWidget(
+              texto: "Informe o email cadastrado para \nreceber um código de segurança",
               tema: tema,
               align: TextAlign.center,
               cor: Color(tema.baseContent),
@@ -172,8 +174,11 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
               width: 300,
               child: InputWidget(
                 tema: tema,
+                label: "Email",
                 tipoInput: const TextInputType.numberWithOptions(decimal: false),
-                controller: TextEditingController(),
+                controller: controllerEmail,
+                alturaCampo: 40,
+                formatters: [LengthLimitingTextInputFormatter(260)],
                 onChanged: (texto) {},
               ),
             ),
@@ -182,21 +187,47 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
               tema: tema,
               texto: 'Próximo',
               nomeIcone: "seta/arrow-long-right",
-              aoClicar: () => atualizarPagina(EtapaSenha.REDIRECIONAMENTO),
+              aoClicar:iniciarRecuperacaoSenha ,
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            BotaoWidget(
+              tema: tema,
+              texto: 'Voltar',
+              corFundo: Color(tema.base100),
+              corTexto: Color(tema.baseContent),
+              nomeIcone: "seta/arrow-long-left",
+              aoClicar: () => Rota.navegar(context, Rota.LOGIN),
             ),
           ],
         ),
-      _ => Column(
+      EtapaSenha.CODIGO => ConteudoCodigoSegurancaWidget(
+          tema: tema,
+          controllerEmail: controllerEmail,
+          controllerCodigoSeguranca: controllerCodigoSeguranca,
+          atualizarPagina: () => atualizarPagina(EtapaSenha.CODIGO),
+          validarCodigoSeguranca: verificarCodigoSeguranca,
+          enviarNovoCodigo: enviarCodigoRecuperacao,
+        ),
+      EtapaSenha.CONFIRMACAO_SENHA => ConteudoCriacaoSenhaWidget(
+          tema: tema,
+          controllerSenha: controllerSenha,
+          controllerConfirmacaoSenha: controllerConfirmacaoSenha,
+          mensagemErro: _mensagemErro,
+          navegarParaAnterior: () => atualizarPagina(EtapaSenha.CONFIRMACAO_SENHA),
+          navegarParaProximo: atualizarSenha,
+          atualizar: atualizar,
+        ),
+      EtapaSenha.REDIRECIONAMENTO => Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SvgWidget(
-              nomeSvg: "pessoas_com_livro",
+              nomeSvg: "garota_lendo_com_oculos",
               altura: 280,
             ),
-            SizedBox(height: tema.espacamento * 4),
+            SizedBox(height: tema.espacamento * 6),
             TextoWidget(
-              texto: "Sua conta foi criada com sucesso!\nFaça o login e comece a compartilhar livros!",
+              texto: "Senha recuperada com sucesso!\nFaça o login e comece a compartilhar livros!",
               tema: tema,
               align: TextAlign.center,
               cor: Color(tema.baseContent),
@@ -210,11 +241,53 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
             ),
           ],
         ),
+      _ => Container(),
     };
   }
 
+  Future<void> enviarCodigoRecuperacao() async {
+    await notificarCasoErro(() async {
+      await _autenticacaoComponent.enviarCodigoRecuperacao(controllerEmail.text);
+      Notificacoes.mostrar("Código enviado com sucesso!", Emoji.SUCESSO);
+      atualizarPagina(EtapaSenha.CODIGO);
+    });
+  }
+
+  Future<void> verificarCodigoSeguranca() async {
+    await notificarCasoErro(() async {
+      await _autenticacaoComponent.validarCodigoRecuperacao(controllerCodigoSeguranca.text, controllerEmail.text);
+      atualizarPagina(EtapaSenha.CONFIRMACAO_SENHA);
+    });
+  }
+
+  Future<void> iniciarRecuperacaoSenha() async {
+    await notificarCasoErro(() async {
+      if(controllerEmail.text.isEmpty) throw Exception("Informe o email");
+      await _autenticacaoComponent.iniciarRecuperacaoSenha(controllerEmail.text);
+      atualizarPagina(EtapaSenha.CODIGO);
+    });
+  }
+
+  Future<void> atualizarSenha() async {
+    await notificarCasoErro(() async {
+      _autenticacaoComponent.atualizarSenha(controllerSenha.text);
+      _autenticacaoComponent.atualizarConfirmacaoSenha(controllerConfirmacaoSenha.text);
+      _autenticacaoState.validarSenha();
+      await _autenticacaoComponent.atualizarRecuperacaoSenha();
+      atualizarPagina(EtapaSenha.REDIRECIONAMENTO);
+    });
+  }
+
+  String get _mensagemErro {
+    try {
+      return Senha.obterErro(controllerSenha.text, controllerConfirmacaoSenha.text);
+    } on SenhaInvalida catch (e) {
+      return e.mensagem;
+    }
+  }
+
   void atualizarPagina(EtapaSenha? etapa) {
-    setState(() => _etapaCadastro = etapa);
+    setState(() => _etapaSenha = etapa);
   }
 }
 

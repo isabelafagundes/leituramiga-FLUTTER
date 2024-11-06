@@ -10,6 +10,7 @@ class TextoWidget extends StatelessWidget {
   final FontWeight? weight;
   final int? maxLines;
   final TextAlign? align;
+  final TextDecoration? decoration;
 
   const TextoWidget({
     super.key,
@@ -19,7 +20,9 @@ class TextoWidget extends StatelessWidget {
     this.fontFamily,
     this.weight,
     this.maxLines,
-     this.align, required this.tema,
+    this.align,
+    required this.tema,
+    this.decoration,
   });
 
   @override
@@ -31,6 +34,7 @@ class TextoWidget extends StatelessWidget {
       maxLines: maxLines ?? 2,
       style: TextStyle(
         fontWeight: weight ?? FontWeight.w400,
+        decoration: decoration,
         fontSize: tamanho ?? tema.tamanhoFonteM,
         fontFamily: fontFamily ?? 'Montserrat',
         color: cor ?? Color(tema.baseContent),

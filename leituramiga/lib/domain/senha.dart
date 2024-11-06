@@ -24,18 +24,18 @@ class Senha {
     if (_senha.isEmpty && _confirmacaoSenha.isNotEmpty) throw SenhaInvalida("Digite a senha.");
   }
 
-  String obterErro() {
+  static String obterErro(String senha, String confirmacaoSenha) {
     RegExp numeros = RegExp(r'[0-9]');
     RegExp letras = RegExp(r'[a-zA-Z]');
     RegExp especiais = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
 
-    if (_senha.length < 6) return "A senha deve ter no mínimo 6 caracteres.";
-    if (!_senha.contains(numeros)) return "A senha deve ter no mínimo 1 número.";
-    if (!_senha.contains(letras)) return "A senha deve ter no mínimo 1 letra.";
-    if (!_senha.contains(especiais)) return "A senha deve ter no mínimo 1 caractere especial.";
-    if (_senha != _confirmacaoSenha) return "As senhas não coincidem.";
-    if (_senha.isNotEmpty && _confirmacaoSenha.isEmpty) return "Confirme a senha.";
-    if (_senha.isEmpty && _confirmacaoSenha.isNotEmpty) return "Digite a senha.";
+    if (senha.length < 6) return "A senha deve ter no mínimo 6 caracteres.";
+    if (!senha.contains(numeros)) return "A senha deve ter no mínimo 1 número.";
+    if (!senha.contains(letras)) return "A senha deve ter no mínimo 1 letra.";
+    if (!senha.contains(especiais)) return "A senha deve ter no mínimo 1 caractere especial.";
+    if (senha != confirmacaoSenha) return "As senhas não coincidem.";
+    if (senha.isNotEmpty && confirmacaoSenha.isEmpty) return "Confirme a senha.";
+    if (senha.isEmpty && confirmacaoSenha.isNotEmpty) return "Digite a senha.";
 
     return "";
   }

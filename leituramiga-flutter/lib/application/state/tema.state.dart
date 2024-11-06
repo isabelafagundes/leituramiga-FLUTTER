@@ -66,7 +66,7 @@ mixin class TemaState {
   }
 
   final Tema _temaEscuro = Tema.criar(
-    id: 1,
+    id: 2,
     corAccent: "A5FFE5",
     corPrimary: "79b791",
     corSecondary: "3FDFAF",
@@ -88,14 +88,14 @@ mixin class TemaState {
     tamanhoFonteM: 14.0,
     tamanhoFonteG: 16.0,
     tamanhoFonteXG: 18.0,
-    selecionado: true,
+    selecionado: false,
     modoFonteGrande: false,
     familiaDeFontePrimaria: 'Montserrat',
     familiaDeFonteSecundaria: 'MontserratAlternates',
   );
 
   final Tema _temaClaro = Tema.criar(
-    id: 2,
+    id: 1,
     // corAccent: "79b791",
     corAccent: "2A9777",
     corPrimary: "A5FFE5",
@@ -118,7 +118,7 @@ mixin class TemaState {
     tamanhoFonteM: 14.0,
     tamanhoFonteG: 16.0,
     tamanhoFonteXG: 18.0,
-    selecionado: false,
+    selecionado: true,
     modoFonteGrande: false,
     familiaDeFontePrimaria: 'Montserrat',
     familiaDeFonteSecundaria: 'MontserratAlternates',

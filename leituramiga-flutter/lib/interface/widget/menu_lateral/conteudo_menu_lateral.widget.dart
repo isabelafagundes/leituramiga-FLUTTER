@@ -145,6 +145,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                 tema: widget.tema,
                                 aoClicar: () => Rota.navegar(context, Rota.AUTENTICACAO),
                                 label: "Login",
+                                corFonte: Color(widget.tema.base200),
                                 icone: SvgWidget(
                                   nomeSvg: "login",
                                   cor: Color(widget.tema.base200),

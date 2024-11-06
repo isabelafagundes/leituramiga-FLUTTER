@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/autenticacao.component.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
-import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
@@ -77,7 +76,10 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SvgWidget(nomeSvg: "garota_login",altura: 350,),
+                            SvgWidget(
+                              nomeSvg: "garota_login",
+                              altura: 350,
+                            ),
                             SizedBox(height: tema.espacamento * 2),
                             SizedBox(
                               child: TextoWidget(
@@ -146,11 +148,13 @@ class _LoginPageState extends State<LoginPage> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () => Rota.navegar(context, Rota.SENHA),
                               child: TextoWidget(
                                 texto: "Esqueceu sua senha?",
                                 tamanho: tema.tamanhoFonteM,
                                 tema: tema,
+                                weight: FontWeight.w500,
+                                decoration: TextDecoration.underline,
                                 align: TextAlign.center,
                                 cor: Color(tema.baseContent),
                               ),
@@ -175,15 +179,17 @@ class _LoginPageState extends State<LoginPage> {
                                 align: TextAlign.center,
                                 cor: Color(tema.baseContent),
                               ),
+                              SizedBox(height: tema.espacamento),
                               GestureDetector(
                                 onTap: () => Rota.navegar(context, Rota.CADASTRO_USUARIO),
                                 child: TextoWidget(
-                                  texto: " Crie já!",
+                                  texto: "Crie já!",
                                   tamanho: tema.tamanhoFonteM,
                                   weight: FontWeight.w500,
+                                  decoration: TextDecoration.underline,
                                   align: TextAlign.center,
                                   tema: tema,
-                                  cor: kCorPessego,
+                                  cor: Color(tema.accent),
                                 ),
                               ),
                             ],

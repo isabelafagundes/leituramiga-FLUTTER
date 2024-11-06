@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu.widget.dart';
@@ -36,7 +35,8 @@ class FormularioUsuarioWidget extends StatelessWidget {
     required this.controllerTelefone,
     required this.controllerInstituicao,
     required this.instituicoes,
-    required this.aoSelecionarInstituicao, required this.atualizar,
+    required this.aoSelecionarInstituicao,
+    required this.atualizar,
   });
 
   final MaskTextInputFormatter _mascaraTelefone = MaskTextInputFormatter(mask: "(##) #########");
@@ -111,16 +111,6 @@ class FormularioUsuarioWidget extends StatelessWidget {
             onChanged: (valor) {},
           ),
         ),
-        SizedBox(height: tema.espacamento * 2),
-        if (Responsive.larguraP(context)) ..._obterChildren,
-        if (!Responsive.larguraP(context))
-          Flexible(
-            child: Flex(
-              direction: Axis.horizontal,
-              mainAxisSize: MainAxisSize.min,
-              children: _obterChildren,
-            ),
-          ),
         SizedBox(height: tema.espacamento * 2),
         Flexible(
           child: SizedBox(

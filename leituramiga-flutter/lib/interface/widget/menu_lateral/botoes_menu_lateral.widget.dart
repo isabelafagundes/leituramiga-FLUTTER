@@ -185,14 +185,14 @@ class BotoesMenuLateralWidget extends StatelessWidget {
           segundoIcone: Padding(
             padding: const EdgeInsets.all(2),
             child: SvgWidget(
-              nomeSvg: "tema/moon",
+              nomeSvg: "tema/sun",
               cor: Color(tema.base200),
             ),
           ),
           primeiroIcone: Padding(
             padding: const EdgeInsets.all(2),
             child: SvgWidget(
-              nomeSvg: "tema/sun",
+              nomeSvg: "tema/moon",
               cor: Color(tema.baseContent),
             ),
           ),

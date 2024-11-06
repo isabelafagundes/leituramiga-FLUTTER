@@ -8,4 +8,14 @@ abstract class AutenticacaoService {
   Future<void> desativar();
 
   Future<void> verificarCodigoSeguranca(String codigo, String email);
+
+  Future<void> verificarCodigoRecuperacao(String codigo, String email);
+
+  Future<void> enviarCodigoCriacaoUsuario(String email);
+
+  Future<void> enviarCodigoRecuperacaoSenha(String email);
+
+  Future<void> atualizarSenha(String email, String senha);
+
+  Future<void> iniciarRecuperacaoSenha(String email);
 }

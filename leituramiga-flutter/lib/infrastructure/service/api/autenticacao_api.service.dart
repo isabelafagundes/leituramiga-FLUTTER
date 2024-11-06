@@ -60,4 +60,71 @@ class AutenticacaoApiService extends AutenticacaoService with ConfiguracaoApiSta
       throw erro;
     });
   }
+
+  @override
+  Future<void> atualizarSenha(String email, String senha) async {
+    Map<String, dynamic> data = {"email": email, "senha": senha};
+
+    await _client.post(
+      "$host/atualizar-senha",
+      data: data,
+      headers: {"Authorization": "Bearer ${_autenticacaoState.recuperacaoSenhaToken}"},
+    ).catchError((erro) {
+      if (erro.response.statusCode == 400) throw TokenExpirado();
+      if (erro.response.statusCode == 404) throw UsuarioNaoEncontrado();
+    });
+  }
+
+  @override
+  Future<void> enviarCodigoCriacaoUsuario(String email) async {
+    String token = await _client.post(
+      "$host/enviar-codigo-verificacao",
+      data: {"email": email},
+    ).catchError((erro) {
+      if (erro.response.statusCode == 404) throw UsuarioNaoEncontrado();
+      throw erro;
+    }).then((response) => response.data["token"]);
+
+    _autenticacaoState.criacaoUsuarioToken = token;
+  }
+
+  @override
+  Future<void> enviarCodigoRecuperacaoSenha(String email) async {
+    String token = await _client.post(
+      "$host/enviar-codigo-recuperacao",
+      data: {"email": email},
+    ).catchError((erro) {
+      if (erro.response.statusCode == 404) throw UsuarioNaoEncontrado();
+      throw erro;
+    }).then((response) => response.data["token"]);
+
+    _autenticacaoState.recuperacaoSenhaToken = token;
+  }
+
+  @override
+  Future<void> iniciarRecuperacaoSenha(String email) async {
+    String token = await _client.post(
+      "$host/recuperar-senha",
+      data: {"email": email},
+    ).catchError((erro) {
+      if (erro.response.statusCode == 404) throw UsuarioNaoEncontrado();
+      throw erro;
+    }).then((response) => response.data["token"]);
+
+    _autenticacaoState.recuperacaoSenhaToken = token;
+  }
+
+  @override
+  Future<void> verificarCodigoRecuperacao(String codigo, String email) async {
+    await _client.post(
+      "$host/verificar-codigo-recuperacao",
+      headers: {"Authorization": "Bearer ${_autenticacaoState.recuperacaoSenhaToken}"},
+      data: {"codigo": codigo, "email": email},
+    ).catchError((erro) {
+      if (erro.response.statusCode == 404) throw UsuarioJaExiste();
+      if (erro.response.statusCode == 400) throw CodigoInvalido();
+      if (erro.response.statusCode == 412) throw TokenExpirado();
+      throw erro;
+    });
+  }
 }

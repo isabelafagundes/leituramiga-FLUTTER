@@ -53,12 +53,18 @@ class AutenticacaoUseCase {
     await _autenticacaoService.verificarCodigoSeguranca(codigo, email);
   }
 
+  Future<void> validarCodigoRecuperacao(String codigo, String email) async {
+    await _autenticacaoService.verificarCodigoRecuperacao(codigo, email);
+  }
+
   void atualizarSenha(String senha) {
     _state.senha.atualizarSenha(senha);
+    _state.senha.validarSenha();
   }
 
   void atualizarConfirmacaoSenha(String confirmacaoSenha) {
     _state.senha.atualizarConfirmacaoSenha(confirmacaoSenha);
+    _state.senha.validarSenha();
   }
 
   Future<void> carregarSessao() async {
@@ -69,5 +75,22 @@ class AutenticacaoUseCase {
       Usuario usuario = await _repo.obterUsuarioPerfil();
       _state.usuario = usuario;
     }
+  }
+
+  Future<void> enviarCodigoCriacaoUsuario(String email) async {
+    await _autenticacaoService.enviarCodigoCriacaoUsuario(email);
+  }
+
+  Future<void> enviarCodigoRecuperacaoSenha(String email) async {
+    await _autenticacaoService.enviarCodigoRecuperacaoSenha(email);
+  }
+
+  Future<void> iniciarRecuperacaoSenha(String email) async {
+    await _autenticacaoService.iniciarRecuperacaoSenha(email);
+    _state.email = email;
+  }
+
+  Future<void> atualizarRecuperacaoSenha() async {
+    await _autenticacaoService.atualizarSenha(_state.email, _state.senha.senha);
   }
 }

@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:leituramiga/component/autenticacao.component.dart';
 import 'package:leituramiga/component/instituicao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
@@ -8,6 +7,7 @@ import 'package:leituramiga/domain/endereco/endereco.dart';
 import 'package:leituramiga/domain/endereco/municipio.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/domain/instiuicao_ensino/instituicao_de_ensino.dart';
+import 'package:leituramiga/domain/senha.dart';
 import 'package:leituramiga/domain/usuario/email.dart';
 import 'package:leituramiga/domain/usuario/telefone.dart';
 import 'package:leituramiga/domain/usuario/usuario.dart';
@@ -16,13 +16,15 @@ import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
+import 'package:projeto_leituramiga/interface/page/autenticacao/esqueceu_senha.page.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/conteudo_codigo_seguranca.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/conteudo_criacao_senha.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/etapas.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/formulario/formulario_usuario.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/logo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/formulario_endereco.widget.dart';
@@ -125,6 +127,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                 SizedBox(height: tema.espacamento * 2),
                 EtapasWidget(
                   tema: tema,
+                  possuiQuatroEtapas: true,
                   corFundo: Color(tema.base200).withOpacity(.8),
                   etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
                 ),
@@ -141,7 +144,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                   : Padding(
                       padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
                       child: CardBaseWidget(
-                        largura: 850,
+                        largura: 640,
                         altura: 750,
                         cursorDeClick: false,
                         padding: EdgeInsets.symmetric(
@@ -169,6 +172,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                                     SizedBox(height: tema.espacamento * 2),
                                     EtapasWidget(
                                       tema: tema,
+                                      possuiQuatroEtapas: true,
                                       etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
                                     ),
                                   ],
@@ -223,14 +227,11 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                 nomeIcone: "seta/arrow-long-right",
                 aoClicar: () {
                   notificarCasoErro(() async {
-                    _autenticacaoComponent.atualizarSenha(controllerSenha.text);
-                    _autenticacaoComponent.atualizarConfirmacaoSenha(controllerConfirmacaoSenha.text);
-                    _autenticacaoState.validarSenha();
                     telefone = _obterTelefone;
                     email = Email.criar(controllerEmail.text.trim());
                     bool camposValidos = _validarCamposDadosGerais();
                     if (!camposValidos) return Notificacoes.mostrar("Preencha todos os campos corretamente!");
-                    atualizarPagina(EtapaCadastro.ENDERECO);
+                    atualizarPagina(EtapaCadastro.SENHA);
                   });
                 },
               ),
@@ -245,6 +246,25 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
               ),
             ],
           ),
+        ),
+      EtapaCadastro.SENHA => ConteudoCriacaoSenhaWidget(
+          tema: tema,
+          controllerSenha: controllerSenha,
+          titulo: "Crie uma senha",
+          controllerConfirmacaoSenha: controllerConfirmacaoSenha,
+          atualizar: atualizar,
+          navegarParaProximo: () {
+            notificarCasoErro(() async {
+              bool camposValidos = _validarCamposDadosGerais();
+              if (!camposValidos) return Notificacoes.mostrar("Preencha todos os campos corretamente!");
+              _autenticacaoComponent.atualizarSenha(controllerSenha.text);
+              _autenticacaoComponent.atualizarConfirmacaoSenha(controllerConfirmacaoSenha.text);
+              _autenticacaoState.validarSenha();
+              atualizarPagina(EtapaCadastro.ENDERECO);
+            });
+          },
+          navegarParaAnterior: () => atualizarPagina(EtapaCadastro.DADOS_GERAIS),
+          mensagemErro: _mensagemErro,
         ),
       EtapaCadastro.ENDERECO => Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -283,50 +303,13 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
             ),
           ],
         ),
-      EtapaCadastro.CODIGO => Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SvgWidget(
-              nomeSvg: "codigo_verificacao",
-              altura: 220,
-            ),
-            SizedBox(height: tema.espacamento * 4),
-            TextoWidget(
-              texto: "Informe o código de segurança enviado no email ${controllerEmail.text}",
-              tema: tema,
-              align: TextAlign.center,
-              cor: Color(tema.baseContent),
-            ),
-            SizedBox(height: tema.espacamento * 2),
-            SizedBox(
-              width: 300,
-              child: InputWidget(
-                tema: tema,
-                tipoInput: const TextInputType.numberWithOptions(decimal: false),
-                controller: controllerCodigoSeguranca,
-                alturaCampo: 35,
-                formatters: [LengthLimitingTextInputFormatter(5)],
-                onChanged: (texto) {},
-              ),
-            ),
-            SizedBox(height: tema.espacamento * 4),
-            BotaoWidget(
-              tema: tema,
-              texto: 'Próximo',
-              nomeIcone: "seta/arrow-long-right",
-              aoClicar: _validarCodigoSeguranca,
-            ),
-            SizedBox(height: tema.espacamento * 2),
-            BotaoWidget(
-              tema: tema,
-              texto: 'Voltar',
-              corFundo: Color(tema.base100),
-              corTexto: Color(tema.baseContent),
-              nomeIcone: "seta/arrow-long-left",
-              aoClicar: () => atualizarPagina(EtapaCadastro.ENDERECO),
-            ),
-          ],
+      EtapaCadastro.CODIGO => ConteudoCodigoSegurancaWidget(
+          tema: tema,
+          controllerEmail: controllerEmail,
+          controllerCodigoSeguranca: controllerCodigoSeguranca,
+          atualizarPagina: () => atualizarPagina(EtapaCadastro.ENDERECO),
+          validarCodigoSeguranca: _validarCodigoSeguranca,
+          enviarNovoCodigo: enviarCodigoCriacao,
         ),
       _ => Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -355,6 +338,22 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
     };
   }
 
+  String get _mensagemErro {
+    try {
+      return Senha.obterErro(controllerSenha.text, controllerConfirmacaoSenha.text);
+    } on SenhaInvalida catch (e) {
+      return e.mensagem;
+    }
+  }
+
+  Future<void> enviarCodigoCriacao() async {
+    await notificarCasoErro(() async {
+      await _autenticacaoComponent.enviarCodigoCriacaoUsuario(controllerEmail.text);
+      Notificacoes.mostrar("Código enviado com sucesso!", Emoji.SUCESSO);
+      atualizarPagina(EtapaCadastro.CODIGO);
+    });
+  }
+
   Future<void> _criarUsuario() async {
     notificarCasoErro(() async {
       _autenticacaoState.validarSenha();
@@ -370,6 +369,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
 
   Future<void> _validarCodigoSeguranca() async {
     await notificarCasoErro(() async {
+      if(controllerCodigoSeguranca.text.isEmpty) return Notificacoes.mostrar("Preencha o campo de código de segurança!");
       await _autenticacaoComponent.validarCodigoSeguranca(controllerCodigoSeguranca.text, controllerEmail.text);
       atualizarPagina(EtapaCadastro.REDIRECIONAMENTO);
     });
@@ -385,12 +385,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   }
 
   bool _validarCamposDadosGerais() {
-    return controllerNome.text.isNotEmpty &&
-        controllerNomeUsuario.text.isNotEmpty &&
-        controllerEmail.text.isNotEmpty &&
-        controllerSenha.text.isNotEmpty &&
-        controllerConfirmacaoSenha.text.isNotEmpty &&
-        controllerSenha.text == controllerConfirmacaoSenha.text;
+    return controllerNome.text.isNotEmpty && controllerNomeUsuario.text.isNotEmpty && controllerEmail.text.isNotEmpty;
   }
 
   bool _todosOsCamposEnderecoVazios() {
@@ -412,11 +407,13 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   }
 
   Endereco? get endereco {
-    Municipio? municipio = _usuarioComponent.municipiosPorNumero.values.where(
-      (element) => element.nome == controllerCidade.text,
-    ).firstOrNull;
+    Municipio? municipio = _usuarioComponent.municipiosPorNumero.values
+        .where(
+          (element) => element.nome == controllerCidade.text,
+        )
+        .firstOrNull;
 
-    if(municipio == null) return null;
+    if (municipio == null) return null;
 
     return Endereco.criar(
       controllerNumero.text,
@@ -467,6 +464,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
 
 enum EtapaCadastro {
   DADOS_GERAIS,
+  SENHA,
   ENDERECO,
   CODIGO,
   REDIRECIONAMENTO,
