@@ -7,13 +7,14 @@ class DuasEscolhasWidget extends StatefulWidget {
   final List<String> escolhas;
   final Function() aoClicarPrimeiraEscolha;
   final Function() aoClicarSegundaEscolha;
+  final int chave;
 
   const DuasEscolhasWidget({
     super.key,
     required this.tema,
     required this.escolhas,
     required this.aoClicarPrimeiraEscolha,
-    required this.aoClicarSegundaEscolha,
+    required this.aoClicarSegundaEscolha, required this.chave,
   });
 
   @override
@@ -21,7 +22,6 @@ class DuasEscolhasWidget extends StatefulWidget {
 }
 
 class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
-  int chave = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +93,7 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
             ),
           ),
           AnimatedPositioned(
-            left: chave == 0 ? 5 : 152,
+            left: widget.chave == 0 ? 5 : 152,
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeOut,
             child: Container(
@@ -116,7 +116,7 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
                   cor: Color(widget.tema.base200),
                   weight: FontWeight.w600,
                   tamanho: widget.tema.tamanhoFonteM + 2,
-                  texto: widget.escolhas[chave],
+                  texto: widget.escolhas[widget.chave],
                 ),
               ),
             ),
@@ -128,6 +128,5 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
 
   void _alterar(int chaveEscolha) {
     chaveEscolha == 0 ? widget.aoClicarPrimeiraEscolha() : widget.aoClicarSegundaEscolha();
-    setState(() => chave = chaveEscolha);
   }
 }

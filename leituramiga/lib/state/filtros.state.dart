@@ -66,6 +66,7 @@ class FiltroState {
   void limparFiltros() {
     numeroCategoria = null;
     numeroInstituicao = null;
+    estado = null;
     numeroMunicipio = null;
     tipo = null;
   }

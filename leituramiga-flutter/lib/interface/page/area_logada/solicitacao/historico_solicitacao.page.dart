@@ -72,7 +72,7 @@ class _HistoricoPageState extends State<HistoricoPage> {
                   crossAxisSpacing: tema.espacamento * 2,
                   mainAxisSpacing: tema.espacamento * 2,
                   childAspectRatio: 1.5,
-                  mainAxisExtent: 170,
+                  mainAxisExtent: 164,
                 ),
                 itemCount: solicitacaoComponent.itensPaginados.length,
                 itemBuilder: (context, index) {

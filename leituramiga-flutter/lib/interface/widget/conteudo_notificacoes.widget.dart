@@ -29,6 +29,7 @@ class ConteudoNotificacoesWidget extends StatefulWidget {
 class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget> {
   bool _exibindoEmAndamento = false;
   SolicitacaoComponent solicitacaoComponent = SolicitacaoComponent();
+  bool _carregando = false;
 
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
@@ -43,7 +44,9 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      setState(() => _carregando = true);
       await solicitacaoComponent.obterNotificacoes(_autenticacaoState.usuario!.email.endereco);
+      setState(() => _carregando = false);
     });
   }
 
@@ -53,9 +56,13 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
 
   @override
   Widget build(BuildContext context) {
-    if (solicitacaoComponent.carregando) {
-      return const Center(
-        child: CircularProgressIndicator(),
+    if (solicitacaoComponent.carregando || _carregando) {
+      return SizedBox(
+        width: Responsive.largura(context) <= 800 ? Responsive.largura(context) : 800,
+        height: 800,
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     }
 
@@ -157,5 +164,4 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
       ),
     );
   }
-
 }

@@ -38,6 +38,7 @@ class UsuarioPage extends StatefulWidget {
 class _UsuarioPageState extends State<UsuarioPage> {
   final UsuarioComponent _usuarioComponent = UsuarioComponent();
   TextEditingController controllerComentario = TextEditingController();
+  bool _carregando = false;
 
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
@@ -74,7 +75,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
       child: ConteudoMenuLateralWidget(
         tema: tema,
         voltar: () => Rota.navegar(context, Rota.HOME),
-        carregando: _usuarioComponent.carregando || _usuario == null || _temaState.temaSelecionado == null,
+        carregando:
+            _usuarioComponent.carregando || _usuario == null || _temaState.temaSelecionado == null || _carregando,
         atualizar: atualizar,
         child: SizedBox(
           width: Responsive.largura(context),
@@ -92,6 +94,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
                       Center(
                         child: DuasEscolhasWidget(
                           tema: tema,
+                          chave: _exibindoLivros ? 0 : 1,
                           aoClicarPrimeiraEscolha: () => setState(() => _exibindoLivros = true),
                           aoClicarSegundaEscolha: () => setState(() => _exibindoLivros = false),
                           escolhas: ["Livros", "Comentários"],
@@ -111,7 +114,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                   tema: tema,
                                   padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
                                   aoClicar: _exibirPopUpComentario,
-                                  corFundo:Color(tema.base200),
+                                  corFundo: Color(tema.base200),
                                   icone: Icon(
                                     Icons.add,
                                     color: Color(tema.baseContent),
@@ -267,9 +270,11 @@ class _UsuarioPageState extends State<UsuarioPage> {
   }
 
   Future<void> _buscarDados() async {
+    setState(() => _carregando = true);
     await _usuarioComponent.obterUsuario(widget.identificador);
     await _usuarioComponent.obterComentarios(_usuarioComponent.usuarioSelecionado!.email.endereco);
     await _usuarioComponent.obterLivrosUsuario();
+    setState(() => _carregando = false);
   }
 
   Future<void> _enviarComentario() async {

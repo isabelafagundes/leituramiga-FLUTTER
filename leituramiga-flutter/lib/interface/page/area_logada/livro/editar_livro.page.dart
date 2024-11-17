@@ -7,7 +7,6 @@ import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:leituramiga/state/filtros.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
-import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
@@ -18,6 +17,7 @@ import 'package:projeto_leituramiga/interface/widget/formulario/formulario_livro
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 @RoutePage()
@@ -107,7 +107,7 @@ class _EditarLivroPageState extends State<EditarLivroPage> {
                     texto: 'Excluir livro',
                     nomeIcone: "seta/arrow-long-right",
                     corFundo: Color(tema.error),
-                    icone: Icon(Icons.restore_from_trash_sharp, color: Color(tema.base200)),
+                    icone: Icon(Icons.delete, color: Color(tema.base200)),
                     aoClicar: _excluirLivro,
                   ),
                   selecionarTipoSolicitacao: (tipo) => setState(
@@ -165,24 +165,24 @@ class _EditarLivroPageState extends State<EditarLivroPage> {
                 BotaoWidget(
                   tema: tema,
                   icone: Icon(
-                    Icons.close,
-                    color: Color(tema.baseContent),
-                  ),
-                  texto: "Fechar",
-                  corFundo: Color(tema.base200),
-                  corTexto: Color(tema.baseContent),
-                  aoClicar: () => Navigator.of(context).pop(false),
-                ),
-                SizedBox(height: tema.espacamento * 2),
-                BotaoWidget(
-                  tema: tema,
-                  icone: Icon(
-                    Icons.restore_from_trash,
+                    Icons.delete,
                     color: Color(tema.base200),
                   ),
                   corFundo: Color(tema.error),
                   texto: "Excluir",
                   aoClicar: () => Navigator.of(context).pop(true),
+                ),
+                SizedBox(height: tema.espacamento * 2),
+                BotaoWidget(
+                  tema: tema,
+                  icone: SvgWidget(
+                    nomeSvg: 'seta/arrow-long-left',
+                    cor: Color(tema.baseContent),
+                  ),
+                  texto: "Voltar",
+                  corFundo: Color(tema.base200),
+                  corTexto: Color(tema.baseContent),
+                  aoClicar: () => Navigator.of(context).pop(false),
                 ),
               ],
             ),

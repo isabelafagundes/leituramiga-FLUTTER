@@ -102,6 +102,18 @@ class Usuario extends Entidade {
     if (_nomeUsuario.isEmpty) throw UsuarioInvalido("Nome de usuário não pode ser vazio!");
     if (_nomeUsuario.contains(" ")) throw UsuarioInvalido("Nome de usuário não pode conter espaços!");
     if (_nomeUsuario.length >= 40) throw UsuarioInvalido("Nome de usuário deve ter no máximo 40 caracteres!");
+    RegExp regex = RegExp(r'^[a-zA-Z0-9_]*$');
+    if (!regex.hasMatch(_nomeUsuario)) throw UsuarioInvalido("Nome de usuário deve conter apenas letras, números e _");
+    if (_nomeUsuario.length < 5) throw UsuarioInvalido("Nome de usuário deve ter no mínimo 5 caracteres!");
+  }
+
+  static void validarNomeUsuario(String nomeUsuario) {
+    if (nomeUsuario.isEmpty) throw UsuarioInvalido("Nome de usuário não pode ser vazio!");
+    if (nomeUsuario.contains(" ")) throw UsuarioInvalido("Nome de usuário não pode conter espaços!");
+    if (nomeUsuario.length >= 40) throw UsuarioInvalido("Nome de usuário deve ter no máximo 40 caracteres!");
+    RegExp regex = RegExp(r'^[a-zA-Z0-9_]*$');
+    if (!regex.hasMatch(nomeUsuario)) throw UsuarioInvalido("Nome de usuário deve conter apenas letras, números e _");
+    if (nomeUsuario.length < 5) throw UsuarioInvalido("Nome de usuário deve ter no mínimo 5 caracteres!");
   }
 
   factory Usuario.carregarDeMapa(Map<String, dynamic> usuarioAsMap) {

@@ -223,12 +223,14 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                 tema: tema,
                 texto: 'Próximo',
                 nomeIcone: "seta/arrow-long-right",
-                aoClicar: () {
-                  notificarCasoErro(() async {
+                aoClicar: () async {
+                  await notificarCasoErro(() async {
                     telefone = _obterTelefone;
                     email = Email.criar(controllerEmail.text.trim());
+                    Usuario.validarNomeUsuario(controllerNomeUsuario.text.trim());
                     bool camposValidos = _validarCamposDadosGerais();
                     if (!camposValidos) return Notificacoes.mostrar("Preencha todos os campos corretamente!");
+                    await _autenticacaoComponent.validarIdentificador(controllerNomeUsuario.text, controllerEmail.text);
                     atualizarPagina(EtapaCadastro.SENHA);
                   });
                 },

@@ -71,6 +71,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if(_autenticacaoState.usuario != null)
       await _solicitacaoComponent.obterNotificacoes(_autenticacaoState.usuario!.email!.endereco);
     });
   }

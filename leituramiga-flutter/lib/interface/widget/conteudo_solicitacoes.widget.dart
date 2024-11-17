@@ -27,8 +27,8 @@ class ConteudoSolicitacoesWidget extends StatefulWidget {
 }
 
 class _ConteudoSolicitacoesWidgetState extends State<ConteudoSolicitacoesWidget> {
-  bool _exibindoEmAndamento = false;
   SolicitacaoComponent solicitacaoComponent = SolicitacaoComponent();
+  bool _carregando = false;
 
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
@@ -43,7 +43,9 @@ class _ConteudoSolicitacoesWidgetState extends State<ConteudoSolicitacoesWidget>
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      setState(() => _carregando = true);
       await solicitacaoComponent.obterSolicitacoesIniciais(_autenticacaoState.usuario!.email.endereco);
+      setState(() => _carregando = false);
     });
   }
 
@@ -53,9 +55,13 @@ class _ConteudoSolicitacoesWidgetState extends State<ConteudoSolicitacoesWidget>
 
   @override
   Widget build(BuildContext context) {
-    if (solicitacaoComponent.carregando) {
-      return const Center(
-        child: CircularProgressIndicator(),
+    if (solicitacaoComponent.carregando || _carregando) {
+      return SizedBox(
+        height: 800,
+        width: Responsive.largura(context) <= 800 ? Responsive.largura(context) : 800,
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     }
 

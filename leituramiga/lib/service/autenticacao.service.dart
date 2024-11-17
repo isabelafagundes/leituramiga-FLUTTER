@@ -18,4 +18,6 @@ abstract class AutenticacaoService {
   Future<void> atualizarSenha(String email, String senha);
 
   Future<void> iniciarRecuperacaoSenha(String email);
+
+  Future<void> validarIdentificador(String username, String email);
 }

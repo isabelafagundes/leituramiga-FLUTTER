@@ -90,6 +90,10 @@ class AutenticacaoUseCase {
     _state.email = email;
   }
 
+  Future<void> validarIdentificador(String username, String email) async {
+    await _autenticacaoService.validarIdentificador(username, email);
+  }
+
   Future<void> atualizarRecuperacaoSenha() async {
     await _autenticacaoService.atualizarSenha(_state.email, _state.senha.senha);
   }

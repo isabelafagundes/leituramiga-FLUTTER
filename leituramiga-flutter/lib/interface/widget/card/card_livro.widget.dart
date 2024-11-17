@@ -220,6 +220,8 @@ class _CardLivroWidgetState extends State<CardLivroWidget> {
       );
     }
 
+    if (_imagemBytes == null) return Container();
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(widget.tema.tamanhoFonteM),

@@ -8,6 +8,7 @@ import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
@@ -141,11 +142,11 @@ class _CalendarioPageState extends State<CalendarioPage> {
                           : Expanded(
                               child: GridView.builder(
                                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: Responsive.larguraP(context) ? 1 : 2,
+                                  crossAxisCount: _obterQuantidadeColunas(context),
                                   crossAxisSpacing: tema.espacamento * 2,
                                   mainAxisSpacing: tema.espacamento * 2,
                                   childAspectRatio: 1.5,
-                                  mainAxisExtent: 220,
+                                  mainAxisExtent: 164,
                                 ),
                                 itemCount: solicitacoesSelecionadas.length,
                                 itemBuilder: (context, index) {
@@ -155,7 +156,14 @@ class _CalendarioPageState extends State<CalendarioPage> {
                                     child: CardSolicitacaoWidget(
                                       tema: tema,
                                       solicitacao: solicitacao,
-                                      aoVisualizar: (int) {},
+                                      aoVisualizar: (numero) {
+                                        Rota.navegarComArgumentos(
+                                          context,
+                                          DetalhesSolicitacaoRoute(
+                                            numeroSolicitacao: numero,
+                                          ),
+                                        );
+                                      },
                                       usuarioPerfil: '',
                                     ),
                                   );
@@ -171,6 +179,12 @@ class _CalendarioPageState extends State<CalendarioPage> {
         ),
       ),
     );
+  }
+
+  int _obterQuantidadeColunas(BuildContext context) {
+    if (Responsive.largura(context) > 1400) return 3;
+    if (Responsive.largura(context) > 900) return 2;
+    return 1;
   }
 
   List<ResumoSolicitacao> obterEventos(DateTime data) => solicitacaoComponent.itensPaginados

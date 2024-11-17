@@ -96,6 +96,7 @@ class _PerfilPageState extends State<PerfilPage> {
                       Center(
                         child: DuasEscolhasWidget(
                           tema: tema,
+                          chave: _exibindoLivros ? 0 : 1,
                           aoClicarPrimeiraEscolha: () => setState(() => _exibindoLivros = true),
                           aoClicarSegundaEscolha: () => setState(() => _exibindoLivros = false),
                           escolhas: const ["Livros", "Comentários"],

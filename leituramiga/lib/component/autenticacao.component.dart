@@ -111,4 +111,11 @@ class AutenticacaoComponent extends State {
       mensagemErro: "Não foi possível atualizar a recuperação de senha",
     );
   }
+
+  Future<void> validarIdentificador(String username, String email) async {
+    await executar(
+      rotina: () async => await _useCase.validarIdentificador(username, email),
+      mensagemErro: "Não foi possível validar o identificador",
+    );
+  }
 }

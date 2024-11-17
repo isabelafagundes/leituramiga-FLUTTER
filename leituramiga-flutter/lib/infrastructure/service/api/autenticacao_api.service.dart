@@ -127,4 +127,15 @@ class AutenticacaoApiService extends AutenticacaoService with ConfiguracaoApiSta
       throw erro;
     });
   }
+
+  @override
+  Future<void> validarIdentificador(String username, String email) async {
+    await _client.post(
+      "$host/validar-identificador",
+      data: {"email": email, "username": username},
+    ).catchError((erro) {
+      if (erro.response.statusCode == 409) throw UsuarioJaExiste();
+      throw erro;
+    });
+  }
 }

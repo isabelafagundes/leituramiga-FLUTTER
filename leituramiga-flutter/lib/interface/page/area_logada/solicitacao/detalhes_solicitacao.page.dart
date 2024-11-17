@@ -452,7 +452,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
   }
 
   void _atualizarCarregamento() {
-    setState(() => _carregando = !_carregando);
+    if (mounted) setState(() => _carregando = !_carregando);
   }
 }
 

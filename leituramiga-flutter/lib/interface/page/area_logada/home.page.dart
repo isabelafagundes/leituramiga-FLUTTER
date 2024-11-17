@@ -38,7 +38,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _controllerPesquisa = TextEditingController();
   bool _exibindoLivros = true;
-
+  bool _carregando = false;
   final LivrosComponent _livrosComponent = LivrosComponent();
   final UsuariosComponent _usuariosComponent = UsuariosComponent();
 
@@ -64,10 +64,12 @@ class _HomePageState extends State<HomePage> {
       atualizar,
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      setState(() => _carregando = true);
       await _livrosComponent.obterLivrosIniciais();
       await _livrosComponent.obterCategorias();
       await _livrosComponent.obterInstituicoes();
       await _usuariosComponent.obterUsuariosIniciais();
+      setState(() => _carregando = false);
     });
   }
 
@@ -83,46 +85,45 @@ class _HomePageState extends State<HomePage> {
         tema: tema,
         atualizar: atualizar,
         exibirPerfil: true,
-        carregando: _livrosComponent.carregando || _usuariosComponent.carregando,
-        widgetNoCabecalho: _livrosComponent.carregando || _usuariosComponent.carregando
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : !Responsive.larguraM(context)
-                ? SizedBox(
-                    height: 55,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        BarraPesquisaWidget(
-                          tema: tema,
-                          aoPesquisar: _pesquisar,
-                          controller: _controllerPesquisa,
-                        ),
+        carregando: _livrosComponent.carregando || _usuariosComponent.carregando || _carregando,
+        widgetNoCabecalho: IgnorePointer(
+          ignoring: _livrosComponent.carregando || _usuariosComponent.carregando || _carregando,
+          child: !Responsive.larguraM(context)
+              ? SizedBox(
+                  height: 55,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      BarraPesquisaWidget(
+                        tema: tema,
+                        aoPesquisar: _pesquisar,
+                        controller: _controllerPesquisa,
+                      ),
+                      SizedBox(width: tema.espacamento),
+                      BotaoPequenoWidget(
+                        tema: tema,
+                        altura: 40,
+                        label: "Filtrar",
+                        corFonte: Color(tema.baseContent),
+                        corFundo: Color(tema.base200),
+                        icone: SvgWidget(nomeSvg: 'filtro', cor: Color(tema.baseContent), altura: 16),
+                        aoClicar: () => SobreposicaoUtil.exibir(context, obterFiltros),
+                      ),
+                      if (_livrosComponent.filtroState.temFiltros) ...[
                         SizedBox(width: tema.espacamento),
-                        BotaoPequenoWidget(
+                        BotaoRedondoWidget(
                           tema: tema,
-                          altura: 40,
-                          label: "Filtrar",
-                          corFonte: Color(tema.baseContent),
-                          corFundo: Color(tema.base200),
-                          icone: SvgWidget(nomeSvg: 'filtro', cor: Color(tema.baseContent), altura: 16),
-                          aoClicar: () => SobreposicaoUtil.exibir(context, obterFiltros),
+                          aoClicar: _limparFiltros,
+                          nomeSvg: "limpar_icon",
+                          tamanhoIcone: 22,
                         ),
-                        if (_livrosComponent.filtroState.temFiltros) ...[
-                          SizedBox(width: tema.espacamento),
-                          BotaoRedondoWidget(
-                            tema: tema,
-                            aoClicar: _limparFiltros,
-                            nomeSvg: "limpar_icon",
-                            tamanhoIcone: 22,
-                          ),
-                        ]
-                      ],
-                    ),
-                  )
-                : null,
+                      ]
+                    ],
+                  ),
+                )
+              : null,
+        ),
         child: SizedBox(
           width: Responsive.largura(context),
           height: Responsive.altura(context),
@@ -154,6 +155,7 @@ class _HomePageState extends State<HomePage> {
                 Center(
                   child: DuasEscolhasWidget(
                     tema: tema,
+                    chave: _exibindoLivros ? 0 : 1,
                     aoClicarPrimeiraEscolha: selecionarLivros,
                     aoClicarSegundaEscolha: selecionarUsuarios,
                     escolhas: const ["Livros", "Usuários"],
@@ -231,6 +233,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _limparFiltros() async {
+    setState(() => _carregando = true);
     _filtroState.limparFiltros();
     _controllerPesquisa.clear();
     setState(() {
@@ -240,19 +243,20 @@ class _HomePageState extends State<HomePage> {
     await _livrosComponent.obterLivrosIniciais();
     await _usuariosComponent.obterUsuariosIniciais();
     _controllerPesquisa.clear();
-    setState(() {});
+    setState(() => _carregando = false);
   }
 
   Future<void> selecionarUsuarios() async {
-    setState(() => _exibindoLivros = false);
     _controllerPesquisa.clear();
     await _limparFiltros();
+    setState(() => _exibindoLivros = false);
   }
 
   Future<void> selecionarLivros() async {
-    setState(() => _exibindoLivros = true);
+    setState(() => _carregando = true);
     _controllerPesquisa.clear();
     await _limparFiltros();
+    setState(() => _exibindoLivros = true);
   }
 
   Widget get obterFiltros {
@@ -275,9 +279,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _aplicarFiltros() async {
+    setState(() => _carregando = true);
     _exibindoLivros
         ? await _livrosComponent.obterLivrosPaginados(true)
         : await _usuariosComponent.obterUsuariosPaginados(true);
+    setState(() => _carregando = false);
     return SobreposicaoUtil.fechar(context);
   }
 
