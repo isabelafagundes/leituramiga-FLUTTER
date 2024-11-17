@@ -3,8 +3,10 @@ import 'package:leituramiga/domain/solicitacao/resumo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/icone_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/carrossel_categorias.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class CardSolicitacaoWidget extends StatefulWidget {
@@ -56,23 +58,16 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                     mainAxisSize: MainAxisSize.min,
                     direction: Axis.horizontal,
                     children: [
-                      Row(
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 2),
-                              color: kCorPessego,
-                            ),
-                            child: Center(
-                              child: TextoWidget(
-                                tamanho: widget.tema.tamanhoFonteXG * 1.4,
-                                weight: FontWeight.w600,
-                                texto: "${widget.solicitacao.nomeUsuario.substring(0, 1)}",
-                                tema: widget.tema,
-                              ),
-                            ),
+                          IconeUsuarioWidget(
+                            tema: widget.tema,
+                            corLivros: Colors.transparent,
+                            textoPerfil: widget.solicitacao.nomeUsuario,
+                            corPerfil: obterCorAleatoria(),
+                            quantidadeLivros: null,
                           ),
                         ],
                       ),
@@ -115,7 +110,8 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                                     ],
                                   ),
                                 SizedBox(width: widget.tema.espacamento / 4),
-                                if (widget.solicitacao.dataDevolucao != null && widget.solicitacao.dataEntrega != null) ...[
+                                if (widget.solicitacao.dataDevolucao != null &&
+                                    widget.solicitacao.dataEntrega != null) ...[
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.center,

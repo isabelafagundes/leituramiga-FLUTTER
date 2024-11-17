@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:leituramiga/domain/notificacao.dart';
-import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/icone_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/carrossel_categorias.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class CardNotificacaoWidget extends StatefulWidget {
@@ -41,21 +42,18 @@ class _CardNotificacaoWidgetState extends State<CardNotificacaoWidget> {
             ),
           ),
           SizedBox(width: widget.tema.espacamento * 2),
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 2),
-              color: Color(widget.tema.accent).withOpacity(.5),
-            ),
-            child: Center(
-              child: TextoWidget(
-                tamanho: widget.tema.tamanhoFonteXG * 1.4,
-                weight: FontWeight.w600,
-                texto: "${widget.notificacao.nomeUsuario.substring(0, 1)}",
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconeUsuarioWidget(
                 tema: widget.tema,
+                corLivros: Colors.transparent,
+                textoPerfil: widget.notificacao.nomeUsuario,
+                corPerfil: obterCorAleatoria(),
+                quantidadeLivros: null,
               ),
-            ),
+            ],
           ),
           SizedBox(width: widget.tema.espacamento * 2),
           Column(
