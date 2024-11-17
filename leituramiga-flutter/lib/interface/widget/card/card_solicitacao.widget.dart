@@ -84,7 +84,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: widget.tema.espacamento * 2),
+                            SizedBox(height: widget.tema.espacamento * 4),
                             Container(
                               child: Wrap(
                                 alignment: WrapAlignment.start,
@@ -163,7 +163,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                             ),
                             SizedBox(
                               height:
-                                  Responsive.larguraP(context) ? widget.tema.espacamento * 5 : widget.tema.espacamento,
+                                  Responsive.larguraP(context) ? widget.tema.espacamento * 6 : widget.tema.espacamento,
                             ),
                           ],
                         ),

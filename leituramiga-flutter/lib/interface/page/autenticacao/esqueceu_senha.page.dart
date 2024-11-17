@@ -8,7 +8,6 @@ import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
-import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart';
@@ -66,78 +65,52 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (_etapaSenha != EtapaSenha.REDIRECIONAMENTO && Responsive.larguraP(context)) ...[
-                SizedBox(height: tema.espacamento * 2),
-                Container(
-                  width: 235,
-                  child: LogoWidget(
-                    tema: tema,
-                    tamanho: tema.tamanhoFonteM * 2,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
+                child: CardBaseWidget(
+                  largura: 640,
+                  altura: 740,
+                  cursorDeClick: false,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: tema.espacamento * 2,
+                    vertical: tema.espacamento * 2,
                   ),
-                ),
-                SizedBox(height: tema.espacamento * 3),
-                EtapasWidget(
                   tema: tema,
-                  possuiQuatroEtapas: true,
-                  corFundo: Color(tema.base200),
-                  etapaSelecionada: _etapaSenha == null ? 1 : _etapaSenha!.index + 1,
-                ),
-                SizedBox(height: tema.espacamento * 4),
-              ],
-              Responsive.larguraP(context)
-                  ? Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: tema.espacamento * 2,
-                        vertical: tema.espacamento,
-                      ),
-                      child: _obterPaginaAtual(),
-                    )
-                  : Padding(
-                      padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
-                      child: CardBaseWidget(
-                        largura: 640,
-                        altura: 740,
-                        cursorDeClick: false,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: tema.espacamento * 2,
-                          vertical: tema.espacamento * 2,
-                        ),
-                        tema: tema,
-                        child: Flex(
-                          direction: Axis.vertical,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                  child: Flex(
+                    direction: Axis.vertical,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (_etapaSenha != EtapaSenha.REDIRECIONAMENTO)
+                        Column(
                           children: [
-                            if (_etapaSenha != EtapaSenha.REDIRECIONAMENTO)
-                              Column(
-                                children: [
-                                  SizedBox(height: tema.espacamento * 2),
-                                  Container(
-                                    width: 235,
-                                    child: LogoWidget(
-                                      tema: tema,
-                                      tamanho: tema.tamanhoFonteM * 2,
-                                    ),
-                                  ),
-                                  SizedBox(height: tema.espacamento * 3),
-                                  EtapasWidget(
-                                    tema: tema,
-                                    possuiQuatroEtapas: true,
-                                    etapaSelecionada: _etapaSenha == null ? 1 : _etapaSenha!.index + 1,
-                                  ),
-                                ],
+                            SizedBox(height: tema.espacamento * 2),
+                            Container(
+                              width: 235,
+                              child: LogoWidget(
+                                tema: tema,
+                                tamanho: tema.tamanhoFonteM * 2,
                               ),
-                            Flexible(
-                              flex: 12,
-                              child: Padding(
-                                padding: EdgeInsets.all(tema.espacamento * 2),
-                                child: _obterPaginaAtual(),
-                              ),
+                            ),
+                            SizedBox(height: tema.espacamento * 3),
+                            EtapasWidget(
+                              tema: tema,
+                              possuiQuatroEtapas: true,
+                              etapaSelecionada: _etapaSenha == null ? 1 : _etapaSenha!.index + 1,
                             ),
                           ],
                         ),
+                      Flexible(
+                        flex: 12,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
+                          child: _obterPaginaAtual(),
+                        ),
                       ),
-                    ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -177,7 +150,7 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
                 label: "Email",
                 tipoInput: const TextInputType.numberWithOptions(decimal: false),
                 controller: controllerEmail,
-                alturaCampo: 40,
+                alturaCampo: 45,
                 formatters: [LengthLimitingTextInputFormatter(260)],
                 onChanged: (texto) {},
               ),

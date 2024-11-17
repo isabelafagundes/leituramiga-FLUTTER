@@ -179,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                                 align: TextAlign.center,
                                 cor: Color(tema.baseContent),
                               ),
-                              SizedBox(height: tema.espacamento),
+                              SizedBox(width: tema.espacamento),
                               GestureDetector(
                                 onTap: () => Rota.navegar(context, Rota.CADASTRO_USUARIO),
                                 child: TextoWidget(

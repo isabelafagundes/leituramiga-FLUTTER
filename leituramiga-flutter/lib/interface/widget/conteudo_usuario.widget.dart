@@ -96,12 +96,14 @@ class ConteudoUsuarioWidget extends StatelessWidget {
                   SizedBox(height: tema.espacamento),
                   Row(
                     children: [
-                      TextoWidget(
-                        tema: tema,
-                        texto: usuario.nome,
-                        cor: Color(tema.baseContent),
-                        weight: FontWeight.w500,
-                        tamanho: tema.tamanhoFonteM * 2,
+                      Expanded(
+                        child: TextoWidget(
+                          tema: tema,
+                          texto: usuario.nome,
+                          cor: Color(tema.baseContent),
+                          weight: FontWeight.w500,
+                          tamanho: tema.tamanhoFonteM * 2,
+                        ),
                       ),
                       SizedBox(width: tema.espacamento * 2),
                       widgetInferior ?? Container(),

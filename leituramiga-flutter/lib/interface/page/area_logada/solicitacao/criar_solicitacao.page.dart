@@ -298,8 +298,8 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
         controllerCidade.text = "";
         controllerEstado.text = "";
       }
-      setState(() => _carregando = false);
     });
+    setState(() => _carregando = false);
   }
 
   Solicitacao get solicitacao {

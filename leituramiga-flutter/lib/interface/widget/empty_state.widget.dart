@@ -23,11 +23,15 @@ class EmptyStateWidget extends StatelessWidget {
             altura: Responsive.larguraP(context) ? 120 : 160,
           ),
           SizedBox(height: tema.espacamento),
-          TextoWidget(
-            tema: tema,
-            texto: "Poxa, não encontramos nada por aqui! :(",
-            tamanho: tema.tamanhoFonteXG,
-            weight: FontWeight.w500,
+          Container(
+            constraints: BoxConstraints(maxWidth: 300),
+            child: TextoWidget(
+              tema: tema,
+              align: TextAlign.center,
+              texto: "Poxa, não encontramos nada por aqui! :(",
+              tamanho: tema.tamanhoFonteXG,
+              weight: FontWeight.w500,
+            ),
           ),
           SizedBox(height: tema.espacamento * 2),
         ],

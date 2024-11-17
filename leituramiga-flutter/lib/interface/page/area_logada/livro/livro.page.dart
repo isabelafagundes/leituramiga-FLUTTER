@@ -105,15 +105,17 @@ class _LivrosPageState extends State<LivrosPage> {
                                     TextoWidget(
                                       texto: _livrosComponent.livroSelecionado?.nome ?? '',
                                       tema: tema,
-                                      tamanho: tema.tamanhoFonteM * 2,
+                                      tamanho:
+                                          Responsive.larguraP(context) ? tema.tamanhoFonteXG : tema.tamanhoFonteM * 2,
                                       weight: FontWeight.w500,
-                                      cor: Color(tema.accent),
+                                      cor: Color(tema.baseContent),
                                     ),
                                     SizedBox(height: tema.espacamento),
                                     TextoWidget(
                                       texto: _livrosComponent.livroSelecionado?.nomeAutor ?? '',
                                       tema: tema,
-                                      tamanho: tema.tamanhoFonteXG,
+                                      tamanho:
+                                      Responsive.larguraP(context) ? tema.tamanhoFonteM : tema.tamanhoFonteXG,
                                       cor: Color(tema.baseContent),
                                     ),
                                     SizedBox(height: tema.espacamento / 2),
@@ -139,14 +141,15 @@ class _LivrosPageState extends State<LivrosPage> {
                                 TextoWidget(
                                   texto: "Descrição: ",
                                   tema: tema,
-                                  tamanho: tema.tamanhoFonteM + 4,
+                                  tamanho:
+                                      Responsive.larguraP(context) ? tema.tamanhoFonteM + 2 : tema.tamanhoFonteM + 4,
                                   weight: FontWeight.w500,
-                                  cor: Color(tema.accent),
                                 ),
                                 TextoWidget(
                                   texto: _livrosComponent.livroSelecionado?.descricao ?? '',
                                   tema: tema,
-                                  tamanho: tema.tamanhoFonteM + 2,
+                                  align: TextAlign.justify,
+                                  tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteM : tema.tamanhoFonteM + 2,
                                   maxLines: 10,
                                   cor: Color(tema.baseContent),
                                 ),
@@ -154,14 +157,14 @@ class _LivrosPageState extends State<LivrosPage> {
                                 TextoWidget(
                                   texto: "Estado do livro: ",
                                   tema: tema,
-                                  tamanho: tema.tamanhoFonteM + 4,
+                                  tamanho:
+                                      Responsive.larguraP(context) ? tema.tamanhoFonteM + 2 : tema.tamanhoFonteM + 4,
                                   weight: FontWeight.w500,
-                                  cor: Color(tema.accent),
                                 ),
                                 TextoWidget(
                                   texto: _livrosComponent.livroSelecionado?.descricaoEstado ?? '',
                                   tema: tema,
-                                  tamanho: tema.tamanhoFonteM + 2,
+                                  tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteM : tema.tamanhoFonteM + 2,
                                   cor: Color(tema.baseContent),
                                 ),
                                 SizedBox(height: tema.espacamento * 2),
@@ -170,9 +173,10 @@ class _LivrosPageState extends State<LivrosPage> {
                                     TextoWidget(
                                       texto: "Categoria: ",
                                       tema: tema,
-                                      tamanho: tema.tamanhoFonteM + 4,
+                                      tamanho: Responsive.larguraP(context)
+                                          ? tema.tamanhoFonteM + 2
+                                          : tema.tamanhoFonteM + 4,
                                       weight: FontWeight.w500,
-                                      cor: Color(tema.accent),
                                     ),
                                     SizedBox(width: tema.espacamento),
                                     ChipWidget(
@@ -225,16 +229,18 @@ class _LivrosPageState extends State<LivrosPage> {
                                                     tema: tema,
                                                     icone: Icon(
                                                       Icons.person,
-                                                      color: Color(tema.base200),
+                                                      color: Color(tema.baseContent),
                                                       size: 20,
                                                     ),
-                                                    corFonte: Color(tema.base200),
+                                                    corFonte: Color(tema.baseContent),
+                                                    corFundo: Color(tema.base200),
                                                     padding: EdgeInsets.symmetric(horizontal: tema.espacamento),
                                                     tamanhoFonte: tema.tamanhoFonteM,
                                                     aoClicar: () => Rota.navegarComArgumentos(
                                                       context,
                                                       UsuarioRoute(
-                                                        identificador: _livrosComponent.livroSelecionado?.emailUsuario ?? '',
+                                                        identificador:
+                                                            _livrosComponent.livroSelecionado?.emailUsuario ?? '',
                                                       ),
                                                     ),
                                                     label: "Ver perfil",
@@ -251,7 +257,7 @@ class _LivrosPageState extends State<LivrosPage> {
                                           texto: _livrosComponent.livroSelecionado?.nomeInstituicao ?? 'Não informado',
                                           tamanhoFonte: tema.tamanhoFonteM + 2,
                                         ),
-                                        SizedBox(height: tema.espacamento*1.5),
+                                        SizedBox(height: tema.espacamento * 1.5),
                                         TextoComIconeWidget(
                                           tema: tema,
                                           nomeSvg: 'menu/map-pin-fill',

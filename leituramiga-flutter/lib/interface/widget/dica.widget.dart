@@ -25,7 +25,7 @@ class DicaWidget extends StatelessWidget {
       children: [
         SvgWidget(
           nomeSvg: "lamp",
-          cor: Colors.yellow,
+          cor: Colors.orangeAccent,
           altura: tamanhoIcone ?? 20,
         ),
         SizedBox(width: tema.espacamento),

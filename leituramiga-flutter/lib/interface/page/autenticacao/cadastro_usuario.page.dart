@@ -16,7 +16,6 @@ import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
-import 'package:projeto_leituramiga/interface/page/autenticacao/esqueceu_senha.page.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
@@ -178,7 +177,6 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                                   ],
                                 ),
                               ),
-                            SizedBox(height: tema.espacamento * 2),
                             Flexible(
                               flex: 12,
                               child: Padding(
@@ -315,6 +313,15 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            TextoWidget(
+              texto: "Usuário criado com sucesso!",
+              tema: tema,
+              tamanho: tema.tamanhoFonteXG,
+              align: TextAlign.center,
+              weight: FontWeight.w500,
+              cor: Color(tema.baseContent),
+            ),
+            SizedBox(height: tema.espacamento * 2),
             const SvgWidget(
               nomeSvg: "pessoas_com_livro",
               altura: 280,
@@ -369,7 +376,8 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
 
   Future<void> _validarCodigoSeguranca() async {
     await notificarCasoErro(() async {
-      if(controllerCodigoSeguranca.text.isEmpty) return Notificacoes.mostrar("Preencha o campo de código de segurança!");
+      if (controllerCodigoSeguranca.text.isEmpty)
+        return Notificacoes.mostrar("Preencha o campo de código de segurança!");
       await _autenticacaoComponent.validarCodigoSeguranca(controllerCodigoSeguranca.text, controllerEmail.text);
       atualizarPagina(EtapaCadastro.REDIRECIONAMENTO);
     });

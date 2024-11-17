@@ -54,7 +54,8 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
       children: [
         Flexible(
           child: Flex(
-            direction: Axis.horizontal,
+            direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Flexible(
                 child: InputWidget(
@@ -68,6 +69,7 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
               ),
               SizedBox(
                 width: tema.espacamento * 2,
+                height: tema.espacamento * 2,
               ),
               Flexible(
                 child: InputWidget(
@@ -83,7 +85,6 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: tema.espacamento * 2),
         SizedBox(height: tema.espacamento * 2),
         Flexible(
           child: Flex(
@@ -104,7 +105,10 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
                   onChanged: (valor) {},
                 ),
               ),
-              SizedBox(width: tema.espacamento * 2),
+              SizedBox(
+                width: tema.espacamento * 2,
+                height: tema.espacamento * 2,
+              ),
               Flexible(
                 child: SizedBox(
                   height: 75,

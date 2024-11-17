@@ -111,12 +111,13 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                   tema: tema,
                                   padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
                                   aoClicar: _exibirPopUpComentario,
+                                  corFundo:Color(tema.base200),
                                   icone: Icon(
                                     Icons.add,
-                                    color: Color(tema.base200),
+                                    color: Color(tema.baseContent),
                                     size: 20,
                                   ),
-                                  corFonte: Color(tema.base200),
+                                  corFonte: Color(tema.baseContent),
                                   label: "Criar comentário",
                                 )
                               ],

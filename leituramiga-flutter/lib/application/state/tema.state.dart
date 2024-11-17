@@ -103,7 +103,7 @@ mixin class TemaState {
     corNeutral: "2a2f2c",
     corBase100: "eaeee5",
     corInfo: "61b3ff",
-    corSuccess: "2dc04b",
+    corSuccess: "48ba43",
     corWarning: "ffad00",
     corError: "ff899a",
     corBase200: "F5F2F0",

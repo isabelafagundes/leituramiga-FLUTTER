@@ -35,7 +35,7 @@ class GridComentarioWidget extends StatelessWidget {
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: _obterQuantidadePorLinha(context),
-              mainAxisExtent: 120,
+              mainAxisExtent: 140,
               mainAxisSpacing: tema.espacamento * 2,
               crossAxisSpacing: tema.espacamento * 2,
             ),

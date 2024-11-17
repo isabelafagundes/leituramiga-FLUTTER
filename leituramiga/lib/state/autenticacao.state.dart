@@ -14,7 +14,7 @@ class AutenticacaoState {
   }
 
   Future<void> Function() atualizarTokens = () async {};
-  String accessToken = "";
+  String _accessToken = "";
   String refreshToken = "";
   String criacaoUsuarioToken = "";
   String recuperacaoSenhaToken = "";
@@ -22,13 +22,14 @@ class AutenticacaoState {
   String email = "";
   Senha senha = Senha.criar();
 
+  String get accessToken => _accessToken;
 
   void validarSenha() => senha.validarSenha();
 
   String get emailUsuario => usuario!.email.endereco;
 
   void atualizarAccessToken(String accessToken) {
-    this.accessToken = accessToken;
+    this._accessToken = accessToken;
   }
 
   void atualizarRefreshToken(String refreshToken) {
@@ -44,7 +45,7 @@ class AutenticacaoState {
   }
 
   void limparTokens() {
-    accessToken = "";
+    _accessToken = "";
     refreshToken = "";
     usuario = null;
   }

@@ -200,25 +200,22 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
                 if (!_exibindoLivros)
-                  Padding(
-                    padding: EdgeInsets.only(right: tema.espacamento + 4),
-                    child: GridUsuariosWidget(
-                      tema: tema,
-                      aoClicarUsuario: (username) {
-                        if (_autenticacaoState.usuario == null) {
-                          return Notificacoes.mostrar("Efetue o login para acessar o perfil do usuário.");
-                        }
+                  GridUsuariosWidget(
+                    tema: tema,
+                    aoClicarUsuario: (username) {
+                      if (_autenticacaoState.usuario == null) {
+                        return Notificacoes.mostrar("Efetue o login para acessar o perfil do usuário.");
+                      }
 
-                        if (username == _autenticacaoState.usuario!.nomeUsuario) {
-                          return Rota.navegar(context, Rota.PERFIL);
-                        }
-                        Rota.navegarComArgumentos(
-                          context,
-                          UsuarioRoute(identificador: username),
-                        );
-                      },
-                      usuarios: _usuariosComponent.itensPaginados,
-                    ),
+                      if (username == _autenticacaoState.usuario!.nomeUsuario) {
+                        return Rota.navegar(context, Rota.PERFIL);
+                      }
+                      Rota.navegarComArgumentos(
+                        context,
+                        UsuarioRoute(identificador: username),
+                      );
+                    },
+                    usuarios: _usuariosComponent.itensPaginados,
                   ),
                 SizedBox(height: tema.espacamento * 2),
               ],

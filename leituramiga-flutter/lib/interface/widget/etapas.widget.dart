@@ -30,82 +30,38 @@ class EtapasWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              Container(
-                width: 30,
-                height: 30,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(tema.borderRadiusM),
-                  color: etapaSelecionada == 1 ? Color(tema.accent) : corFundo ?? Color(tema.base100),
-                ),
-                child: Center(
-                  child: TextoWidget(
-                    texto: "1",
-                    tema: tema,
-                    weight: FontWeight.bold,
-                    cor: etapaSelecionada == 1 ? Color(tema.base200) : corFundo ?? Color(tema.accent).withOpacity(.2),
-                  ),
-                ),
-              ),
+              _obterWidget(1),
               const Spacer(),
-              Container(
-                width: 30,
-                height: 30,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(tema.borderRadiusM),
-                  color: etapaSelecionada == 2 ? Color(tema.accent) : corFundo ?? Color(tema.base100),
-                ),
-                child: Center(
-                  child: TextoWidget(
-                    tema: tema,
-                    texto: "2",
-                    weight: FontWeight.bold,
-                    cor: etapaSelecionada == 2 ? Color(tema.base200) : Color(tema.baseContent),
-                  ),
-                ),
-              ),
+              _obterWidget(2),
               const Spacer(),
-              Container(
-                width: 30,
-                height: 30,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(tema.borderRadiusM),
-                  color: etapaSelecionada == 3 ? Color(tema.accent) : corFundo ?? Color(tema.base100),
-                ),
-                child: Center(
-                  child: TextoWidget(
-                    tema: tema,
-                    texto: "3",
-                    weight: FontWeight.bold,
-                    cor: etapaSelecionada == 3 ? Color(tema.base200) : Color(tema.baseContent),
-                  ),
-                ),
-              ),
+              _obterWidget(3),
               if (possuiQuatroEtapas) ...[
                 const Spacer(),
-                Container(
-                  width: 30,
-                  height: 30,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(tema.borderRadiusM),
-                    color: etapaSelecionada == 4? Color(tema.accent) : corFundo ?? Color(tema.base100),
-                  ),
-                  child: Center(
-                    child: TextoWidget(
-                      tema: tema,
-                      texto: "4",
-                      weight: FontWeight.bold,
-                      cor: etapaSelecionada == 4 ? Color(tema.base200) : Color(tema.baseContent),
-                    ),
-                  ),
-                ),
+                _obterWidget(4),
               ]
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _obterWidget(int numero) {
+    return Container(
+      width: 30,
+      height: 30,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(tema.borderRadiusM),
+        color: etapaSelecionada == numero ? Color(tema.accent) : corFundo ?? Color(tema.base100),
+      ),
+      child: Center(
+        child: TextoWidget(
+          tema: tema,
+          texto: numero.toString(),
+          weight: FontWeight.bold,
+          cor: etapaSelecionada == numero ? Color(tema.base200) : Color(tema.baseContent),
+        ),
       ),
     );
   }

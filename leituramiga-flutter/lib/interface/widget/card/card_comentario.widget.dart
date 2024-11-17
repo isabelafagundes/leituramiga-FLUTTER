@@ -22,12 +22,16 @@ class CardComentarioWidget extends StatelessWidget {
       tema: tema,
       child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: tema.espacamento * 2,
+          vertical: tema.espacamento,
           horizontal: tema.espacamento,
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   width: 60,
@@ -47,7 +51,7 @@ class CardComentarioWidget extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(width: tema.espacamento * 2),
+            SizedBox(width: tema.espacamento),
             Container(
               width: 2,
               height: 100,
@@ -66,10 +70,13 @@ class CardComentarioWidget extends StatelessWidget {
                     tamanho: tema.tamanhoFonteM,
                   ),
                   SizedBox(height: tema.espacamento),
-                  TextoWidget(
-                    texto: comentario,
-                    tema: tema,
-                    maxLines: 6,
+                  Expanded(
+                    child: TextoWidget(
+                      align: TextAlign.justify,
+                      texto: comentario,
+                      tema: tema,
+                      maxLines: 4,
+                    ),
                   ),
                 ],
               ),

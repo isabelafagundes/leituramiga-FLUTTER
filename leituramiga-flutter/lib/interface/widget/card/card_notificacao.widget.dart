@@ -45,8 +45,16 @@ class _CardNotificacaoWidgetState extends State<CardNotificacaoWidget> {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
-              color: Color(widget.tema.neutral).withOpacity(.1),
+              borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 2),
+              color: Color(widget.tema.accent).withOpacity(.5),
+            ),
+            child: Center(
+              child: TextoWidget(
+                tamanho: widget.tema.tamanhoFonteXG * 1.4,
+                weight: FontWeight.w600,
+                texto: "${widget.notificacao.nomeUsuario.substring(0, 1)}",
+                tema: widget.tema,
+              ),
             ),
           ),
           SizedBox(width: widget.tema.espacamento * 2),
@@ -79,12 +87,12 @@ class _CardNotificacaoWidgetState extends State<CardNotificacaoWidget> {
                 children: [
                   BotaoPequenoWidget(
                     tema: widget.tema,
-                    corFonte: kCorFonte,
+                    corFonte: Color(widget.tema.base200),
                     padding: EdgeInsets.symmetric(
                       horizontal: widget.tema.espacamento * 1.5,
                       vertical: widget.tema.espacamento / 1.5,
                     ),
-                    icone: Icon(Icons.remove_red_eye, color: kCorFonte),
+                    icone: Icon(Icons.remove_red_eye, color: Color(widget.tema.base200)),
                     aoClicar: () => widget.aoVisualizar(widget.notificacao.numeroSolicitacao),
                     label: "Visualizar",
                   ),

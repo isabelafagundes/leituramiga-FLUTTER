@@ -100,6 +100,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       child: ConteudoMenuLateralWidget(
         tema: tema,
         atualizar: () => setState(() {}),
+        carregando: _usuarioComponent.carregando || _instituicaoComponent.carregando || _autenticacaoComponent.carregando || _usuarioComponent.usuarioSelecionado == null,
         voltar: () => Rota.navegar(context, Rota.HOME),
         child: SingleChildScrollView(
           child: SizedBox(

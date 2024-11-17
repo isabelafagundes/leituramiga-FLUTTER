@@ -65,7 +65,7 @@ class _InputWidgetState extends State<InputWidget> {
             TextoWidget(
               tema: widget.tema,
               texto:widget.obrigatorio ? "${widget.label} *": widget.label!,
-              tamanho: widget.tamanho ?? 12,
+              tamanho: widget.tamanho ?? 14,
               cor: Color(widget.tema.baseContent),
             ),
           SizedBox(height: widget.tema.espacamento / 2),
