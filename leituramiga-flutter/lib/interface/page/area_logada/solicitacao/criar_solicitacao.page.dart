@@ -96,6 +96,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      setState(() => _carregando = true);
       await _usuarioComponent.obterPerfil();
       if (widget.numeroLivro != null) {
         await _usuarioComponent.obterLivro(widget.numeroLivro!);
@@ -106,6 +107,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
 
       await _usuarioComponent.obterLivrosUsuarioSolicitacao();
       _tipoSolicitacao = TipoSolicitacao.deNumero(widget.tipoSolicitacao);
+      setState(() => _carregando = false);
     });
   }
 
@@ -157,6 +159,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
             aoClicarProximo: () async {
               await notificarCasoErro(() async {
                 _validarDataDevolucao();
+                if (formaEntregaSelecionada == null) throw FormaDeEntregaInvalida("Selecione uma forma de entrega!");
                 atualizarPagina(CriarSolicitacao.ENDERECO);
               });
             },
@@ -182,28 +185,30 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
           ),
         ),
       CriarSolicitacao.ENDERECO => SingleChildScrollView(
-          child: ConteudoEnderecoSolicitacaoWidget(
-            tema: tema,
-            atualizar: () => setState(() {}),
-            utilizaEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoPerfil,
-            aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
-            aoSelecionarFrete: (frete) => setState(() => controllerFrete.text = frete),
-            estados: UF.values.map((e) => e.descricao).toList(),
-            cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome).toList(),
-            controllerFrete: controllerFrete,
-            aoSelecionarEstado: _selecionarEstado,
-            aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
-            aoClicarProximo: salvarSolicitacao,
-            utilizarEnderecoPerfil: _utilizarEnderecoPerfil,
-            aoClicarFrete: (frete) {},
-            controllerRua: controllerRua,
-            controllerBairro: controllerBairro,
-            controllerCep: controllerCep,
-            controllerNumero: controllerNumero,
-            controllerComplemento: controllerComplemento,
-            controllerCidade: controllerCidade,
-            controllerEstado: controllerEstado,
-          ),
+          child: _carregando
+              ? SizedBox()
+              : ConteudoEnderecoSolicitacaoWidget(
+                  tema: tema,
+                  atualizar: () => setState(() {}),
+                  utilizaEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoPerfil,
+                  aoSelecionarFormaEntrega: (forma) => setState(() => controllerFormaEntrega.text = forma),
+                  aoSelecionarFrete: (frete) => setState(() => controllerFrete.text = frete),
+                  estados: UF.values.map((e) => e.descricao).toList(),
+                  cidades: _usuarioComponent.municipiosPorNumero.values.map((e) => e.nome).toList(),
+                  controllerFrete: controllerFrete,
+                  aoSelecionarEstado: _selecionarEstado,
+                  aoSelecionarCidade: (cidade) => setState(() => controllerCidade.text = cidade),
+                  aoClicarProximo: salvarSolicitacao,
+                  utilizarEnderecoPerfil: _utilizarEnderecoPerfil,
+                  aoClicarFrete: (frete) {},
+                  controllerRua: controllerRua,
+                  controllerBairro: controllerBairro,
+                  controllerCep: controllerCep,
+                  controllerNumero: controllerNumero,
+                  controllerComplemento: controllerComplemento,
+                  controllerCidade: controllerCidade,
+                  controllerEstado: controllerEstado,
+                ),
         ),
       CriarSolicitacao.CONCLUSAO => SingleChildScrollView(
           child: SizedBox(
@@ -282,7 +287,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
   }
 
   Future<void> _utilizarEnderecoPerfil() async {
-    notificarCasoErro(() async {
+    await notificarCasoErro(() async {
       setState(() => _carregando = true);
       await _usuarioComponent.obterEndereco();
       if (_usuarioComponent.enderecoEdicao != null) _solicitacaoComponent.utilizarEnderecoDoPerfil();

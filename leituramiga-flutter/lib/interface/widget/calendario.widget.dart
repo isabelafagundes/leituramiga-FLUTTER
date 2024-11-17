@@ -84,7 +84,7 @@ class _CalendarioWidgetState extends State<CalendarioWidget> {
       );
 
   TextStyle get textStyleSelected => TextStyle(
-        color: kCorFonte,
+        color: Color(widget.tema.base200),
         fontSize: widget.tema.tamanhoFonteM,
         fontFamily: widget.tema.familiaDeFontePrimaria,
       );

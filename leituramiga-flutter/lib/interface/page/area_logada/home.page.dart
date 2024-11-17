@@ -97,11 +97,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         BarraPesquisaWidget(
                           tema: tema,
-                          aoPesquisar: (valor) async {
-                            _exibindoLivros
-                                ? await _livrosComponent.realizarPesquisaLivros(valor)
-                                : await _usuariosComponent.realizarPesquisaDeUsuarios(valor);
-                          },
+                          aoPesquisar: _pesquisar,
                           controller: _controllerPesquisa,
                         ),
                         SizedBox(width: tema.espacamento),
@@ -224,6 +220,14 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _pesquisar(String valor) async {
+    await notificarCasoErro(() async {
+      _exibindoLivros
+          ? await _livrosComponent.realizarPesquisaLivros(valor)
+          : await _usuariosComponent.realizarPesquisaDeUsuarios(valor);
+    });
   }
 
   Future<void> _limparFiltros() async {

@@ -10,6 +10,7 @@ class MenuWidget extends StatefulWidget {
   final TextEditingController controller;
   final String? valorSelecionado;
   final Function() atualizar;
+  final bool readOnly;
 
   const MenuWidget({
     super.key,
@@ -19,6 +20,7 @@ class MenuWidget extends StatefulWidget {
     this.valorSelecionado,
     required this.atualizar,
     required this.controller,
+     this.readOnly = false,
   });
 
   @override
@@ -60,41 +62,46 @@ class _MenuWidgetState extends State<MenuWidget> {
           Offset containerPosition = renderBox.localToGlobal(Offset.zero);
           _exibirOverlay(context, containerPosition, renderBox);
         },
-        child: Container(
-          key: _key,
-          height: 50,
-          decoration: BoxDecoration(
-            color: Color(widget.tema.base200),
-            border: Border.all(color: Color(widget.tema.neutral).withOpacity(.2)),
-            borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
-            boxShadow: [
-              BoxShadow(
-                color: Color(widget.tema.neutral).withOpacity(.2),
-                offset: const Offset(0, 2),
-                blurRadius: 5.0,
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: TextoWidget(
-                  texto: _label,
-                  tamanho: 14,
-                  maxLines: 1,
-                  tema: widget.tema,
+        child: Opacity(
+          opacity: widget.readOnly ? 0.8 : 1,
+          child: Container(
+            key: _key,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Color(widget.tema.base200),
+              border: Border.all(color: Color(widget.tema.neutral).withOpacity(.2)),
+              borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
+              boxShadow: widget.readOnly
+                  ? []
+                  : [
+                      BoxShadow(
+                        color: Color(widget.tema.neutral).withOpacity(.2),
+                        offset: const Offset(0, 2),
+                        blurRadius: 5.0,
+                      ),
+                    ],
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: TextoWidget(
+                    texto: _label,
+                    tamanho: 14,
+                    maxLines: 1,
+                    tema: widget.tema,
+                  ),
                 ),
-              ),
-              Icon(
-                _visivel ? Icons.expand_less : Icons.expand_more,
-                color: Color(widget.tema.baseContent),
-                size: 24,
-              )
-            ],
+                Icon(
+                  _visivel ? Icons.expand_less : Icons.expand_more,
+                  color: widget.readOnly? Colors.transparent:Color(widget.tema.baseContent),
+                  size: 24,
+                )
+              ],
+            ),
           ),
         ),
       ),

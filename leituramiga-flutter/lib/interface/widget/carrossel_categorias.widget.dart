@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:leituramiga/domain/livro/categoria.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/chip/chip.widget.dart';
 
 class CarrosselCategoriaWidget extends StatefulWidget {
@@ -32,9 +31,9 @@ class _CarrosselCategoriaWidgetState extends State<CarrosselCategoriaWidget> {
   @override
   void initState() {
     super.initState();
-   
+
     for (int i = 0; i < widget.categoriasPorId.length; i++) {
-      cores.add(_obterCorAleatoria());
+      cores.add(obterCorAleatoria());
     }
   }
 
@@ -106,12 +105,12 @@ class _CarrosselCategoriaWidgetState extends State<CarrosselCategoriaWidget> {
             ),
           );
   }
+}
 
-  Color _obterCorAleatoria() {
-    final Random random = Random();
-    double hue = random.nextDouble() * 360; // Matiz: qualquer valor entre 0 e 360
-    double saturation = random.nextDouble() * 0.4 + 0.3; // Saturação baixa: entre 0.3 e 0.7
+Color obterCorAleatoria() {
+  final Random random = Random();
+  double hue = random.nextDouble() * 360; // Matiz: qualquer valor entre 0 e 360
+  double saturation = random.nextDouble() * 0.4 + 0.3; // Saturação baixa: entre 0.3 e 0.7
 
-    return HSLColor.fromAHSL(1.0, hue, saturation, .8).toColor();
-  }
+  return HSLColor.fromAHSL(1.0, hue, saturation, .8).toColor();
 }

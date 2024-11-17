@@ -105,6 +105,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      setState(() => _carregando = true);
       await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
       setState(() => _tipoSolicitacao = _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao);
       await _obterUsuarioSolicitacao();
@@ -114,6 +115,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
       if (enderecoEmEdicao?.principal ?? false) _solicitacaoComponent.utilizarEnderecoDoPerfil();
       UF? uf = enderecoEmEdicao?.municipio.estado;
       await _usuarioComponent.obterCidades(uf);
+      setState(() => _carregando = false);
     });
   }
 
@@ -349,7 +351,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
         _solicitacaoComponent.solicitacaoSelecionada!.status,
         _solicitacaoComponent.solicitacaoSelecionada!.dataAceite,
         "",
-        _tipoSolicitacao,
+        _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao,
         controllerCodigoRastreio.text,
         _solicitacaoComponent.solicitacaoSelecionada!.livrosSolicitante,
         _solicitacaoComponent.solicitacaoSelecionada!.livrosReceptor,

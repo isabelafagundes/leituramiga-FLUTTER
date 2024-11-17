@@ -45,7 +45,6 @@ class PaginacaoLivroUseCase {
       numeroCategoria: numeroCategoria,
       emailUsuario: emailUsuario,
     );
-    print(pagina.length);
     _state.paginar(pagina, limite, pesquisa ?? '');
   }
 }

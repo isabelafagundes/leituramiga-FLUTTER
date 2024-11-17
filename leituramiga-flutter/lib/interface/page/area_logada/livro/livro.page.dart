@@ -290,13 +290,19 @@ class _LivrosPageState extends State<LivrosPage> {
                                 if (_livrosComponent.livroSelecionado?.tiposSolicitacao
                                         .contains(TipoSolicitacao.TROCA) ??
                                     false) ...[
-                                  ChipWidget(
-                                    tema: tema,
-                                    cor: kCorPessego,
-                                    texto: "Troca",
-                                    corTexto: kCorFonte,
-                                    ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.TROCA,
-                                    aoClicar: () => _selecionarTipoSolicitacao(TipoSolicitacao.TROCA),
+                                  Opacity(
+                                    opacity: _autenticacaoState.usuario!.numeroDeLivros == 0 ? 0.5 : 1,
+                                    child: IgnorePointer(
+                                      ignoring: _autenticacaoState.usuario!.numeroDeLivros == 0,
+                                      child: ChipWidget(
+                                        tema: tema,
+                                        cor: kCorPessego,
+                                        texto: "Troca",
+                                        corTexto: kCorFonte,
+                                        ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.TROCA,
+                                        aoClicar: () => _selecionarTipoSolicitacao(TipoSolicitacao.TROCA),
+                                      ),
+                                    ),
                                   ),
                                   SizedBox(width: tema.espacamento * 2),
                                 ],

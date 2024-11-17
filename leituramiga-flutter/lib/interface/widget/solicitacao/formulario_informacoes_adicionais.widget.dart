@@ -121,6 +121,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                                   tema: tema,
                                   controller: controllerFormaEntrega,
                                   atualizar: atualizar,
+                                  readOnly: semSelecaoLivros,
                                   valorSelecionado:
                                       controllerFormaEntrega.text.isNotEmpty ? controllerFormaEntrega.text : null,
                                   escolhas: const ["Correios", "Presencial"],
@@ -152,6 +153,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                                   Expanded(
                                     child: MenuWidget(
                                       tema: tema,
+                                      readOnly: semSelecaoLivros,
                                       controller: controllerFormaEntrega,
                                       atualizar: atualizar,
                                       valorSelecionado:

@@ -185,6 +185,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                     width: 70,
                                     height: 70,
                                     decoration: BoxDecoration(
+                                      border: Border.all(color: Color(widget.tema.neutral).withOpacity(.1), width: 1),
                                       borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 2),
                                       color: kCorPessego.withOpacity(.5),
                                     ),

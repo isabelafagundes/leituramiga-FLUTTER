@@ -54,6 +54,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
   final TextEditingController controllerInstituicaoEnsino = TextEditingController();
   final TextEditingController controllerDescricao = TextEditingController();
   EditarPerfil? _estagioAtual = EditarPerfil.DADOS_GERAIS;
+  bool _carregando = false;
 
   TemaState get _temaState => TemaState.instancia;
 
@@ -80,12 +81,14 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       atualizar,
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      setState(() => _carregando = true);
       await _usuarioComponent.obterPerfil();
       await _instituicaoComponent.obterInstituicoes();
       await notificarCasoErro(() async => await _usuarioComponent.obterEndereco());
       if (_usuarioComponent.enderecoEdicao != null)
         await _usuarioComponent.obterCidades(_usuarioComponent.enderecoEdicao!.municipio.estado);
       _preencherControllers();
+      setState(() => _carregando = false);
     });
   }
 
@@ -100,7 +103,11 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       child: ConteudoMenuLateralWidget(
         tema: tema,
         atualizar: () => setState(() {}),
-        carregando: _usuarioComponent.carregando || _instituicaoComponent.carregando || _autenticacaoComponent.carregando || _usuarioComponent.usuarioSelecionado == null,
+        carregando: _usuarioComponent.carregando ||
+            _instituicaoComponent.carregando ||
+            _autenticacaoComponent.carregando ||
+            _carregando ||
+            _usuarioComponent.usuarioSelecionado == null,
         voltar: () => Rota.navegar(context, Rota.HOME),
         child: SingleChildScrollView(
           child: SizedBox(

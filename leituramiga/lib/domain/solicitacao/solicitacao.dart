@@ -76,11 +76,7 @@ class Solicitacao extends Entidade {
     this._motivoRecusa,
     this._codigoRastreamento,
     this._enderecoReceptor,
-  ) {
-    validarDataEntrega(_dataEntrega);
-    validarDataDevolucao(_dataDevolucao);
-    validarDataEntregaEDevolucao(_dataEntrega, _dataDevolucao);
-  }
+  );
 
   int? get numero => _numero;
 
@@ -118,7 +114,7 @@ class Solicitacao extends Entidade {
   }
 
   bool get validarPodeFinalizar {
-    if (_dataDevolucao != null && _dataDevolucao!.ehAntesDe(DataHora.hoje())) {
+    if (_dataDevolucao != null && _dataDevolucao!.ehDepoisDe(DataHora.hoje())) {
       return false;
     } else if (_dataEntrega != null && _dataEntrega!.ehDepoisDe(DataHora.hoje())) {
       return false;
@@ -161,7 +157,6 @@ class Solicitacao extends Entidade {
     String dataAtualizacao = "${solicitacaoAsMap["dataAtualizacao"]} ${solicitacaoAsMap["horaAtualizacao"]}";
     String dataAceite = "${solicitacaoAsMap["dataAceite"]} ${solicitacaoAsMap["horaAceite"]}";
     String dataDevolucao = "${solicitacaoAsMap["dataDevolucao"]} ${solicitacaoAsMap["horaDevolucao"]}";
-    print(solicitacaoAsMap);
     return Solicitacao.carregar(
       solicitacaoAsMap["codigoSolicitacao"],
       solicitacaoAsMap["emailUsuarioReceptor"],

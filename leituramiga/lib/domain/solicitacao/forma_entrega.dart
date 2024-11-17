@@ -1,3 +1,5 @@
+import 'package:leituramiga/domain/super/erro_dominio.dart';
+
 enum FormaEntrega {
   CORREIOS(id: 1, descricao: "Correios"),
   PRESENCIAL(id: 2, descricao: "Presencial");
@@ -14,4 +16,8 @@ enum FormaEntrega {
   }
 
   const FormaEntrega({required this.id, required this.descricao});
+}
+
+class FormaDeEntregaInvalida extends ErroDominio {
+  FormaDeEntregaInvalida(String mensagemException) : super(mensagemException);
 }
