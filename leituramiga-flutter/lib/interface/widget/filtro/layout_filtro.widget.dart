@@ -57,6 +57,27 @@ class LayoutFiltroWidget extends StatefulWidget {
 
 class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
   FiltroState get _filtroState => FiltroState.instancia;
+  TextEditingController _controllerMunicipio = TextEditingController();
+  TextEditingController _controllerInstituicao = TextEditingController();
+  TextEditingController _controllerEstado = TextEditingController();
+
+  String? get _municipio => _filtroState.municipios
+      .where((element) => element.numero == FiltroState.instancia.numeroMunicipio)
+      .firstOrNull
+      ?.nome;
+
+  String? get _instituicao => widget.instituicoesPorId.values
+      .where((element) => element.numero == FiltroState.instancia.numeroInstituicao)
+      .firstOrNull
+      ?.nome;
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerMunicipio.text = _municipio ?? "";
+    _controllerInstituicao.text = _instituicao ?? "";
+    _controllerEstado.text = _filtroState.estado?.descricao ?? "";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +186,7 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                       Container(
                         constraints: const BoxConstraints(maxWidth: 400),
                         child: MenuWidget(
-                          controller: TextEditingController(text: _filtroState.estado?.descricao),
+                          controller:_controllerEstado,
                           tema: widget.tema,
                           atualizar: () => setState(() {}),
                           valorSelecionado: FiltroState.instancia.estado?.descricao,
@@ -190,12 +211,9 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                     constraints: const BoxConstraints(maxWidth: 400),
                     child: MenuWidget(
                       tema: widget.tema,
-                      controller: TextEditingController(),
+                      controller:_controllerMunicipio,
                       atualizar: () => setState(() {}),
-                      valorSelecionado: _filtroState.municipios
-                          .where((element) => element.numero == FiltroState.instancia.numeroMunicipio)
-                          .firstOrNull
-                          ?.nome,
+                      valorSelecionado: _municipio,
                       escolhas: _filtroState.municipios.map((e) => e.nome).toList(),
                       aoClicar: (nomeCidade) => setState(() {
                         widget.selecionarMunicipio(
@@ -215,7 +233,7 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
                     constraints: const BoxConstraints(maxWidth: 400),
                     child: MenuWidget(
                       tema: widget.tema,
-                      controller: TextEditingController(),
+                      controller: _controllerInstituicao,
                       atualizar: () => setState(() {}),
                       escolhas: widget.instituicoesPorId.values.map((e) => e.nome).toList(),
                       aoClicar: (nomeInstituicao) => setState(() {

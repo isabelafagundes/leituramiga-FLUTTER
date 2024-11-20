@@ -260,22 +260,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget get obterFiltros {
-    return LayoutFiltroWidget(
-      tema: tema,
-      limparFiltros: _limparFiltros,
-      selecionarEstado: _selecionarEstado,
-      carrergando: _livrosComponent.carregando,
-      categoriaSelecionada: _livrosComponent.filtroState.numeroCategoria,
-      categoriasPorId: _livrosComponent.categoriasPorNumero,
-      selecionarCategoria: _livrosComponent.selecionarCategoriaFiltro,
-      instituicoesPorId: _livrosComponent.instituicoesPorNumero,
-      selecionarInstituicao: _livrosComponent.selecionarInstituicao,
-      selecionarMunicipio: _livrosComponent.selecionarMunicipio,
-      municipiosPorId: _livrosComponent.municipiosPorNumero,
-      selecionarTipoSolicitacao: _livrosComponent.selecionarTipoSolicitacao,
-      aplicarFiltros: _aplicarFiltros,
-      usuario: !_exibindoLivros,
-    );
+    return _livrosComponent.carregando || _usuariosComponent.carregando || _carregando
+        ? SizedBox()
+        : LayoutFiltroWidget(
+            tema: tema,
+            limparFiltros: _limparFiltros,
+            selecionarEstado: _selecionarEstado,
+            carrergando: _livrosComponent.carregando || _usuariosComponent.carregando || _carregando,
+            categoriaSelecionada: _livrosComponent.filtroState.numeroCategoria,
+            categoriasPorId: _livrosComponent.categoriasPorNumero,
+            selecionarCategoria: _livrosComponent.selecionarCategoriaFiltro,
+            instituicoesPorId: _livrosComponent.instituicoesPorNumero,
+            selecionarInstituicao: _livrosComponent.selecionarInstituicao,
+            selecionarMunicipio: _livrosComponent.selecionarMunicipio,
+            municipiosPorId: _livrosComponent.municipiosPorNumero,
+            selecionarTipoSolicitacao: _livrosComponent.selecionarTipoSolicitacao,
+            aplicarFiltros: _aplicarFiltros,
+            usuario: !_exibindoLivros,
+          );
   }
 
   Future<void> _aplicarFiltros() async {
