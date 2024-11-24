@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/autenticacao.component.dart';
+import 'package:leituramiga/domain/usuario/usuario.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
@@ -41,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void atualizar() {
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   TemaState get _temaState => TemaState.instancia;
@@ -218,8 +220,19 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _logar() async {
     _validarCredenciais();
     await notificarCasoErro(() async {
-      await autenticacaoComponent.logar(emailController.text, senhaController.text);
-      Rota.navegar(context, Rota.AREA_LOGADA);
+      try {
+        await autenticacaoComponent.logar(emailController.text, senhaController.text);
+        Rota.navegar(context, Rota.AREA_LOGADA);
+      } on UsuarioNaoAtivo catch (e) {
+          Notificacoes.mostrar(e.toString(), Emoji.ERRO);
+        Rota.navegarComArgumentos(
+            context,
+            AtivarUsuarioRoute(
+              identificadorUsuario: emailController.text,
+            ));
+      } catch (e) {
+        Notificacoes.mostrar(e.toString(), Emoji.ERRO);
+      }
     });
   }
 }

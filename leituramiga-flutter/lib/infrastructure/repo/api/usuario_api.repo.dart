@@ -90,4 +90,15 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
       throw erro;
     }).then((response) => Usuario.carregarDeMapa(response.data));
   }
+
+  @override
+  Future<String> obterIdentificadorUsuario(String login) async {
+    return await _client.post("$host/identificador", data: {
+      "email": login,
+      "username": login,
+    }).catchError((erro) {
+      if (erro.response.statusCode == 404) throw UsuarioNaoEncontrado();
+      throw erro;
+    }).then((response) => response.data["email"]);
+  }
 }

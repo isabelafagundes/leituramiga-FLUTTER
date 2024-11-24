@@ -10,7 +10,6 @@ import 'package:leituramiga/repo/usuario.repo.dart';
 import 'package:leituramiga/state/comentario.state.dart';
 import 'package:leituramiga/state/endereco.state.dart';
 import 'package:leituramiga/state/livro.state.dart';
-import 'package:leituramiga/state/solicitacao.state.dart';
 import 'package:leituramiga/state/super/paginacao.state.dart';
 import 'package:leituramiga/state/super/state.dart';
 import 'package:leituramiga/state/usuario.state.dart';
@@ -21,7 +20,7 @@ import 'package:leituramiga/usecase/paginacao_livro.usecase.dart';
 import 'package:leituramiga/usecase/usuario.usecase.dart';
 
 class UsuarioComponent extends State
-    with UsuarioState, SolicitacaoState, ComentarioState, PaginacaoState<ResumoLivro>, EnderecoState, LivroState {
+    with UsuarioState, ComentarioState, PaginacaoState<ResumoLivro>, EnderecoState, LivroState {
   late final UsuarioUseCase _usuarioUseCase;
   late final ComentarioUseCase _comentarioUseCase;
   late final PaginacaoLivroUseCase _paginacaoLivroUseCase;
@@ -178,6 +177,21 @@ class UsuarioComponent extends State
     await executar(
       rotina: () => _enderecoUseCase.desativarEndereco(endereco),
       mensagemErro: "Não foi possível desativar o endereço",
+    );
+  }
+
+  Future<void> obterIdentificadorUsuario(String login) async {
+    await executar(
+      rotina: () => _usuarioUseCase.obterIdentificadorUsuario(login),
+      mensagemErro: "Não foi possível obter o identificador do usuário",
+    );
+  }
+
+
+  void utilizarEnderecoDoPerfil() {
+    executar(
+      rotina: () => _usuarioUseCase.utilizarEnderecoPerfil(),
+      mensagemErro: "Não foi possível atualizar o endereço",
     );
   }
 }

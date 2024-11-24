@@ -85,7 +85,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
               ),
               Flexible(
                 child: SizedBox(
-                  height: 70,
+                  height: 75,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +124,7 @@ class FormularioEnderecoWidget extends StatelessWidget {
             children: [
               Flexible(
                 child: SizedBox(
-                  height: 70,
+                  height: 75,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -103,7 +103,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                   children: [
                     Flexible(
                       child: SizedBox(
-                        height: 70,
+                        height: 80,
                         child: IgnorePointer(
                           ignoring: controllerCodigoRastreio.text.isNotEmpty,
                           child: Column(

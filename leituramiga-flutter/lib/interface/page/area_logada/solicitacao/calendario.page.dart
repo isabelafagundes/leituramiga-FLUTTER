@@ -146,7 +146,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                                   crossAxisSpacing: tema.espacamento * 2,
                                   mainAxisSpacing: tema.espacamento * 2,
                                   childAspectRatio: 1.5,
-                                  mainAxisExtent: 164,
+                                  mainAxisExtent: 166,
                                 ),
                                 itemCount: solicitacoesSelecionadas.length,
                                 itemBuilder: (context, index) {

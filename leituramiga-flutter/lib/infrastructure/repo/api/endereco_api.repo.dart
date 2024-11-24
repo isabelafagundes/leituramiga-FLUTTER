@@ -44,7 +44,10 @@ class EnderecoApiRepo extends EnderecoRepo with ConfiguracaoApiState {
     return await _client.get("$host/endereco").catchError((erro) {
       if (erro.response?.statusCode == 404) throw EnderecoNaoEncontrado();
       throw erro;
-    }).then((response) => Endereco.carregarDeMapa(response.data));
+    }).then((response) {
+      if (response.data["codigoEndereco"] == null) return null;
+      return Endereco.carregarDeMapa(response.data);
+    });
   }
 
   @override
@@ -57,7 +60,7 @@ class EnderecoApiRepo extends EnderecoRepo with ConfiguracaoApiState {
   }
 
   @override
-  Future<void> desativarEndereco(int codigoEndereco)async {
+  Future<void> desativarEndereco(int codigoEndereco) async {
     await _client.delete("$host/endereco/$codigoEndereco").catchError((erro) {
       throw erro;
     });

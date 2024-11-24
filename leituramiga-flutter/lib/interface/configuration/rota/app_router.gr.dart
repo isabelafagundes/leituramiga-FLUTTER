@@ -31,6 +31,19 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AreaLogadaPage(),
       );
     },
+    AtivarUsuarioRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<AtivarUsuarioRouteArgs>(
+          orElse: () => AtivarUsuarioRouteArgs(
+              identificadorUsuario: pathParams.getString('usuario')));
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AtivarUsuarioPage(
+          key: args.key,
+          identificadorUsuario: args.identificadorUsuario,
+        ),
+      );
+    },
     AutenticacaoRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -227,6 +240,45 @@ class AreaLogadaRoute extends PageRouteInfo<void> {
   static const String name = 'AreaLogadaRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [AtivarUsuarioPage]
+class AtivarUsuarioRoute extends PageRouteInfo<AtivarUsuarioRouteArgs> {
+  AtivarUsuarioRoute({
+    Key? key,
+    required String identificadorUsuario,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AtivarUsuarioRoute.name,
+          args: AtivarUsuarioRouteArgs(
+            key: key,
+            identificadorUsuario: identificadorUsuario,
+          ),
+          rawPathParams: {'usuario': identificadorUsuario},
+          initialChildren: children,
+        );
+
+  static const String name = 'AtivarUsuarioRoute';
+
+  static const PageInfo<AtivarUsuarioRouteArgs> page =
+      PageInfo<AtivarUsuarioRouteArgs>(name);
+}
+
+class AtivarUsuarioRouteArgs {
+  const AtivarUsuarioRouteArgs({
+    this.key,
+    required this.identificadorUsuario,
+  });
+
+  final Key? key;
+
+  final String identificadorUsuario;
+
+  @override
+  String toString() {
+    return 'AtivarUsuarioRouteArgs{key: $key, identificadorUsuario: $identificadorUsuario}';
+  }
 }
 
 /// generated route for

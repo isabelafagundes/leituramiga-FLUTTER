@@ -9,6 +9,7 @@ class ChipWidget extends StatelessWidget {
   final String texto;
   final Function()? aoClicar;
   final bool ativado;
+  final bool comSombra;
 
   const ChipWidget({
     super.key,
@@ -18,6 +19,7 @@ class ChipWidget extends StatelessWidget {
     this.corTexto,
     this.aoClicar,
     this.ativado = false,
+    this.comSombra = true,
   });
 
   @override
@@ -36,6 +38,14 @@ class ChipWidget extends StatelessWidget {
             color: !ativado ? cor : Color(tema.base200),
             borderRadius: BorderRadius.circular(tema.borderRadiusXG),
             border: Border.all(color: Color(tema.neutral).withOpacity(.2)),
+            boxShadow: [
+              if (comSombra)
+                BoxShadow(
+                  color: Color(tema.neutral).withOpacity(.2),
+                  offset: Offset(0, 3),
+                  blurRadius: 2,
+                ),
+            ],
           ),
           child: Row(
             children: [

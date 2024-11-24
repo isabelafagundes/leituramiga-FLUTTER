@@ -4,6 +4,7 @@ import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/area_logada.page.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/solicitacao/aceite_solicitacao.page.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/solicitacao/editar_solicitacao.page.dart';
+import 'package:projeto_leituramiga/interface/page/autenticacao/ativar_usuario.page.dart';
 import 'package:projeto_leituramiga/interface/page/autenticacao/autenticacao.page.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/solicitacao/calendario.page.dart';
 import 'package:projeto_leituramiga/interface/page/area_logada/livro/criar_livro.page.dart';

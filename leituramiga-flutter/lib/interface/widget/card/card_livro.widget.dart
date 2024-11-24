@@ -91,6 +91,7 @@ class _CardLivroWidgetState extends State<CardLivroWidget> {
                               tema: widget.tema,
                               texto: widget.nomeCategoria,
                               cor: kCorPessego,
+                              comSombra: false,
                               corTexto: const Color(0xff464A52),
                             ),
                           ),

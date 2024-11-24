@@ -101,7 +101,7 @@ class ConteudoLivrosSolicitacaoWidget extends StatelessWidget {
                   mainAxisSpacing: tema.espacamento,
                   mainAxisExtent: 92,
                 ),
-                itemCount: usuarioCriador.length,
+                itemCount: usuarioDoador?.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   LivroSolicitacao livro = usuarioDoador![index];

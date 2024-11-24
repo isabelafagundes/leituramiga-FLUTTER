@@ -53,7 +53,7 @@ class _MenuWidgetState extends State<MenuWidget> {
 
   void atualizar() {
     widget.atualizar();
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -204,6 +204,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                                 onPressed: () {
                                   _removerOverlay();
                                   widget.controller.text = _escolhasFiltradas[index];
+                                  _label = _escolhasFiltradas[index];
                                   _indiceHover = -1;
                                   widget.aoClicar(widget.controller.text);
                                   _escolhasFiltradas = widget.escolhas;
@@ -249,6 +250,7 @@ class _MenuWidgetState extends State<MenuWidget> {
   }
 
   void _removerOverlay() {
+    if (widget.controller.text != _label) widget.controller.text = 'Selecione';
     _focusNode.unfocus();
     if (_overlayEntry != null && _overlayEntry!.mounted) _overlayEntry!.remove();
     _visivel = false;

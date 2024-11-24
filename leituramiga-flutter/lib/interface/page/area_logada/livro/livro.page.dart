@@ -114,8 +114,7 @@ class _LivrosPageState extends State<LivrosPage> {
                                     TextoWidget(
                                       texto: _livrosComponent.livroSelecionado?.nomeAutor ?? '',
                                       tema: tema,
-                                      tamanho:
-                                      Responsive.larguraP(context) ? tema.tamanhoFonteM : tema.tamanhoFonteXG,
+                                      tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteM : tema.tamanhoFonteXG,
                                       cor: Color(tema.baseContent),
                                     ),
                                     SizedBox(height: tema.espacamento / 2),
@@ -183,6 +182,7 @@ class _LivrosPageState extends State<LivrosPage> {
                                       tema: tema,
                                       texto: _livrosComponent.livroSelecionado?.nomeCategoria ?? '',
                                       cor: kCorPessego,
+                                      comSombra: false,
                                       corTexto: const Color(0xff464A52),
                                     ),
                                   ],
@@ -273,16 +273,18 @@ class _LivrosPageState extends State<LivrosPage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: tema.espacamento * 2),
+                      SizedBox(height: tema.espacamento * 4),
                       if (_livrosComponent.livroSelecionado?.emailUsuario != _autenticacaoState.usuario?.email.endereco)
                         Column(
                           children: [
                             TextoWidget(
                               texto: "Selecione o tipo de solicitação que deseja efetuar",
                               tema: tema,
+                              tamanho: tema.tamanhoFonteM + 2,
+                              weight: FontWeight.w500,
                               cor: Color(tema.baseContent),
                             ),
-                            SizedBox(height: tema.espacamento),
+                            SizedBox(height: tema.espacamento * 2),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -330,9 +332,10 @@ class _LivrosPageState extends State<LivrosPage> {
                                   ),
                               ],
                             ),
-                            SizedBox(height: tema.espacamento * 2),
+                            SizedBox(height: tema.espacamento * 3),
                             BotaoWidget(
                               tema: tema,
+                              desabilitado: _tipoSolicitacaoSelecionado == null,
                               texto: 'Criar solicitação',
                               icone: Icon(
                                 Icons.chevron_right,

@@ -63,4 +63,10 @@ class UsuarioMockRepo extends UsuarioRepo {
     // TODO: implement obterUsuarios
     throw UnimplementedError();
   }
+
+  @override
+  Future<String> obterIdentificadorUsuario(String login) {
+    // TODO: implement obterIdentificadorUsuario
+    throw UnimplementedError();
+  }
 }

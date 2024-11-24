@@ -112,8 +112,9 @@ class _UsuarioPageState extends State<UsuarioPage> {
                               children: [
                                 BotaoPequenoWidget(
                                   tema: tema,
-                                  padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
+                                  padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2,vertical: tema.espacamento),
                                   aoClicar: _exibirPopUpComentario,
+                                  altura: 40,
                                   corFundo: Color(tema.base200),
                                   icone: Icon(
                                     Icons.add,

@@ -25,7 +25,7 @@ class BotaoPequenoWidget extends StatefulWidget {
     this.icone,
     this.padding,
     this.tamanhoFonte,
-    this.altura = 35,
+    this.altura = 40,
   });
 
   @override

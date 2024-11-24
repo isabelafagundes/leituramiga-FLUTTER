@@ -156,7 +156,7 @@ class UsuarioNaoEncontrado extends ErroDominio {
 }
 
 class UsuarioNaoAtivo extends ErroDominio {
-  UsuarioNaoAtivo() : super("O usuário não ativo. Confirme seu código!");
+  UsuarioNaoAtivo() : super("O usuário está desativado! Confirme o código de verificação.");
 }
 
 class CredenciaisExistentes extends ErroDominio {

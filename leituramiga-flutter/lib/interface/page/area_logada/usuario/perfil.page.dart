@@ -116,6 +116,7 @@ class _PerfilPageState extends State<PerfilPage> {
                                   tema: tema,
                                   corFonte: Color(tema.baseContent),
                                   corFundo: Color(tema.base200),
+                                  altura: 40,
                                   icone: Icon(Icons.add, color: Color(tema.baseContent)),
                                   padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
                                   aoClicar: _exibindoLivros ? () => Rota.navegar(context, Rota.CRIAR_LIVRO) : () {},

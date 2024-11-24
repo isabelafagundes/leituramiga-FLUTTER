@@ -74,20 +74,19 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      setState(() => _carregando = true);
-      await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
-      Solicitacao? solicitacao = _solicitacaoComponent.solicitacaoSelecionada;
-      setState(() {
-        _tipoSolicitacao = _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao;
-        _abaSelecionada = AceitarSolicitacao.deDescricao(_opcoes.first);
+      await notificarCasoErro(() async {
+        setState(() => _carregando = true);
+        await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
+        Solicitacao? solicitacao = _solicitacaoComponent.solicitacaoSelecionada;
+        setState(() {
+          _tipoSolicitacao = _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao;
+          _abaSelecionada = AceitarSolicitacao.deDescricao(_opcoes.first);
+        });
+        await _usuarioComponent.obterUsuario(solicitacao!.emailUsuarioSolicitante);
+        await _usuarioComponent.obterUsuarioSolicitacao(solicitacao.emailUsuarioProprietario);
+        await _usuarioComponent.obterLivrosUsuario();
+        await _obterEnderecoUsuario();
       });
-      await _usuarioComponent.obterUsuario(solicitacao!.emailUsuarioSolicitante);
-      await _usuarioComponent.obterUsuarioSolicitacao(solicitacao.emailUsuarioProprietario);
-      await _usuarioComponent.obterLivrosUsuario();
-      await _usuarioComponent.obterEndereco();
-      if (_usuarioComponent.enderecoEdicao!.principal) _preencherControllersEndereco(_usuarioComponent.enderecoEdicao!);
-      UF? uf = _solicitacaoComponent.solicitacaoSelecionada?.enderecoSolicitante?.municipio.estado;
-      await _usuarioComponent.obterCidades(uf!);
       setState(() => _carregando = false);
     });
   }
@@ -124,29 +123,7 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
                     altura: 45,
                     largura: 140,
                     texto: "Aceitar",
-                    aoClicar: () async {
-                      notificarCasoErro(() async {
-                        if (!_enderecoValido) return Notificacoes.mostrar("Preencha todos os campos do endereço!");
-                        if (_solicitacaoComponent.livrosSelecionados.isEmpty)
-                          return Notificacoes.mostrar("Selecione um livro!");
-                        _solicitacaoComponent.validarNumeroLivrosSelecionados();
-
-                        bool? navegarParaSolicitacoes = await showDialog(
-                          context: context,
-                          builder: (BuildContext context) => _obterPopUpPadrao(context),
-                        );
-
-                        if (navegarParaSolicitacoes ?? false) {
-                          await _aceitarSolicitacao(enderecoSolicitacao);
-                          Rota.navegarComArgumentos(
-                            context,
-                            DetalhesSolicitacaoRoute(
-                              numeroSolicitacao: widget.numeroSolicitacao,
-                            ),
-                          );
-                        }
-                      });
-                    },
+                    aoClicar: _fecharAceite,
                     icone: Icon(
                       Icons.check,
                       color: Color(tema.base200),
@@ -183,6 +160,45 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _fecharAceite() async {
+    await notificarCasoErro(() async {
+      if (!_enderecoValido) return Notificacoes.mostrar("Preencha todos os campos do endereço!");
+      TipoSolicitacao tipoSolicitacao = _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao;
+      if (tipoSolicitacao == TipoSolicitacao.TROCA) {
+        if (_solicitacaoComponent.livrosSelecionados.isEmpty) return Notificacoes.mostrar("Selecione um livro!");
+        _solicitacaoComponent.validarNumeroLivrosSelecionados();
+      }
+
+      bool? navegarParaSolicitacoes = await showDialog(
+        context: context,
+        builder: (BuildContext context) => _obterPopUpPadrao(context),
+      );
+
+      if (navegarParaSolicitacoes ?? false) {
+        await _aceitarSolicitacao(enderecoSolicitacao);
+        Rota.navegarComArgumentos(
+          context,
+          DetalhesSolicitacaoRoute(
+            numeroSolicitacao: widget.numeroSolicitacao,
+          ),
+        );
+      }
+    });
+  }
+
+  Future<void> _obterEnderecoUsuario() async {
+    try {
+      await _usuarioComponent.obterEndereco();
+      if (_usuarioComponent.enderecoEdicao!.principal) _preencherControllersEndereco(_usuarioComponent.enderecoEdicao!);
+      UF? uf = _solicitacaoComponent.solicitacaoSelecionada?.enderecoSolicitante?.municipio.estado;
+      await _usuarioComponent.obterCidades(uf!);
+      if (_usuarioComponent.enderecoEdicao != null && _usuarioComponent.enderecoEdicao!.principal)
+        _usuarioComponent.utilizarEnderecoDoPerfil();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   bool get _enderecoValido =>
@@ -222,22 +238,23 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
                 BotaoWidget(
                   tema: tema,
                   icone: Icon(
-                    Icons.close,
-                    color: Color(tema.base200),
-                  ),
-                  texto: "Cancelar",
-                  corFundo: Color(tema.error),
-                  aoClicar: () => Navigator.of(context).pop(false),
-                ),
-                SizedBox(height: tema.espacamento * 2),
-                BotaoWidget(
-                  tema: tema,
-                  icone: Icon(
                     Icons.check,
                     color: Color(tema.base200),
                   ),
                   texto: "Aceitar",
                   aoClicar: () => Navigator.of(context).pop(true),
+                ),
+                SizedBox(height: tema.espacamento * 2),
+                BotaoWidget(
+                  tema: tema,
+                  icone: Icon(
+                    Icons.close,
+                    color: Color(tema.baseContent),
+                  ),
+                  corTexto: Color(tema.baseContent),
+                  texto: "Cancelar",
+                  corFundo: Color(tema.base200),
+                  aoClicar: () => Navigator.of(context).pop(false),
                 ),
               ],
             ),
@@ -258,7 +275,7 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
         )
         .firstOrNull;
 
-    if (_solicitacaoComponent.utilizarEnderecoPerfil) {
+    if (_usuarioComponent.utilizarEnderecoPerfil) {
       return _usuarioComponent.enderecoEdicao;
     }
 
@@ -294,7 +311,7 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
             textoAjuda: _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao == TipoSolicitacao.EMPRESTIMO
                 ? "Preencha com o endereço que será feita a devolução!"
                 : "Preencha com o endereço que será feita a entrega!",
-            utilizaEnderecoPerfil: _solicitacaoComponent.utilizarEnderecoPerfil,
+            utilizaEnderecoPerfil: _usuarioComponent.utilizarEnderecoPerfil,
             aoSelecionarFormaEntrega: (forma) {},
             aoSelecionarFrete: (frete) {},
             estados: UF.values.map((e) => e.descricao).toList(),
@@ -332,11 +349,11 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
   }
 
   Future<void> _utilizarEnderecoPerfil() async {
-    notificarCasoErro(() async {
-      setState(() => _carregando = true);
+    await notificarCasoErro(() async {
+      _atualizarCarregamento();
       await _usuarioComponent.obterEndereco();
-      if (_usuarioComponent.enderecoEdicao != null) _solicitacaoComponent.utilizarEnderecoDoPerfil();
-      if (_solicitacaoComponent.utilizarEnderecoPerfil) {
+      if (_usuarioComponent.enderecoEdicao != null) _usuarioComponent.utilizarEnderecoDoPerfil();
+      if (_usuarioComponent.utilizarEnderecoPerfil) {
         _preencherControllersEndereco(_usuarioComponent.enderecoEdicao!);
         setState(() {});
       } else {
@@ -348,8 +365,8 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
         controllerCidade.text = "";
         controllerEstado.text = "";
       }
-      setState(() => _carregando = false);
     });
+    _atualizarCarregamento();
   }
 
   void _preencherControllersEndereco(Endereco endereco) {
@@ -366,16 +383,6 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
     UF uf = UF.deDescricao(estado);
     await _usuarioComponent.obterCidades(uf);
     setState(() => controllerEstado.text = estado);
-  }
-
-  Future<void> _obterUsuarioSolicitacao() async {
-    String emailoUsuarioCriador = _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioSolicitante;
-    String emailUsuarioProprietario = _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioProprietario;
-    if (emailoUsuarioCriador == _autenticacaoState.usuario!.email) {
-      await _usuarioComponent.obterUsuarioSolicitacao(emailUsuarioProprietario);
-    } else {
-      await _usuarioComponent.obterUsuarioSolicitacao(emailoUsuarioCriador);
-    }
   }
 
   List<String> get _opcoes => AceitarSolicitacao.values

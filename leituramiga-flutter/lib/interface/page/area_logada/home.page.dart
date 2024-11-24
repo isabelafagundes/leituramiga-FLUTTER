@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                         icone: SvgWidget(nomeSvg: 'filtro', cor: Color(tema.baseContent), altura: 16),
                         aoClicar: () => SobreposicaoUtil.exibir(context, obterFiltros),
                       ),
-                      if (_livrosComponent.filtroState.temFiltros) ...[
+                      if (_livrosComponent.filtroState.temFiltros || _controllerPesquisa.text.isNotEmpty) ...[
                         SizedBox(width: tema.espacamento),
                         BotaoRedondoWidget(
                           tema: tema,

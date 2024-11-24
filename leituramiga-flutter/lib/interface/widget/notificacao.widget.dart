@@ -1,18 +1,18 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
-Future<void> notificarCasoErro(Future<void> Function() rotina) async {
+Future<void> notificarCasoErro(Future<void> Function() rotina, [bool lancarErro = true]) async {
   try {
     await rotina();
   } catch (e) {
     print(e.toString());
-    Notificacoes.mostrar(e.toString(), Emoji.ERRO);
+    if (lancarErro) Notificacoes.mostrar(e.toString(), Emoji.ERRO);
   }
 }
 

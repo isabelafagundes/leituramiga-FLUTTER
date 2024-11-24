@@ -17,4 +17,6 @@ abstract class UsuarioRepo {
   Future<void> desativarUsuario();
 
   Future<void> atualizarUsuario(Usuario usuario);
+
+  Future<String> obterIdentificadorUsuario(String login);
 }

@@ -14,6 +14,7 @@ class BotaoWidget extends StatefulWidget {
   final Color? corTexto;
   final double? largura;
   final double? altura;
+  final bool desabilitado;
 
   const BotaoWidget({
     super.key,
@@ -26,6 +27,7 @@ class BotaoWidget extends StatefulWidget {
     this.corTexto,
     this.largura,
     this.altura,
+    this.desabilitado = false,
   });
 
   @override
@@ -37,67 +39,73 @@ class _BotaoWidgetState extends State<BotaoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hover = true),
-      onExit: (_) => setState(() => _hover = false),
-      child: GestureDetector(
-        onTap: widget.aoClicar,
-        child: Container(
-          width: widget.largura ?? 280,
-          height: widget.altura ?? 50,
-          padding: EdgeInsets.symmetric(
-            horizontal: widget.tema.espacamento,
-            vertical: widget.tema.espacamento / 3,
-          ),
-          decoration: BoxDecoration(
-            color: widget.corFundo ?? Color(widget.tema.accent),
-            borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
-            border: Border.all(color: Color(widget.tema.neutral).withOpacity(.2)),
-            boxShadow: [
-              BoxShadow(
-                color: Color(widget.tema.neutral).withOpacity(.1),
-                offset: const Offset(0, 4),
-                blurRadius: 2,
-              )
-            ],
-          ),
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(2),
-                  child: widget.icone ??
-                      SvgWidget(
-                        nomeSvg: widget.nomeIcone,
-                        cor: widget.corTexto ?? Color(widget.tema.base200),
-                        largura: 16,
-                      ),
+    return IgnorePointer(
+      ignoring: widget.desabilitado,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _hover = true),
+        onExit: (_) => setState(() => _hover = false),
+        child: GestureDetector(
+          onTap: widget.aoClicar,
+          child: Opacity(
+            opacity: widget.desabilitado ? .3 : 1,
+            child: Container(
+              width: widget.largura ?? 280,
+              height: widget.altura ?? 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: widget.tema.espacamento,
+                vertical: widget.tema.espacamento / 3,
+              ),
+              decoration: BoxDecoration(
+                color: widget.corFundo ?? Color(widget.tema.accent),
+                borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
+                border: Border.all(color: Color(widget.tema.neutral).withOpacity(.2)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(widget.tema.neutral).withOpacity(.1),
+                    offset: const Offset(0, 4),
+                    blurRadius: 2,
+                  )
+                ],
+              ),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: widget.icone ??
+                          SvgWidget(
+                            nomeSvg: widget.nomeIcone,
+                            cor: widget.corTexto ?? Color(widget.tema.base200),
+                            largura: 16,
+                          ),
+                    ),
+                    SizedBox(width: widget.tema.espacamento),
+                    TextoWidget(
+                      tema: widget.tema,
+                      texto: widget.texto,
+                      tamanho: widget.tema.tamanhoFonteM,
+                      weight: FontWeight.w500,
+                      cor: widget.corTexto ?? Color(widget.tema.base200),
+                    ),
+                  ],
                 ),
-                SizedBox(width: widget.tema.espacamento),
-                TextoWidget(
-                  tema: widget.tema,
-                  texto: widget.texto,
-                  tamanho: widget.tema.tamanhoFonteM,
-                  weight: FontWeight.w500,
-                  cor: widget.corTexto ?? Color(widget.tema.base200),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      )
-          .animate(
-              target: _hover ? 1 : 0,
-              onComplete: (controller) {
-                if (_hover) controller.repeat();
-              })
-          .shimmer(
-            duration: const Duration(seconds: 1),
-            curve: Curves.easeOut,
-          ),
+        )
+            .animate(
+                target: _hover ? 1 : 0,
+                onComplete: (controller) {
+                  if (_hover) controller.repeat();
+                })
+            .shimmer(
+              duration: const Duration(seconds: 1),
+              curve: Curves.easeOut,
+            ),
+      ),
     );
   }
 }

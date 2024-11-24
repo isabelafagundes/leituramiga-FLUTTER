@@ -83,7 +83,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       setState(() => _carregando = true);
       await _usuarioComponent.obterPerfil();
       await _instituicaoComponent.obterInstituicoes();
-      await notificarCasoErro(() async => await _usuarioComponent.obterEndereco());
+      await notificarCasoErro(() async => await _usuarioComponent.obterEndereco(), false);
       if (_usuarioComponent.enderecoEdicao != null)
         await _usuarioComponent.obterCidades(_usuarioComponent.enderecoEdicao!.municipio.estado);
       _preencherControllers();
@@ -272,30 +272,49 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
   }
 
   Future<void> _salvarUsuario() async {
-    _usuarioComponent.atualizarUsuarioMemoria(usuario);
-    await notificarCasoErro(() async => await _usuarioComponent.atualizarUsuario());
-    Notificacoes.mostrar("Usuário atualizado com sucesso", Emoji.SUCESSO);
+    try {
+      setState(() => _carregando = true);
+      _usuarioComponent.atualizarUsuarioMemoria(usuario);
+      await notificarCasoErro(() async => await _usuarioComponent.atualizarUsuario());
+      Notificacoes.mostrar("Usuário atualizado com sucesso", Emoji.SUCESSO);
+    } catch (e) {
+      Notificacoes.mostrar("Erro ao atualizar usuário", Emoji.ERRO);
+    }
+    setState(() => _carregando = false);
   }
 
   Future<void> _salvarEndereco() async {
-    if (!_validarCamposEndereco() || endereco == null) {
-      return Notificacoes.mostrar("Preencha todos os campos do endereço");
+    try {
+      setState(() => _carregando = true);
+      if (!_validarCamposEndereco() || endereco == null) {
+        return Notificacoes.mostrar("Preencha todos os campos do endereço");
+      }
+      _usuarioComponent.atualizarEnderecoMemoria(endereco!);
+      await notificarCasoErro(() async => await _usuarioComponent.atualizarEndereco());
+      Notificacoes.mostrar("Endereço atualizado com sucesso", Emoji.SUCESSO);
+    } catch (e) {
+      Notificacoes.mostrar("Erro ao atualizar usuário", Emoji.ERRO);
     }
-    _usuarioComponent.atualizarEnderecoMemoria(endereco!);
-    await notificarCasoErro(() async => await _usuarioComponent.atualizarEndereco());
-    Notificacoes.mostrar("Endereço atualizado com sucesso", Emoji.SUCESSO);
+
+    setState(() => _carregando = false);
   }
 
   Future<void> _excluirEndereco() async {
-    bool? excluir = await showDialog(
-        context: context, builder: (context) => _obterPopUpPadrao(context, "Deseja realmente excluir o endereço?"));
-    if (excluir == null) return;
-    if (excluir)
-      await notificarCasoErro(() async {
-        await _usuarioComponent.desativarEndereco(_usuarioComponent.enderecoEdicao!.numero!);
-        Notificacoes.mostrar("Endereço excluído com sucesso!", Emoji.SUCESSO);
-        Rota.navegar(context, Rota.PERFIL);
-      });
+    try {
+      setState(() => _carregando = true);
+      bool? excluir = await showDialog(
+          context: context, builder: (context) => _obterPopUpPadrao(context, "Deseja realmente excluir o endereço?"));
+      if (excluir == null) return;
+      if (excluir)
+        await notificarCasoErro(() async {
+          await _usuarioComponent.desativarEndereco(_usuarioComponent.enderecoEdicao!.numero!);
+          Notificacoes.mostrar("Endereço excluído com sucesso!", Emoji.SUCESSO);
+          Rota.navegar(context, Rota.PERFIL);
+        });
+    } catch (e) {
+      Notificacoes.mostrar("Erro ao excluir endereço", Emoji.ERRO);
+    }
+    setState(() => _carregando = false);
   }
 
   Future<void> _excluirUsuario() async {

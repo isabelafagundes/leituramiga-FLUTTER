@@ -3,10 +3,10 @@ import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/dica.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/empty_state.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/grid/grid_livros.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class ConteudoSelecaoLivrosWidget extends StatelessWidget {
@@ -76,18 +76,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
         Expanded(
           child: livros.isEmpty
               ? Column(
-                  children: [
-                    TextoWidget(
-                      tema: tema,
-                      texto: "Nenhum livro selecionado!",
-                      weight: FontWeight.w500,
-                    ),
-                    SizedBox(height: tema.espacamento),
-                    const SvgWidget(
-                      nomeSvg: "empty_state",
-                      altura: 80,
-                    ),
-                  ],
+                  children: [EmptyStateWidget(tema: tema)],
                 )
               : Padding(
                   padding: const EdgeInsets.all(8.0),

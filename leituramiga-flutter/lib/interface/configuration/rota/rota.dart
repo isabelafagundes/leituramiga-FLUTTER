@@ -23,6 +23,7 @@ enum Rota {
   DETALHES_SOLICITACAO(url: "detalhes-solicitacao/:numeroSolicitacao", pageInfo: DetalhesSolicitacaoRoute.page),
   HISTORICO(url: "historico", pageInfo: HistoricoRoute.page),
   ACEITE_SOLICITACAO(url: "aceitar-solicitacao", pageInfo: AceiteSolicitacaoRoute.page),
+  ATIVACAO_USUARIO(url: "ativar-usuario", pageInfo: AtivarUsuarioRoute.page),
   SOLICITACAO(url: "solicitacao/:numeroSolicitacao", pageInfo: EditarSolicitacaoRoute.page);
 
   final PageInfo<dynamic> pageInfo;
@@ -57,6 +58,7 @@ enum Rota {
             adicionar(rota: LOGIN, inicial: true, guards: [UsuarioNaoLogadoGuard()]),
             adicionar(rota: CADASTRO_USUARIO, guards: [UsuarioNaoLogadoGuard()]),
             adicionar(rota: SENHA, guards: [UsuarioNaoLogadoGuard()]),
+            adicionar(rota: ATIVACAO_USUARIO, guards: [UsuarioNaoLogadoGuard()]),
           ],
         ),
       ];
