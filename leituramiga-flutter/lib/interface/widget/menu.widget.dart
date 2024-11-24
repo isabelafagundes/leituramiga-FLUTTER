@@ -102,7 +102,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                 IgnorePointer(
                   child: Container(
                     height: 50,
-                    constraints: BoxConstraints(maxWidth: 300),
+                    constraints: BoxConstraints(maxWidth: 150),
                     child: TextFormField(
                       focusNode: _focusNode,
                       cursorColor: _visivel ? Color(widget.tema.accent) : Colors.transparent,

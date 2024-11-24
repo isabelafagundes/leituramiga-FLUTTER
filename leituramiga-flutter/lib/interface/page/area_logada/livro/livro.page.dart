@@ -14,6 +14,7 @@ import 'package:projeto_leituramiga/interface/widget/background/background.widge
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/chip/chip.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/hint_padrao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/imagem.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
@@ -292,19 +293,34 @@ class _LivrosPageState extends State<LivrosPage> {
                                 if (_livrosComponent.livroSelecionado?.tiposSolicitacao
                                         .contains(TipoSolicitacao.TROCA) ??
                                     false) ...[
-                                  Opacity(
-                                    opacity: _autenticacaoState.usuario!.numeroDeLivros == 0 ? 0.5 : 1,
-                                    child: IgnorePointer(
-                                      ignoring: _autenticacaoState.usuario!.numeroDeLivros == 0,
-                                      child: ChipWidget(
+                                  Row(
+                                    children: [
+                                      HintPadraoWidget(
                                         tema: tema,
-                                        cor: kCorPessego,
-                                        texto: "Troca",
-                                        corTexto: kCorFonte,
-                                        ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.TROCA,
-                                        aoClicar: () => _selecionarTipoSolicitacao(TipoSolicitacao.TROCA),
+                                        exibir: _autenticacaoState.usuario!.numeroDeLivros == 0,
+                                        textoTooltip: "Você precisa ter livros cadastrados para efetuar uma troca",
+                                        child: Icon(
+                                          Icons.info_sharp,
+                                          color: kCorPessego,
+                                          size: 25,
+                                        ),
                                       ),
-                                    ),
+                                      SizedBox(width: tema.espacamento/2),
+                                      IgnorePointer(
+                                        ignoring: _autenticacaoState.usuario!.numeroDeLivros == 0,
+                                        child: Opacity(
+                                          opacity: _autenticacaoState.usuario!.numeroDeLivros == 0 ? 0.5 : 1,
+                                          child: ChipWidget(
+                                            tema: tema,
+                                            cor: kCorPessego,
+                                            texto: "Troca",
+                                            corTexto: kCorFonte,
+                                            ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.TROCA,
+                                            aoClicar: () => _selecionarTipoSolicitacao(TipoSolicitacao.TROCA),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(width: tema.espacamento * 2),
                                 ],
