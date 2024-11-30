@@ -68,7 +68,6 @@ class _HomePageState extends State<HomePage> {
       await _livrosComponent.obterLivrosIniciais();
       await _livrosComponent.obterCategorias();
       await _livrosComponent.obterInstituicoes();
-      await _usuariosComponent.obterUsuariosIniciais();
       setState(() => _carregando = false);
     });
   }
@@ -139,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       BarraPesquisaWidget(
                         tema: tema,
-                        aoPesquisar: (valor) {},
+                        aoPesquisar: _pesquisar,
                         controller: _controllerPesquisa,
                       ),
                       SizedBox(width: tema.espacamento),
@@ -166,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                   tema: tema,
                   texto: "Encontre seu livro",
                   cor: Color(tema.baseContent),
-                  tamanho: tema.tamanhoFonteXG + 4,
+                  tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteG + 4 : tema.tamanhoFonteXG + 4,
                   weight: FontWeight.w500,
                 ),
                 SizedBox(height: tema.espacamento * 2),

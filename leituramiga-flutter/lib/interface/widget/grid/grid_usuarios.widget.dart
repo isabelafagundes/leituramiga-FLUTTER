@@ -33,6 +33,7 @@ class GridUsuariosWidget extends StatelessWidget {
           )
         : GridView.builder(
             shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: _obterQuantidadePorLinha(context),
               mainAxisExtent: 130,

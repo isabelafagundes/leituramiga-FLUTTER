@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu.widget.dart';
@@ -85,13 +86,14 @@ class FormularioUsuarioWidget extends StatelessWidget {
               ),
               SizedBox(
                 width: tema.espacamento * 2,
+                height: tema.espacamento * 2,
               ),
               Flexible(
                 child: InputWidget(
                   tema: tema,
                   obrigatorio: false,
                   controller: controllerTelefone,
-                  label: "Número de telefone",
+                  label: "Telefone",
                   formatters: [_mascaraTelefone],
                   tamanho: tema.tamanhoFonteM,
                   onChanged: (valor) {},

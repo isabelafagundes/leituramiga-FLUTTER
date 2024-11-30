@@ -286,67 +286,70 @@ class _LivrosPageState extends State<LivrosPage> {
                               cor: Color(tema.baseContent),
                             ),
                             SizedBox(height: tema.espacamento * 2),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                if (_livrosComponent.livroSelecionado?.tiposSolicitacao
-                                        .contains(TipoSolicitacao.TROCA) ??
-                                    false) ...[
-                                  Row(
-                                    children: [
-                                      HintPadraoWidget(
-                                        tema: tema,
-                                        exibir: _autenticacaoState.usuario!.numeroDeLivros == 0,
-                                        textoTooltip: "Você precisa ter livros cadastrados para efetuar uma troca",
-                                        child: Icon(
-                                          Icons.info_sharp,
-                                          color: kCorPessego,
-                                          size: 25,
-                                        ),
-                                      ),
-                                      SizedBox(width: tema.espacamento/2),
-                                      IgnorePointer(
-                                        ignoring: _autenticacaoState.usuario!.numeroDeLivros == 0,
-                                        child: Opacity(
-                                          opacity: _autenticacaoState.usuario!.numeroDeLivros == 0 ? 0.5 : 1,
-                                          child: ChipWidget(
-                                            tema: tema,
-                                            cor: kCorPessego,
-                                            texto: "Troca",
-                                            corTexto: kCorFonte,
-                                            ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.TROCA,
-                                            aoClicar: () => _selecionarTipoSolicitacao(TipoSolicitacao.TROCA),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  if (_livrosComponent.livroSelecionado?.tiposSolicitacao
+                                          .contains(TipoSolicitacao.TROCA) ??
+                                      false) ...[
+                                    Row(
+                                      children: [
+                                        HintPadraoWidget(
+                                          tema: tema,
+                                          exibir: _autenticacaoState.usuario!.numeroDeLivros == 0,
+                                          textoTooltip: "Você precisa ter livros cadastrados para efetuar uma troca",
+                                          child: Icon(
+                                            Icons.info_sharp,
+                                            color: kCorPessego,
+                                            size: 25,
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(width: tema.espacamento * 2),
+                                        SizedBox(width: tema.espacamento/2),
+                                        IgnorePointer(
+                                          ignoring: _autenticacaoState.usuario!.numeroDeLivros == 0,
+                                          child: Opacity(
+                                            opacity: _autenticacaoState.usuario!.numeroDeLivros == 0 ? 0.5 : 1,
+                                            child: ChipWidget(
+                                              tema: tema,
+                                              cor: kCorPessego,
+                                              texto: "Troca",
+                                              corTexto: kCorFonte,
+                                              ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.TROCA,
+                                              aoClicar: () => _selecionarTipoSolicitacao(TipoSolicitacao.TROCA),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(width: tema.espacamento),
+                                  ],
+                                  if (_livrosComponent.livroSelecionado!.tiposSolicitacao
+                                      .contains(TipoSolicitacao.EMPRESTIMO)) ...[
+                                    ChipWidget(
+                                      tema: tema,
+                                      cor: kCorVerde,
+                                      texto: "Empréstimo",
+                                      ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.EMPRESTIMO,
+                                      corTexto: kCorFonte,
+                                      aoClicar: () => _selecionarTipoSolicitacao(TipoSolicitacao.EMPRESTIMO),
+                                    ),
+                                    SizedBox(width: tema.espacamento),
+                                  ],
+                                  if (_livrosComponent.livroSelecionado!.tiposSolicitacao
+                                      .contains(TipoSolicitacao.DOACAO))
+                                    ChipWidget(
+                                      tema: tema,
+                                      cor: kCorAzul,
+                                      texto: "Doação",
+                                      corTexto: kCorFonte,
+                                      ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.DOACAO,
+                                      aoClicar: () => _selecionarTipoSolicitacao(TipoSolicitacao.DOACAO),
+                                    ),
                                 ],
-                                if (_livrosComponent.livroSelecionado!.tiposSolicitacao
-                                    .contains(TipoSolicitacao.EMPRESTIMO)) ...[
-                                  ChipWidget(
-                                    tema: tema,
-                                    cor: kCorVerde,
-                                    texto: "Empréstimo",
-                                    ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.EMPRESTIMO,
-                                    corTexto: kCorFonte,
-                                    aoClicar: () => _selecionarTipoSolicitacao(TipoSolicitacao.EMPRESTIMO),
-                                  ),
-                                  SizedBox(width: tema.espacamento * 2),
-                                ],
-                                if (_livrosComponent.livroSelecionado!.tiposSolicitacao
-                                    .contains(TipoSolicitacao.DOACAO))
-                                  ChipWidget(
-                                    tema: tema,
-                                    cor: kCorAzul,
-                                    texto: "Doação",
-                                    corTexto: kCorFonte,
-                                    ativado: _tipoSolicitacaoSelecionado == TipoSolicitacao.DOACAO,
-                                    aoClicar: () => _selecionarTipoSolicitacao(TipoSolicitacao.DOACAO),
-                                  ),
-                              ],
+                              ),
                             ),
                             SizedBox(height: tema.espacamento * 3),
                             BotaoWidget(

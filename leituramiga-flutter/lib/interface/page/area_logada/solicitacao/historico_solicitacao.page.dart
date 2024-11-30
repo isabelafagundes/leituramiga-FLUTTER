@@ -9,10 +9,18 @@ import 'package:projeto_leituramiga/interface/configuration/module/app.module.da
 import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
+import 'package:projeto_leituramiga/interface/util/sobreposicao.util.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/calendario_range.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_solicitacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/empty_state.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/layout_flexivel.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
+
+import '../../../widget/svg/svg.widget.dart';
 
 @RoutePage()
 class HistoricoPage extends StatefulWidget {
@@ -55,7 +63,7 @@ class _HistoricoPageState extends State<HistoricoPage> {
     return BackgroundWidget(
       child: ConteudoMenuLateralWidget(
         tema: tema,
-        voltar: ()=>Rota.navegar(context, Rota.HOME),
+        voltar: () => Rota.navegar(context, Rota.HOME),
         child: Column(
           children: [
             TextoWidget(
@@ -64,35 +72,51 @@ class _HistoricoPageState extends State<HistoricoPage> {
               weight: FontWeight.w500,
               tamanho: tema.tamanhoFonteXG + 4,
             ),
+            SizedBox(height: tema.espacamento * 2),
+            Row(
+              children: [
+                BotaoPequenoWidget(
+                  tema: tema,
+                  altura: 40,
+                  label: "Filtrar",
+                  corFonte: Color(tema.baseContent),
+                  corFundo: Color(tema.base200),
+                  icone: SvgWidget(nomeSvg: 'filtro', cor: Color(tema.baseContent), altura: 16),
+                  aoClicar: () => SobreposicaoUtil.exibir(context, _datePicker),
+                ),
+              ],
+            ),
             SizedBox(height: tema.espacamento * 4),
             Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount:_obterQuantidadeColunas(context),
-                  crossAxisSpacing: tema.espacamento * 2,
-                  mainAxisSpacing: tema.espacamento * 2,
-                  childAspectRatio: 1.5,
-                  mainAxisExtent: 164,
-                ),
-                itemCount: solicitacaoComponent.itensPaginados.length,
-                itemBuilder: (context, index) {
-                  final solicitacao = solicitacaoComponent.itensPaginados[index];
-                  return CardSolicitacaoWidget(
-                    tema: tema,
-                    solicitacao: solicitacao,
-                    aoVisualizar: (numero) async {
-                      Rota.navegarComArgumentos(
-                        context,
-                        DetalhesSolicitacaoRoute(
-                          numeroSolicitacao: numero,
-                        ),
-                      );
-                      Navigator.pop(context, true);
-                    },
-                    usuarioPerfil: '',
-                  );
-                },
-              ),
+              child: solicitacaoComponent.itensPaginados.isEmpty
+                  ? EmptyStateWidget(tema: tema)
+                  : GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: _obterQuantidadeColunas(context),
+                        crossAxisSpacing: tema.espacamento * 2,
+                        mainAxisSpacing: tema.espacamento * 2,
+                        childAspectRatio: 1.5,
+                        mainAxisExtent: 168,
+                      ),
+                      itemCount: solicitacaoComponent.itensPaginados.length,
+                      itemBuilder: (context, index) {
+                        final solicitacao = solicitacaoComponent.itensPaginados[index];
+                        return CardSolicitacaoWidget(
+                          tema: tema,
+                          solicitacao: solicitacao,
+                          aoVisualizar: (numero) async {
+                            Rota.navegarComArgumentos(
+                              context,
+                              DetalhesSolicitacaoRoute(
+                                numeroSolicitacao: numero,
+                              ),
+                            );
+                            Navigator.pop(context, true);
+                          },
+                          usuarioPerfil: '',
+                        );
+                      },
+                    ),
             ),
           ],
         ),
@@ -101,10 +125,26 @@ class _HistoricoPageState extends State<HistoricoPage> {
     );
   }
 
+  Widget get _datePicker => LayoutFlexivelWidget(
+        tema: tema,
+        alturaOverlay: 600,
+        overlayChild: CalendarioRangeWidget(
+          tema: tema,
+          aoSelecionarDataRange: (dataInicio, dataFim) async {
+            Navigator.pop(context);
+          },
+        ),
+        drawerChild: CalendarioRangeWidget(
+          tema: tema,
+          aoSelecionarDataRange: (dataInicio, dataFim) async {
+            Navigator.pop(context);
+          },
+        ),
+      );
+
   int _obterQuantidadeColunas(BuildContext context) {
     if (Responsive.largura(context) > 1400) return 3;
     if (Responsive.largura(context) > 900) return 2;
     return 1;
   }
-
 }

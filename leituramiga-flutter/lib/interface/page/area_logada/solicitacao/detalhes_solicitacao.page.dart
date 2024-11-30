@@ -110,82 +110,87 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
         carregando:
             _solicitacaoComponent.carregando || solicitacao == null || _usuarioComponent.carregando || _carregando,
         voltar: () => Rota.navegar(context, Rota.HOME),
-        child: SingleChildScrollView(
-          physics:
-              _abaSelecionada == DetalhesSolicitacao.SELECAO_LIVROS || _abaSelecionada == DetalhesSolicitacao.LIVROS
-                  ? const NeverScrollableScrollPhysics()
-                  : const AlwaysScrollableScrollPhysics(),
-          child: _usuarioComponent.usuarioSelecionado == null || solicitacao == null || _carregando
-              ? SizedBox()
-              : SizedBox(
-                  height: Responsive.altura(context) * .88,
-                  child: _abaSelecionada == DetalhesSolicitacao.SELECAO_LIVROS
-                      ? ConteudoSelecaoLivrosWidget(
-                          tema: tema,
-                          aceitarSolicitacao: _aceitarSolicitacao,
-                          textoPopUp: "Deseja selecionar os livros e aceitar a solicitação?",
-                          aoClicarLivro: _solicitacaoComponent.selecionarLivro,
-                          aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
-                          verificarSelecao: _solicitacaoComponent.verificarSelecao,
-                          livros: _usuarioComponent.itensPaginados,
-                          validarSelecao: _solicitacaoComponent.validarNumeroLivrosSelecionados,
-                          navegarParaSolicitacao: () async {
-                            _solicitacaoComponent.validarNumeroLivrosSelecionados();
-                            _atualizarAbaSelecionada(DetalhesSolicitacao.LIVROS);
-                          },
-                        )
-                      : Flex(
-                          direction: Axis.vertical,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (solicitacao?.status == TipoStatusSolicitacao.EM_ANDAMENTO) ...[
-                              SizedBox(
-                                child: BotaoWidget(
-                                  tema: tema,
-                                  corTexto: Color(tema.base200),
-                                  altura: 45,
-                                  largura: 140,
-                                  texto: "Editar",
-                                  aoClicar: () => Rota.navegarComArgumentos(
-                                    context,
-                                    EditarSolicitacaoRoute(
-                                      numeroSolicitacao: widget.numeroSolicitacao,
+        child: SizedBox(
+          height: Responsive.altura(context),
+          child: SingleChildScrollView(
+            physics:
+                _abaSelecionada == DetalhesSolicitacao.SELECAO_LIVROS || _abaSelecionada == DetalhesSolicitacao.LIVROS
+                    ? const NeverScrollableScrollPhysics()
+                    : const AlwaysScrollableScrollPhysics(),
+            child: _usuarioComponent.usuarioSelecionado == null || solicitacao == null || _carregando
+                ? SizedBox()
+                : SizedBox(
+                    height: 850,
+                    child: _abaSelecionada == DetalhesSolicitacao.SELECAO_LIVROS
+                        ? ConteudoSelecaoLivrosWidget(
+                            tema: tema,
+                            aceitarSolicitacao: _aceitarSolicitacao,
+                            textoPopUp: "Deseja selecionar os livros e aceitar a solicitação?",
+                            aoClicarLivro: _solicitacaoComponent.selecionarLivro,
+                            aoSelecionarLivro: _solicitacaoComponent.selecionarLivro,
+                            verificarSelecao: _solicitacaoComponent.verificarSelecao,
+                            livros: _usuarioComponent.itensPaginados,
+                            validarSelecao: _solicitacaoComponent.validarNumeroLivrosSelecionados,
+                            navegarParaSolicitacao: () async {
+                              _solicitacaoComponent.validarNumeroLivrosSelecionados();
+                              _atualizarAbaSelecionada(DetalhesSolicitacao.LIVROS);
+                            },
+                          )
+                        : Flex(
+                            direction: Axis.vertical,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (solicitacao?.status == TipoStatusSolicitacao.EM_ANDAMENTO) ...[
+                                SizedBox(
+                                  child: BotaoWidget(
+                                    tema: tema,
+                                    corTexto: Color(tema.base200),
+                                    altura: 45,
+                                    largura: 140,
+                                    texto: "Editar",
+                                    aoClicar: () => Rota.navegarComArgumentos(
+                                      context,
+                                      EditarSolicitacaoRoute(
+                                        numeroSolicitacao: widget.numeroSolicitacao,
+                                      ),
                                     ),
+                                    icone: Icon(
+                                      Icons.edit,
+                                      color: Color(tema.base200),
+                                    ),
+                                    corFundo: Color(tema.accent),
                                   ),
-                                  icone: Icon(
-                                    Icons.edit,
-                                    color: Color(tema.base200),
-                                  ),
-                                  corFundo: Color(tema.accent),
                                 ),
+                                SizedBox(height: tema.espacamento * 4, width: tema.espacamento * 2),
+                              ],
+                              TabWidget(
+                                tema: tema,
+                                validarAtivo: (opcao) => _abaSelecionada.descricao != opcao,
+                                opcoes: _opcoes,
+                                aoSelecionar: (index) =>
+                                    _atualizarAbaSelecionada(DetalhesSolicitacao.deDescricao(_opcoes[index])),
                               ),
-                              SizedBox(height: tema.espacamento * 4, width: tema.espacamento * 2),
+                              if (solicitacao != null)
+                                _obterAba,
+                              if (_abaSelecionada == DetalhesSolicitacao.INFORMACOES &&
+                                  (solicitacao?.status.permiteEdicao ?? false))
+                                Flex(
+                                  direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+
+                                    _obterBotaoEsquerdo(context),
+                                    SizedBox(height: tema.espacamento * 2, width: tema.espacamento * 2),
+                                    _obterBotaoDireito,
+                                  ],
+                                )
                             ],
-                            TabWidget(
-                              tema: tema,
-                              validarAtivo: (opcao) => _abaSelecionada.descricao != opcao,
-                              opcoes: _opcoes,
-                              aoSelecionar: (index) =>
-                                  _atualizarAbaSelecionada(DetalhesSolicitacao.deDescricao(_opcoes[index])),
-                            ),
-                            if (solicitacao != null) _obterAba,
-                            if (_abaSelecionada == DetalhesSolicitacao.INFORMACOES &&
-                                (solicitacao?.status.permiteEdicao ?? false))
-                              Flex(
-                                direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  _obterBotaoEsquerdo(context),
-                                  SizedBox(height: tema.espacamento * 2, width: tema.espacamento * 2),
-                                  _obterBotaoDireito,
-                                ],
-                              )
-                          ],
-                        ),
-                ),
+                          ),
+                  ),
+          ),
         ),
       ),
     );

@@ -121,6 +121,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                                   tema: tema,
                                   controller: controllerFormaEntrega,
                                   atualizar: atualizar,
+                                  semPesquisa: true,
                                   readOnly: semSelecaoLivros,
                                   valorSelecionado:
                                       controllerFormaEntrega.text.isNotEmpty ? controllerFormaEntrega.text : null,

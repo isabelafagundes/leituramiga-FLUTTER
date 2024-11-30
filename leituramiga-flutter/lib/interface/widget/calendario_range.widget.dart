@@ -4,43 +4,51 @@ import 'package:leituramiga/domain/data_hora.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 
-class CalendarioWidget extends StatefulWidget {
+class CalendarioRangeWidget extends StatefulWidget {
   final Tema tema;
   final DateTime? dataInicial;
-  final Function(DateTime) aoSelecionarData;
+  final DateTime? dataFinal;
+  final Function(DateTime, DateTime) aoSelecionarDataRange;
 
-  const CalendarioWidget({
+  const CalendarioRangeWidget({
     super.key,
     required this.tema,
-    required this.aoSelecionarData,
+    required this.aoSelecionarDataRange,
     this.dataInicial,
+    this.dataFinal,
   });
 
   @override
-  State<CalendarioWidget> createState() => _CalendarioWidgetState();
+  State<CalendarioRangeWidget> createState() => _CalendarioRangeWidgetState();
 }
 
-class _CalendarioWidgetState extends State<CalendarioWidget> {
-  DateTime dataSelecionada = DataHora.hoje().valor;
+class _CalendarioRangeWidgetState extends State<CalendarioRangeWidget> {
+  DateTime? dataInicioSelecionada;
+  DateTime? dataFimSelecionada;
 
   @override
   void initState() {
     super.initState();
-    dataSelecionada = widget.dataInicial ?? DataHora.hoje().valor;
+    dataInicioSelecionada = widget.dataInicial ?? DataHora.hoje().valor;
+    dataFimSelecionada = widget.dataFinal;
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        DatePicker(
+        RangeDatePicker(
           maxDate: DateTime(2200, 12, 31),
-          minDate: DataHora.hoje().valor,
-          initialDate: DataHora.hoje().valor,
+          minDate: DateTime(2024, 01, 12),
+          initialDate: DateTime(2024, 01, 12),
           enabledCellsTextStyle: textStyle,
-          selectedCellTextStyle: textStyleSelected,
           leadingDateTextStyle: textStyle,
-          selectedDate: dataSelecionada,
+          selectedCellsTextStyle: textStyleSelected,
+          singelSelectedCellTextStyle: textStyleSelected,
+          singelSelectedCellDecoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Color(widget.tema.accent),
+          ),
           slidersColor: Color(widget.tema.accent),
           highlightColor: Color(widget.tema.accent),
           splashColor: Color(widget.tema.accent),
@@ -52,19 +60,19 @@ class _CalendarioWidgetState extends State<CalendarioWidget> {
           currentDateTextStyle: textStyle,
           disabledCellsDecoration: const BoxDecoration(shape: BoxShape.circle),
           disabledCellsTextStyle: textStyleDisabled,
-          selectedCellDecoration: BoxDecoration(
-            color: Color(widget.tema.accent),
-            shape: BoxShape.circle,
-          ),
           enabledCellsDecoration: const BoxDecoration(shape: BoxShape.circle),
-          onDateSelected: (data) => setState(() => dataSelecionada = data),
+          onRangeSelected: (dataRange) => setState(() {
+            dataInicioSelecionada = dataRange.start;
+            dataFimSelecionada = dataRange.end;
+          }),
         ),
         SizedBox(height: widget.tema.espacamento * 4),
         BotaoWidget(
           tema: widget.tema,
+          desabilitado: dataInicioSelecionada == null || dataFimSelecionada == null,
           texto: 'Selecionar',
           nomeIcone: "seta/arrow-long-right",
-          aoClicar: () => widget.aoSelecionarData(dataSelecionada),
+          aoClicar: () => widget.aoSelecionarDataRange(dataInicioSelecionada!, dataFimSelecionada!),
         ),
       ],
     );
@@ -85,13 +93,6 @@ class _CalendarioWidgetState extends State<CalendarioWidget> {
   TextStyle get textStyleSelected => TextStyle(
         color: Color(widget.tema.base200),
         fontSize: widget.tema.tamanhoFonteM,
-        fontFamily: widget.tema.familiaDeFontePrimaria,
-      );
-
-  TextStyle get textStyleBold => TextStyle(
-        color: Color(widget.tema.baseContent),
-        fontSize: widget.tema.tamanhoFonteM,
-        fontWeight: FontWeight.w500,
         fontFamily: widget.tema.familiaDeFontePrimaria,
       );
 }

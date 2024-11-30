@@ -114,80 +114,55 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (_etapaCadastro != EtapaCadastro.REDIRECIONAMENTO && Responsive.larguraP(context)) ...[
-                SizedBox(height: tema.espacamento * 2),
-                Container(
-                  width: 235,
-                  child: LogoWidget(
-                    tema: tema,
-                    tamanho: tema.tamanhoFonteM * 2,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
+                child: CardBaseWidget(
+                  largura: 640,
+                  altura: Responsive.larguraP(context)
+                      ? _etapaCadastro == EtapaCadastro.ENDERECO
+                          ? 800
+                          : 675
+                      : 750,
+                  cursorDeClick: false,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: tema.espacamento * 2,
+                    vertical: tema.espacamento * 2,
                   ),
-                ),
-                SizedBox(height: tema.espacamento * 2),
-                EtapasWidget(
                   tema: tema,
-                  possuiQuatroEtapas: true,
-                  corFundo: Color(tema.base200).withOpacity(.8),
-                  etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
-                ),
-                SizedBox(height: tema.espacamento * 4),
-              ],
-              Responsive.larguraP(context)
-                  ? Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: tema.espacamento * 2,
-                        vertical: tema.espacamento,
-                      ),
-                      child: _obterPaginaAtual(),
-                    )
-                  : Padding(
-                      padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
-                      child: CardBaseWidget(
-                        largura: 640,
-                        altura: 750,
-                        cursorDeClick: false,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: tema.espacamento * 2,
-                          vertical: tema.espacamento * 2,
-                        ),
-                        tema: tema,
-                        child: Flex(
-                          direction: Axis.vertical,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                  child: Flex(
+                    direction: Axis.vertical,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (_etapaCadastro != EtapaCadastro.REDIRECIONAMENTO)
+                        Column(
                           children: [
-                            if (_etapaCadastro != EtapaCadastro.REDIRECIONAMENTO)
-                              Flexible(
-                                flex: 2,
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      width: 235,
-                                      child: LogoWidget(
-                                        tema: tema,
-                                        tamanho: tema.tamanhoFonteM * 2,
-                                      ),
-                                    ),
-                                    SizedBox(height: tema.espacamento * 2),
-                                    EtapasWidget(
-                                      tema: tema,
-                                      possuiQuatroEtapas: true,
-                                      etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
-                                    ),
-                                  ],
-                                ),
+                            Container(
+                              width: 235,
+                              child: LogoWidget(
+                                tema: tema,
+                                tamanho: tema.tamanhoFonteM * 2,
                               ),
-                            Flexible(
-                              flex: 12,
-                              child: Padding(
-                                padding: EdgeInsets.all(tema.espacamento * 2),
-                                child: _obterPaginaAtual(),
-                              ),
+                            ),
+                            SizedBox(height: tema.espacamento * 2),
+                            EtapasWidget(
+                              tema: tema,
+                              possuiQuatroEtapas: true,
+                              etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
                             ),
                           ],
                         ),
+                      Flexible(
+                        flex: 12,
+                        child: Padding(
+                          padding: EdgeInsets.all(tema.espacamento * 2),
+                          child: _obterPaginaAtual(),
+                        ),
                       ),
-                    ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -198,11 +173,11 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   Widget _obterPaginaAtual() {
     return switch (_etapaCadastro) {
       EtapaCadastro.DADOS_GERAIS => SizedBox(
-          height: 810,
+          height: !Responsive.larguraP(context) ? 810 : 550,
           child: Column(
             children: [
               SizedBox(
-                height: !Responsive.larguraP(context) ? 450 : 550,
+                height: !Responsive.larguraP(context) ? 450 : 400,
                 child: FormularioUsuarioWidget(
                   tema: tema,
                   atualizar: () => setState(() {}),
@@ -462,6 +437,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   Telefone? get _obterTelefone {
     String telefone = controllerTelefone.text.replaceAll("(", "").replaceAll(")", "");
     telefone = telefone.replaceAll("-", "").replaceAll(" ", "");
+    if (telefone.length < 11) throw TelefoneInvalido("Tente novamente!");
 
     return controllerTelefone.text.isNotEmpty
         ? Telefone.criar(

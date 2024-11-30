@@ -47,7 +47,7 @@ class _CarrosselCategoriaWidgetState extends State<CarrosselCategoriaWidget> {
               alignment: Alignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 5),
+                  padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento *4),
                   child: ListView.builder(
                     controller: _controller,
                     shrinkWrap: true,

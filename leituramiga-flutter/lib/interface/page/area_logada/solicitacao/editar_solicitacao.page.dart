@@ -140,7 +140,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
           children: [
             SizedBox(
               child: Flex(
-                direction: Responsive.larguraPP(context) ? Axis.vertical : Axis.horizontal,
+                direction: Responsive.largura(context) < 320 ? Axis.vertical : Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,

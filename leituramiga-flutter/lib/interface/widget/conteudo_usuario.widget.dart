@@ -4,7 +4,6 @@ import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/icone_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
-import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto_com_icone.widget.dart';
 
@@ -30,10 +29,10 @@ class ConteudoUsuarioWidget extends StatelessWidget {
         children: [
           Flexible(
             child: Container(
-              width: 100,
+              width: Responsive.larguraP(context) ? 80 : 100,
               child: IconeUsuarioWidget(
                 tema: tema,
-                tamanho: 100,
+                tamanho: Responsive.larguraP(context) ? 80 : 100,
                 corPerfil: kCorPessego.withOpacity(.5),
                 corLivros: Color(tema.base200),
                 textoPerfil: usuario.nome,
@@ -43,7 +42,7 @@ class ConteudoUsuarioWidget extends StatelessWidget {
           ),
           SizedBox(
             width: tema.espacamento * 4,
-            height: tema.espacamento * 4,
+            height: Responsive.larguraP(context) ? tema.espacamento * 2 : tema.espacamento * 4,
           ),
           Flexible(
             flex: Responsive.larguraP(context) ? 1 : 4,
@@ -62,7 +61,7 @@ class ConteudoUsuarioWidget extends StatelessWidget {
                           texto: usuario.nome,
                           cor: Color(tema.baseContent),
                           weight: FontWeight.w500,
-                          tamanho: tema.tamanhoFonteM * 2,
+                          tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteXG : tema.tamanhoFonteM * 2,
                         ),
                       ),
                       SizedBox(width: tema.espacamento * 2),
@@ -73,7 +72,7 @@ class ConteudoUsuarioWidget extends StatelessWidget {
                     tema: tema,
                     texto: "@${usuario.nomeUsuario}" ?? "",
                     cor: Color(tema.baseContent),
-                    tamanho: tema.tamanhoFonteXG,
+                    tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteG : tema.tamanhoFonteXG,
                   ),
                   SizedBox(height: tema.espacamento * 2),
                   TextoWidget(
@@ -82,20 +81,20 @@ class ConteudoUsuarioWidget extends StatelessWidget {
                         ? "Olá, estou usando o LeiturAmiga!"
                         : usuario.descricao!,
                     cor: Color(tema.baseContent),
-                    tamanho: tema.tamanhoFonteM + 2,
+                    tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteM : tema.tamanhoFonteM + 2,
                   ),
                   SizedBox(height: tema.espacamento * 2),
                   TextoComIconeWidget(
                     tema: tema,
                     nomeSvg: 'academico/academic-cap',
-                    tamanhoFonte: tema.tamanhoFonteM + 2,
+                    tamanhoFonte: Responsive.larguraP(context) ? tema.tamanhoFonteM : tema.tamanhoFonteM + 2,
                     texto: usuario.instituicaoDeEnsino?.nome.toString() ?? "Não informado.",
                   ),
                   SizedBox(height: tema.espacamento / 2),
                   TextoComIconeWidget(
                     tema: tema,
                     nomeSvg: 'menu/map-pin-fill',
-                    tamanhoFonte: tema.tamanhoFonteM + 2,
+                    tamanhoFonte: Responsive.larguraP(context) ? tema.tamanhoFonteM : tema.tamanhoFonteM + 2,
                     texto: usuario.nomeMunicipio ?? "Não informado.",
                   ),
                 ],

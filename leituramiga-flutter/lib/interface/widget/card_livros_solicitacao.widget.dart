@@ -49,13 +49,13 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                   texto: "Livros da solicitação",
                   tema: widget.tema,
                   cor: Color(widget.tema.baseContent),
-                  tamanho: Responsive.larguraP(context)?widget.tema.tamanhoFonteM :widget.tema.tamanhoFonteXG + 4,
+                  tamanho: Responsive.larguraP(context) ? widget.tema.tamanhoFonteM : widget.tema.tamanhoFonteXG + 4,
                   weight: FontWeight.w500,
                 ),
                 const Spacer(),
                 BotaoPequenoWidget(
                   tema: widget.tema,
-                  label: "Adicionar livro",
+                  label: Responsive.larguraP(context) ? "Livro" : "Adicionar livro",
                   tamanhoFonte: widget.tema.tamanhoFonteM,
                   corFonte: Color(widget.tema.base200),
                   padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 2),
@@ -124,7 +124,9 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                                         children: [
                                           TextoWidget(
                                             texto: livro.nome,
-                                            tamanho: widget.tema.tamanhoFonteXG,
+                                            tamanho: Responsive.larguraP(context)
+                                                ? widget.tema.tamanhoFonteM
+                                                : widget.tema.tamanhoFonteXG,
                                             weight: FontWeight.w500,
                                             tema: widget.tema,
                                           ),
@@ -132,7 +134,9 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                                           TextoWidget(
                                             texto: livro.nomeAutor,
                                             tema: widget.tema,
-                                            tamanho: widget.tema.tamanhoFonteM + 2,
+                                            tamanho: Responsive.larguraP(context)
+                                                ? widget.tema.tamanhoFonteM - 2
+                                                : widget.tema.tamanhoFonteM + 4,
                                           ),
                                         ],
                                       ),
@@ -140,7 +144,7 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                                   ),
                                 ),
                               ),
-                              SizedBox(height: widget.tema.espacamento*2),
+                              SizedBox(height: widget.tema.espacamento * 2),
                             ],
                           );
                         },

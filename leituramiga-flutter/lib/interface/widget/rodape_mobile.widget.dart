@@ -91,7 +91,7 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
             ),
           ),
           if (widget.usuarioLogado) ...[
-            SizedBox(width: widget.tema.espacamento * 5),
+            SizedBox(width: widget.tema.espacamento * 4),
             BotaoNotificacaoWidget(
               tema: widget.tema,
               modoMobile: true,
@@ -99,7 +99,7 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
               numeroNotificacoes: widget.numeroNotificacoes,
               modoMinimizado: true,
             ),
-            SizedBox(width: widget.tema.espacamento * 5),
+            SizedBox(width: widget.tema.espacamento * 4),
             Flexible(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

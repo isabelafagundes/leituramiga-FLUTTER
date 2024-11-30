@@ -54,157 +54,166 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return BackgroundWidget(
       tema: tema,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
-              child: CardBaseWidget(
-                largura: 850,
-                altura: 550,
-                cursorDeClick: false,
-                padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 6, vertical: tema.espacamento * 3),
-                tema: tema,
-                child: Flex(
-                  direction: Axis.horizontal,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (Responsive.largura(context) > 1200)
-                      Flexible(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SvgWidget(
-                              nomeSvg: "garota_login",
-                              altura: 350,
-                            ),
-                            SizedBox(height: tema.espacamento * 2),
-                            SizedBox(
-                              child: TextoWidget(
-                                tema: tema,
-                                align: TextAlign.center,
-                                texto:
-                                    "Descubra, troque, e doe livros enquanto transforma sua experiência de leitura ainda mais incrivel!",
-                                cor: Color(tema.baseContent),
-                                maxLines: 5,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    if (Responsive.largura(context) > 1200) ...[
-                      SizedBox(width: tema.espacamento * 6),
-                      Container(
-                        width: 2,
-                        color: Color(tema.neutral).withOpacity(.1),
-                        height: 450,
-                      ),
-                      SizedBox(width: tema.espacamento * 6),
-                    ],
-                    Flexible(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            children: [
-                              Container(
-                                width: 235,
-                                child: LogoWidget(
-                                  tema: tema,
-                                  tamanho: tema.tamanhoFonteM * 2,
+      child: SingleChildScrollView(
+        child: SizedBox(
+          height: Responsive.altura(context),
+          width: Responsive.largura(context),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
+                  child: CardBaseWidget(
+                    largura: 850,
+                    altura: 550,
+                    cursorDeClick: false,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Responsive.larguraP(context) ? tema.espacamento * 3 : tema.espacamento * 6,
+                      vertical: tema.espacamento * 3,
+                    ),
+                    tema: tema,
+                    child: Flex(
+                      direction: Axis.horizontal,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (Responsive.largura(context) > 1200)
+                          Flexible(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgWidget(
+                                  nomeSvg: "garota_login",
+                                  altura: 350,
                                 ),
-                              ),
-                              SizedBox(height: tema.espacamento),
-                              TextoWidget(
-                                texto: "Bem-vindo(a)! ",
-                                tamanho: tema.tamanhoFonteG,
-                                tema: tema,
-                                align: TextAlign.center,
-                                cor: Color(tema.baseContent),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          InputWidget(
-                            tema: tema,
-                            controller: emailController,
-                            label: "Email ou usuário",
-                            tamanho: tema.tamanhoFonteM,
-                            onChanged: (valor) {},
-                          ),
-                          SizedBox(height: tema.espacamento * 2),
-                          InputWidget(
-                            tema: tema,
-                            controller: senhaController,
-                            label: "Senha",
-                            senha: true,
-                            tamanho: tema.tamanhoFonteM,
-                            onChanged: (valor) {},
-                          ),
-                          SizedBox(height: tema.espacamento / 2),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: GestureDetector(
-                              onTap: () => Rota.navegar(context, Rota.SENHA),
-                              child: TextoWidget(
-                                texto: "Esqueceu sua senha?",
-                                tamanho: tema.tamanhoFonteM,
-                                tema: tema,
-                                weight: FontWeight.w500,
-                                decoration: TextDecoration.underline,
-                                align: TextAlign.center,
-                                cor: Color(tema.baseContent),
-                              ),
+                                SizedBox(height: tema.espacamento * 2),
+                                SizedBox(
+                                  child: TextoWidget(
+                                    tema: tema,
+                                    align: TextAlign.center,
+                                    texto:
+                                        "Descubra, troque, e doe livros enquanto transforma sua experiência de leitura ainda mais incrivel!",
+                                    cor: Color(tema.baseContent),
+                                    maxLines: 5,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          const Spacer(),
-                          BotaoWidget(
-                            tema: tema,
-                            texto: 'Login',
-                            nomeIcone: "seta/arrow-long-right",
-                            aoClicar: _logar,
+                        if (Responsive.largura(context) > 1200) ...[
+                          SizedBox(width: tema.espacamento * 6),
+                          Container(
+                            width: 2,
+                            color: Color(tema.neutral).withOpacity(.1),
+                            height: 450,
                           ),
-                          SizedBox(height: tema.espacamento * 2),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          SizedBox(width: tema.espacamento * 6),
+                        ],
+                        Flexible(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              TextoWidget(
-                                tema: tema,
-                                texto: "Não tem uma conta?",
-                                tamanho: tema.tamanhoFonteM,
-                                align: TextAlign.center,
-                                cor: Color(tema.baseContent),
+                              Column(
+                                children: [
+                                  Container(
+                                    width: 235,
+                                    child: LogoWidget(
+                                      tema: tema,
+                                      tamanho: tema.tamanhoFonteM * 2,
+                                    ),
+                                  ),
+                                  SizedBox(height: tema.espacamento),
+                                  TextoWidget(
+                                    texto: "Bem-vindo(a)! ",
+                                    tamanho: tema.tamanhoFonteG,
+                                    tema: tema,
+                                    align: TextAlign.center,
+                                    cor: Color(tema.baseContent),
+                                  ),
+                                ],
                               ),
-                              SizedBox(width: tema.espacamento),
-                              GestureDetector(
-                                onTap: () => Rota.navegar(context, Rota.CADASTRO_USUARIO),
-                                child: TextoWidget(
-                                  texto: "Crie já!",
-                                  tamanho: tema.tamanhoFonteM,
-                                  weight: FontWeight.w500,
-                                  decoration: TextDecoration.underline,
-                                  align: TextAlign.center,
-                                  tema: tema,
-                                  cor: Color(tema.accent),
+                              const Spacer(),
+                              InputWidget(
+                                tema: tema,
+                                controller: emailController,
+                                label: "Email ou usuário",
+                                tamanho: tema.tamanhoFonteM,
+                                onChanged: (valor) {},
+                              ),
+                              SizedBox(height: tema.espacamento * 2),
+                              InputWidget(
+                                tema: tema,
+                                controller: senhaController,
+                                label: "Senha",
+                                senha: true,
+                                tamanho: tema.tamanhoFonteM,
+                                onChanged: (valor) {},
+                              ),
+                              SizedBox(height: tema.espacamento / 1.5),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: GestureDetector(
+                                  onTap: () => Rota.navegar(context, Rota.SENHA),
+                                  child: TextoWidget(
+                                    texto: "Esqueceu sua senha?",
+                                    tamanho: tema.tamanhoFonteM,
+                                    tema: tema,
+                                    weight: FontWeight.w500,
+                                    decoration: TextDecoration.underline,
+                                    align: TextAlign.center,
+                                    cor: Color(tema.baseContent),
+                                  ),
                                 ),
                               ),
+                              const Spacer(),
+                              BotaoWidget(
+                                tema: tema,
+                                texto: 'Login',
+                                nomeIcone: "seta/arrow-long-right",
+                                aoClicar: _logar,
+                              ),
+                              SizedBox(height: tema.espacamento * 2),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  TextoWidget(
+                                    tema: tema,
+                                    texto: "Não tem uma conta?",
+                                    tamanho: tema.tamanhoFonteM,
+                                    align: TextAlign.center,
+                                    cor: Color(tema.baseContent),
+                                  ),
+                                  SizedBox(width: tema.espacamento),
+                                  GestureDetector(
+                                    onTap: () => Rota.navegar(context, Rota.CADASTRO_USUARIO),
+                                    child: TextoWidget(
+                                      texto: "Crie já!",
+                                      tamanho: tema.tamanhoFonteM,
+                                      weight: FontWeight.w500,
+                                      decoration: TextDecoration.underline,
+                                      align: TextAlign.center,
+                                      tema: tema,
+                                      cor: Color(tema.accent),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: tema.espacamento * 2),
                             ],
                           ),
-                          SizedBox(height: tema.espacamento * 2),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -224,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
         await autenticacaoComponent.logar(emailController.text, senhaController.text);
         Rota.navegar(context, Rota.AREA_LOGADA);
       } on UsuarioNaoAtivo catch (e) {
-          Notificacoes.mostrar(e.toString(), Emoji.ERRO);
+        Notificacoes.mostrar(e.toString(), Emoji.ERRO);
         Rota.navegarComArgumentos(
             context,
             AtivarUsuarioRoute(

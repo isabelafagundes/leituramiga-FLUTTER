@@ -37,6 +37,7 @@ class ConteudoLivrosSolicitacaoWidget extends StatelessWidget {
                 color: Color(tema.baseContent),
                 size: 18,
               ),
+              context,
             ),
             SizedBox(height: tema.espacamento),
             GridView.builder(
@@ -91,6 +92,7 @@ class ConteudoLivrosSolicitacaoWidget extends StatelessWidget {
                   color: Color(tema.baseContent),
                   size: 18,
                 ),
+                context,
               ),
               SizedBox(height: tema.espacamento),
               GridView.builder(
@@ -142,7 +144,7 @@ class ConteudoLivrosSolicitacaoWidget extends StatelessWidget {
     );
   }
 
-  Widget _obterTextoComIcone(String texto, Widget icone) {
+  Widget _obterTextoComIcone(String texto, Widget icone, BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -153,7 +155,7 @@ class ConteudoLivrosSolicitacaoWidget extends StatelessWidget {
           texto: texto,
           tema: tema,
           weight: FontWeight.w500,
-          tamanho: tema.tamanhoFonteXG,
+          tamanho: Responsive.larguraP(context) ?  tema.tamanhoFonteG:tema.tamanhoFonteXG,
         ),
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
@@ -33,7 +34,7 @@ class ConteudoCriacaoSenhaWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SvgWidget(nomeSvg: 'security', altura: 190),
+        SvgWidget(nomeSvg: 'security', altura: Responsive.larguraP(context) ? 140 : 190),
         SizedBox(height: tema.espacamento * 2),
         TextoWidget(
           texto: titulo ?? "Recuperação de senha",

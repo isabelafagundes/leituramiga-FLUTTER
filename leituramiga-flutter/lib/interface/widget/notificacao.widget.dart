@@ -87,7 +87,7 @@ class _NotificacaoWidgetState extends State<NotificacaoWidget> {
               curve: Curves.easeInOut,
               top: Notificacoes.notificacaoAtual == null ? -100 : 8,
               child: Container(
-                height: Responsive.larguraP(context) ? 50 : 60,
+                height: Responsive.larguraP(context) ? 52 : 60,
                 width: Responsive.larguraP(context) ? Responsive.largura(context) - widget.tema.espacamento * 2 : 400,
                 decoration: BoxDecoration(
                   color: Color(widget.tema.base200),

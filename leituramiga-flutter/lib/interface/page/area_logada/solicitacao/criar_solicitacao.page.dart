@@ -176,12 +176,8 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
               });
             },
             abrirDatePicker: ([bool ehDevolucao = false]) => abrirDatePicker(ehDevolucao),
-            aoClicarAdicionarLivro: () async {
-              await notificarCasoErro(() async {
-                _validarDataDevolucao();
-                atualizarPagina(CriarSolicitacao.SELECIONAR_LIVROS);
-              });
-            },
+            aoClicarAdicionarLivro: () async =>
+                await notificarCasoErro(() async => atualizarPagina(CriarSolicitacao.SELECIONAR_LIVROS)),
           ),
         ),
       CriarSolicitacao.ENDERECO => SingleChildScrollView(

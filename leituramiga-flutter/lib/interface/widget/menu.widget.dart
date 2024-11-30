@@ -12,6 +12,7 @@ class MenuWidget extends StatefulWidget {
   final String? valorSelecionado;
   final Function() atualizar;
   final bool readOnly;
+  final bool semPesquisa;
 
   const MenuWidget({
     super.key,
@@ -22,6 +23,7 @@ class MenuWidget extends StatefulWidget {
     required this.atualizar,
     required this.controller,
     this.readOnly = false,
+    this.semPesquisa = false,
   });
 
   @override
@@ -46,7 +48,7 @@ class _MenuWidgetState extends State<MenuWidget> {
       _label = widget.valorSelecionado ?? "Selecione";
       widget.controller.text = _label;
       _escolhasFiltradas = widget.escolhas;
-      widget.controller.addListener(() => atualizar());
+      if (!widget.semPesquisa) widget.controller.addListener(() => atualizar());
       atualizar();
     });
   }
@@ -64,15 +66,15 @@ class _MenuWidgetState extends State<MenuWidget> {
         onTap: () {
           if (_overlayEntry != null && _overlayEntry!.mounted) return _removerOverlay();
           _visivel = !_visivel;
-
           _escolhasFiltradas = widget.escolhas;
           atualizar();
           RenderBox renderBox = _key.currentContext?.findRenderObject() as RenderBox;
           Offset containerPosition = renderBox.localToGlobal(Offset.zero);
           _exibirOverlay(context, containerPosition, renderBox);
-          widget.controller.selection = TextSelection.fromPosition(
-            TextPosition(offset: widget.controller.text.length),
-          );
+          if (!widget.semPesquisa)
+            widget.controller.selection = TextSelection.fromPosition(
+              TextPosition(offset: widget.controller.text.length),
+            );
         },
         child: Opacity(
           opacity: widget.readOnly ? 0.8 : 1,
@@ -102,14 +104,15 @@ class _MenuWidgetState extends State<MenuWidget> {
                 IgnorePointer(
                   child: Container(
                     height: 50,
-                    constraints: BoxConstraints(maxWidth: 150),
+                    constraints:
+                        BoxConstraints(maxWidth: Responsive.larguraP(context) ? Responsive.largura(context) * .5 : 150),
                     child: TextFormField(
                       focusNode: _focusNode,
                       cursorColor: _visivel ? Color(widget.tema.accent) : Colors.transparent,
                       controller: widget.controller,
                       onChanged: (texto) async => _debouncer.executar(() => _filtrarEscolhas(texto)),
-                      readOnly: !_visivel,
-                      autofocus: !_visivel,
+                      readOnly: !_visivel || widget.semPesquisa,
+                      autofocus: !_visivel || !widget.semPesquisa,
                       style: TextStyle(
                         color: Color(widget.tema.baseContent),
                         fontSize: widget.tema.tamanhoFonteM,
@@ -230,10 +233,11 @@ class _MenuWidgetState extends State<MenuWidget> {
       },
     );
     Overlay.of(context).insert(_overlayEntry!);
-    _focusNode.requestFocus();
+    if (!widget.semPesquisa) _focusNode.requestFocus();
   }
 
   Future<void> _filtrarEscolhas(String texto) async {
+    if (widget.semPesquisa) return;
     setState(() => _carregando = true);
 
     List<String> escolhasFiltradas = texto.isEmpty || texto == "Selecione"

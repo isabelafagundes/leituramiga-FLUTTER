@@ -75,49 +75,44 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                     SizedBox(height: tema.espacamento / 2),
                     if (Responsive.larguraP(context)) SizedBox(height: tema.espacamento * 2),
                     if (solicitacao.dataEntrega != null)
-                      Row(
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _obterTextoComIcone(
-                                "Data entrega",
-                                Icon(
-                                  Icons.calendar_today,
-                                  size: 18,
-                                  color: Color(tema.baseContent),
-                                ),
-                              ),
-                              SizedBox(height: tema.espacamento),
-                              TextoWidget(
-                                texto: solicitacao.dataEntrega?.formatar("dd/MM/yyyy HH:mm") ?? '',
-                                tema: tema,
-                              ),
-                            ],
-                          ),
-                          if(Responsive.larguraP(context)) Spacer(),
-                          SizedBox(width: tema.espacamento * 2),
-                          if (solicitacao.dataDevolucao != null)
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _obterTextoComIcone(
-                                  "Data devolução",
-                                  Icon(
-                                    Icons.calendar_today,
-                                    size: 18,
-                                    color: Color(tema.baseContent),
-                                  ),
-                                ),
-                                SizedBox(height: tema.espacamento),
-                                TextoWidget(
-                                  texto: solicitacao.dataDevolucao?.formatar("dd/MM/yyyy HH:mm") ?? '',
-                                  tema: tema,
-                                ),
-                              ],
+                          _obterTextoComIcone(
+                            "Data entrega",
+                            Icon(
+                              Icons.calendar_today,
+                              size: 18,
+                              color: Color(tema.baseContent),
                             ),
+                          ),
+                          SizedBox(height: tema.espacamento),
+                          TextoWidget(
+                            texto: solicitacao.dataEntrega?.formatar("dd/MM/yyyy HH:mm") ?? '',
+                            tema: tema,
+                          ),
+                        ],
+                      ),
+                    SizedBox(height: tema.espacamento * 2),
+                    if (solicitacao.dataDevolucao != null)
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _obterTextoComIcone(
+                            "Data devolução",
+                            Icon(
+                              Icons.calendar_today,
+                              size: 18,
+                              color: Color(tema.baseContent),
+                            ),
+                          ),
+                          SizedBox(height: tema.espacamento),
+                          TextoWidget(
+                            texto: solicitacao.dataDevolucao?.formatar("dd/MM/yyyy HH:mm") ?? '',
+                            tema: tema,
+                          ),
                         ],
                       ),
                     SizedBox(height: tema.espacamento * 2),
