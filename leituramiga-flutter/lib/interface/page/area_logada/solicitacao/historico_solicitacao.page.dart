@@ -18,6 +18,7 @@ import 'package:projeto_leituramiga/interface/widget/card/card_solicitacao.widge
 import 'package:projeto_leituramiga/interface/widget/empty_state.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/layout_flexivel.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 import '../../../widget/svg/svg.widget.dart';
@@ -63,6 +64,7 @@ class _HistoricoPageState extends State<HistoricoPage> {
     return BackgroundWidget(
       child: ConteudoMenuLateralWidget(
         tema: tema,
+        carregando: solicitacaoComponent.carregando,
         voltar: () => Rota.navegar(context, Rota.HOME),
         child: Column(
           children: [
@@ -78,12 +80,23 @@ class _HistoricoPageState extends State<HistoricoPage> {
                 BotaoPequenoWidget(
                   tema: tema,
                   altura: 40,
-                  label: "Filtrar",
+                  label:
+                      solicitacaoComponent.datasFormatadas.isEmpty ? "Filtrar" : solicitacaoComponent.datasFormatadas,
                   corFonte: Color(tema.baseContent),
                   corFundo: Color(tema.base200),
                   icone: SvgWidget(nomeSvg: 'filtro', cor: Color(tema.baseContent), altura: 16),
-                  aoClicar: () => SobreposicaoUtil.exibir(context, _datePicker),
+                  aoClicar: () =>
+                      SobreposicaoUtil.exibir(context, _datePicker, aoFechar: () async => await _selecionarPeriodo()),
                 ),
+                if (solicitacaoComponent.dataInicio != null) ...[
+                  SizedBox(width: tema.espacamento),
+                  BotaoRedondoWidget(
+                    tema: tema,
+                    aoClicar: limparPeriodo,
+                    nomeSvg: "limpar_icon",
+                    tamanhoIcone: 22,
+                  ),
+                ]
               ],
             ),
             SizedBox(height: tema.espacamento * 4),
@@ -128,19 +141,37 @@ class _HistoricoPageState extends State<HistoricoPage> {
   Widget get _datePicker => LayoutFlexivelWidget(
         tema: tema,
         alturaOverlay: 600,
-        overlayChild: CalendarioRangeWidget(
-          tema: tema,
-          aoSelecionarDataRange: (dataInicio, dataFim) async {
-            Navigator.pop(context);
-          },
-        ),
-        drawerChild: CalendarioRangeWidget(
-          tema: tema,
-          aoSelecionarDataRange: (dataInicio, dataFim) async {
-            Navigator.pop(context);
-          },
-        ),
+        overlayChild: _calendario(context),
+        drawerChild: _calendario(context),
       );
+
+  Widget _calendario(BuildContext context) {
+    return CalendarioRangeWidget(
+      tema: tema,
+      aoSelecionarDataRange: (dataInicio, dataFim) async {
+        DataHora dataHoraInicio = DataHora.criar(dataInicio);
+        DataHora dataHoraFim = DataHora.criar(dataFim);
+        solicitacaoComponent.selecionarDatas(
+          dataHoraInicio.formatar('yyyy-MM-dd'),
+          dataHoraFim.formatar('yyyy-MM-dd'),
+        );
+        await SobreposicaoUtil.fechar(context, resposta: true);
+      },
+    );
+  }
+
+  Future<void> _selecionarPeriodo() async {
+    await notificarCasoErro(() async {
+      await solicitacaoComponent.obterHistoricoInicial(_autenticacaoState.usuario!.email.endereco);
+    });
+  }
+
+  Future<void> limparPeriodo() async {
+    await notificarCasoErro(() async {
+      solicitacaoComponent.limparDatas();
+      await solicitacaoComponent.obterHistoricoInicial(_autenticacaoState.usuario!.email.endereco);
+    });
+  }
 
   int _obterQuantidadeColunas(BuildContext context) {
     if (Responsive.largura(context) > 1400) return 3;

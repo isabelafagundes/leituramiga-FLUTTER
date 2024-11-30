@@ -84,4 +84,12 @@ class SolicitacaoUseCase {
   void utilizarEnderecoPerfil() {
     _state.utilizarEnderecoPerfil = !_state.utilizarEnderecoPerfil;
   }
+
+  void selecionarDatasSolicitacao(String? inicio, String? fim) {
+    _state.selecionarDatas(inicio, fim);
+  }
+
+  void limparDatasSolicitacao() {
+    _state.limparDatas();
+  }
 }

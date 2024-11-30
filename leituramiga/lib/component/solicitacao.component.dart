@@ -36,14 +36,14 @@ class SolicitacaoComponent extends State with SolicitacaoState, PaginacaoState<R
 
   Future<void> obterHistoricoInicial(String emailUsuario) async {
     await executar(
-      rotina: () => _paginacaoUseCase.obterHistoricoInicial(emailUsuario),
+      rotina: () => _paginacaoUseCase.obterHistoricoInicial(emailUsuario, dataInicio, dataFim),
       mensagemErro: "Não foi possível obter o histórico",
     );
   }
 
   Future<void> obterHistoricoPaginadas(String emailUsuario) async {
     await executar(
-      rotina: () => _paginacaoUseCase.obterHistoricoPaginadas(emailUsuario),
+      rotina: () => _paginacaoUseCase.obterHistoricoPaginadas(emailUsuario, dataInicio, dataFim),
       mensagemErro: "Não foi possível obter o histórico",
     );
   }
@@ -133,6 +133,20 @@ class SolicitacaoComponent extends State with SolicitacaoState, PaginacaoState<R
     await executar(
       rotina: () => _solicitacaoUseCase.utilizarEnderecoPerfil(),
       mensagemErro: "Não foi possível utilizar o endereço do perfil",
+    );
+  }
+
+  void selecionarDatasSolicitacao(String? inicio, String? fim) async {
+    await executar(
+      rotina: () => _solicitacaoUseCase.selecionarDatasSolicitacao(inicio, fim),
+      mensagemErro: "Não foi possível selecionar as datas",
+    );
+  }
+
+  void limparDatasSolicitacao() async {
+    await executar(
+      rotina: () => _solicitacaoUseCase.limparDatasSolicitacao(),
+      mensagemErro: "Não foi possível limpar as datas",
     );
   }
 }

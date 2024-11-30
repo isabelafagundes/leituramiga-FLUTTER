@@ -20,7 +20,6 @@ mixin PaginacaoState<T> {
     this.pesquisa = pesquisa;
     possuiProximaPagina = itens.length < limite;
     itensPaginadosSet.addAll(itens);
-    // if (possuiProximaPagina) return;
     pagina++;
   }
 

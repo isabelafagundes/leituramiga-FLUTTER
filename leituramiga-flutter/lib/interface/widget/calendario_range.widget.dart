@@ -40,13 +40,16 @@ class _CalendarioRangeWidgetState extends State<CalendarioRangeWidget> {
         RangeDatePicker(
           maxDate: DateTime(2200, 12, 31),
           minDate: DateTime(2024, 01, 12),
-          initialDate: DateTime(2024, 01, 12),
+          initialDate: DataHora.hoje().valor,
           enabledCellsTextStyle: textStyle,
           leadingDateTextStyle: textStyle,
           selectedCellsTextStyle: textStyleSelected,
           singelSelectedCellTextStyle: textStyleSelected,
           singelSelectedCellDecoration: BoxDecoration(
             shape: BoxShape.circle,
+            color: Color(widget.tema.accent),
+          ),
+          selectedCellsDecoration: BoxDecoration(
             color: Color(widget.tema.accent),
           ),
           slidersColor: Color(widget.tema.accent),

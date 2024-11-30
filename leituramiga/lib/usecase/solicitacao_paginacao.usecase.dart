@@ -14,9 +14,13 @@ class SolicitacaoPaginacaoUseCase {
     _state.paginar(pagina, 50);
   }
 
-  Future<void> obterHistoricoInicial(String emailUsuario) async {
+  Future<void> obterHistoricoInicial(
+    String emailUsuario,
+    String? dataInicio,
+    String? dataFim,
+  ) async {
     _state.reiniciar();
-    List<ResumoSolicitacao> pagina = await _repo.obterHistorico(emailUsuario);
+    List<ResumoSolicitacao> pagina = await _repo.obterHistorico(emailUsuario, dataInicio, dataFim, _state.pagina);
     _state.paginar(pagina, 50);
   }
 
@@ -25,8 +29,17 @@ class SolicitacaoPaginacaoUseCase {
     _state.paginar(pagina, 50);
   }
 
-  Future<void> obterHistoricoPaginadas(String emailUsuario) async {
-    List<ResumoSolicitacao> pagina = await _repo.obterHistorico(emailUsuario, _state.pagina);
+  Future<void> obterHistoricoPaginadas(
+    String emailUsuario,
+    String? dataInicio,
+    String? dataFim,
+  ) async {
+    List<ResumoSolicitacao> pagina = await _repo.obterHistorico(
+      emailUsuario,
+      dataInicio,
+      dataFim,
+      _state.pagina,
+    );
     _state.paginar(pagina, 50);
   }
 }

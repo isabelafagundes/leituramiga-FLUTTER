@@ -1,12 +1,9 @@
 import 'package:leituramiga/domain/data_hora.dart';
-import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
 import 'package:leituramiga/domain/solicitacao/resumo_solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
-import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:leituramiga/repo/solicitacao.repo.dart';
 import 'package:projeto_leituramiga/infrastructure/repo/mock/endereco_mock.repo.dart';
-import 'package:projeto_leituramiga/infrastructure/repo/mock/instituicao_mock.repo.dart';
 
 class SolicitacaoMockRepo extends SolicitacaoRepo {
   final List<ResumoSolicitacao> _solicitacoes = [
@@ -55,8 +52,10 @@ class SolicitacaoMockRepo extends SolicitacaoRepo {
   }
 
   @override
-  Future<List<ResumoSolicitacao>> obterHistorico(String emailUsuario, [int numeroPagina = 0, int limite = 50]) {
+  Future<List<ResumoSolicitacao>> obterHistorico(String emailUsuario, String? dataInicio, String? dataFim, [int numeroPagina = 0, int limite = 50]) {
     // TODO: implement obterHistorico
     throw UnimplementedError();
   }
+
+
 }

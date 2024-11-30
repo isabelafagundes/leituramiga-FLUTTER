@@ -72,16 +72,18 @@ class SolicitacaoApiRepo extends SolicitacaoRepo with ConfiguracaoApiState {
   }
 
   @override
-  Future<List<ResumoSolicitacao>> obterHistorico(String emailUsuario, [int numeroPagina = 0, int limite = 50]) async {
+  Future<List<ResumoSolicitacao>> obterHistorico(
+    String emailUsuario,
+    String? dataInicio,
+    String? dataFim, [
+    int numeroPagina = 0,
+    int limite = 50,
+  ]) async {
     Map<String, dynamic> mapaFiltros = {
       "numeroPagina": numeroPagina,
       "tamanhoPagina": limite,
-      "emailUsuario": emailUsuario,
-      "numeroCidade": null,
-      "numeroInstituicao": null,
-      "pesquisa": null,
-      "tipoSolicitacao": null,
-      "numeroCategoria": null,
+      "dataInicio": dataInicio,
+      "dataFim": dataFim,
     };
 
     return await _client.post("$host/solicitacoes/historico", data: mapaFiltros).catchError((erro) {
