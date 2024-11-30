@@ -17,7 +17,7 @@ class Usuario extends Entidade {
   final String? _nomeMunicipio;
   final InstituicaoDeEnsino? _instituicaoDeEnsino;
   final int? _numeroEndereco;
-  final String imagem;
+  final String? _imagem;
   final Endereco? endereco;
   final Senha? senha;
   final TipoUsuario _tipoUsuario;
@@ -32,7 +32,7 @@ class Usuario extends Entidade {
     this._instituicaoDeEnsino,
     this._numeroEndereco,
     this._nomeMunicipio,
-    this.imagem,
+    this._imagem,
     this.endereco,
     this.senha, [
     this._tipoUsuario = TipoUsuario.USUARIO,
@@ -50,7 +50,7 @@ class Usuario extends Entidade {
     this._instituicaoDeEnsino,
     this._numeroEndereco,
     this._nomeMunicipio,
-    this.imagem,
+    this._imagem,
     this.endereco, [
     this.senha,
     this._tipoUsuario = TipoUsuario.USUARIO,
@@ -69,7 +69,7 @@ class Usuario extends Entidade {
       "email": email.endereco,
       "celular": telefone?.telefone,
       "descricao": descricao,
-      "imagem": imagem,
+      "imagem": _imagem,
       "codigoInstituicao": instituicaoDeEnsino?.numero,
       "endereco": endereco?.paraMapa(email.endereco),
       "senha": senha?.senha,
@@ -116,31 +116,40 @@ class Usuario extends Entidade {
     if (nomeUsuario.length < 5) throw UsuarioInvalido("Nome de usuário deve ter no mínimo 5 caracteres!");
   }
 
+  String? get imagem => _imagem;
+
   factory Usuario.carregarDeMapa(Map<String, dynamic> usuarioAsMap) {
     return Usuario.carregar(
-        usuarioAsMap["nome"],
-        usuarioAsMap["username"],
-        Email.criar(usuarioAsMap["email"]),
-        usuarioAsMap["celular"] == null
-            ? null
-            : Telefone.criar(
-                usuarioAsMap["celular"].substring(2, 11),
-                usuarioAsMap["celular"].substring(0, 2),
-              ),
-        usuarioAsMap["quantidadeLivros"],
-        usuarioAsMap["descricao"],
-        usuarioAsMap["codigoInstituicao"] == null || usuarioAsMap["nomeInstituicao"] == null
-            ? null
-            : InstituicaoDeEnsino.carregar(
-                usuarioAsMap["codigoInstituicao"],
-                "",
-                usuarioAsMap["nomeInstituicao"],
-              ),
-        usuarioAsMap["codigoEndereco"],
-        usuarioAsMap["nomeCidade"],
-        usuarioAsMap["imagem"],
-        usuarioAsMap["endereco"] == null ? null : Endereco.carregarDeMapa(usuarioAsMap["endereco"]));
+      usuarioAsMap["nome"],
+      usuarioAsMap["username"],
+      Email.criar(usuarioAsMap["email"]),
+      usuarioAsMap["celular"] == null
+          ? null
+          : Telefone.criar(
+              usuarioAsMap["celular"].substring(2, 11),
+              usuarioAsMap["celular"].substring(0, 2),
+            ),
+      usuarioAsMap["quantidadeLivros"],
+      usuarioAsMap["descricao"],
+      usuarioAsMap["codigoInstituicao"] == null || usuarioAsMap["nomeInstituicao"] == null
+          ? null
+          : InstituicaoDeEnsino.carregar(
+              usuarioAsMap["codigoInstituicao"],
+              "",
+              usuarioAsMap["nomeInstituicao"],
+            ),
+      usuarioAsMap["codigoEndereco"],
+      usuarioAsMap["nomeCidade"],
+      usuarioAsMap["imagem"],
+      usuarioAsMap["endereco"] == null
+          ? null
+          : Endereco.carregarDeMapa(
+              usuarioAsMap["endereco"],
+            ),
+    );
   }
+
+  TipoUsuario get tipoUsuario => _tipoUsuario;
 }
 
 class UsuarioInvalido extends ErroDominio {

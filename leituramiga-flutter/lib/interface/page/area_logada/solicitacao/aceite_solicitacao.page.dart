@@ -22,6 +22,7 @@ import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/solicitacao/conteudo_endereco_solicitacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/tab.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
@@ -213,8 +214,10 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
     return PopUpPadraoWidget(
       tema: tema,
       conteudo: Container(
-        height: 320,
+        height: Responsive.larguraP(context) ? Responsive.altura(context) : 320,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: tema.espacamento * 4),
             Icon(
@@ -247,12 +250,12 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
                 SizedBox(height: tema.espacamento * 2),
                 BotaoWidget(
                   tema: tema,
-                  icone: Icon(
-                    Icons.close,
-                    color: Color(tema.baseContent),
+                  icone: SvgWidget(
+                    nomeSvg: 'seta/arrow-long-left',
+                    cor: Color(tema.baseContent),
                   ),
                   corTexto: Color(tema.baseContent),
-                  texto: "Cancelar",
+                  texto: "Voltar",
                   corFundo: Color(tema.base200),
                   aoClicar: () => Navigator.of(context).pop(false),
                 ),

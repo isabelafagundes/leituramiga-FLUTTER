@@ -3,7 +3,6 @@ import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/icone_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base_com_sombra.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/carrossel_categorias.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto_com_icone.widget.dart';
 
@@ -13,6 +12,7 @@ class CardUsuarioWidget extends StatelessWidget {
   final String nome;
   final String? nomeInstituicao;
   final String? nomeCidade;
+  final String? imagem;
   final int quantidadeLivros;
 
   const CardUsuarioWidget({
@@ -23,6 +23,7 @@ class CardUsuarioWidget extends StatelessWidget {
     this.nomeCidade,
     required this.quantidadeLivros,
     required this.nome,
+    this.imagem,
   });
 
   @override
@@ -41,8 +42,8 @@ class CardUsuarioWidget extends StatelessWidget {
           Flexible(
             child: IconeUsuarioWidget(
               tema: tema,
-              tamanho: 60,
-              corPerfil:obterCorAleatoria(),
+              tamanho: 69,
+              imagem: imagem,
               corLivros: Color(tema.base100),
               textoPerfil: nomeUsuario,
               quantidadeLivros: quantidadeLivros,

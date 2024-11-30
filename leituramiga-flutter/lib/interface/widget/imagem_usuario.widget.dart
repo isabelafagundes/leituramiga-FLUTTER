@@ -4,21 +4,19 @@ import 'dart:html';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:leituramiga/domain/super/erro_dominio.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 
-class ImagemWidget extends StatefulWidget {
+class ImagemUsuarioWidget extends StatefulWidget {
   final Tema tema;
   final Function(String) salvarImagem;
   final String? imagemBase64;
   final bool visualizacao;
 
-  const ImagemWidget({
+  const ImagemUsuarioWidget({
     super.key,
     required this.tema,
     required this.salvarImagem,
@@ -27,10 +25,10 @@ class ImagemWidget extends StatefulWidget {
   });
 
   @override
-  State<ImagemWidget> createState() => _ImagemWidgetState();
+  State<ImagemUsuarioWidget> createState() => _ImagemUsuarioWidgetState();
 }
 
-class _ImagemWidgetState extends State<ImagemWidget> {
+class _ImagemUsuarioWidgetState extends State<ImagemUsuarioWidget> {
   File? imagem;
   bool possuiImagem = false;
   Uint8List? _imagemBytes;
@@ -40,7 +38,7 @@ class _ImagemWidgetState extends State<ImagemWidget> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.imagemBase64 != null) {
+      if (widget.imagemBase64 != null || (widget.imagemBase64?.isNotEmpty ?? false)) {
         setState(() => carregando = true);
         carregarImagemIsolate(widget.imagemBase64!);
       }
@@ -54,28 +52,28 @@ class _ImagemWidgetState extends State<ImagemWidget> {
       alignment: Alignment.center,
       children: [
         Container(
-          width: Responsive.largura(context) <= 1000 ? Responsive.largura(context) : Responsive.largura(context) * .4,
-          height: Responsive.largura(context) <= 1000 ? 250 : Responsive.altura(context) * .4,
+          width: 150,
+          height: 150,
           decoration: BoxDecoration(
             color: Color(widget.tema.neutral).withOpacity(.2),
             border: Border.all(color: Color(widget.tema.neutral).withOpacity(.1)),
-            borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
+            borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 4),
           ),
-          child: _imagemBytes == null || carregando
+          child: _imagemBytes == null || (widget.imagemBase64?.isEmpty ?? false) || carregando
               ? const SizedBox()
               : ClipRRect(
-                  borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
+                  borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 4),
                   child: Image.memory(
                     _imagemBytes!,
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.fill,
                     filterQuality: FilterQuality.low,
                   ),
                 ),
         ),
         if (_imagemBytes != null && !widget.visualizacao)
           Positioned(
-            top: 8,
-            right: 8,
+            top: -8,
+            right: -8,
             child: BotaoRedondoWidget(
               tema: widget.tema,
               aoClicar: _abrirImagePicker,

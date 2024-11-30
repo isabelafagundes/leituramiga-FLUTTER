@@ -5,12 +5,14 @@ class Notificacao extends Entidade {
   final String _nomeUsuario;
   final String _emailUsuario;
   final int _numeroSolicitacao;
+  final String? _imagem;
 
   Notificacao.carregar(
     this._numero,
     this._nomeUsuario,
     this._emailUsuario,
     this._numeroSolicitacao,
+    this._imagem,
   );
 
   @override
@@ -27,6 +29,7 @@ class Notificacao extends Entidade {
           mapa['nomeUsuarioSolicitante'],
           mapa['emailUsuarioSolicitante'],
           mapa['codigoSolicitacao'],
+          mapa['imagem'],
         );
 
   String get emailUsuario => _emailUsuario;
@@ -36,4 +39,6 @@ class Notificacao extends Entidade {
   int get numeroSolicitacao => _numeroSolicitacao;
 
   int? get numero => _numero;
+
+  String? get imagem => _imagem;
 }

@@ -105,7 +105,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                   child: Container(
                     height: 50,
                     constraints:
-                        BoxConstraints(maxWidth: Responsive.larguraP(context) ? Responsive.largura(context) * .5 : 150),
+                        BoxConstraints(maxWidth: Responsive.larguraP(context) ? Responsive.largura(context) * .5 : 250),
                     child: TextFormField(
                       focusNode: _focusNode,
                       cursorColor: _visivel ? Color(widget.tema.accent) : Colors.transparent,

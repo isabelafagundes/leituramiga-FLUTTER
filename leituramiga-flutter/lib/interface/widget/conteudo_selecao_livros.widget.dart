@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/dica.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/empty_state.widget.dart';
@@ -8,6 +9,8 @@ import 'package:projeto_leituramiga/interface/widget/grid/grid_livros.widget.dar
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/pop_up_padrao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
+
+import 'svg/svg.widget.dart';
 
 class ConteudoSelecaoLivrosWidget extends StatelessWidget {
   final Tema tema;
@@ -98,7 +101,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
     return PopUpPadraoWidget(
       tema: tema,
       conteudo: Container(
-        height: 320,
+        height: Responsive.larguraP(context) ? Responsive.altura(context) : 320,
         child: Column(
           children: [
             SizedBox(height: tema.espacamento * 4),
@@ -123,17 +126,6 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
                 BotaoWidget(
                   tema: tema,
                   icone: Icon(
-                    Icons.close,
-                    color: Color(tema.base200),
-                  ),
-                  texto: "Cancelar",
-                  corFundo: Color(tema.error),
-                  aoClicar: () => Navigator.of(context).pop(false),
-                ),
-                SizedBox(height: tema.espacamento * 2),
-                BotaoWidget(
-                  tema: tema,
-                  icone: Icon(
                     Icons.check,
                     color: Color(tema.base200),
                   ),
@@ -143,6 +135,18 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
                     Navigator.of(context).pop(true);
                   },
                 ),
+                SizedBox(height: tema.espacamento * 2),
+                BotaoWidget(
+                  tema: tema,
+                  icone: SvgWidget(
+                    nomeSvg: 'seta/arrow-long-left',
+                    cor: Color(tema.baseContent),
+                  ),
+                  texto: "Voltar",
+                  corFundo: Color(tema.error),
+                  aoClicar: () => Navigator.of(context).pop(false),
+                ),
+
               ],
             ),
           ],

@@ -5,7 +5,6 @@ import 'package:leituramiga/domain/livro/livro.dart';
 import 'package:leituramiga/domain/livro/tipo_status_livro.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
-import 'package:leituramiga/state/filtros.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
@@ -42,8 +41,6 @@ class _EditarLivroPageState extends State<EditarLivroPage> {
   TemaState get _temaState => TemaState.instancia;
 
   Tema get tema => _temaState.temaSelecionado!;
-
-  FiltroState get _filtroState => FiltroState.instancia;
 
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
@@ -139,9 +136,11 @@ class _EditarLivroPageState extends State<EditarLivroPage> {
       tema: tema,
       naoRedimensionar: true,
       conteudo: Container(
-        height: 320,
-        width: 320,
+        height: Responsive.larguraP(context) ? Responsive.altura(context) : 320,
+        width: Responsive.larguraP(context) ? Responsive.largura(context) : 320,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: tema.espacamento * 4),
             Icon(

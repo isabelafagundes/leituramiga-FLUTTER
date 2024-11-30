@@ -7,6 +7,7 @@ class ResumoUsuario extends Entidade implements Comparable {
   final String? _nomeInstituicao;
   final String? _nomeMunicipio;
   final int _quantidadeLivros;
+  final String? _imagem;
 
   ResumoUsuario.carregar(
     this._nome,
@@ -15,6 +16,7 @@ class ResumoUsuario extends Entidade implements Comparable {
     this._nomeMunicipio,
     this._quantidadeLivros,
     this._email,
+    this._imagem,
   );
 
   @override
@@ -29,6 +31,7 @@ class ResumoUsuario extends Entidade implements Comparable {
       "nomeInstituicao": _nomeInstituicao,
       "nomeMunicipio": _nomeMunicipio,
       "quantidadeLivros": _quantidadeLivros,
+      "imagem": _imagem,
     };
   }
 
@@ -40,6 +43,7 @@ class ResumoUsuario extends Entidade implements Comparable {
       usuarioAsMap["nomeCidade"],
       usuarioAsMap["quantidadeLivros"],
       usuarioAsMap["email"],
+      usuarioAsMap["imagem"],
     );
   }
 
@@ -53,6 +57,8 @@ class ResumoUsuario extends Entidade implements Comparable {
 
   String get nome => _nome;
 
+  String get email => _email;
+
   @override
   int compareTo(other) {
     if (other is ResumoUsuario) {
@@ -60,6 +66,7 @@ class ResumoUsuario extends Entidade implements Comparable {
     }
     return 0;
   }
+
   @override
   bool operator ==(Object other) {
     if (other is ResumoUsuario) {
@@ -71,4 +78,6 @@ class ResumoUsuario extends Entidade implements Comparable {
   hashcode() {
     return _email.hashCode;
   }
+
+  String? get imagem => _imagem;
 }

@@ -67,7 +67,7 @@ enum Rota {
     try {
       AutoRouter.of(context).navigateNamed(rota.url);
     } catch (e) {
-      Notificacoes.mostrar("Não foi possível navegar");
+      Notificacoes.mostrar(e.toString());
     }
   }
 

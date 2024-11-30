@@ -112,7 +112,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
                               children: [
                                 BotaoPequenoWidget(
                                   tema: tema,
-                                  padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2,vertical: tema.espacamento),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: tema.espacamento * 2, vertical: tema.espacamento),
                                   aoClicar: _exibirPopUpComentario,
                                   altura: 40,
                                   corFundo: Color(tema.base200),
@@ -168,6 +169,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
         height: Responsive.larguraM(context) ? Responsive.altura(context) : 690,
         width: 450,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Responsive.larguraM(context)
                 ? Row(
@@ -229,18 +232,6 @@ class _UsuarioPageState extends State<UsuarioPage> {
             SizedBox(height: tema.espacamento * 4),
             BotaoWidget(
               tema: tema,
-              corTexto: Color(tema.baseContent),
-              texto: "Fechar",
-              aoClicar: () => Navigator.pop(context),
-              icone: Icon(
-                Icons.close,
-                color: Color(tema.baseContent),
-              ),
-              corFundo: Color(tema.base200),
-            ),
-            SizedBox(height: tema.espacamento * 2),
-            BotaoWidget(
-              tema: tema,
               corTexto: Color(tema.base200),
               texto: "Enviar",
               aoClicar: aoClicar,
@@ -249,6 +240,18 @@ class _UsuarioPageState extends State<UsuarioPage> {
                 color: Color(tema.base200),
               ),
               corFundo: Color(tema.accent),
+            ),
+            SizedBox(height: tema.espacamento * 2),
+            BotaoWidget(
+              tema: tema,
+              corTexto: Color(tema.baseContent),
+              aoClicar: () => Navigator.pop(context),
+              icone: SvgWidget(
+                nomeSvg: 'seta/arrow-long-left',
+                cor: Color(tema.baseContent),
+              ),
+              texto: "Voltar",
+              corFundo: Color(tema.base200),
             ),
           ],
         ),

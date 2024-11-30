@@ -13,6 +13,7 @@ import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_solicitacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/dica.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -26,8 +27,6 @@ class CalendarioPage extends StatefulWidget {
 }
 
 class _CalendarioPageState extends State<CalendarioPage> {
-  bool _exibindoEmAndamento = false;
-  bool _visualizarSolicitacao = false;
   SolicitacaoComponent solicitacaoComponent = SolicitacaoComponent();
 
   TemaState get _temaState => TemaState.instancia;
@@ -74,51 +73,70 @@ class _CalendarioPageState extends State<CalendarioPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TableCalendar<ResumoSolicitacao>(
-                  locale: 'pt_BR',
-                  firstDay: DateTime.utc(2010, 10, 16),
-                  lastDay: DateTime.utc(2030, 3, 14),
-                  focusedDay: DataHora.hoje().valor,
-                  selectedDayPredicate: (day) => isSameDay(dataSelecionada?.valor, day),
-                  rangeStartDay: null,
-                  rangeEndDay: null,
-                  calendarFormat: CalendarFormat.month,
-                  rangeSelectionMode: RangeSelectionMode.disabled,
-                  eventLoader: obterEventos,
-                  startingDayOfWeek: StartingDayOfWeek.monday,
-                  calendarStyle: CalendarStyle(
-                    outsideDaysVisible: false,
-                    weekendTextStyle: textStyle,
-                    todayTextStyle: textStyleBold,
-                    todayDecoration: BoxDecoration(
-                      color: Color(tema.base200).withOpacity(.2),
-                      shape: BoxShape.circle,
+                DicaWidget(
+                  tema: tema,
+                  texto: "Clique em uma data para visualizar as solicitações.",
+                ),
+                SizedBox(height: tema.espacamento * 2),
+                Container(
+                  width: Responsive.largura(context) < 1000 ? Responsive.largura(context) : 1000,
+                  height: 400,
+                  child: TableCalendar<ResumoSolicitacao>(
+                    locale: 'pt_BR',
+                    firstDay: DateTime.utc(2010, 10, 16),
+                    lastDay: DateTime.utc(2030, 3, 14),
+                    focusedDay: dataSelecionada?.valor ?? DataHora.hoje().valor,
+                    selectedDayPredicate: (day) => isSameDay(dataSelecionada?.valor, day),
+                    rangeStartDay: null,
+                    rangeEndDay: null,
+                    calendarFormat: CalendarFormat.month,
+                    rangeSelectionMode: RangeSelectionMode.disabled,
+                    eventLoader: obterEventos,
+                    startingDayOfWeek: StartingDayOfWeek.monday,
+                    calendarStyle: CalendarStyle(
+                      outsideDaysVisible: false,
+                      weekendTextStyle: textStyle,
+                      todayTextStyle: textStyleBold,
+                      todayDecoration: BoxDecoration(
+                        color: Color(tema.base200).withOpacity(.2),
+                        shape: BoxShape.circle,
+                      ),
+                      selectedTextStyle: textStyle,
+                      markerDecoration: BoxDecoration(
+                        color: Color(tema.accent),
+                        shape: BoxShape.circle,
+                      ),
+                      selectedDecoration: BoxDecoration(
+                        color: Color(tema.accent),
+                        shape: BoxShape.circle,
+                      ),
+                      disabledTextStyle: textStyleDisabled,
+                      defaultTextStyle: textStyle,
+                      defaultDecoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                    selectedTextStyle: textStyle,
-                    markerDecoration: BoxDecoration(
-                      color: Color(tema.accent),
-                      shape: BoxShape.circle,
+                    onDaySelected: (selectedDay, focusedDay) => _selecionarData(selectedDay),
+                    headerStyle: HeaderStyle(
+                      titleTextStyle: textStyleBold,
+                      formatButtonVisible: false,
+                      leftChevronIcon: Icon(Icons.chevron_left, color: Color(tema.baseContent)),
+                      rightChevronIcon: Icon(Icons.chevron_right, color: Color(tema.baseContent)),
                     ),
-                    selectedDecoration: BoxDecoration(
-                      color: Color(tema.base200),
-                      shape: BoxShape.circle,
+                    daysOfWeekStyle: DaysOfWeekStyle(
+                      weekdayStyle: TextStyle(
+                        color: Color(tema.baseContent),
+                        fontSize: tema.tamanhoFonteM,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: tema.familiaDeFontePrimaria,
+                      ),
+                      weekendStyle: TextStyle(
+                        color: Color(tema.baseContent),
+                        fontSize: tema.tamanhoFonteM,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: tema.familiaDeFontePrimaria,
+                      ),
                     ),
-                    disabledTextStyle: textStyleDisabled,
-                    defaultTextStyle: textStyle,
-                    defaultDecoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  onDaySelected: (selectedDay, focusedDay) => _selecionarData(selectedDay),
-                  headerStyle: HeaderStyle(
-                    titleTextStyle: textStyleBold,
-                    formatButtonVisible: false,
-                    leftChevronIcon: Icon(Icons.chevron_left, color: Color(tema.baseContent)),
-                    rightChevronIcon: Icon(Icons.chevron_right, color: Color(tema.baseContent)),
-                  ),
-                  daysOfWeekStyle: DaysOfWeekStyle(
-                    weekdayStyle: textStyleBold,
-                    weekendStyle: textStyleBold,
                   ),
                 ),
                 SizedBox(height: tema.espacamento * 4),
@@ -130,7 +148,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                         texto: 'Solicitações',
                         tema: tema,
                         weight: FontWeight.w500,
-                        tamanho: tema.tamanhoFonteG,
+                        tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteG : tema.tamanhoFonteXG + 4,
                       ),
                       SizedBox(height: tema.espacamento * 2),
                       solicitacoesSelecionadas.isEmpty
@@ -204,25 +222,25 @@ class _CalendarioPageState extends State<CalendarioPage> {
 
   TextStyle get textStyleDisabled => TextStyle(
         color: Color(tema.baseContent).withOpacity(.2),
-        fontSize: tema.tamanhoFonteM,
+        fontSize: tema.tamanhoFonteM + 2,
         fontFamily: tema.familiaDeFontePrimaria,
       );
 
   TextStyle get textStyle => TextStyle(
         color: Color(tema.baseContent),
-        fontSize: tema.tamanhoFonteM,
+        fontSize: tema.tamanhoFonteM + 2,
         fontFamily: tema.familiaDeFontePrimaria,
       );
 
   TextStyle get textStyleSelected => TextStyle(
         color: kCorFonte,
-        fontSize: tema.tamanhoFonteM,
+        fontSize: tema.tamanhoFonteM + 2,
         fontFamily: tema.familiaDeFontePrimaria,
       );
 
   TextStyle get textStyleBold => TextStyle(
         color: Color(tema.baseContent),
-        fontSize: tema.tamanhoFonteM,
+        fontSize: tema.tamanhoFonteM + 2,
         fontWeight: FontWeight.w500,
         fontFamily: tema.familiaDeFontePrimaria,
       );

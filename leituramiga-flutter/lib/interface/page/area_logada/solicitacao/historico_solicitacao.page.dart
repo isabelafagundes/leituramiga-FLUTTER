@@ -15,6 +15,7 @@ import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.
 import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/calendario_range.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_solicitacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/dica.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/empty_state.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/layout_flexivel.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
@@ -146,17 +147,27 @@ class _HistoricoPageState extends State<HistoricoPage> {
       );
 
   Widget _calendario(BuildContext context) {
-    return CalendarioRangeWidget(
-      tema: tema,
-      aoSelecionarDataRange: (dataInicio, dataFim) async {
-        DataHora dataHoraInicio = DataHora.criar(dataInicio);
-        DataHora dataHoraFim = DataHora.criar(dataFim);
-        solicitacaoComponent.selecionarDatas(
-          dataHoraInicio.formatar('yyyy-MM-dd'),
-          dataHoraFim.formatar('yyyy-MM-dd'),
-        );
-        await SobreposicaoUtil.fechar(context, resposta: true);
-      },
+    return Column(
+      children: [
+        SizedBox(height: tema.espacamento * 2),
+        DicaWidget(
+          tema: tema,
+          texto: "Selecione o período desejado",
+        ),
+        SizedBox(height: tema.espacamento),
+        CalendarioRangeWidget(
+          tema: tema,
+          aoSelecionarDataRange: (dataInicio, dataFim) async {
+            DataHora dataHoraInicio = DataHora.criar(dataInicio);
+            DataHora dataHoraFim = DataHora.criar(dataFim);
+            solicitacaoComponent.selecionarDatas(
+              dataHoraInicio.formatar('yyyy-MM-dd'),
+              dataHoraFim.formatar('yyyy-MM-dd'),
+            );
+            await SobreposicaoUtil.fechar(context, resposta: true);
+          },
+        ),
+      ],
     );
   }
 

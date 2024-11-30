@@ -9,6 +9,7 @@ import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_notificacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/dica.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/empty_state.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
@@ -124,7 +125,14 @@ class _ConteudoNotificacoesWidgetState extends State<ConteudoNotificacoesWidget>
               ),
             ],
           ),
-          SizedBox(height: widget.tema.espacamento * 4),
+
+          SizedBox(height: widget.tema.espacamento *2),
+          DicaWidget(
+            tema: widget.tema,
+            largura: 450,
+            texto: "Aqui você pode visualizar as notificações de solicitações enviadas para você.",
+          ),
+          SizedBox(height: widget.tema.espacamento * 2),
           Expanded(
             child: SizedBox(
               width: 800,

@@ -29,13 +29,14 @@ class ConteudoUsuarioWidget extends StatelessWidget {
         children: [
           Flexible(
             child: Container(
-              width: Responsive.larguraP(context) ? 80 : 100,
+              width: Responsive.larguraP(context) ? 80 : 120,
               child: IconeUsuarioWidget(
                 tema: tema,
-                tamanho: Responsive.larguraP(context) ? 80 : 100,
-                corPerfil: kCorPessego.withOpacity(.5),
+                tamanho: Responsive.larguraP(context) ? 80 : 120,
                 corLivros: Color(tema.base200),
-                textoPerfil: usuario.nome,
+                imagem: usuario.imagem,
+                textoPerfil: usuario.nomeUsuario,
+                tamanhoFonteLivro:tema.tamanhoFonteM ,
                 quantidadeLivros: usuario.numeroDeLivros,
               ),
             ),

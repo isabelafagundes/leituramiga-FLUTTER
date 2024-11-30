@@ -54,6 +54,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
   final TextEditingController controllerDescricao = TextEditingController();
   EditarPerfil? _estagioAtual = EditarPerfil.DADOS_GERAIS;
   bool _carregando = false;
+  String? _imagem;
 
   TemaState get _temaState => TemaState.instancia;
 
@@ -109,8 +110,9 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
             _usuarioComponent.usuarioSelecionado == null,
         voltar: () => Rota.navegar(context, Rota.HOME),
         child: SingleChildScrollView(
-          child: SizedBox(
+          child: Container(
             height: Responsive.larguraP(context) ? 1000 : Responsive.altura(context) * .8,
+            width: Responsive.largura(context) < 1200 ? null : 1200,
             child: Flex(
               direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -174,6 +176,8 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
     return switch (_estagioAtual) {
       EditarPerfil.DADOS_GERAIS => FormularioEdicaoUsuarioWidget(
           tema: tema,
+          imagem: _imagem,
+          salvarImagem: (imagem) => setState(() => _imagem = imagem),
           atualizar: () => setState(() {}),
           controllerDescricao: controllerDescricao,
           controllerConfirmacaoSenha: controllerConfirmacaoSenha,
@@ -393,7 +397,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       instituicao,
       null,
       "",
-      "",
+      _imagem ?? _usuarioComponent.usuarioSelecionado!.imagem,
       endereco,
       null,
     );
@@ -412,6 +416,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
   }
 
   void _preencherControllers() {
+    _imagem = _usuarioComponent.usuarioSelecionado!.imagem;
     controllerNome.text = _usuarioComponent.usuarioSelecionado!.nome;
     controllerNomeUsuario.text = _usuarioComponent.usuarioSelecionado!.nomeUsuario;
     controllerEmail.text = _usuarioComponent.usuarioSelecionado!.email.endereco;
@@ -438,9 +443,11 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       tema: tema,
       naoRedimensionar: true,
       conteudo: Container(
-        height: 320,
-        width: 320,
+        height: Responsive.larguraP(context) ? Responsive.altura(context) : 320,
+        width: Responsive.larguraP(context) ? Responsive.largura(context) : 320,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: tema.espacamento * 4),
             Icon(

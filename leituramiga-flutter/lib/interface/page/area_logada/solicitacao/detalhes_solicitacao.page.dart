@@ -172,8 +172,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
                                 aoSelecionar: (index) =>
                                     _atualizarAbaSelecionada(DetalhesSolicitacao.deDescricao(_opcoes[index])),
                               ),
-                              if (solicitacao != null)
-                                _obterAba,
+                              if (solicitacao != null) _obterAba,
                               if (_abaSelecionada == DetalhesSolicitacao.INFORMACOES &&
                                   (solicitacao?.status.permiteEdicao ?? false))
                                 Flex(
@@ -181,7 +180,6 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-
                                     _obterBotaoEsquerdo(context),
                                     SizedBox(height: tema.espacamento * 2, width: tema.espacamento * 2),
                                     _obterBotaoDireito,
@@ -354,9 +352,11 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
       tema: tema,
       conteudo: Container(
         padding: EdgeInsets.all(tema.espacamento * 2),
-        height: 380,
-        width: 400,
+        height: Responsive.larguraP(context) ? Responsive.altura(context) : 380,
+        width: Responsive.larguraP(context) ? Responsive.largura(context) : 400,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(
               Icons.warning_rounded,

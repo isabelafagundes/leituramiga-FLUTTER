@@ -43,6 +43,8 @@ class GridComentarioWidget extends StatelessWidget {
               ComentarioPerfil comentario = comentariosPorId.values.elementAt(indice);
               return CardComentarioWidget(
                 tema: tema,
+                dataComentario: comentario.dataCriacao?.formatar() ?? "",
+                imagem: comentario.imagem,
                 nomeUsuario: comentario.nomeUsuarioCriador,
                 comentario: comentario.comentario,
               );

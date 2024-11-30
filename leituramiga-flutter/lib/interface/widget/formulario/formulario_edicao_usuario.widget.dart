@@ -4,6 +4,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/imagem_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/input.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
@@ -19,8 +20,10 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
   final TextEditingController controllerDescricao;
   final TextEditingController controllerInstituicao;
   final List<String> instituicoes;
+  final String? imagem;
   final Function() atualizar;
   final Function(String) aoSelecionarInstituicao;
+  final Function(String) salvarImagem;
   final Function() aoCadastrar;
   final Widget? botaoInferior;
 
@@ -40,6 +43,8 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
     required this.aoSelecionarInstituicao,
     required this.controllerDescricao,
     required this.atualizar,
+    required this.salvarImagem,
+    this.imagem,
   });
 
   final MaskTextInputFormatter _mascaraTelefone = MaskTextInputFormatter(mask: "(##) #########");
@@ -52,6 +57,12 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        ImagemUsuarioWidget(
+          tema: tema,
+          salvarImagem: salvarImagem,
+          imagemBase64: imagem,
+        ),
+        SizedBox(height: tema.espacamento * 2),
         Flexible(
           child: Flex(
             direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,

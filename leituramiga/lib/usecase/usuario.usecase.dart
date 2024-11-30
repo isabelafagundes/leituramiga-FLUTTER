@@ -1,6 +1,7 @@
 import 'package:leituramiga/domain/usuario/email.dart';
 import 'package:leituramiga/domain/usuario/usuario.dart';
 import 'package:leituramiga/repo/usuario.repo.dart';
+import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:leituramiga/state/usuario.state.dart';
 
 class UsuarioUseCase {
@@ -16,6 +17,7 @@ class UsuarioUseCase {
 
   Future<void> obterPerfil() async {
     Usuario usuario = await _repo.obterUsuarioPerfil();
+    AutenticacaoState.instancia.usuario = usuario;
     _state.usuarioSelecionado = usuario;
   }
 

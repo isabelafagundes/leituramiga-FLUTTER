@@ -6,7 +6,6 @@ import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/carrossel_categorias.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class CardNotificacaoWidget extends StatefulWidget {
   final Tema tema;
@@ -49,8 +48,8 @@ class _CardNotificacaoWidgetState extends State<CardNotificacaoWidget> {
               IconeUsuarioWidget(
                 tema: widget.tema,
                 corLivros: Colors.transparent,
+                imagem: widget.notificacao.imagem,
                 textoPerfil: widget.notificacao.nomeUsuario,
-                corPerfil: obterCorAleatoria(),
                 quantidadeLivros: null,
               ),
             ],
@@ -61,21 +60,29 @@ class _CardNotificacaoWidgetState extends State<CardNotificacaoWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                constraints: BoxConstraints(maxWidth: Responsive.largura(context) - 200),
-                child: Wrap(
-                  alignment: WrapAlignment.start,
-                  crossAxisAlignment: WrapCrossAlignment.start,
-                  children: [
-                    TextoWidget(
-                      texto: "Você recebeu uma solicitação de ",
-                      tema: widget.tema,
-                    ),
-                    TextoWidget(
-                      texto: widget.notificacao.nomeUsuario,
-                      tema: widget.tema,
-                      weight: FontWeight.w500,
-                    ),
-                  ],
+                constraints: BoxConstraints(maxWidth: Responsive.largura(context) - 180),
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "Você recebeu uma solicitação de ",
+                        style: TextStyle(
+                          color: Color(widget.tema.baseContent),
+                          fontSize: widget.tema.tamanhoFonteM,
+                          fontFamily: widget.tema.familiaDeFontePrimaria,
+                        ),
+                      ),
+                      TextSpan(
+                        text: widget.notificacao.nomeUsuario,
+                        style: TextStyle(
+                          color: Color(widget.tema.baseContent),
+                          fontSize: widget.tema.tamanhoFonteM,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: widget.tema.familiaDeFontePrimaria,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: widget.tema.espacamento),

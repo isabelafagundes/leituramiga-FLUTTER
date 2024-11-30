@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
@@ -45,12 +45,14 @@ class CardLivroWidget extends StatefulWidget {
 
 class _CardLivroWidgetState extends State<CardLivroWidget> {
   Uint8List? _imagemBytes;
+  bool _carregando = false;
+  Widget _imagem = Container();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _carregarImagem();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await carregarImagemIsolate(widget.imagem!);
     });
   }
 
@@ -81,9 +83,11 @@ class _CardLivroWidgetState extends State<CardLivroWidget> {
                       flex: 3,
                       child: Stack(
                         children: [
-                          Container(
-                            child: _obterImagem,
-                          ),
+                          _carregando
+                              ? const CircularProgressIndicator()
+                              : Container(
+                                  child: _imagem,
+                                ),
                           Positioned(
                             bottom: 4,
                             left: 4,
@@ -236,6 +240,11 @@ class _CardLivroWidgetState extends State<CardLivroWidget> {
     );
   }
 
+  Future<void> carregarImagemIsolate(String base64) async {
+    setState(() => _carregando = true);
+    return await compute((base64) async => _carregarImagem(), base64);
+  }
+
   void _carregarImagem() {
     if (widget.imagem == null) {
       return;
@@ -243,6 +252,10 @@ class _CardLivroWidgetState extends State<CardLivroWidget> {
 
     final decodedBytes = base64Decode(widget.imagem!);
 
-    setState(() => _imagemBytes = decodedBytes);
+    setState(() {
+      _imagemBytes = decodedBytes;
+      _imagem = _obterImagem;
+      _carregando = false;
+    });
   }
 }

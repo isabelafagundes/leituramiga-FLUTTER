@@ -79,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        if (Responsive.largura(context) > 1200)
+                        if (Responsive.largura(context) > 700)
                           Flexible(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

@@ -27,9 +27,19 @@ class Notificacoes {
   }
 
   static void mostrar(String mensagem, [Emoji emoji = Emoji.ALERTA]) {
+    if (_mensagemInvalida(mensagem)) return;
     Notificacao notificacao = Notificacao(emoji, mensagem);
     _notificacoes.add(notificacao);
     _processarNotificacoes();
+  }
+
+  static bool _mensagemInvalida(String mensagem) {
+    Set<String> _palavrasChave = {"null", "widget", "exception", "error", "mounted", "operator", "bad"};
+    if (_palavrasChave.any((palavra) => mensagem.toLowerCase().contains(palavra))) {
+      print("Mensagem de erro: $mensagem\nStack: ${StackTrace.current}");
+      return true;
+    }
+    return false;
   }
 
   static void _processarNotificacoes() {

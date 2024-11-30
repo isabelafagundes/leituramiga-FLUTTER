@@ -8,6 +8,7 @@ class ComentarioPerfil extends Entidade {
   final String? _nomeUsuarioCriador;
   final String _comentario;
   final DataHora? _dataCriacao;
+  final String? _imagem;
 
   ComentarioPerfil.carregar(
     this._numero,
@@ -16,6 +17,7 @@ class ComentarioPerfil extends Entidade {
     this._nomeUsuarioCriador,
     this._emailUsuarioPerfil,
     this._dataCriacao,
+    this._imagem,
   );
 
   ComentarioPerfil.criar(
@@ -24,6 +26,7 @@ class ComentarioPerfil extends Entidade {
     this._comentario,
   )   : _numero = null,
         _nomeUsuarioCriador = null,
+        _imagem = null,
         _dataCriacao = null;
 
   @override
@@ -37,6 +40,7 @@ class ComentarioPerfil extends Entidade {
       'emailUsuarioPerfil': _emailUsuarioPerfil,
       'descricao': _comentario,
       'nomeUsuarioCriador': _nomeUsuarioCriador,
+      'dataCriacao': _dataCriacao?.formatar(),
     };
   }
 
@@ -49,8 +53,11 @@ class ComentarioPerfil extends Entidade {
       mapa['nomeUsuarioCriador'],
       mapa['emailUsuarioPerfil'],
       mapa['dataCriacao'] != null ? DataHora.deString(dataCriacao) : null,
+      mapa['imagem'],
     );
   }
+
+  String? get imagem => _imagem;
 
   String get comentario => _comentario;
 

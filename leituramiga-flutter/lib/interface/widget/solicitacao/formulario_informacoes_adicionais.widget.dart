@@ -55,7 +55,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Flex(
-      direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
+      direction: Responsive.larguraM(context) ? Axis.vertical : Axis.horizontal,
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,14 +81,14 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
               ],
             ),
           ),
-        if (Responsive.larguraP(context) && !semSelecaoLivros) ...[
+        if (Responsive.larguraM(context) && !semSelecaoLivros) ...[
           SizedBox(height: tema.espacamento * 2),
           Divider(
             color: Color(tema.accent),
           ),
           SizedBox(height: tema.espacamento * 2),
         ],
-        if (!Responsive.larguraP(context)) SizedBox(width: tema.espacamento * 4),
+        if (!Responsive.larguraM(context)) SizedBox(width: tema.espacamento * 4),
         Flexible(
           child: Flex(
             direction: Axis.vertical,
@@ -96,7 +96,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
             children: [
               Flexible(
                 child: Flex(
-                  direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
+                  direction: Responsive.larguraM(context) ? Axis.vertical : Axis.horizontal,
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +134,7 @@ class FormularioInformacoesAdicionaisWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (!Responsive.larguraP(context))
+                    if (Responsive.largura(context) > 1500)
                       Flexible(
                         child: IgnorePointer(
                           child: Opacity(

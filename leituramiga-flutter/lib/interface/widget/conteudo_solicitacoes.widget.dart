@@ -9,6 +9,7 @@ import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_solicitacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/dica.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/empty_state.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
@@ -118,11 +119,16 @@ class _ConteudoSolicitacoesWidgetState extends State<ConteudoSolicitacoesWidget>
                             weight: FontWeight.w500,
                             tema: widget.tema,
                           ),
-                    SizedBox(height: widget.tema.espacamento * 4),
+                    SizedBox(height: widget.tema.espacamento * 2),
                   ],
                 ),
               ),
             ],
+          ),
+          DicaWidget(
+            tema: widget.tema,
+            largura: 400,
+            texto: "Aqui você pode visualizar todas as solicitações que estão em andamento.",
           ),
           SizedBox(height: widget.tema.espacamento * 2),
           Expanded(

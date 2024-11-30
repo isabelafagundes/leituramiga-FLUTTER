@@ -66,13 +66,13 @@ class GridLivroWidget extends StatelessWidget {
               );
             },
             itemCount: livros.length,
-          ).animate().fade();
+          );
   }
 
   int _obterQuantidadePorLinha(BuildContext context) {
     double largura = MediaQuery.of(context).size.width;
-    if (largura > 1200) return 3;
-    if (largura > 1400) return 2;
+    if (largura > 1400) return 3;
+    if (largura > 800) return 2;
     return 1;
   }
 }

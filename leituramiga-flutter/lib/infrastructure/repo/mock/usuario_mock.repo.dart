@@ -13,10 +13,12 @@ class UsuarioMockRepo extends UsuarioRepo {
       "Cajamar",
       4,
       "isabela@gmail.com",
+      null,
     ),
-    ResumoUsuario.carregar("Kaua Guedes", "kauaguedes", "Fatec Santana de Parnaíba", "Cajamar", 5, "kaua@gmail.com"),
-    ResumoUsuario.carregar("João da Silva", "joao", "UNIP Alphaville", "Cajamar", 3, "joao@gmail.com"),
-    ResumoUsuario.carregar("Maria da Silva", "maria", "UNINOVE Vila Maria", "Cajamar", 2, "maria@gmail.com"),
+    ResumoUsuario.carregar(
+        "Kaua Guedes", "kauaguedes", "Fatec Santana de Parnaíba", "Cajamar", 5, "kaua@gmail.com", null),
+    ResumoUsuario.carregar("João da Silva", "joao", "UNIP Alphaville", "Cajamar", 3, "joao@gmail.com", null),
+    ResumoUsuario.carregar("Maria da Silva", "maria", "UNINOVE Vila Maria", "Cajamar", 2, "maria@gmail.com", null),
   ];
 
   Usuario get usuario => Usuario.carregar(
@@ -50,8 +52,6 @@ class UsuarioMockRepo extends UsuarioRepo {
     return Future.delayed(Duration(seconds: 1), () => usuario);
   }
 
-
-
   @override
   Future<Usuario> obterUsuarioPerfil() {
     // TODO: implement obterUsuarioPerfil
@@ -59,7 +59,8 @@ class UsuarioMockRepo extends UsuarioRepo {
   }
 
   @override
-  Future<List<ResumoUsuario>> obterUsuarios({int numeroPagina = 0, int limite = 18, int? numeroMunicipio, int? numeroInstituicao, String? pesquisa}) {
+  Future<List<ResumoUsuario>> obterUsuarios(
+      {int numeroPagina = 0, int limite = 18, int? numeroMunicipio, int? numeroInstituicao, String? pesquisa}) {
     // TODO: implement obterUsuarios
     throw UnimplementedError();
   }

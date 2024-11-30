@@ -3,11 +3,11 @@ import 'package:leituramiga/component/autenticacao.component.dart';
 import 'package:leituramiga/component/solicitacao.component.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
-import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/menu_lateral.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
+import 'package:projeto_leituramiga/interface/icone_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/botao_pequeno.widget.dart';
@@ -132,7 +132,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                       nomeSvg: '',
                                       icone: Icon(
                                         Icons.more_horiz_rounded,
-                                        color: Color(widget.tema.accent),
+                                        color: Color(widget.tema.baseContent),
                                       ),
                                       aoClicar: () {
                                         setState(() => exibindoMenu = !exibindoMenu);
@@ -163,49 +163,49 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                   if (widget.exibirPerfil && _autenticacaoState.usuario != null) ...[
                                     const Spacer(),
                                     SizedBox(
-                                      height: 60,
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                      height: Responsive.larguraP(context) ? 55 : 70,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          TextoWidget(
-                                            texto: "Olá,",
-                                            tema: widget.tema,
-                                            cor: Color(widget.tema.baseContent),
-                                          ),
-                                          TextoWidget(
-                                            texto: "${_autenticacaoState.usuario?.nome.split(" ").first}!",
-                                            tema: widget.tema,
-                                            weight: FontWeight.w500,
-                                            tamanho: widget.tema.tamanhoFonteXG,
-                                            cor: Color(widget.tema.accent),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(width: widget.tema.espacamento),
-                                    MouseRegion(
-                                      cursor: SystemMouseCursors.click,
-                                      child: GestureDetector(
-                                        onTap: () => Rota.navegar(context, Rota.PERFIL),
-                                        child: Container(
-                                          width: Responsive.larguraP(context) ? 55 : 70,
-                                          height: Responsive.larguraP(context) ? 55 : 70,
-                                          decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: Color(widget.tema.neutral).withOpacity(.1), width: 1),
-                                            borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 2),
-                                            color: kCorPessego.withOpacity(.5),
-                                          ),
-                                          child: Center(
-                                            child: TextoWidget(
-                                              tamanho: widget.tema.tamanhoFonteXG * 1.5,
-                                              weight: FontWeight.w600,
-                                              texto: "${_autenticacaoState.usuario?.nome.substring(0, 1)}",
-                                              tema: widget.tema,
+                                          SizedBox(
+                                            height: 60,
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                TextoWidget(
+                                                  texto: "Olá,",
+                                                  tema: widget.tema,
+                                                  cor: Color(widget.tema.baseContent),
+                                                ),
+                                                TextoWidget(
+                                                  texto: "${_autenticacaoState.usuario?.nome.split(" ").first}!",
+                                                  tema: widget.tema,
+                                                  weight: FontWeight.w500,
+                                                  tamanho: widget.tema.tamanhoFonteXG,
+                                                  cor: Color(widget.tema.accent),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ),
+                                          SizedBox(width: widget.tema.espacamento),
+                                          MouseRegion(
+                                            cursor: SystemMouseCursors.click,
+                                            child: GestureDetector(
+                                              onTap: () => Rota.navegar(context, Rota.PERFIL),
+                                              child: IconeUsuarioWidget(
+                                                tema: widget.tema,
+                                                tamanho: Responsive.larguraP(context) ? 55 : 70,
+                                                imagem: _autenticacaoState.usuario!.imagem,
+                                                corLivros: Color(widget.tema.base200),
+                                                textoPerfil: _autenticacaoState.usuario!.nome.split(" ").first,
+                                                quantidadeLivros: null,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],

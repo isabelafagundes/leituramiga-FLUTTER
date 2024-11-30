@@ -68,7 +68,6 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                               tema: widget.tema,
                               corLivros: Colors.transparent,
                               textoPerfil: widget.solicitacao.nomeUsuario,
-                              corPerfil: obterCorAleatoria(),
                               tamanho: Responsive.larguraP(context) ? 55 : 60,
                               quantidadeLivros: null,
                             ),
@@ -84,12 +83,10 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: Responsive.larguraP(context)
-                                    ? widget.tema.espacamento * 3.5
-                                    : widget.tema.espacamento,
+                                height: widget.tema.espacamento,
                               ),
                               TextoWidget(
-                                texto: "Solicitação criada por:",
+                                texto: "Criador:",
                                 tema: widget.tema,
                                 weight: FontWeight.w500,
                               ),
@@ -175,7 +172,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                     right: -4,
                     child: Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: widget.tema.espacamento * 2.5,
+                        horizontal: widget.tema.espacamento * 1.5,
                         vertical: widget.tema.espacamento / 1.5,
                       ),
                       decoration: BoxDecoration(
@@ -189,6 +186,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                       child: TextoWidget(
                         texto: widget.solicitacao.tipo.descricao,
                         tema: widget.tema,
+                        tamanho: widget.tema.tamanhoFonteP+2,
                         weight: FontWeight.w500,
                         cor: kCorFonte,
                       ),
