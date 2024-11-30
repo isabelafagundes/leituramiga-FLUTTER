@@ -136,8 +136,8 @@ class _EditarLivroPageState extends State<EditarLivroPage> {
       tema: tema,
       naoRedimensionar: true,
       conteudo: Container(
-        height: Responsive.larguraM(context) ? Responsive.altura(context) : 320,
-        width: Responsive.larguraM(context) ? Responsive.largura(context) : 320,
+        height: 320,
+        width: 320,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
