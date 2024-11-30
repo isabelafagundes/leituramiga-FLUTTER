@@ -1,7 +1,7 @@
 import 'dart:io';
 
 abstract mixin class ConfiguracaoApiState {
-  static String _ip = '192.168.15.95';
+  static String _ip = 'localhost';
   static const String _porta = '8080';
   static const String _protocolo = 'http';
 
