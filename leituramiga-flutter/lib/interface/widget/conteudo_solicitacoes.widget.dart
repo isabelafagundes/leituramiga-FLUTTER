@@ -59,7 +59,7 @@ class _ConteudoSolicitacoesWidgetState extends State<ConteudoSolicitacoesWidget>
     if (solicitacaoComponent.carregando || _carregando) {
       return SizedBox(
         height: 800,
-        width: Responsive.largura(context) <= 800 ? Responsive.largura(context) : 800,
+        width: Responsive.larguraM(context) ? Responsive.largura(context) : 800,
         child: const Center(
           child: CircularProgressIndicator(),
         ),
@@ -67,7 +67,7 @@ class _ConteudoSolicitacoesWidgetState extends State<ConteudoSolicitacoesWidget>
     }
 
     return Container(
-      width: Responsive.largura(context) <= 800 ? Responsive.largura(context) : 800,
+      width: Responsive.larguraM(context) ? Responsive.largura(context) : 800,
       height: 800,
       padding: EdgeInsets.all(widget.tema.espacamento * 2),
       child: Column(

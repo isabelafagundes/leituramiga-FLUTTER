@@ -62,7 +62,7 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Flex(
-      direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
+      direction: Responsive.larguraM(context) ? Axis.vertical : Axis.horizontal,
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,7 +135,7 @@ class ConteudoEnderecoSolicitacaoWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (!Responsive.larguraP(context))
+              if (!Responsive.larguraM(context))
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,

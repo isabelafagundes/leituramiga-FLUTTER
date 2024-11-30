@@ -443,8 +443,8 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       tema: tema,
       naoRedimensionar: true,
       conteudo: Container(
-        height: Responsive.larguraP(context) ? Responsive.altura(context) : 320,
-        width: Responsive.larguraP(context) ? Responsive.largura(context) : 320,
+        height: Responsive.larguraM(context) ? Responsive.altura(context) : 320,
+        width: Responsive.larguraM(context) ? Responsive.largura(context) : 320,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

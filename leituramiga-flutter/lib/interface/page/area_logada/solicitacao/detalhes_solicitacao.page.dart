@@ -352,8 +352,8 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
       tema: tema,
       conteudo: Container(
         padding: EdgeInsets.all(tema.espacamento * 2),
-        height: Responsive.larguraP(context) ? Responsive.altura(context) : 380,
-        width: Responsive.larguraP(context) ? Responsive.largura(context) : 400,
+        height: Responsive.larguraM(context) ? Responsive.altura(context) : 380,
+        width: Responsive.larguraM(context) ? Responsive.largura(context) : 400,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

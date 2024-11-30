@@ -37,7 +37,7 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
         horizontal: widget.tema.espacamento * 2,
       ),
       child: Container(
-        constraints: BoxConstraints(maxHeight: Responsive.larguraP(context) ? 250 : Responsive.altura(context) * .66),
+        constraints: BoxConstraints(maxHeight: Responsive.larguraM(context) ? 250 : Responsive.altura(context) * .66),
         child: Column(
           children: [
             SizedBox(height: widget.tema.espacamento / 2),
@@ -49,13 +49,13 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                   texto: "Livros da solicitação",
                   tema: widget.tema,
                   cor: Color(widget.tema.baseContent),
-                  tamanho: Responsive.larguraP(context) ? widget.tema.tamanhoFonteM : widget.tema.tamanhoFonteXG + 4,
+                  tamanho: Responsive.larguraM(context) ? widget.tema.tamanhoFonteM : widget.tema.tamanhoFonteXG + 4,
                   weight: FontWeight.w500,
                 ),
                 const Spacer(),
                 BotaoPequenoWidget(
                   tema: widget.tema,
-                  label: Responsive.larguraP(context) ? "Livro" : "Adicionar livro",
+                  label: Responsive.larguraM(context) ? "Livro" : "Adicionar livro",
                   tamanhoFonte: widget.tema.tamanhoFonteM,
                   corFonte: Color(widget.tema.base200),
                   padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 2),
@@ -79,7 +79,7 @@ class _CardLivrosSolicitacaoWidgetState extends State<CardLivrosSolicitacaoWidge
                           SvgWidget(
                             nomeSvg: "empty_state",
                             cor: Color(widget.tema.accent),
-                            altura: Responsive.larguraP(context) ? 120 : 160,
+                            altura: Responsive.larguraM(context) ? 120 : 160,
                           ),
                           SizedBox(height: widget.tema.espacamento),
                           TextoWidget(

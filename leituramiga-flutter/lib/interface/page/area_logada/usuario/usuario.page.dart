@@ -167,7 +167,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
       conteudo: Container(
         padding: EdgeInsets.all(tema.espacamento * 2),
         height: Responsive.larguraM(context) ? Responsive.altura(context) : 690,
-        width: 450,
+        width: Responsive.larguraM(context) ? Responsive.largura(context) : 450,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
