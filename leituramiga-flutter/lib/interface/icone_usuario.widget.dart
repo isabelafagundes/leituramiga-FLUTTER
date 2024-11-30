@@ -85,6 +85,9 @@ class _IconeUsuarioWidgetState extends State<IconeUsuarioWidget> {
           SizedBox(height: widget.tema.espacamento),
           Container(
             padding: EdgeInsets.symmetric(vertical: widget.tema.espacamento / 3),
+            constraints: BoxConstraints(
+              maxWidth: 80,
+            ),
             decoration: BoxDecoration(
               border: Border.all(
                 color: Color(widget.tema.neutral).withOpacity(.1),
@@ -175,7 +178,7 @@ class _IconeUsuarioWidgetState extends State<IconeUsuarioWidget> {
         color: Color(widget.tema.neutral).withOpacity(.3),
         image: DecorationImage(
           image: MemoryImage(_imagemBytes!),
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
           filterQuality: FilterQuality.low,
         ),
       ),

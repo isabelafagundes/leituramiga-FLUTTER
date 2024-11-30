@@ -29,10 +29,10 @@ class ConteudoUsuarioWidget extends StatelessWidget {
         children: [
           Flexible(
             child: Container(
-              width: Responsive.larguraP(context) ? 80 : 120,
+              width: Responsive.larguraP(context) ? 100 : 120,
               child: IconeUsuarioWidget(
                 tema: tema,
-                tamanho: Responsive.larguraP(context) ? 80 : 120,
+                tamanho: Responsive.larguraP(context) ? 100 : 120,
                 corLivros: Color(tema.base200),
                 imagem: usuario.imagem,
                 textoPerfil: usuario.nomeUsuario,

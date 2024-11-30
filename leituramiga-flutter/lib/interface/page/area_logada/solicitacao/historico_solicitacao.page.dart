@@ -20,9 +20,8 @@ import 'package:projeto_leituramiga/interface/widget/empty_state.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/layout_flexivel.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/menu_lateral/conteudo_menu_lateral.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
+import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
-
-import '../../../widget/svg/svg.widget.dart';
 
 @RoutePage()
 class HistoricoPage extends StatefulWidget {
@@ -73,7 +72,7 @@ class _HistoricoPageState extends State<HistoricoPage> {
               texto: "Histórico de Solicitações",
               tema: tema,
               weight: FontWeight.w500,
-              tamanho: tema.tamanhoFonteXG + 4,
+              tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteG + 4 : tema.tamanhoFonteXG + 4,
             ),
             SizedBox(height: tema.espacamento * 2),
             Row(
@@ -100,7 +99,7 @@ class _HistoricoPageState extends State<HistoricoPage> {
                 ]
               ],
             ),
-            SizedBox(height: tema.espacamento * 4),
+            SizedBox(height: tema.espacamento * 3),
             Expanded(
               child: solicitacaoComponent.itensPaginados.isEmpty
                   ? EmptyStateWidget(tema: tema)

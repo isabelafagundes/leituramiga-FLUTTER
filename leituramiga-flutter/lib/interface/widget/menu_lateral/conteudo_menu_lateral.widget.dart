@@ -163,7 +163,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                   if (widget.exibirPerfil && _autenticacaoState.usuario != null) ...[
                                     const Spacer(),
                                     SizedBox(
-                                      height: Responsive.larguraP(context) ? 55 : 70,
+                                      height: Responsive.larguraP(context) ? 60 : 70,
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -197,7 +197,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                               onTap: () => Rota.navegar(context, Rota.PERFIL),
                                               child: IconeUsuarioWidget(
                                                 tema: widget.tema,
-                                                tamanho: Responsive.larguraP(context) ? 55 : 70,
+                                                tamanho: Responsive.larguraP(context) ? 60 : 70,
                                                 imagem: _autenticacaoState.usuario!.imagem,
                                                 corLivros: Color(widget.tema.base200),
                                                 textoPerfil: _autenticacaoState.usuario!.nome.split(" ").first,

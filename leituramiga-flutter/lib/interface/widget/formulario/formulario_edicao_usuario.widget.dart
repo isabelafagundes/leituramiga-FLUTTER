@@ -57,12 +57,13 @@ class FormularioEdicaoUsuarioWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        SizedBox(height: tema.espacamento * 4),
         ImagemUsuarioWidget(
           tema: tema,
           salvarImagem: salvarImagem,
           imagemBase64: imagem,
         ),
-        SizedBox(height: tema.espacamento * 2),
+        SizedBox(height: tema.espacamento * 4),
         Flexible(
           child: Flex(
             direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,

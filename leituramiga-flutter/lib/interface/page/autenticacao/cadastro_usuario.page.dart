@@ -118,11 +118,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                 padding: EdgeInsets.symmetric(horizontal: tema.espacamento * 2),
                 child: CardBaseWidget(
                   largura: 640,
-                  altura: Responsive.larguraP(context)
-                      ? _etapaCadastro == EtapaCadastro.ENDERECO
-                          ? 800
-                          : 675
-                      : 750,
+                  altura: obterAltura(context),
                   cursorDeClick: false,
                   padding: EdgeInsets.symmetric(
                     horizontal: tema.espacamento * 2,
@@ -173,11 +169,11 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   Widget _obterPaginaAtual() {
     return switch (_etapaCadastro) {
       EtapaCadastro.DADOS_GERAIS => SizedBox(
-          height: !Responsive.larguraP(context) ? 810 : 550,
+          height: !Responsive.larguraP(context) ? 810 : 618,
           child: Column(
             children: [
               SizedBox(
-                height: !Responsive.larguraP(context) ? 450 : 400,
+                height: !Responsive.larguraP(context) ? 450 : 500,
                 child: FormularioUsuarioWidget(
                   tema: tema,
                   atualizar: () => setState(() {}),
@@ -378,8 +374,8 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
         controllerBairro.text.isEmpty &&
         controllerCep.text.isEmpty &&
         controllerNumero.text.isEmpty &&
-        controllerCidade.text.isEmpty &&
-        controllerEstado.text.isEmpty;
+        (controllerCidade.text.isEmpty || controllerCidade.text == "Selecione") &&
+        (controllerEstado.text.isEmpty || controllerEstado.text == "Selecione");
   }
 
   bool _validarCamposEndereco() {
@@ -432,6 +428,14 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
       endereco,
       _autenticacaoState.senha,
     );
+  }
+
+  double obterAltura(BuildContext context) {
+    if (Responsive.larguraP(context) && _etapaCadastro == EtapaCadastro.ENDERECO) return 940;
+    if (Responsive.larguraP(context) && _etapaCadastro == EtapaCadastro.DADOS_GERAIS) return 780;
+    if (Responsive.larguraP(context)) return 682;
+
+    return 750;
   }
 
   Telefone? get _obterTelefone {

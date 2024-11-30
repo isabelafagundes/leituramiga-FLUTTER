@@ -70,38 +70,41 @@ class FormularioUsuarioWidget extends StatelessWidget {
           height: tema.espacamento * 2,
           width: tema.espacamento * 2,
         ),
-        Flexible(
-          child: Flex(
-            direction: Axis.horizontal,
-            children: [
-              Flexible(
-                child: InputWidget(
-                  tema: tema,
-                  controller: controllerUsuario,
-                  label: "Usuário",
-                  formatters: [LengthLimitingTextInputFormatter(30)],
-                  tamanho: tema.tamanhoFonteM,
-                  onChanged: (valor) {},
+        if (Responsive.larguraP(context)) ..._obterChildren,
+        if (!Responsive.larguraP(context))
+          Flexible(
+            child: Flex(
+              direction: Axis.horizontal,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: InputWidget(
+                    tema: tema,
+                    controller: controllerUsuario,
+                    label: "Usuário",
+                    formatters: [LengthLimitingTextInputFormatter(30)],
+                    tamanho: tema.tamanhoFonteM,
+                    onChanged: (valor) {},
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: tema.espacamento * 2,
-                height: tema.espacamento * 2,
-              ),
-              Flexible(
-                child: InputWidget(
-                  tema: tema,
-                  obrigatorio: false,
-                  controller: controllerTelefone,
-                  label: "Telefone",
-                  formatters: [_mascaraTelefone],
-                  tamanho: tema.tamanhoFonteM,
-                  onChanged: (valor) {},
+                SizedBox(
+                  width: tema.espacamento * 2,
+                  height: tema.espacamento * 2,
                 ),
-              ),
-            ],
+                Flexible(
+                  child: InputWidget(
+                    tema: tema,
+                    obrigatorio: false,
+                    controller: controllerTelefone,
+                    label: "Telefone",
+                    formatters: [_mascaraTelefone],
+                    tamanho: tema.tamanhoFonteM,
+                    onChanged: (valor) {},
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
         SizedBox(height: tema.espacamento * 2),
         Flexible(
           child: InputWidget(
@@ -162,23 +165,24 @@ class FormularioUsuarioWidget extends StatelessWidget {
       Flexible(
         child: InputWidget(
           tema: tema,
-          controller: controllerSenha,
-          label: "Senha",
-          senha: true,
+          controller: controllerUsuario,
+          label: "Usuário",
+          formatters: [LengthLimitingTextInputFormatter(30)],
           tamanho: tema.tamanhoFonteM,
           onChanged: (valor) {},
         ),
       ),
       SizedBox(
-        height: tema.espacamento * 2,
         width: tema.espacamento * 2,
+        height: tema.espacamento * 2,
       ),
       Flexible(
         child: InputWidget(
           tema: tema,
-          controller: controllerConfirmacaoSenha,
-          label: "Confirmar senha",
-          senha: true,
+          obrigatorio: false,
+          controller: controllerTelefone,
+          label: "Telefone",
+          formatters: [_mascaraTelefone],
           tamanho: tema.tamanhoFonteM,
           onChanged: (valor) {},
         ),

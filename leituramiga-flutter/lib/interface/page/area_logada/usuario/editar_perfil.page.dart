@@ -111,7 +111,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
         voltar: () => Rota.navegar(context, Rota.HOME),
         child: SingleChildScrollView(
           child: Container(
-            height: Responsive.larguraP(context) ? 1000 : Responsive.altura(context) * .8,
+            height: Responsive.larguraP(context) ? 1200 : Responsive.altura(context) * .8,
             width: Responsive.largura(context) < 1200 ? null : 1200,
             child: Flex(
               direction: Responsive.larguraP(context) ? Axis.vertical : Axis.horizontal,
@@ -246,18 +246,20 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
             ),
             SizedBox(height: tema.espacamento * 2),
             SvgWidget(
-              nomeSvg: "",
-              caminhoCompleto: Emoji.ERRO.icone,
-              altura: 90,
-              cor: Color(tema.baseContent),
+              nomeSvg: "excluir_conta",
+              altura: 290,
             ),
             SizedBox(height: tema.espacamento * 2),
-            TextoWidget(
-              texto:
-                  "Ao selecionar \"excluir\", sua conta será desativada e você não poderá mais usar o LeiturAmiga :(\nTem certeza que deseja continuar? ",
-              tema: tema,
-              tamanho: tema.tamanhoFonteG,
-              align: TextAlign.center,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: TextoWidget(
+                texto:
+                    "Ao selecionar \"excluir\", sua conta será desativada e você não poderá mais usar o LeiturAmiga. ",
+                tema: tema,
+                maxLines: 5,
+                tamanho: tema.tamanhoFonteG,
+                align: TextAlign.center,
+              ),
             ),
             SizedBox(height: tema.espacamento * 4),
             SizedBox(height: tema.espacamento * 2),
@@ -280,6 +282,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       setState(() => _carregando = true);
       _usuarioComponent.atualizarUsuarioMemoria(usuario);
       await notificarCasoErro(() async => await _usuarioComponent.atualizarUsuario());
+      await _usuarioComponent.obterPerfil();
       Notificacoes.mostrar("Usuário atualizado com sucesso", Emoji.SUCESSO);
     } catch (e) {
       Notificacoes.mostrar("Erro ao atualizar usuário", Emoji.ERRO);
@@ -295,6 +298,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       }
       _usuarioComponent.atualizarEnderecoMemoria(endereco!);
       await notificarCasoErro(() async => await _usuarioComponent.atualizarEndereco());
+      await _usuarioComponent.obterPerfil();
       Notificacoes.mostrar("Endereço atualizado com sucesso", Emoji.SUCESSO);
     } catch (e) {
       Notificacoes.mostrar("Erro ao atualizar usuário", Emoji.ERRO);

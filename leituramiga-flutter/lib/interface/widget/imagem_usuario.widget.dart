@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:leituramiga/domain/super/erro_dominio.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao_redondo.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/notificacao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/svg/svg.widget.dart';
@@ -52,8 +53,8 @@ class _ImagemUsuarioWidgetState extends State<ImagemUsuarioWidget> {
       alignment: Alignment.center,
       children: [
         Container(
-          width: 150,
-          height: 150,
+          width: Responsive.larguraP(context) ? 120 : 150,
+          height: Responsive.larguraP(context) ? 120 : 150,
           decoration: BoxDecoration(
             color: Color(widget.tema.neutral).withOpacity(.2),
             border: Border.all(color: Color(widget.tema.neutral).withOpacity(.1)),
@@ -65,7 +66,7 @@ class _ImagemUsuarioWidgetState extends State<ImagemUsuarioWidget> {
                   borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG * 4),
                   child: Image.memory(
                     _imagemBytes!,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                     filterQuality: FilterQuality.low,
                   ),
                 ),
