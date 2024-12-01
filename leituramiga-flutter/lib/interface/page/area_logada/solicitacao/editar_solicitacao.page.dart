@@ -115,6 +115,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
         await _obterUsuarioSolicitacao();
         await _usuarioComponent.obterUsuario(_autenticacaoState.usuario!.email.endereco);
         await _usuarioComponent.obterLivrosUsuario();
+        await _usuarioComponent.obterEndereco();
         _preencherControllers();
         if (enderecoEmEdicao?.principal ?? false) _solicitacaoComponent.utilizarEnderecoDoPerfil();
         UF? uf = enderecoEmEdicao?.municipio.estado;

@@ -101,7 +101,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                         color: Color(tema.base200).withOpacity(.2),
                         shape: BoxShape.circle,
                       ),
-                      selectedTextStyle: textStyle,
+                      selectedTextStyle: textStyleSelected,
                       markerDecoration: BoxDecoration(
                         color: Color(tema.accent),
                         shape: BoxShape.circle,
@@ -233,7 +233,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
       );
 
   TextStyle get textStyleSelected => TextStyle(
-        color: kCorFonte,
+        color: Color(tema.base200),
         fontSize: tema.tamanhoFonteM + 2,
         fontFamily: tema.familiaDeFontePrimaria,
       );
