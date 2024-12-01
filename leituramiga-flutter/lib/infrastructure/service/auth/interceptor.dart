@@ -19,7 +19,6 @@ class Interceptor extends InterceptorsWrapper {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    print("Efetuando requisição para ${options.uri}");
     String token =
         options.uri.path.contains('refresh') ? _autenticacaoState.refreshToken : _autenticacaoState.accessToken;
     if (!options.headers.containsKey("Authorization")) options.headers["Authorization"] = "Bearer $token";
