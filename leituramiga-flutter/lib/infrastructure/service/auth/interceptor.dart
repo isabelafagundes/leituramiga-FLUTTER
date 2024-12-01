@@ -29,7 +29,6 @@ class Interceptor extends InterceptorsWrapper {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) async {
-    print('Recebendo resposta da requisitação: ${response.statusCode} ${response.statusMessage}');
     await _atualizarTokenSeNaoAutorizado(response);
     await _deslogarSeTentativasExcedidas(response);
     _resetarTentativasSeSucesso(response);
