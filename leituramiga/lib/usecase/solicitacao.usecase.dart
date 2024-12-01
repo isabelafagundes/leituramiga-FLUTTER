@@ -22,7 +22,6 @@ class SolicitacaoUseCase {
   Future<void> obterSolicitacao(int numero) async {
     Solicitacao solicitacao = await _repo.obterSolicitacao(numero);
     _state.solicitacaoSelecionada = solicitacao;
-    _state.utilizarEnderecoPerfil = solicitacao.enderecoSolicitante?.principal ?? false;
   }
 
   void validarNumeroLivrosSelecionados() {

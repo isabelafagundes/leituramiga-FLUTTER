@@ -14,7 +14,6 @@ import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
-import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/util/sobreposicao.util.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
@@ -110,7 +109,8 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
       setState(() => _carregando = true);
       try {
         await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
-        if(_solicitacaoComponent.solicitacaoSelecionada!.status!=TipoStatusSolicitacao.EM_ANDAMENTO) throw SolicitacaoFinalizada();
+        if (_solicitacaoComponent.solicitacaoSelecionada!.status != TipoStatusSolicitacao.EM_ANDAMENTO)
+          throw SolicitacaoFinalizada();
         setState(() => _tipoSolicitacao = _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao);
         await _obterUsuarioSolicitacao();
         await _usuarioComponent.obterUsuario(_autenticacaoState.usuario!.email.endereco);
@@ -120,7 +120,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
         UF? uf = enderecoEmEdicao?.municipio.estado;
         await _usuarioComponent.obterCidades(uf);
       } catch (e) {
-        Notificacoes.mostrar("Erro ao obter solicitação");
+        Notificacoes.mostrar(e.toString());
         Navigator.pop(context);
       }
       setState(() => _carregando = false);
@@ -377,9 +377,9 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
         )
         .firstOrNull;
 
-    if (enderecoEmEdicao != null && municipio == null) return enderecoEmEdicao;
+    if (_solicitacaoComponent.utilizarEnderecoPerfil) return _usuarioComponent.enderecoEdicao;
 
-    if (municipio == null) return null;
+    if (municipio == null) return enderecoEmEdicao;
 
     return Endereco.carregar(
       enderecoEmEdicao?.numero,

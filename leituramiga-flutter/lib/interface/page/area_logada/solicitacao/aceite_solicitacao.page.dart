@@ -282,9 +282,7 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
 
     print("UTILIZA PERFIL ${_usuarioComponent.utilizarEnderecoPerfil}");
 
-    if (_usuarioComponent.utilizarEnderecoPerfil) {
-      return _usuarioComponent.enderecoEdicao;
-    }
+    if (_usuarioComponent.utilizarEnderecoPerfil) return _usuarioComponent.enderecoEdicao;
 
     if (municipio == null) return null;
 

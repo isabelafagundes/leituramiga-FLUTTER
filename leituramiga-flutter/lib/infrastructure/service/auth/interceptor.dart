@@ -43,7 +43,6 @@ class Interceptor extends InterceptorsWrapper {
 
   Future<void> _atualizarTokenSeNaoAutorizado(Response response) async {
     if (response.statusCode == 401 && _tentativas <= 3) {
-      print('Iniciando a tentativa $_tentativas de atualização do token de acesso...');
       _autenticacaoState.atualizarTokens();
       _tentativas++;
     }
@@ -51,7 +50,6 @@ class Interceptor extends InterceptorsWrapper {
 
   Future<void> _deslogarSeTentativasExcedidas(Response response) async {
     if (response.statusCode == 401 && _tentativas > 3) {
-      print('Tentativas de atualização do token de acesso esgotadas. Redirecionando para a tela de login...');
       _sessaoFlutterService.limpar();
       _autenticacaoState.limparTokens();
       _tentativas = 0;
