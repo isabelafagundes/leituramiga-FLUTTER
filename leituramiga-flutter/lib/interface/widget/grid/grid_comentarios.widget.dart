@@ -35,7 +35,7 @@ class GridComentarioWidget extends StatelessWidget {
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: _obterQuantidadePorLinha(context),
-              mainAxisExtent: 140,
+              mainAxisExtent: 145,
               mainAxisSpacing: tema.espacamento * 2,
               crossAxisSpacing: tema.espacamento * 2,
             ),
@@ -56,8 +56,8 @@ class GridComentarioWidget extends StatelessWidget {
   int _obterQuantidadePorLinha(BuildContext context) {
     double largura = MediaQuery.of(context).size.width;
     if (largura > 1500) return 4;
-    if (largura > 1200) return 3;
-    if (largura > 800) return 2;
+    if (largura > 1450) return 3;
+    if (largura > 1000) return 2;
     return 1;
   }
 }

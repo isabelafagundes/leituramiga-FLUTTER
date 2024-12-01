@@ -1,5 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/domain/usuario/comentario_perfil.dart';
 import 'package:leituramiga/domain/usuario/usuario.dart';
@@ -224,6 +225,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
             InputWidget(
               tema: tema,
               label: "Comentário",
+              formatters: [LengthLimitingTextInputFormatter(119)],
               controller: controllerComentario,
               onChanged: (valor) {},
             ),

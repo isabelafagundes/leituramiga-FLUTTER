@@ -9,10 +9,12 @@ import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/domain/solicitacao/forma_entrega.dart';
 import 'package:leituramiga/domain/solicitacao/solicitacao.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
+import 'package:leituramiga/domain/solicitacao/tipo_status_solicitacao.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/util/sobreposicao.util.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
@@ -106,15 +108,21 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       setState(() => _carregando = true);
-      await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
-      setState(() => _tipoSolicitacao = _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao);
-      await _obterUsuarioSolicitacao();
-      await _usuarioComponent.obterUsuario(_autenticacaoState.usuario!.email.endereco);
-      await _usuarioComponent.obterLivrosUsuario();
-      _preencherControllers();
-      if (enderecoEmEdicao?.principal ?? false) _solicitacaoComponent.utilizarEnderecoDoPerfil();
-      UF? uf = enderecoEmEdicao?.municipio.estado;
-      await _usuarioComponent.obterCidades(uf);
+      try {
+        await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
+        if(_solicitacaoComponent.solicitacaoSelecionada!.status!=TipoStatusSolicitacao.EM_ANDAMENTO) throw SolicitacaoFinalizada();
+        setState(() => _tipoSolicitacao = _solicitacaoComponent.solicitacaoSelecionada!.tipoSolicitacao);
+        await _obterUsuarioSolicitacao();
+        await _usuarioComponent.obterUsuario(_autenticacaoState.usuario!.email.endereco);
+        await _usuarioComponent.obterLivrosUsuario();
+        _preencherControllers();
+        if (enderecoEmEdicao?.principal ?? false) _solicitacaoComponent.utilizarEnderecoDoPerfil();
+        UF? uf = enderecoEmEdicao?.municipio.estado;
+        await _usuarioComponent.obterCidades(uf);
+      } catch (e) {
+        Notificacoes.mostrar("Erro ao obter solicitação");
+        Navigator.pop(context);
+      }
       setState(() => _carregando = false);
     });
   }
@@ -421,6 +429,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
       context,
       LayoutFlexivelWidget(
         tema: tema,
+        alturaOverlay: 600,
         overlayChild: _obterCalendario(ehDataDevolucao),
         drawerChild: _obterCalendario(ehDataDevolucao),
       ),

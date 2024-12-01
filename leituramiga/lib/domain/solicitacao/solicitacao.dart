@@ -264,3 +264,7 @@ class Solicitacao extends Entidade {
 class DataSolicitacaoInvalida extends ErroDominio {
   DataSolicitacaoInvalida(String mensagemException) : super(mensagemException);
 }
+
+class SolicitacaoFinalizada extends ErroDominio {
+  SolicitacaoFinalizada() : super("Solicitação já finalizada");
+}

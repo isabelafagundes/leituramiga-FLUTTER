@@ -38,6 +38,7 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
 
   Future<void> _atualizarUsuario(Usuario usuario) async {
     await _client.post("$host/atualizar-usuario", data: usuario.paraMapa()).catchError((erro) {
+      if (erro.response.statusCode == 404) throw UsuarioNaoEncontrado();
       throw erro;
     });
   }
@@ -45,6 +46,8 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
   @override
   Future<void> desativarUsuario() async {
     await _client.post("$host/desativar").catchError((erro) {
+      if (erro.response.statusCode == 404) throw UsuarioNaoEncontrado();
+      if (erro.response.statusCode == 412) throw UsuarioComSolicitacaoAberta();
       throw erro;
     });
   }
@@ -55,6 +58,8 @@ class UsuarioApiRepo extends UsuarioRepo with ConfiguracaoApiState {
       "$host/usuario",
       data: {"email": emailUsuario, "username": emailUsuario},
     ).catchError((erro) {
+      if (erro.response.statusCode == 404) throw UsuarioNaoEncontrado();
+      if (erro.response.statusCode == 412) throw UsuarioNaoAtivo();
       throw erro;
     }).then((response) {
       return Usuario.carregarDeMapa(response.data);

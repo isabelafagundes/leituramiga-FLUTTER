@@ -164,8 +164,11 @@ class UsuarioNaoEncontrado extends ErroDominio {
   UsuarioNaoEncontrado() : super("O usuário não encontrado. Crie uma conta!");
 }
 
+class PerfilNaoAtivo extends ErroDominio {
+  PerfilNaoAtivo() : super("O usuário está desativado! Confirme o código de verificação.");
+}
 class UsuarioNaoAtivo extends ErroDominio {
-  UsuarioNaoAtivo() : super("O usuário está desativado! Confirme o código de verificação.");
+  UsuarioNaoAtivo() : super("O usuário está desativado!");
 }
 
 class CredenciaisExistentes extends ErroDominio {
@@ -182,4 +185,8 @@ class TokenExpirado extends ErroDominio {
 
 class CodigoInvalido extends ErroDominio {
   CodigoInvalido() : super("O código é inválido!");
+}
+
+class UsuarioComSolicitacaoAberta extends ErroDominio {
+  UsuarioComSolicitacaoAberta() : super("O usuário possui solicitações em aberto! Finalize-as para desativar a conta!");
 }

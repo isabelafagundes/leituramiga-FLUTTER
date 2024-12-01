@@ -265,7 +265,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
             SizedBox(height: tema.espacamento * 2),
             BotaoWidget(
               tema: tema,
-              texto: 'Sim, excluir',
+              texto: 'Excluir',
               nomeIcone: "seta/arrow-long-right",
               corFundo: Color(tema.error),
               icone: Icon(Icons.delete, color: Color(tema.base200)),

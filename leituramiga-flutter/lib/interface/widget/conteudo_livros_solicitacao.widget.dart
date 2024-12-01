@@ -46,7 +46,7 @@ class ConteudoLivrosSolicitacaoWidget extends StatelessWidget {
                 childAspectRatio: 1.5,
                 crossAxisSpacing: tema.espacamento,
                 mainAxisSpacing: tema.espacamento,
-                mainAxisExtent: 92,
+                mainAxisExtent: Responsive.larguraP(context) ? 94 : 102,
               ),
               itemCount: usuarioCriador.length,
               shrinkWrap: true,
@@ -63,14 +63,15 @@ class ConteudoLivrosSolicitacaoWidget extends StatelessWidget {
                           children: [
                             TextoWidget(
                               texto: usuarioCriador[index].nome,
-                              tamanho: tema.tamanhoFonteXG,
+                              tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteXG - 2 : tema.tamanhoFonteXG,
                               weight: FontWeight.w500,
                               tema: tema,
                             ),
+                            SizedBox(height: tema.espacamento),
                             TextoWidget(
                               texto: usuarioCriador[index].nomeAutor,
                               tema: tema,
-                              tamanho: tema.tamanhoFonteG,
+                              tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteM : tema.tamanhoFonteG,
                             ),
                           ],
                         ),
@@ -101,7 +102,7 @@ class ConteudoLivrosSolicitacaoWidget extends StatelessWidget {
                   childAspectRatio: 1.5,
                   crossAxisSpacing: tema.espacamento,
                   mainAxisSpacing: tema.espacamento,
-                  mainAxisExtent: 92,
+                  mainAxisExtent: Responsive.larguraP(context) ? 94 : 102,
                 ),
                 itemCount: usuarioDoador?.length,
                 shrinkWrap: true,
@@ -119,14 +120,15 @@ class ConteudoLivrosSolicitacaoWidget extends StatelessWidget {
                             children: [
                               TextoWidget(
                                 texto: livro.nome,
-                                tamanho: tema.tamanhoFonteXG,
+                                tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteG - 2 : tema.tamanhoFonteXG,
                                 weight: FontWeight.w500,
                                 tema: tema,
                               ),
+                              SizedBox(height: tema.espacamento),
                               TextoWidget(
                                 texto: livro.nomeAutor,
                                 tema: tema,
-                                tamanho: tema.tamanhoFonteG,
+                                tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteM : tema.tamanhoFonteG,
                               ),
                             ],
                           ),
@@ -155,7 +157,7 @@ class ConteudoLivrosSolicitacaoWidget extends StatelessWidget {
           texto: texto,
           tema: tema,
           weight: FontWeight.w500,
-          tamanho: Responsive.larguraP(context) ?  tema.tamanhoFonteG:tema.tamanhoFonteXG,
+          tamanho: Responsive.larguraP(context) ? tema.tamanhoFonteG : tema.tamanhoFonteXG,
         ),
       ],
     );

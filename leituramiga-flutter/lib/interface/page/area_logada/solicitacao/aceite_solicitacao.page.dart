@@ -86,7 +86,7 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
         await _usuarioComponent.obterUsuario(solicitacao!.emailUsuarioSolicitante);
         await _usuarioComponent.obterUsuarioSolicitacao(solicitacao.emailUsuarioProprietario);
         await _usuarioComponent.obterLivrosUsuario();
-        await _obterEnderecoUsuario();
+        // await _obterEnderecoUsuario();
       });
       setState(() => _carregando = false);
     });
@@ -157,6 +157,7 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
             ),
             SizedBox(height: tema.espacamento * 2),
             Expanded(child: paginaSelecionada),
+            SizedBox(height: tema.espacamento * 2),
           ],
         ),
       ),
@@ -279,11 +280,15 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
         )
         .firstOrNull;
 
+    print("UTILIZA PERFIL ${_usuarioComponent.utilizarEnderecoPerfil}");
+
     if (_usuarioComponent.utilizarEnderecoPerfil) {
       return _usuarioComponent.enderecoEdicao;
     }
 
     if (municipio == null) return null;
+
+    print("UTILIZA PERFIL 2 ${_usuarioComponent.utilizarEnderecoPerfil}");
 
     return Endereco.criar(
       controllerNumero.text.trim(),
@@ -346,7 +351,6 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
   Future<void> _aceitarSolicitacao([Endereco? endereco]) async {
     _atualizarCarregamento();
     await notificarCasoErro(() async {
-      setState(() => _carregando = true);
       await _solicitacaoComponent.aceitarSolicitacao(widget.numeroSolicitacao, enderecoSolicitacao);
     });
     _atualizarCarregamento();

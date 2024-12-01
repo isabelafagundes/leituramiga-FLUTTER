@@ -89,12 +89,17 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
       atualizar,
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
-      await _usuarioComponent.obterUsuario(solicitacao!.emailUsuarioSolicitante);
-      await _usuarioComponent.obterUsuarioSolicitacao(solicitacao!.emailUsuarioProprietario);
-      await _usuarioComponent.obterLivrosUsuario();
-      UF? uf = solicitacao?.enderecoSolicitante?.municipio.estado;
-      await _usuarioComponent.obterCidades(uf!);
+      try {
+        await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
+        await _usuarioComponent.obterUsuario(solicitacao!.emailUsuarioSolicitante);
+        await _usuarioComponent.obterUsuarioSolicitacao(solicitacao!.emailUsuarioProprietario);
+        await _usuarioComponent.obterLivrosUsuario();
+        UF? uf = solicitacao?.enderecoSolicitante?.municipio.estado;
+        await _usuarioComponent.obterCidades(uf!);
+      } catch (e) {
+        Notificacoes.mostrar(e.toString());
+        Rota.navegar(context, Rota.HOME);
+      }
     });
   }
 
@@ -184,7 +189,8 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
                                     SizedBox(height: tema.espacamento * 2, width: tema.espacamento * 2),
                                     _obterBotaoDireito,
                                   ],
-                                )
+                                ),
+                              SizedBox(height: tema.espacamento * 2),
                             ],
                           ),
                   ),

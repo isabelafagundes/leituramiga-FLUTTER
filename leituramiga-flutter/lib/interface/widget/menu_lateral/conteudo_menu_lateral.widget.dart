@@ -77,7 +77,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
   }
 
   void atualizar() {
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override

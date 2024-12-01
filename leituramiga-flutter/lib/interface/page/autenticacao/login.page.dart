@@ -232,7 +232,7 @@ class _LoginPageState extends State<LoginPage> {
       try {
         await autenticacaoComponent.logar(emailController.text, senhaController.text);
         Rota.navegar(context, Rota.AREA_LOGADA);
-      } on UsuarioNaoAtivo catch (e) {
+      } on PerfilNaoAtivo catch (e) {
         Notificacoes.mostrar(e.toString(), Emoji.ERRO);
         Rota.navegarComArgumentos(
             context,

@@ -71,7 +71,7 @@ class GridLivroWidget extends StatelessWidget {
 
   int _obterQuantidadePorLinha(BuildContext context) {
     double largura = MediaQuery.of(context).size.width;
-    if (largura > 1400) return 3;
+    if (largura > 1450) return 3;
     if (largura > 800) return 2;
     return 1;
   }

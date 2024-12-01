@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
       await _livrosComponent.obterLivrosIniciais();
       await _livrosComponent.obterCategorias();
       await _livrosComponent.obterInstituicoes();
-      await _usuarioComponent.obterPerfil();
+      if (_autenticacaoState.accessToken.isNotEmpty) await _usuarioComponent.obterPerfil();
       setState(() => _carregando = false);
     });
   }

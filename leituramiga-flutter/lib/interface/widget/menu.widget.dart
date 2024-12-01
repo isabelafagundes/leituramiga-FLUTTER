@@ -60,87 +60,88 @@ class _MenuWidgetState extends State<MenuWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {
-          if (_overlayEntry != null && _overlayEntry!.mounted) return _removerOverlay();
-          _visivel = !_visivel;
-          _escolhasFiltradas = widget.escolhas;
-          atualizar();
-          RenderBox renderBox = _key.currentContext?.findRenderObject() as RenderBox;
-          Offset containerPosition = renderBox.localToGlobal(Offset.zero);
-          _exibirOverlay(context, containerPosition, renderBox);
-          if (!widget.semPesquisa)
-            widget.controller.selection = TextSelection.fromPosition(
-              TextPosition(offset: widget.controller.text.length),
-            );
-        },
-        child: Opacity(
-          opacity: widget.readOnly ? 0.8 : 1,
-          child: Container(
-            key: _key,
-            height: 50,
-            decoration: BoxDecoration(
-              color: Color(widget.tema.base200),
-              border: Border.all(color: Color(widget.tema.neutral).withOpacity(.2)),
-              borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
-              boxShadow: widget.readOnly
-                  ? []
-                  : [
-                      BoxShadow(
-                        color: Color(widget.tema.neutral).withOpacity(.2),
-                        offset: const Offset(0, 2),
-                        blurRadius: 5.0,
-                      ),
-                    ],
-            ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IgnorePointer(
-                  child: Container(
-                    height: 50,
-                    constraints:
-                        BoxConstraints(maxWidth: Responsive.larguraP(context) ? Responsive.largura(context) * .5 : 250),
-                    child: TextFormField(
-                      focusNode: _focusNode,
-                      cursorColor: _visivel ? Color(widget.tema.accent) : Colors.transparent,
-                      controller: widget.controller,
-                      onChanged: (texto) async => _debouncer.executar(() => _filtrarEscolhas(texto)),
-                      readOnly: !_visivel || widget.semPesquisa,
-                      autofocus: !_visivel || !widget.semPesquisa,
-                      style: TextStyle(
-                        color: Color(widget.tema.baseContent),
-                        fontSize: widget.tema.tamanhoFonteM,
-                        fontFamily: widget.tema.familiaDeFontePrimaria,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: "Selecione",
-                        hintStyle: TextStyle(
-                          color: Color(widget.tema.neutral),
+    return LayoutBuilder(builder: (context, constraints) {
+      return MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () {
+            if (_overlayEntry != null && _overlayEntry!.mounted) return _removerOverlay();
+            _visivel = !_visivel;
+            _escolhasFiltradas = widget.escolhas;
+            atualizar();
+            RenderBox renderBox = _key.currentContext?.findRenderObject() as RenderBox;
+            Offset containerPosition = renderBox.localToGlobal(Offset.zero);
+            _exibirOverlay(context, containerPosition, renderBox);
+            if (!widget.semPesquisa)
+              widget.controller.selection = TextSelection.fromPosition(
+                TextPosition(offset: widget.controller.text.length),
+              );
+          },
+          child: Opacity(
+            opacity: widget.readOnly ? 0.8 : 1,
+            child: Container(
+              key: _key,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Color(widget.tema.base200),
+                border: Border.all(color: Color(widget.tema.neutral).withOpacity(.2)),
+                borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
+                boxShadow: widget.readOnly
+                    ? []
+                    : [
+                        BoxShadow(
+                          color: Color(widget.tema.neutral).withOpacity(.2),
+                          offset: const Offset(0, 2),
+                          blurRadius: 5.0,
+                        ),
+                      ],
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IgnorePointer(
+                    child: Container(
+                      height: 50,
+                      constraints: BoxConstraints(maxWidth: constraints.maxWidth - 78),
+                      child: TextFormField(
+                        focusNode: _focusNode,
+                        cursorColor: _visivel ? Color(widget.tema.accent) : Colors.transparent,
+                        controller: widget.controller,
+                        onChanged: (texto) async => _debouncer.executar(() => _filtrarEscolhas(texto)),
+                        readOnly: !_visivel || widget.semPesquisa,
+                        autofocus: !_visivel || !widget.semPesquisa,
+                        style: TextStyle(
+                          color: Color(widget.tema.baseContent),
                           fontSize: widget.tema.tamanhoFonteM,
                           fontFamily: widget.tema.familiaDeFontePrimaria,
                         ),
-                        border: InputBorder.none,
+                        decoration: InputDecoration(
+                          hintText: "Selecione",
+                          hintStyle: TextStyle(
+                            color: Color(widget.tema.neutral),
+                            fontSize: widget.tema.tamanhoFonteM,
+                            fontFamily: widget.tema.familiaDeFontePrimaria,
+                          ),
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Icon(
-                  _visivel ? Icons.expand_less : Icons.expand_more,
-                  color: widget.readOnly ? Colors.transparent : Color(widget.tema.baseContent),
-                  size: 24,
-                )
-              ],
+                  Icon(
+                    _visivel ? Icons.expand_less : Icons.expand_more,
+                    color: widget.readOnly ? Colors.transparent : Color(widget.tema.baseContent),
+                    size: 24,
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   void _exibirOverlay(BuildContext context, Offset containerPosition, RenderBox render) {
