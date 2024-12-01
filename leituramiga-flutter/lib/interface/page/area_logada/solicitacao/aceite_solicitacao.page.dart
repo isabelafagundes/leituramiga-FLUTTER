@@ -213,8 +213,9 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
   Widget _obterPopUpPadrao(BuildContext context) {
     return PopUpPadraoWidget(
       tema: tema,
+      naoRedimensionar: true,
       conteudo: Container(
-        height: Responsive.larguraM(context) ? Responsive.altura(context) : 320,
+        height: 324,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

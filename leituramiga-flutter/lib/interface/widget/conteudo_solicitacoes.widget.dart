@@ -87,7 +87,7 @@ class _ConteudoSolicitacoesWidgetState extends State<ConteudoSolicitacoesWidget>
                               BotaoRedondoWidget(
                                 tema: widget.tema,
                                 nomeSvg: 'seta/chevron-left',
-                                aoClicar: () => Navigator.pop(context),
+                                aoClicar: () => Navigator.pop(context, false),
                               ),
                               const Spacer(),
                               TextoWidget(

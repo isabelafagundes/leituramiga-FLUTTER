@@ -136,8 +136,8 @@ class _EditarLivroPageState extends State<EditarLivroPage> {
       tema: tema,
       naoRedimensionar: true,
       conteudo: Container(
-        height: 320,
-        width: 320,
+        height: 324,
+        width: 330,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -183,6 +183,7 @@ class _EditarLivroPageState extends State<EditarLivroPage> {
                   corTexto: Color(tema.baseContent),
                   aoClicar: () => Navigator.of(context).pop(false),
                 ),
+                SizedBox(height: tema.espacamento * 2),
               ],
             ),
           ],

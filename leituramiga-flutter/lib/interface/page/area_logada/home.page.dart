@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/livros.component.dart';
+import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/component/usuarios.component.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
 import 'package:leituramiga/state/autenticacao.state.dart';
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage> {
   bool _carregando = false;
   final LivrosComponent _livrosComponent = LivrosComponent();
   final UsuariosComponent _usuariosComponent = UsuariosComponent();
+  final UsuarioComponent _usuarioComponent = UsuarioComponent();
 
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
@@ -63,11 +65,19 @@ class _HomePageState extends State<HomePage> {
       AppModule.usuarioRepo,
       atualizar,
     );
+    _usuarioComponent.inicializar(
+      AppModule.usuarioRepo,
+      AppModule.comentarioRepo,
+      AppModule.enderecoRepo,
+      AppModule.livroRepo,
+      atualizar,
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       setState(() => _carregando = true);
       await _livrosComponent.obterLivrosIniciais();
       await _livrosComponent.obterCategorias();
       await _livrosComponent.obterInstituicoes();
+      await _usuarioComponent.obterPerfil();
       setState(() => _carregando = false);
     });
   }
@@ -177,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                         return Notificacoes.mostrar("Efetue o login para acessar o livro.");
                       }
 
-                      await _livrosComponent.obterLivro(livro.numero);
+                      await notificarCasoErro(() async => await _livrosComponent.obterLivro(livro.numero));
                       if (livro.emailUsuario.endereco == _autenticacaoState.usuario!.email.endereco) {
                         return Rota.navegarComArgumentos(
                           context,

@@ -3,6 +3,7 @@ import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:leituramiga/domain/livro/tipo_status_livro.dart';
 import 'package:leituramiga/domain/solicitacao/tipo_solicitacao.dart';
 import 'package:leituramiga/domain/super/entidade.dart';
+import 'package:leituramiga/domain/super/erro_dominio.dart';
 import 'package:leituramiga/domain/usuario/email.dart';
 
 class Livro extends Entidade {
@@ -134,4 +135,12 @@ class Livro extends Entidade {
   String? get nomeInstituicao => _nomeInstituicao;
 
   String? get imagemLivro => _imagemLivro;
+}
+
+class LivroNaoEncontrado extends ErroDominio{
+  LivroNaoEncontrado() : super("Livro não encontrado");
+}
+
+class LivroNaoDisponivel extends ErroDominio{
+  LivroNaoDisponivel() : super("Livro não disponível");
 }

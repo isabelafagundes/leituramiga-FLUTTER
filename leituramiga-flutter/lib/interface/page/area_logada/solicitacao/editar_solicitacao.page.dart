@@ -282,7 +282,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
 
   Future<void> salvarSolicitacao() async {
     await notificarCasoErro(() async {
-      if (!validarCamposPreenchidos()) throw Exception("Preencha todos os campos");
+      if (!validarCamposPreenchidos()) return Notificacoes.mostrar("Preencha todos os campos");
       _solicitacaoComponent.atualizarSolicitacaoMemoria(solicitacao);
       await _solicitacaoComponent.atualizarSolicitacao();
       Navigator.pop(context);

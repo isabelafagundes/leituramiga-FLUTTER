@@ -72,13 +72,13 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: tema.espacamento / 2),
                     if (Responsive.larguraP(context)) SizedBox(height: tema.espacamento * 2),
                     if (solicitacao.dataEntrega != null)
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          SizedBox(height: tema.espacamento / 2),
                           _obterTextoComIcone(
                             "Data entrega",
                             Icon(
@@ -94,12 +94,12 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                           ),
                         ],
                       ),
-                    SizedBox(height: tema.espacamento * 2),
                     if (solicitacao.dataDevolucao != null)
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          SizedBox(height: tema.espacamento * 2),
                           _obterTextoComIcone(
                             "Data devolução",
                             Icon(
@@ -223,7 +223,7 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                                   vertical: tema.espacamento / 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Color(tema.accent),
+                                  color: Color(tema.accent).withOpacity(.7),
                                   borderRadius: BorderRadius.circular(tema.borderRadiusM),
                                   border: Border.all(color: Color(tema.neutral).withOpacity(.2)),
                                 ),

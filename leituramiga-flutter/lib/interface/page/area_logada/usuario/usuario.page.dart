@@ -169,7 +169,6 @@ class _UsuarioPageState extends State<UsuarioPage> {
         height: Responsive.larguraM(context) ? Responsive.altura(context) : 690,
         width: Responsive.larguraM(context) ? Responsive.largura(context) : 450,
         child: Column(
-
           children: [
             Responsive.larguraM(context)
                 ? Row(

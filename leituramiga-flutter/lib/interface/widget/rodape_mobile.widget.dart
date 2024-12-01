@@ -169,9 +169,7 @@ class _RodapeMobileWidgetState extends State<RodapeMobileWidget> {
           tema: widget.tema,
           conteudo: ConteudoSolicitacoesWidget(
             tema: widget.tema,
-            aoVisualizarSolicitacao: () {
-              Navigator.pop(context, true);
-            },
+            aoVisualizarSolicitacao: () => Navigator.pop(context, true),
           ),
         );
       },

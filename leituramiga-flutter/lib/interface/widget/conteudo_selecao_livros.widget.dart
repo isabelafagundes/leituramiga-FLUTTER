@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
-import 'package:projeto_leituramiga/interface/util/responsive.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/dica.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/empty_state.widget.dart';
@@ -100,8 +100,9 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
   Widget _obterPopUpPadrao(BuildContext context) {
     return PopUpPadraoWidget(
       tema: tema,
+      naoRedimensionar: true,
       conteudo: Container(
-        height: Responsive.larguraP(context) ? Responsive.altura(context) : 320,
+        height: 324,
         child: Column(
           children: [
             SizedBox(height: tema.espacamento * 4),
@@ -143,10 +144,14 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
                     cor: Color(tema.baseContent),
                   ),
                   texto: "Voltar",
-                  corFundo: Color(tema.error),
-                  aoClicar: () => Navigator.of(context).pop(false),
+                  corFundo: Color(tema.base200),
+                  corTexto: Color(tema.baseContent),
+                  aoClicar: () {
+                    Rota.navegar(context, Rota.HOME);
+                    Navigator.of(context).pop(false);
+                  },
                 ),
-
+                SizedBox(height: tema.espacamento * 2),
               ],
             ),
           ],

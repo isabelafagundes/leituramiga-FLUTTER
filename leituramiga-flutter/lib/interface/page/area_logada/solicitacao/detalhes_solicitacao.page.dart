@@ -350,10 +350,11 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
   Widget obterPopUp(String texto, String textoBotao, BuildContext context, Function() aoClicar) {
     return PopUpPadraoWidget(
       tema: tema,
+      naoRedimensionar: true,
       conteudo: Container(
         padding: EdgeInsets.all(tema.espacamento * 2),
-        height: Responsive.larguraM(context) ? Responsive.altura(context) : 380,
-        width: Responsive.larguraM(context) ? Responsive.largura(context) : 400,
+        height: 390,
+        width: 400,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -402,6 +403,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
               ),
               corFundo: Color(tema.base200),
             ),
+            SizedBox(height: tema.espacamento * 2),
           ],
         ),
       ),

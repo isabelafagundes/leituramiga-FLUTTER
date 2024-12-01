@@ -283,6 +283,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       _usuarioComponent.atualizarUsuarioMemoria(usuario);
       await notificarCasoErro(() async => await _usuarioComponent.atualizarUsuario());
       await _usuarioComponent.obterPerfil();
+      setState(() => _imagem = _usuarioComponent.usuarioSelecionado!.imagem);
       Notificacoes.mostrar("Usuário atualizado com sucesso", Emoji.SUCESSO);
     } catch (e) {
       Notificacoes.mostrar("Erro ao atualizar usuário", Emoji.ERRO);

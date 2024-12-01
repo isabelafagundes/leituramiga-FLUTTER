@@ -19,7 +19,6 @@ class LivroApiRepo extends LivroRepo with ConfiguracaoApiState {
 
   @override
   Future<void> atualizarLivro(Livro livro) async {
-    print(livro.paraMapa());
     if (livro.numero == null) {
       await _criarLivro(livro);
     } else {
@@ -42,6 +41,8 @@ class LivroApiRepo extends LivroRepo with ConfiguracaoApiState {
   @override
   Future<void> desativarLivro(int numero) async {
     await _client.delete("$host/livro/$numero").catchError((erro) {
+      if (erro.response?.statusCode == 404) throw LivroNaoEncontrado();
+      if (erro.response?.statusCode == 417) throw LivroNaoDisponivel();
       throw erro;
     });
   }
@@ -49,6 +50,8 @@ class LivroApiRepo extends LivroRepo with ConfiguracaoApiState {
   @override
   Future<Livro> obterLivro(int numero) async {
     return await _client.get("$host/livro/$numero").catchError((erro) {
+      if (erro.response?.statusCode == 404) throw LivroNaoEncontrado();
+      if (erro.response?.statusCode == 417) throw LivroNaoDisponivel();
       throw erro;
     }).then((response) => Livro.carregarDeMapa(response.data));
   }
