@@ -102,7 +102,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
       tema: tema,
       naoRedimensionar: true,
       conteudo: Container(
-        height: 324,
+        height: 350,
         child: Column(
           children: [
             SizedBox(height: tema.espacamento * 4),
@@ -117,6 +117,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
               child: TextoWidget(
                 tema: tema,
                 texto: textoPopUp,
+                align: TextAlign.center,
                 weight: FontWeight.w500,
               ),
             ),

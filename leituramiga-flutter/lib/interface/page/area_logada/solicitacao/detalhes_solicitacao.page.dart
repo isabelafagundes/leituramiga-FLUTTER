@@ -438,7 +438,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
   Future<void> _aceitarSolicitacao([Endereco? endereco]) async {
     _atualizarCarregamento();
     await notificarCasoErro(() async {
-      setState(() => _carregando = true);
+      await _validarSolicitacao();
       _solicitacaoComponent.validarNumeroLivrosSelecionados();
       Solicitacao solicitacao = _solicitacaoComponent.solicitacaoSelecionada!;
       if (solicitacao.tipoSolicitacao.possuiSegundoEndereco && solicitacao.formaEntrega == FormaEntrega.CORREIOS) {
@@ -454,6 +454,12 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
     });
     _atualizarCarregamento();
   }
+
+  Future<void> _validarSolicitacao() async {
+      await _solicitacaoComponent.obterSolicitacao(widget.numeroSolicitacao);
+      if (_solicitacaoComponent.solicitacaoSelecionada!.status != TipoStatusSolicitacao.PENDENTE)
+        throw SolicitacaoRecusada();
+    }
 
   Future<void> _cancelarSolicitacao(BuildContext context) async {
     await notificarCasoErro(() async {

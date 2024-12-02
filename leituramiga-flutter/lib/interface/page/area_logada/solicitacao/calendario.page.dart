@@ -200,7 +200,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
   }
 
   int _obterQuantidadeColunas(BuildContext context) {
-    if (Responsive.largura(context) > 1400) return 3;
+    if (Responsive.largura(context) > 1450) return 3;
     if (Responsive.largura(context) > 900) return 2;
     return 1;
   }

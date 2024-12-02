@@ -268,3 +268,7 @@ class DataSolicitacaoInvalida extends ErroDominio {
 class SolicitacaoFinalizada extends ErroDominio {
   SolicitacaoFinalizada() : super("Solicitação já finalizada");
 }
+
+class SolicitacaoRecusada extends ErroDominio {
+  SolicitacaoRecusada() : super("Solicitação não está mais disponível para aceite");
+}

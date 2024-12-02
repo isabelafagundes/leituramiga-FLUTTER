@@ -9,26 +9,26 @@ enum MenuLateral {
     usuarioLogado: false,
     rota: Rota.HOME,
   ),
-  SOLICITACOES(
+  PERFIL(
     id: 2,
+    descricao: "Perfil",
+    iconeAtivado: "usuario/user",
+    iconeDesativado: "usuario/user-outline",
+    rota: Rota.PERFIL,
+  ),
+  SOLICITACOES(
+    id: 3,
     descricao: "Solicitações",
     iconeAtivado: "compartilhar_fill",
     iconeDesativado: "compartilhar",
     rota: Rota.DETALHES_SOLICITACAO,
   ),
   CALENDARIO(
-    id: 3,
+    id: 4,
     descricao: "Calendário",
     iconeAtivado: "calendar-fill",
     iconeDesativado: "calendar",
     rota: Rota.CALENDARIO,
-  ),
-  PERFIL(
-    id: 4,
-    descricao: "Perfil",
-    iconeAtivado: "usuario/user",
-    iconeDesativado: "usuario/user-outline",
-    rota: Rota.PERFIL,
   ),
   HISTORICO(
     id: 5,
