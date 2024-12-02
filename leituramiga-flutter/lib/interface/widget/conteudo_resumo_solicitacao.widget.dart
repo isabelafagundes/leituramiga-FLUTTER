@@ -129,12 +129,13 @@ class ConteudoResumoSolicitacaoWidget extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: tema.espacamento),
-                        TextoWidget(
-                          texto: solicitacao.status == TipoStatusSolicitacao.EM_ANDAMENTO
-                              ? solicitacao.enderecoSolicitante!.enderecoFormatado
-                              : solicitacao.enderecoSolicitante!.enderecoFormatadoCensurado,
-                          tema: tema,
-                        ),
+                        if (solicitacao.enderecoSolicitante != null)
+                          TextoWidget(
+                            texto: solicitacao.status == TipoStatusSolicitacao.EM_ANDAMENTO
+                                ? solicitacao.enderecoSolicitante!.enderecoFormatado
+                                : solicitacao.enderecoSolicitante!.enderecoFormatadoCensurado,
+                            tema: tema,
+                          ),
                         SizedBox(height: tema.espacamento * 2),
                         if (solicitacao.enderecoReceptor != null) ...[
                           _obterTextoComIcone(

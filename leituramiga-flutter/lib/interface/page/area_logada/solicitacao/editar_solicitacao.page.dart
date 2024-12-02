@@ -356,7 +356,7 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
         _solicitacaoComponent.solicitacaoSelecionada!.numero,
         _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioProprietario,
         _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioSolicitante,
-        formaEntregaSelecionada ?? FormaEntrega.CORREIOS,
+        _solicitacaoComponent.solicitacaoSelecionada!.formaEntrega,
         _solicitacaoComponent.solicitacaoSelecionada!.dataCriacao,
         dataEntrega,
         dataDevolucao,
@@ -464,7 +464,12 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
     setState(() => _abaSelecionada = aba);
   }
 
-  List<String> get _opcoes => EditarSolicitacao.values.where((e) => e.aba).map((e) => e.descricao).toList();
+  List<String> get _opcoes {
+    String emailSolicitante = _solicitacaoComponent.solicitacaoSelecionada?.emailUsuarioSolicitante ?? "";
+    if (_autenticacaoState.emailUsuario == emailSolicitante)
+      return EditarSolicitacao.values.where((e) => e.aba).map((e) => e.descricao).toList();
+    return [EditarSolicitacao.INFORMACOES, EditarSolicitacao.LIVROS].map((e) => e.descricao).toList();
+  }
 }
 
 enum CriarSolicitacao { SELECIONAR_LIVROS, INFORMACOES_ADICIONAIS, ENDERECO, CONCLUSAO }
