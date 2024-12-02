@@ -59,6 +59,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   final TextEditingController controllerInstituicao = TextEditingController();
   Telefone? telefone;
   Email? email;
+  bool _carregando = false;
   EtapaCadastro? _etapaCadastro = EtapaCadastro.DADOS_GERAIS;
 
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
@@ -125,38 +126,53 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
                     vertical: tema.espacamento * 2,
                   ),
                   tema: tema,
-                  child: Flex(
-                    direction: Axis.vertical,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      if (_etapaCadastro != EtapaCadastro.REDIRECIONAMENTO)
-                        Column(
-                          children: [
-                            Container(
-                              width: 235,
-                              child: LogoWidget(
-                                tema: tema,
-                                tamanho: tema.tamanhoFonteM * 2,
-                              ),
+                  child: _carregando
+                      ? Center(
+                          child: SizedBox(
+                            height: obterAltura(context),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CircularProgressIndicator(
+                                  color: Color(tema.accent),
+                                ),
+                              ],
                             ),
-                            SizedBox(height: tema.espacamento * 2),
-                            EtapasWidget(
-                              tema: tema,
-                              possuiQuatroEtapas: true,
-                              etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
+                          ),
+                        )
+                      : Flex(
+                          direction: Axis.vertical,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            if (_etapaCadastro != EtapaCadastro.REDIRECIONAMENTO)
+                              Column(
+                                children: [
+                                  Container(
+                                    width: 235,
+                                    child: LogoWidget(
+                                      tema: tema,
+                                      tamanho: tema.tamanhoFonteM * 2,
+                                    ),
+                                  ),
+                                  SizedBox(height: tema.espacamento * 2),
+                                  EtapasWidget(
+                                    tema: tema,
+                                    possuiQuatroEtapas: true,
+                                    etapaSelecionada: _etapaCadastro == null ? 1 : _etapaCadastro!.index + 1,
+                                  ),
+                                ],
+                              ),
+                            Flexible(
+                              flex: 12,
+                              child: Padding(
+                                padding: EdgeInsets.all(tema.espacamento * 2),
+                                child: _obterPaginaAtual(),
+                              ),
                             ),
                           ],
                         ),
-                      Flexible(
-                        flex: 12,
-                        child: Padding(
-                          padding: EdgeInsets.all(tema.espacamento * 2),
-                          child: _obterPaginaAtual(),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ),
             ],
@@ -357,8 +373,12 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   }
 
   Future<void> _selecionarEstado(String estado) async {
-    setState(() => controllerEstado.text = estado);
-    await _usuarioComponent.obterCidades(UF.deDescricao(estado));
+    setState(() {
+      _carregando = true;
+      controllerEstado.text = estado;
+    });
+    await notificarCasoErro(() async => await _usuarioComponent.obterCidades(UF.deDescricao(estado)));
+    setState(() => _carregando = false);
   }
 
   void atualizarPagina(EtapaCadastro? etapa) {
@@ -441,7 +461,7 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage> {
   Telefone? get _obterTelefone {
     String telefone = controllerTelefone.text.replaceAll("(", "").replaceAll(")", "");
     telefone = telefone.replaceAll("-", "").replaceAll(" ", "");
-    if (telefone.length < 11) throw TelefoneInvalido("Tente novamente!");
+    if (telefone.length > 0 && telefone.length < 11) throw TelefoneInvalido("Tente novamente!");
 
     return controllerTelefone.text.isNotEmpty
         ? Telefone.criar(

@@ -342,8 +342,12 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
   }
 
   Future<void> _selecionarEstado(String estado) async {
-    setState(() => controllerEstado.text = estado);
-    await _usuarioComponent.obterCidades(UF.deDescricao(estado));
+    setState(() {
+      _carregando = true;
+      controllerEstado.text = estado;
+    });
+    await notificarCasoErro(() async => await _usuarioComponent.obterCidades(UF.deDescricao(estado)));
+    setState(() => _carregando = false);
   }
 
   bool _validarCamposDadosGerais() {

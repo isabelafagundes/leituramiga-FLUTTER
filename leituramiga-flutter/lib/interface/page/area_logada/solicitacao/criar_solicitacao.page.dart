@@ -277,9 +277,15 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
   }
 
   Future<void> _selecionarEstado(String estado) async {
-    UF uf = UF.deDescricao(estado);
-    await _usuarioComponent.obterCidades(uf);
-    setState(() => controllerEstado.text = estado);
+    setState(() => _carregando = true);
+    await notificarCasoErro(() async {
+      UF uf = UF.deDescricao(estado);
+      await _usuarioComponent.obterCidades(uf);
+    });
+    setState(() {
+      controllerEstado.text = estado;
+      _carregando = false;
+    });
   }
 
   Future<void> _utilizarEnderecoPerfil() async {
