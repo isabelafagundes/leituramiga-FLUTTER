@@ -2,7 +2,6 @@ import 'package:leituramiga/service/sessao.service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SessaoFlutterService extends SessaoService {
-
   static SessaoFlutterService? _instancia;
 
   SessaoFlutterService._();
@@ -63,5 +62,11 @@ class SessaoFlutterService extends SessaoService {
   Future<void> limpar() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+  }
+
+  @override
+  Future<bool> validarSePossuiToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey('accessToken');
   }
 }

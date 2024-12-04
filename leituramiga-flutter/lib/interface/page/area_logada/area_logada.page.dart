@@ -29,7 +29,7 @@ class _AreaLogadaPageState extends State<AreaLogadaPage> {
       atualizar,
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await autenticacaoComponent.carregarSessao();
+      await autenticacaoComponent.validarSePossuiToken();
     });
   }
 

@@ -97,4 +97,15 @@ class AutenticacaoUseCase {
   Future<void> atualizarRecuperacaoSenha() async {
     await _autenticacaoService.atualizarSenha(_state.email, _state.senha.senha);
   }
+
+  Future<void> validarSePossuiToken() async {
+    bool possuiToken = await _sessaoService.validarSePossuiToken();
+    _state.possuiTokens = possuiToken;
+    if (possuiToken) {
+      await carregarSessao();
+    } else {
+      _state.limparTokens();
+    }
+  }
+
 }

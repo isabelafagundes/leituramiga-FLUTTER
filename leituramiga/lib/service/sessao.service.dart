@@ -14,4 +14,6 @@ abstract class SessaoService {
   Future<bool> obterModoFonteGrande();
 
   Future<void> limpar();
+
+  Future<bool> validarSePossuiToken();
 }

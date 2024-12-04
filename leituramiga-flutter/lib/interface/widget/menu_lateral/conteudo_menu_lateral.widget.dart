@@ -72,21 +72,12 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (_autenticacaoState.usuario != null)
-        await _solicitacaoComponent.obterNotificacoes(_autenticacaoState.usuario!.email!.endereco);
+        await _solicitacaoComponent.obterNotificacoes(_autenticacaoState.usuario!.email.endereco);
     });
   }
 
   void atualizar() {
     if (mounted) setState(() {});
-  }
-
-  @override
-  void didUpdateWidget(covariant ConteudoMenuLateralWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (_autenticacaoState.usuario != null)
-        await _solicitacaoComponent.obterNotificacoes(_autenticacaoState.usuario!.email!.endereco);
-    });
   }
 
   @override

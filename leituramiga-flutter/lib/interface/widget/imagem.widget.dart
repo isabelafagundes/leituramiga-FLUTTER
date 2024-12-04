@@ -4,7 +4,7 @@ import 'dart:html';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image/image.dart' as img;
 import 'package:leituramiga/domain/super/erro_dominio.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
@@ -134,6 +134,7 @@ class _ImagemWidgetState extends State<ImagemWidget> {
       });
 
       String base64 = 'data:image/$extensao;base64,' + base64Encode(bytes);
+
       widget.salvarImagem(base64);
     } catch (e) {
       print("Erro ao carregar imagem: $e");
@@ -141,6 +142,7 @@ class _ImagemWidgetState extends State<ImagemWidget> {
       rethrow;
     }
   }
+
 
   Future<String> converterParaBase64(File file) async {
     final reader = FileReader();

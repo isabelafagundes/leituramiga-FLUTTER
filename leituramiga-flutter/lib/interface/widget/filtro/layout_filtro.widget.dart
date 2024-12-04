@@ -296,7 +296,7 @@ class _LayoutFiltroWidgetState extends State<LayoutFiltroWidget> {
 
   Future<void> _aplicarFiltros() async {
     if (_filtroState.estado != null && _filtroState.numeroMunicipio == null) {
-      return Notificacoes.mostrar("Selecione um município.");
+      return Notificacoes.mostrar("Selecione uma cidade.");
     }
     await widget.aplicarFiltros();
   }

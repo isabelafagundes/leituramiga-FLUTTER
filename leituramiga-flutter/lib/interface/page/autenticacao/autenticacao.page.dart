@@ -31,7 +31,7 @@ class _AutenticacaoPageState extends State<AutenticacaoPage> {
       atualizar,
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await autenticacaoComponent.carregarSessao();
+      await autenticacaoComponent.validarSePossuiToken();
       if (autenticacaoState.usuario != null) {
         Rota.navegar(context, Rota.AREA_LOGADA);
       }

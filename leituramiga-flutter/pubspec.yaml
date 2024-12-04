@@ -27,6 +27,7 @@ dependencies:
   dio: ^5.7.0
   connectivity_plus: ^2.3.0
   flutter_image_compress: ^2.3.0
+  image: ^4.3.0
 
   leituramiga:
     path: ../leituramiga

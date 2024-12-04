@@ -11,6 +11,7 @@ class TextoWidget extends StatelessWidget {
   final int? maxLines;
   final TextAlign? align;
   final TextDecoration? decoration;
+  final bool podeCopiar;
 
   const TextoWidget({
     super.key,
@@ -23,22 +24,34 @@ class TextoWidget extends StatelessWidget {
     this.align,
     required this.tema,
     this.decoration,
+    this.podeCopiar = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      texto,
-      textAlign: align ?? TextAlign.start,
-      overflow: TextOverflow.ellipsis,
-      maxLines: maxLines ?? 2,
-      style: TextStyle(
-        fontWeight: weight ?? FontWeight.w400,
-        decoration: decoration,
-        fontSize: tamanho ?? tema.tamanhoFonteM,
-        fontFamily: fontFamily ?? 'Montserrat',
-        color: cor ?? Color(tema.baseContent),
-      ),
+    return podeCopiar
+        ? SelectableText(
+            texto,
+            textAlign: align ?? TextAlign.start,
+            maxLines: maxLines ?? 2,
+            style: _estilo,
+          )
+        : Text(
+            texto,
+            textAlign: align ?? TextAlign.start,
+            overflow: TextOverflow.ellipsis,
+            maxLines: maxLines ?? 2,
+            style: _estilo,
+          );
+  }
+
+  TextStyle get _estilo {
+    return TextStyle(
+      fontWeight: weight ?? FontWeight.w400,
+      decoration: decoration,
+      fontSize: tamanho ?? tema.tamanhoFonteM,
+      fontFamily: fontFamily ?? 'Montserrat',
+      color: cor ?? Color(tema.baseContent),
     );
   }
 }

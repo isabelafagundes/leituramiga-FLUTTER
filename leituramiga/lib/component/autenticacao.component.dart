@@ -118,4 +118,11 @@ class AutenticacaoComponent extends State {
       mensagemErro: "Não foi possível validar o identificador",
     );
   }
+
+  Future<void> validarSePossuiToken() async {
+    await executar(
+      rotina: () async => await _useCase.validarSePossuiToken(),
+      mensagemErro: "Não foi possível validar o token",
+    );
+  }
 }

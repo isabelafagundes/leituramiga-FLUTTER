@@ -177,7 +177,7 @@ class _EsqueceSenhaPageState extends State<EsqueceSenhaPage> {
           tema: tema,
           controllerEmail: controllerEmail,
           controllerCodigoSeguranca: controllerCodigoSeguranca,
-          atualizarPagina: () => atualizarPagina(EtapaSenha.CODIGO),
+          atualizarPagina: () => atualizarPagina(EtapaSenha.EMAIL),
           validarCodigoSeguranca: verificarCodigoSeguranca,
           enviarNovoCodigo: enviarCodigoRecuperacao,
         ),

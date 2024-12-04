@@ -21,6 +21,7 @@ class AutenticacaoState {
   Usuario? usuario;
   String email = "";
   Senha senha = Senha.criar();
+  bool possuiTokens = false;
 
   String get accessToken => _accessToken;
 
@@ -47,6 +48,8 @@ class AutenticacaoState {
   void limparTokens() {
     _accessToken = "";
     refreshToken = "";
+    criacaoUsuarioToken = "";
+    recuperacaoSenhaToken = "";
     usuario = null;
   }
 }
