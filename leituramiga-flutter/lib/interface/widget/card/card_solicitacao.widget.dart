@@ -6,7 +6,6 @@ import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/icone_usuario.widget.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/card/card_base.widget.dart';
-import 'package:projeto_leituramiga/interface/widget/carrossel_categorias.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class CardSolicitacaoWidget extends StatefulWidget {
@@ -97,11 +96,12 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                                 tema: widget.tema,
                               ),
                               SizedBox(height: widget.tema.espacamento / 2),
-                              TextoWidget(
-                                texto: "Data:",
-                                weight: FontWeight.w500,
-                                tema: widget.tema,
-                              ),
+                              if (widget.solicitacao.dataEntrega != null || widget.solicitacao.dataDevolucao != null)
+                                TextoWidget(
+                                  texto: "Data:",
+                                  weight: FontWeight.w500,
+                                  tema: widget.tema,
+                                ),
                               Row(
                                 children: [
                                   if (widget.solicitacao.dataEntrega != null)
@@ -186,7 +186,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                       child: TextoWidget(
                         texto: widget.solicitacao.tipo.descricao,
                         tema: widget.tema,
-                        tamanho: widget.tema.tamanhoFonteP+2,
+                        tamanho: widget.tema.tamanhoFonteP + 2,
                         weight: FontWeight.w500,
                         cor: kCorFonte,
                       ),

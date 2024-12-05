@@ -176,7 +176,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
     return switch (_estagioAtual) {
       EditarPerfil.DADOS_GERAIS => FormularioEdicaoUsuarioWidget(
           tema: tema,
-          imagem: _imagem,
+          imagem: _imagem ?? _usuarioComponent.usuarioSelecionado?.imagem,
           salvarImagem: (imagem) => setState(() => _imagem = imagem),
           atualizar: () => setState(() {}),
           controllerDescricao: controllerDescricao,
@@ -283,8 +283,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
       _usuarioComponent.atualizarUsuarioMemoria(usuario);
       await notificarCasoErro(() async => await _usuarioComponent.atualizarUsuario());
       await _usuarioComponent.obterPerfil();
-      setState(() => _imagem = _usuarioComponent.usuarioSelecionado!.imagem);
-      Notificacoes.mostrar("Usuário atualizado com sucesso", Emoji.SUCESSO);
+      Notificacoes.mostrar("Usuário atualizado com sucesso!", Emoji.SUCESSO);
     } catch (e) {
       Notificacoes.mostrar("Erro ao atualizar usuário", Emoji.ERRO);
     }
@@ -348,15 +347,6 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
     });
     await notificarCasoErro(() async => await _usuarioComponent.obterCidades(UF.deDescricao(estado)));
     setState(() => _carregando = false);
-  }
-
-  bool _validarCamposDadosGerais() {
-    return controllerNome.text.isNotEmpty &&
-        controllerNomeUsuario.text.isNotEmpty &&
-        controllerEmail.text.isNotEmpty &&
-        controllerSenha.text.isNotEmpty &&
-        controllerConfirmacaoSenha.text.isNotEmpty &&
-        controllerSenha.text == controllerConfirmacaoSenha.text;
   }
 
   bool _validarCamposEndereco() {

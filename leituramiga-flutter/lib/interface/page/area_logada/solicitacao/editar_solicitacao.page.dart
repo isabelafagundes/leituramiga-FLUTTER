@@ -291,8 +291,8 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
         controllerCidade.text = "";
         controllerEstado.text = "";
       }
-      setState(() => _carregando = false);
     });
+    setState(() => _carregando = false);
   }
 
   Future<void> salvarSolicitacao() async {
@@ -466,9 +466,11 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
 
   List<String> get _opcoes {
     String emailSolicitante = _solicitacaoComponent.solicitacaoSelecionada?.emailUsuarioSolicitante ?? "";
-    if (_autenticacaoState.emailUsuario == emailSolicitante)
-      return EditarSolicitacao.values.where((e) => e.aba).map((e) => e.descricao).toList();
-    return [EditarSolicitacao.INFORMACOES, EditarSolicitacao.LIVROS].map((e) => e.descricao).toList();
+    Endereco? enderecoReceptor = _solicitacaoComponent.solicitacaoSelecionada?.enderecoReceptor;
+    if (_autenticacaoState.emailUsuario != emailSolicitante && enderecoReceptor == null)
+      return [EditarSolicitacao.INFORMACOES, EditarSolicitacao.LIVROS].map((e) => e.descricao).toList();
+
+    return EditarSolicitacao.values.where((e) => e.aba).map((e) => e.descricao).toList();
   }
 }
 

@@ -258,7 +258,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
   Future<void> salvarSolicitacao() async {
     await notificarCasoErro(() async {
       setState(() => _carregando = true);
-      if (!validarCamposPreenchidos()) throw Exception("Preencha todos os campos");
+      if (!validarCamposPreenchidos()) return Notificacoes.mostrar("Preencha todos os campos!");
       _solicitacaoComponent.atualizarSolicitacaoMemoria(solicitacao);
       await _solicitacaoComponent.atualizarSolicitacao();
       atualizarPagina(CriarSolicitacao.CONCLUSAO);
