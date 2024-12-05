@@ -78,13 +78,11 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
     if (possuiSegundoEndereco) {
       if (_autenticacaoState.usuario!.email.endereco ==
           _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioSolicitante) {
-        _enderecoSolicitante = true;
         return _solicitacaoComponent.solicitacaoSelecionada!.enderecoSolicitante!;
       } else {
         return _solicitacaoComponent.solicitacaoSelecionada!.enderecoReceptor!;
       }
     }
-    _enderecoSolicitante = true;
     return _solicitacaoComponent.solicitacaoSelecionada!.enderecoSolicitante!;
   }
 
@@ -120,6 +118,9 @@ class _EditarSolicitacaoPageState extends State<EditarSolicitacaoPage> {
         if (enderecoEmEdicao?.principal ?? false) _solicitacaoComponent.utilizarEnderecoDoPerfil();
         UF? uf = enderecoEmEdicao?.municipio.estado;
         await _usuarioComponent.obterCidades(uf);
+        _enderecoSolicitante = _autenticacaoState.usuario!.email.endereco ==
+            _solicitacaoComponent.solicitacaoSelecionada!.emailUsuarioSolicitante;
+        setState(() {});
       } catch (e) {
         Notificacoes.mostrar(e.toString());
         Navigator.pop(context);

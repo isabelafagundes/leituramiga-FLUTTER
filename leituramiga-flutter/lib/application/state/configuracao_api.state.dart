@@ -1,5 +1,5 @@
 abstract mixin class ConfiguracaoApiState {
-  static String _ip = '192.168.201.70';
+  static String _ip = '192.168.1.10';
   static const String _porta = '8080';
   static const String _protocolo = 'http';
 

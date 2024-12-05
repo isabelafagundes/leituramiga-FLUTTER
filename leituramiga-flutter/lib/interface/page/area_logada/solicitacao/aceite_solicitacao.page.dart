@@ -85,8 +85,7 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
         });
         await _usuarioComponent.obterUsuario(solicitacao!.emailUsuarioSolicitante);
         await _usuarioComponent.obterUsuarioSolicitacao(solicitacao.emailUsuarioProprietario);
-        await _usuarioComponent.obterLivrosUsuario();
-        // await _obterEnderecoUsuario();
+        await _usuarioComponent.obterLivrosUsuario();;
       });
       setState(() => _carregando = false);
     });
