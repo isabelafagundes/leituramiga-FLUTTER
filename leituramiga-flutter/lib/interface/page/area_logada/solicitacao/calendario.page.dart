@@ -61,7 +61,6 @@ class _CalendarioPageState extends State<CalendarioPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
-        voltar: () => Rota.navegar(context, Rota.HOME),
         atualizar: atualizar,
         carregando: solicitacaoComponent.carregando || !mounted,
         child: SizedBox(

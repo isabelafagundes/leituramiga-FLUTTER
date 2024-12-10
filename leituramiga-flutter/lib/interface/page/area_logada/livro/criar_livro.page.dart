@@ -65,7 +65,7 @@ class _CriarLivroPageState extends State<CriarLivroPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
-        voltar: () => Rota.navegar(context, Rota.HOME),
+        voltar: () => Rota.navegar(context, Rota.PERFIL),
         carregando: _livrosComponent.carregando || _livrosComponent.categoriasPorNumero.isEmpty,
         child: SizedBox(
           width: Responsive.largura(context),

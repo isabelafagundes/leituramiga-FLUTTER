@@ -114,7 +114,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
         atualizar: atualizar,
         carregando:
             _solicitacaoComponent.carregando || solicitacao == null || _usuarioComponent.carregando || _carregando,
-        voltar: () => Rota.navegar(context, Rota.HOME),
+        voltar: _voltar,
         child: SizedBox(
           height: Responsive.altura(context),
           child: SingleChildScrollView(
@@ -381,6 +381,7 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
             SizedBox(height: tema.espacamento * 2),
             InputWidget(
               tema: tema,
+              obrigatorio: false,
               label: "Motivo",
               controller: controllerMotivo,
               onChanged: (valor) {},
@@ -414,6 +415,14 @@ class _DetalhesSolicitacaoPageState extends State<DetalhesSolicitacaoPage> {
         ),
       ),
     );
+  }
+
+  void _voltar() {
+    if(_abaSelecionada == DetalhesSolicitacao.SELECAO_LIVROS) {
+      _atualizarAbaSelecionada(DetalhesSolicitacao.INFORMACOES);
+    } else {
+      Rota.navegar(context, Rota.HOME);
+    }
   }
 
   void _atualizarAbaSelecionada(DetalhesSolicitacao aba) {

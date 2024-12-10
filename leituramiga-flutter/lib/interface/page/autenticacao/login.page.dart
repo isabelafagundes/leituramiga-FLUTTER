@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                                     tema: tema,
                                     align: TextAlign.center,
                                     texto:
-                                        "Descubra, troque, e doe livros enquanto transforma sua experiência de leitura ainda mais incrivel!",
+                                        "Descubra, troque e doe livros, enquanto transforma sua experiência de leitura ainda mais incrível!",
                                     cor: Color(tema.baseContent),
                                     maxLines: 5,
                                   ),

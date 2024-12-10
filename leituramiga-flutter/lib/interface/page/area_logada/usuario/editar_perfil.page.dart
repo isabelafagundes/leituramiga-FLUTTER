@@ -12,6 +12,7 @@ import 'package:leituramiga/domain/usuario/usuario.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/background/background.widget.dart';
@@ -108,7 +109,7 @@ class _EditarPefilPageState extends State<EditarPefilPage> {
             _autenticacaoComponent.carregando ||
             _carregando ||
             _usuarioComponent.usuarioSelecionado == null,
-        voltar: () => Rota.navegar(context, Rota.HOME),
+        voltar: () => Rota.navegar(context, Rota.PERFIL),
         child: SingleChildScrollView(
           child: Container(
             height: Responsive.larguraP(context) ? 1200 : Responsive.altura(context) * .8,

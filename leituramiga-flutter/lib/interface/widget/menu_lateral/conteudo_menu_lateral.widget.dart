@@ -220,7 +220,7 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                             tema: widget.tema,
                                             padding: EdgeInsets.symmetric(horizontal: widget.tema.espacamento * 2),
                                             corFundo: Color(widget.tema.base200),
-                                            aoClicar: () => Rota.navegar(context, Rota.HOME),
+                                            aoClicar: widget.voltar!,
                                             label: "Voltar",
                                             corFonte: Color(widget.tema.baseContent),
                                             icone: Icon(

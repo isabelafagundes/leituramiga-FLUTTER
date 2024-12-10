@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:leituramiga/component/livros.component.dart';
+import 'package:leituramiga/component/solicitacao.component.dart';
 import 'package:leituramiga/component/usuario.component.dart';
 import 'package:leituramiga/component/usuarios.component.dart';
 import 'package:leituramiga/domain/endereco/uf.dart';
@@ -43,6 +44,7 @@ class _HomePageState extends State<HomePage> {
   final LivrosComponent _livrosComponent = LivrosComponent();
   final UsuariosComponent _usuariosComponent = UsuariosComponent();
   final UsuarioComponent _usuarioComponent = UsuarioComponent();
+  SolicitacaoComponent _solicitacaoComponent = SolicitacaoComponent();
 
   AutenticacaoState get _autenticacaoState => AutenticacaoState.instancia;
 
@@ -70,6 +72,12 @@ class _HomePageState extends State<HomePage> {
       AppModule.comentarioRepo,
       AppModule.enderecoRepo,
       AppModule.livroRepo,
+      atualizar,
+    );
+    _solicitacaoComponent.inicializar(
+      AppModule.solicitacaoRepo,
+      AppModule.solicitacaoService,
+      AppModule.notificacaoRepo,
       atualizar,
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -249,23 +257,21 @@ class _HomePageState extends State<HomePage> {
       _usuariosComponent.reiniciar();
       _livrosComponent.reiniciar();
     });
-    await _livrosComponent.obterLivrosIniciais();
-    await _usuariosComponent.obterUsuariosIniciais();
+    _exibindoLivros ? await _livrosComponent.obterLivrosIniciais() : await _usuariosComponent.obterUsuariosIniciais();
     _controllerPesquisa.clear();
     setState(() => _carregando = false);
   }
 
   Future<void> selecionarUsuarios() async {
     _controllerPesquisa.clear();
-    await _limparFiltros();
     setState(() => _exibindoLivros = false);
+    await _limparFiltros();
   }
 
   Future<void> selecionarLivros() async {
-    setState(() => _carregando = true);
     _controllerPesquisa.clear();
-    await _limparFiltros();
     setState(() => _exibindoLivros = true);
+    await _limparFiltros();
   }
 
   Widget get obterFiltros {

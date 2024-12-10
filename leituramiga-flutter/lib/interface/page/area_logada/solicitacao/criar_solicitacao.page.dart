@@ -16,6 +16,7 @@ import 'package:leituramiga/state/autenticacao.state.dart';
 import 'package:projeto_leituramiga/application/state/tema.state.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/module/app.module.dart';
+import 'package:projeto_leituramiga/interface/configuration/rota/app_router.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
 import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/util/sobreposicao.util.dart';
@@ -122,7 +123,7 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
       child: ConteudoMenuLateralWidget(
         tema: tema,
         atualizar: atualizar,
-        voltar: () => Rota.navegar(context, Rota.HOME),
+        voltar: _voltar,
         carregando: _usuarioComponent.carregando || _solicitacaoComponent.carregando || _carregando,
         child: SizedBox(
           width: Responsive.largura(context),
@@ -253,6 +254,17 @@ class _CriarSolicitacaoPageState extends State<CriarSolicitacaoPage> {
         ),
       _ => const SizedBox(),
     };
+  }
+
+  void _voltar() {
+    if (estagioPagina == CriarSolicitacao.SELECIONAR_LIVROS)
+      atualizarPagina(CriarSolicitacao.INFORMACOES_ADICIONAIS);
+    else if (estagioPagina == CriarSolicitacao.INFORMACOES_ADICIONAIS)
+      Rota.navegarComArgumentos(context, LivrosRoute(numeroLivro: widget.numeroLivro!));
+    else if (estagioPagina == CriarSolicitacao.ENDERECO)
+      atualizarPagina(CriarSolicitacao.INFORMACOES_ADICIONAIS);
+    else
+      Rota.navegar(context, Rota.HOME);
   }
 
   Future<void> salvarSolicitacao() async {

@@ -70,7 +70,7 @@ class _LivrosPageState extends State<LivrosPage> {
       child: ConteudoMenuLateralWidget(
         tema: tema,
         atualizar: atualizar,
-        voltar: () => Rota.navegar(context, Rota.HOME),
+        voltar: () => Navigator.pop(context),
         carregando: _livrosComponent.carregando || _livrosComponent.livroSelecionado == null,
         child: SizedBox(
           width: Responsive.largura(context),

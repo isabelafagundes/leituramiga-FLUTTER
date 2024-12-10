@@ -215,7 +215,8 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
       tema: tema,
       naoRedimensionar: true,
       conteudo: Container(
-        height: 324,
+        height: 344,
+        width: 324,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -279,13 +280,9 @@ class _AceiteSolicitacaoPageState extends State<AceiteSolicitacaoPage> {
         )
         .firstOrNull;
 
-    print("UTILIZA PERFIL ${_usuarioComponent.utilizarEnderecoPerfil}");
-
     if (_usuarioComponent.utilizarEnderecoPerfil) return _usuarioComponent.enderecoEdicao;
 
     if (municipio == null) return null;
-
-    print("UTILIZA PERFIL 2 ${_usuarioComponent.utilizarEnderecoPerfil}");
 
     return Endereco.criar(
       controllerNumero.text.trim(),

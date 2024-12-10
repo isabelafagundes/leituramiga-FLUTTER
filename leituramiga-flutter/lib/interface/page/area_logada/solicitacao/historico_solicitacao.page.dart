@@ -65,7 +65,6 @@ class _HistoricoPageState extends State<HistoricoPage> {
       child: ConteudoMenuLateralWidget(
         tema: tema,
         carregando: solicitacaoComponent.carregando,
-        voltar: () => Rota.navegar(context, Rota.HOME),
         child: Column(
           children: [
             TextoWidget(

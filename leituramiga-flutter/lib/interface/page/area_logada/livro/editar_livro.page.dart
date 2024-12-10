@@ -72,7 +72,7 @@ class _EditarLivroPageState extends State<EditarLivroPage> {
       tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
-        voltar: () => Rota.navegar(context, Rota.HOME),
+        voltar: () => Rota.navegar(context, Rota.PERFIL),
         carregando: _livrosComponent.carregando ||
             _livrosComponent.categoriasPorNumero.isEmpty ||
             _temaState.temaSelecionado == null ||

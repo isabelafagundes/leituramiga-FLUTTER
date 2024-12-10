@@ -102,7 +102,8 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
       tema: tema,
       naoRedimensionar: true,
       conteudo: Container(
-        height: 350,
+        height: 344,
+        width: 334,
         child: Column(
           children: [
             SizedBox(height: tema.espacamento * 4),
@@ -148,7 +149,6 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
                   corFundo: Color(tema.base200),
                   corTexto: Color(tema.baseContent),
                   aoClicar: () {
-                    Rota.navegar(context, Rota.HOME);
                     Navigator.of(context).pop(false);
                   },
                 ),
