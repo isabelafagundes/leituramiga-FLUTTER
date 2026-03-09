@@ -192,6 +192,14 @@ class Solicitacao extends Entidade {
     );
   }
 
+  void atualizarEnderecoReceptor(Endereco enderecoRecepetor) {
+    _enderecoReceptor = enderecoRecepetor;
+  }
+
+  void atualizarEnderecoSolicitante(Endereco enderecoSolicitante) {
+    _enderecoSolicitante = enderecoSolicitante;
+  }
+
   static void validarDataDevolucao(DataHora? dataDevolucao) {
     if (dataDevolucao != null && dataDevolucao.ehAntesDe(DataHora.hoje())) {
       throw DataSolicitacaoInvalida("Data de devolução não pode ser anterior a data atual");
