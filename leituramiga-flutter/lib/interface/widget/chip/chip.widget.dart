@@ -10,6 +10,8 @@ class ChipWidget extends StatelessWidget {
   final Function()? aoClicar;
   final bool ativado;
   final bool comSombra;
+  final double? tamanhoFonte;
+  final EdgeInsets? padding;
 
   const ChipWidget({
     super.key,
@@ -20,6 +22,8 @@ class ChipWidget extends StatelessWidget {
     this.aoClicar,
     this.ativado = false,
     this.comSombra = true,
+    this.tamanhoFonte,
+    this.padding,
   });
 
   @override
@@ -30,10 +34,11 @@ class ChipWidget extends StatelessWidget {
         onTap: aoClicar,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: EdgeInsets.symmetric(
-            horizontal: ativado ? tema.espacamento + 2 : tema.espacamento + 4,
-            vertical: tema.espacamento / 1.5,
-          ),
+          padding: padding ??
+              EdgeInsets.symmetric(
+                horizontal: ativado ? tema.espacamento + 2 : tema.espacamento + 4,
+                vertical: tema.espacamento / 1.5,
+              ),
           decoration: BoxDecoration(
             color: !ativado ? cor : Color(tema.base200),
             borderRadius: BorderRadius.circular(tema.borderRadiusXG),
@@ -54,7 +59,7 @@ class ChipWidget extends StatelessWidget {
                 texto: texto,
                 cor: ativado ? Color(tema.baseContent) : corTexto ?? Color(tema.baseContent),
                 weight: FontWeight.w600,
-                tamanho: tema.tamanhoFonteM,
+                tamanho: tamanhoFonte ?? tema.tamanhoFonteM,
               ),
               if (ativado) ...[
                 SizedBox(width: tema.espacamento / 1.5),
