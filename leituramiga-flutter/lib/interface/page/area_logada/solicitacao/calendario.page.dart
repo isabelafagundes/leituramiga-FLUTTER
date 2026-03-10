@@ -75,9 +75,10 @@ class _CalendarioPageState extends State<CalendarioPage> {
                 DicaWidget(
                   tema: tema,
                   texto: "Clique em uma data para visualizar as solicitações.",
+                  largura: Responsive.largura(context) < 445 ? Responsive.largura(context) : null ,
                 ),
                 SizedBox(height: tema.espacamento * 2),
-                Container(
+                SizedBox(
                   width: Responsive.largura(context) < 1000 ? Responsive.largura(context) : 1000,
                   height: 400,
                   child: TableCalendar<ResumoSolicitacao>(
@@ -163,7 +164,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                                   crossAxisSpacing: tema.espacamento * 2,
                                   mainAxisSpacing: tema.espacamento * 2,
                                   childAspectRatio: 1.5,
-                                  mainAxisExtent: 166,
+                                  mainAxisExtent: 184,
                                 ),
                                 itemCount: solicitacoesSelecionadas.length,
                                 itemBuilder: (context, index) {

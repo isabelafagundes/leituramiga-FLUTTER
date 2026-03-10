@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:leituramiga/domain/livro/resumo_livro.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
 import 'package:projeto_leituramiga/interface/configuration/rota/rota.dart';
+import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/botao/botao.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/dica.widget.dart';
 import 'package:projeto_leituramiga/interface/widget/empty_state.widget.dart';
@@ -49,6 +50,7 @@ class ConteudoSelecaoLivrosWidget extends StatelessWidget {
             DicaWidget(
               tema: tema,
               texto: "Selecione os livros que deseja adicionar na solicitação:",
+              largura: Responsive.largura(context) < 445 ? Responsive.largura(context) : null,
             ),
             if (exibirBotao) ...[
               SizedBox(height: tema.espacamento),

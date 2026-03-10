@@ -46,13 +46,14 @@ class CardLivroWidget extends StatefulWidget {
 class _CardLivroWidgetState extends State<CardLivroWidget> {
   Uint8List? _imagemBytes;
   bool _carregando = false;
-  Widget _imagem = Container();
+  Widget? _imagem;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await carregarImagemIsolate(widget.imagem!);
+
+      await carregarImagemIsolate(widget.imagem);
     });
   }
 
@@ -83,11 +84,36 @@ class _CardLivroWidgetState extends State<CardLivroWidget> {
                       flex: 3,
                       child: Stack(
                         children: [
-                          _carregando
-                              ? const CircularProgressIndicator()
-                              : Container(
-                                  child: _imagem,
-                                ),
+                          if (_imagem == null) ...[
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Color(widget.tema.neutral).withOpacity(.1),
+                                borderRadius: BorderRadius.circular(widget.tema.borderRadiusM),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.image,
+                                        color: Color(widget.tema.baseContent),
+                                        size: 28,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ] else
+                            _carregando
+                                ? const CircularProgressIndicator()
+                                : Container(
+                                    child: _imagem,
+                                  ),
                           Positioned(
                             bottom: 4,
                             left: 4,
@@ -240,7 +266,9 @@ class _CardLivroWidgetState extends State<CardLivroWidget> {
     );
   }
 
-  Future<void> carregarImagemIsolate(String base64) async {
+  Future<void> carregarImagemIsolate(String? base64) async {
+    if (base64 == null) return;
+
     setState(() => _carregando = true);
     return await compute((base64) async => _carregarImagem(), base64);
   }

@@ -40,7 +40,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
               boxShadow: [
                 BoxShadow(
                   color: Color(widget.tema.neutral).withOpacity(.1),
-                  offset: Offset(0, 2),
+                  offset: const Offset(0, 2),
                   blurRadius: 4,
                 ),
               ],
@@ -168,7 +168,7 @@ class _CardSolicitacaoWidgetState extends State<CardSolicitacaoWidget> {
                     ),
                   ),
                   Positioned(
-                    top: 0,
+                    top: -2,
                     right: -4,
                     child: Container(
                       padding: EdgeInsets.symmetric(

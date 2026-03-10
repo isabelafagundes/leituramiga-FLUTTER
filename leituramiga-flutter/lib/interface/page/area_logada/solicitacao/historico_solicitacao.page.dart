@@ -62,6 +62,7 @@ class _HistoricoPageState extends State<HistoricoPage> {
   @override
   Widget build(BuildContext context) {
     return BackgroundWidget(
+      tema: tema,
       child: ConteudoMenuLateralWidget(
         tema: tema,
         carregando: solicitacaoComponent.carregando,
@@ -133,7 +134,6 @@ class _HistoricoPageState extends State<HistoricoPage> {
           ],
         ),
       ),
-      tema: tema,
     );
   }
 
