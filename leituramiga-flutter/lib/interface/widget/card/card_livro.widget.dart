@@ -1,6 +1,6 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/contants.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
@@ -46,15 +46,151 @@ class CardLivroWidget extends StatefulWidget {
 class _CardLivroWidgetState extends State<CardLivroWidget> {
   Uint8List? _imagemBytes;
   bool _carregando = false;
-  Widget? _imagem;
+  String? _imagemUrl;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-
-      await carregarImagemIsolate(widget.imagem);
+      await carregarImagem(widget.imagem);
     });
+  }
+
+  bool _ehUrl(String valor) {
+    return valor.startsWith('http://') || valor.startsWith('https://');
+  }
+
+  Future<void> carregarImagem(String? valor) async {
+    if (valor == null || valor.trim().isEmpty) return;
+
+    setState(() {
+      _carregando = true;
+      _imagemBytes = null;
+      _imagemUrl = null;
+    });
+
+    try {
+      final valorTratado = valor.trim();
+
+      if (_ehUrl(valorTratado)) {
+        setState(() {
+          _imagemUrl = valorTratado;
+          _carregando = false;
+        });
+        return;
+      }
+
+      final bytes = await _converterParaUint8List(valorTratado);
+
+      setState(() {
+        _imagemBytes = bytes;
+        _carregando = false;
+      });
+    } catch (_) {
+      setState(() {
+        _imagemBytes = null;
+        _imagemUrl = null;
+        _carregando = false;
+      });
+    }
+  }
+
+  Future<Uint8List> _converterParaUint8List(String valor) async {
+    String base64String = valor.trim();
+
+    if (base64String.startsWith('data:image')) {
+      final partes = base64String.split(',');
+      if (partes.length > 1) {
+        base64String = partes.last;
+      }
+    }
+
+    return base64Decode(base64String);
+  }
+
+  Widget get _placeholderImagem {
+    return Container(
+      decoration: BoxDecoration(
+        color: Color(widget.tema.neutral).withOpacity(.1),
+        borderRadius: BorderRadius.circular(widget.tema.borderRadiusM),
+      ),
+      child: Center(
+        child: Icon(
+          Icons.image,
+          color: Color(widget.tema.baseContent),
+          size: 28,
+        ),
+      ),
+    );
+  }
+
+  Widget get _imagemWidget {
+    if (widget.imagem == null || widget.imagem!.trim().isEmpty) {
+      return _placeholderImagem;
+    }
+
+    if (_carregando) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (_imagemUrl != null) {
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(widget.tema.tamanhoFonteM),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(widget.tema.tamanhoFonteM),
+          child: Image.network(
+            _imagemUrl!,
+            fit: BoxFit.fitHeight,
+            filterQuality: FilterQuality.low,
+            width: double.infinity,
+            height: double.infinity,
+            frameBuilder: (context, child, __, ___) {
+              return Container(
+                color: Color(widget.tema.neutral).withOpacity(.1),
+                child: child,
+              );
+            },
+            errorBuilder: (_, __, ___) {
+              return _placeholderImagem;
+            },
+            loadingBuilder: (context, child, progress) {
+              if (progress == null) return child;
+              return const Center(child: CircularProgressIndicator());
+            },
+          ),
+        ),
+      );
+    }
+
+    if (_imagemBytes != null) {
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(widget.tema.tamanhoFonteM),
+          color: Color(widget.tema.neutral).withOpacity(.05),
+          image: DecorationImage(
+            image: MemoryImage(_imagemBytes!),
+            fit: BoxFit.fitHeight,
+            filterQuality: FilterQuality.low,
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Color(widget.tema.neutral).withOpacity(.3),
+        borderRadius: BorderRadius.circular(widget.tema.tamanhoFonteP),
+      ),
+      child: Center(
+        child: Icon(
+          Icons.image_not_supported,
+          color: Color(widget.tema.base200),
+          size: widget.tema.tamanhoFonteXG * 2,
+        ),
+      ),
+    );
   }
 
   @override
@@ -70,7 +206,10 @@ class _CardLivroWidgetState extends State<CardLivroWidget> {
               decoration: widget.ativado
                   ? BoxDecoration(
                       color: Color(widget.tema.base200),
-                      border: Border.all(color: Color(widget.tema.accent), width: 3),
+                      border: Border.all(
+                        color: Color(widget.tema.accent),
+                        width: 3,
+                      ),
                       borderRadius: BorderRadius.circular(widget.tema.borderRadiusM),
                     )
                   : null,
@@ -84,42 +223,18 @@ class _CardLivroWidgetState extends State<CardLivroWidget> {
                       flex: 3,
                       child: Stack(
                         children: [
-                          if (_imagem == null) ...[
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Color(widget.tema.neutral).withOpacity(.1),
-                                borderRadius: BorderRadius.circular(widget.tema.borderRadiusM),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.image,
-                                        color: Color(widget.tema.baseContent),
-                                        size: 28,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ] else
-                            _carregando
-                                ? const CircularProgressIndicator()
-                                : Container(
-                                    child: _imagem,
-                                  ),
+                          _imagemWidget,
                           Positioned(
                             bottom: 4,
                             left: 4,
                             child: ChipWidget(
                               tema: widget.tema,
                               texto: widget.nomeCategoria,
+                              padding: EdgeInsets.symmetric(
+                                vertical: widget.tema.espacamento / 2,
+                                horizontal: widget.tema.espacamento,
+                              ),
+                              tamanhoFonte: widget.tema.tamanhoFonteM - 2,
                               cor: kCorPessego,
                               comSombra: false,
                               corTexto: const Color(0xff464A52),
@@ -154,16 +269,13 @@ class _CardLivroWidgetState extends State<CardLivroWidget> {
                             ],
                           ),
                           const Spacer(),
-                          Container(
-                            child: TextoWidget(
-                              texto: widget.descricao,
-                              tema: widget.tema,
-                              cor: Color(widget.tema.baseContent),
-                              weight: FontWeight.w400,
-                              maxLines: 3,
-                              align: TextAlign.justify,
-                              tamanho: widget.tema.tamanhoFonteM,
-                            ),
+                          TextoWidget(
+                            texto: widget.descricao,
+                            tema: widget.tema,
+                            cor: Color(widget.tema.baseContent),
+                            weight: FontWeight.w400,
+                            maxLines: 3,
+                            tamanho: widget.tema.tamanhoFonteM,
                           ),
                           const Spacer(),
                           TextoComIconeWidget(
@@ -205,7 +317,10 @@ class _CardLivroWidgetState extends State<CardLivroWidget> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Color(widget.tema.neutral).withOpacity(.1), width: 1),
+                      border: Border.all(
+                        color: Color(widget.tema.neutral).withOpacity(.1),
+                        width: 1,
+                      ),
                       color: !widget.ativado ? Color(widget.tema.accent) : Color(widget.tema.base200),
                       borderRadius: BorderRadius.circular(50),
                     ),
@@ -222,68 +337,5 @@ class _CardLivroWidgetState extends State<CardLivroWidget> {
         ],
       ),
     );
-  }
-
-  Widget get _obterImagem {
-    if (widget.imagem == null) {
-      return Container(
-        decoration: BoxDecoration(
-          color: Color(widget.tema.neutral).withOpacity(.3),
-          borderRadius: BorderRadius.circular(widget.tema.tamanhoFonteP),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.image_not_supported,
-                  color: Color(widget.tema.base200),
-                  size: widget.tema.tamanhoFonteXG * 2,
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (_imagemBytes == null) return Container();
-
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(widget.tema.tamanhoFonteM),
-        color: Color(widget.tema.neutral).withOpacity(.3),
-        image: DecorationImage(
-          image: MemoryImage(_imagemBytes!),
-          fit: BoxFit.fitHeight,
-          filterQuality: FilterQuality.low,
-        ),
-      ),
-    );
-  }
-
-  Future<void> carregarImagemIsolate(String? base64) async {
-    if (base64 == null) return;
-
-    setState(() => _carregando = true);
-    return await compute((base64) async => _carregarImagem(), base64);
-  }
-
-  void _carregarImagem() {
-    if (widget.imagem == null) {
-      return;
-    }
-
-    final decodedBytes = base64Decode(widget.imagem!);
-
-    setState(() {
-      _imagemBytes = decodedBytes;
-      _imagem = _obterImagem;
-      _carregando = false;
-    });
   }
 }
