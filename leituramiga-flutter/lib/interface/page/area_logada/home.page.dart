@@ -154,11 +154,13 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      BarraPesquisaWidget(
-                        tema: tema,
-                        aoPesquisar: _pesquisar,
-                        controller: _controllerPesquisa,
-                      ),
+                      if (Responsive.largura(context) > 700)
+                        Container(
+                          constraints: const BoxConstraints(maxWidth: 300),
+                          child: _barraPesquisa,
+                        )
+                      else
+                        Expanded(child: _barraPesquisa),
                       SizedBox(width: tema.espacamento),
                       BotaoRedondoWidget(
                         tema: tema,
@@ -308,5 +310,13 @@ class _HomePageState extends State<HomePage> {
     _livrosComponent.selecionarEstado(uf);
     await _livrosComponent.obterMunicipios(uf);
     setState(() {});
+  }
+
+  Widget get _barraPesquisa {
+    return BarraPesquisaWidget(
+      tema: tema,
+      aoPesquisar: _pesquisar,
+      controller: _controllerPesquisa,
+    );
   }
 }

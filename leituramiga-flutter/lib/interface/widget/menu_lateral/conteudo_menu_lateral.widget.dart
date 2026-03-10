@@ -145,10 +145,11 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
                                           );
                                         },
                                       ),
+                                      const Spacer(),
                                     ],
                                     widget.widgetNoCabecalho ?? const SizedBox(),
                                     if (widget.exibirPerfil && _autenticacaoState.usuario == null) ...[
-                                      Spacer(),
+                                      const Spacer(),
                                       BotaoPequenoWidget(
                                         tema: widget.tema,
                                         aoClicar: () => Rota.navegar(context, Rota.AUTENTICACAO),
@@ -346,12 +347,16 @@ class _ConteudoMenuLateralWidgetState extends State<ConteudoMenuLateralWidget> {
   }
 
   void _alterarTema() async {
-    await _temaState.atualizarTemaPeloId(widget.tema.id == 1 ? 2 : 1, () => setState(() {}));
+    await _temaState.atualizarTemaPeloId(widget.tema.id == 1 ? 2 : 1, () {
+      if (mounted) setState(() {});
+    });
     if (widget.atualizar != null) widget.atualizar!();
   }
 
   void _alterarFonte() async {
-    await _temaState.atualizarFonteSelecionada(() => setState(() {}));
+    await _temaState.atualizarFonteSelecionada(() {
+      if (mounted) setState(() {});
+    });
     if (widget.atualizar != null) widget.atualizar!();
   }
 }

@@ -156,6 +156,7 @@ class BotoesMenuLateralWidget extends StatelessWidget {
           tema: tema,
           exibirLabel: exibindoMenu,
           label: "Fonte:",
+          valorInicial: tema.modoFonteGrande,
           primeiroIcone: Center(
             child: TextoWidget(
               texto: "A",

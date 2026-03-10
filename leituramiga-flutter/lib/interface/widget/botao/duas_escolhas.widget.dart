@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_leituramiga/domain/tema.dart';
+import 'package:projeto_leituramiga/interface/util/responsive.dart';
 import 'package:projeto_leituramiga/interface/widget/texto/texto.widget.dart';
 
 class DuasEscolhasWidget extends StatefulWidget {
@@ -14,7 +15,8 @@ class DuasEscolhasWidget extends StatefulWidget {
     required this.tema,
     required this.escolhas,
     required this.aoClicarPrimeiraEscolha,
-    required this.aoClicarSegundaEscolha, required this.chave,
+    required this.aoClicarSegundaEscolha,
+    required this.chave,
   });
 
   @override
@@ -22,16 +24,19 @@ class DuasEscolhasWidget extends StatefulWidget {
 }
 
 class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
-
   @override
   Widget build(BuildContext context) {
+    double largura = Responsive.largura(context) > 350 ? 300 : 178;
+    double larguraItem = Responsive.largura(context) > 350 ? 143 : 80;
+    double posicaoSelecao = Responsive.largura(context) > 350 ? 152 : 93;
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Stack(
         alignment: Alignment.center,
         children: [
           Container(
-            width: 300,
+            width: largura,
             height: 40,
             decoration: BoxDecoration(
               color: Color(widget.tema.base200),
@@ -57,7 +62,7 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
                       ),
-                      width: 143,
+                      width: larguraItem,
                       height: 31,
                       child: Center(
                         child: TextoWidget(
@@ -73,7 +78,7 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
                   GestureDetector(
                     onTap: () => _alterar(1),
                     child: Container(
-                      width: 143,
+                      width: larguraItem,
                       height: 31,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(widget.tema.borderRadiusXG),
@@ -93,11 +98,11 @@ class _DuasEscolhasWidgetState extends State<DuasEscolhasWidget> {
             ),
           ),
           AnimatedPositioned(
-            left: widget.chave == 0 ? 5 : 152,
+            left: widget.chave == 0 ? 5 : posicaoSelecao,
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeOut,
             child: Container(
-              width: 143,
+              width: larguraItem,
               height: 31,
               decoration: BoxDecoration(
                 boxShadow: [
