@@ -10,10 +10,10 @@ class BackgroundWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Color(tema.base100),
-        body: Stack(
+    return Scaffold(
+      backgroundColor: Color(tema.base100),
+      body: SafeArea(
+        child: Stack(
           children: [
             Positioned(
               bottom: 8,
